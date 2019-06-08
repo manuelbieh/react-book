@@ -1,6 +1,6 @@
-# Multilingualism
+# Internationalization
 
-One of the topics that comes up again and again besides **routing** and **state management** is **multilingualism**. How do I get my application translated so that a German user sees a German interface while other users see an English interface?
+One of the topics that comes up again and again besides **routing** and **state management** is **internationalization**. How do I get my application translated so that a German user sees a German interface while other users see an English interface?
 
 In this chapter I don't want to go into the depths of **Internationalization** \(mostly abbreviated: **i18n**\), because this is about **React**. I therefore assume a certain \(low\) basic understanding of the internationalization of user interfaces and concentrate on how to implement it in React.
 

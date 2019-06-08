@@ -1,4 +1,4 @@
-# Lists, fragments and conditional rendering
+# Lists, Fragments and Conditional Rendering
 
 So far you've learned a lot about React. You know what the **Props** are for, what the **State** is for and how it differs from the **Props**, you know how to implement a React component, what is the difference between a React**** component** and a React** element** and how to use **JSX** to describe an element tree that will later be rendered in your application. **Lifecycle methods help you react to changes in your data. So you already have everything together to develop a simple React application. 
 
