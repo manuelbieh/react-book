@@ -1,12 +1,12 @@
-# Use of hooks
+# Use of Hooks
 
-React currently has **10** hooks of its own, of which the official documentary **3** is called **Basic**, which means _basic_, and the remaining **7** is called **Additional**, which means _additional_. And in fact, this subdivision makes sense, because in most cases when working with hooks, you will use the 3 basic hooks `useState()`, `useEffect()` and `useContext()`. 
+React currently has **10** hooks of its own, of which the official documentary **3** is called **Basic**, which means _basic_, and the remaining **7** is called **Additional**, which means _additional_. And in fact, this subdivision makes sense, because in most cases when working with hooks, you will use the 3 basic hooks `useState()`, `useEffect()` and `useContext()`.
 
 The characteristics referred to as **Additional Hooks** are intended in particular for subsequent optimisation or to cover edge cases. So this chapter will first discuss the "simple" hooks and I would like to demonstrate how you can realize functionality with **Function Components**, for which **class components** were necessary up to now.
 
-### State with useState\(\)
+## State with useState\(\)
 
-Let's first take a look at how we've accessed State in Components so far and how we've modified it. 
+Let's first take a look at how we've accessed State in Components so far and how we've modified it.
 
 ```jsx
 import React from 'react';
@@ -64,12 +64,12 @@ var value = state[0];
 var setValue = state[1];
 ```
 
-In JSX, which we return from the `Counter` component, we now directly access `value` instead of `this.state.value` and set the new value with a very short `setValue(value + 1)` instead of the class component with `this.setState((state) => ({ value: state + 1 }))`. 
+In JSX, which we return from the `Counter` component, we now directly access `value` instead of `this.state.value` and set the new value with a very short `setValue(value + 1)` instead of the class component with `this.setState((state) => ({ value: state + 1 }))`.
 
 We have just created our first **Function Component** which is **stateful**!
 
 {% hint style="info" %}
-At this point we have used our first **Hook**: `useState()`. We have called the method `React.useState()`. **Hooks** can also be imported directly from the `react` package. 
+At this point we have used our first **Hook**: `useState()`. We have called the method `React.useState()`. **Hooks** can also be imported directly from the `react` package.
 
 This is especially useful if a hook is used several times. This saves a lot of paperwork in the component:
 
@@ -104,7 +104,7 @@ ReactDOM.render(<Counter />, document.getElementById('root'));
 
 For working with complex states, we'll learn more about using the `useReducer()` hook later in this book. This was introduced to simplify the management of complex states.
 
-### Side effects with useEffect\(\)
+## Side effects with useEffect\(\)
 
 The `useEffect()`-**Hook** gets its name because it is intended to be used for **Side Effects**. So side effects like loading data via API, registering global events or manipulating DOM elements. The hook maps the functionality of the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()`-Lifecycle methods.
 
@@ -112,11 +112,11 @@ Yes, I read that right: Instead of the _three_ methods mentioned above, there is
 
 To use the hook, the `useEffect()` function itself passes a function as the first parameter. This function, we call it for simplicity's sake **"effect function "**, is basically executed by React **after** each rendering of the component and thus replaces `componentDidUpdate()` in class components.
 
-Since this **effect function** is called after **every** rendering of the component, it is also called after the **first** rendering, which at this point can be equated with the `componentDidMount()` lifecycle method from the class components. 
+Since this **effect function** is called after **every** rendering of the component, it is also called after the **first** rendering, which at this point can be equated with the `componentDidMount()` lifecycle method from the class components.
 
-In addition, the _Effect_ function can optionally return a function itself. Let's call it the Clean-Up Function. This _clean up_ function is called when **unmounting** the component, which brings us to the next lifecycle method, namely `componentWillUnmount()`. 
+In addition, the _Effect_ function can optionally return a function itself. Let's call it the Clean-Up Function. This _clean up_ function is called when **unmounting** the component, which brings us to the next lifecycle method, namely `componentWillUnmount()`.
 
-But be careful: here we also have the first deviation in functionality compared to class components. And so our _clean up_ function is called not only when **unmounting** the component, but also **before each new execution** of the _effect_ function. 
+But be careful: here we also have the first deviation in functionality compared to class components. And so our _clean up_ function is called not only when **unmounting** the component, but also **before each new execution** of the _effect_ function.
 
 This behavior can be actively controlled by passing an array of **Dependencies** to the `useEffect()` hook as the second parameter. These are values on which the execution of the **effect** function depends. If a **Dependency array** is passed, the hook is executed only once initially and then only again if at least one of the values in the **Dependency array** has changed.
 
@@ -132,7 +132,7 @@ const defaultTitle = 'React with Hooks';
 
 const Counter = () => {
   const [ value, setValue ] = useState(0);
-  
+
   useEffect(() => {
     // `document.title` is set at every change (didMount/didUpdate).
     // Provided the `value` has changed
@@ -143,11 +143,11 @@ const Counter = () => {
     return () => {
       document.title = defaultTitle;
     }
-  
+
   // Last but not least, our Dependency. It only calls the effect function
   // even though the `value` has changed.
   }, [value]);
-  
+
   return (
     <div>
       <p>Counter value: {value}</p>
@@ -211,15 +211,15 @@ class Counter extends React.Component {
 ReactDOM.render(<Counter />, document.getElementById("root"));
 ```
 
-Of course it can be discussed here that the call to change the `document.title` can be outsourced to a separate class method such as `setDocumentTitle()`, but these are details that do not really change the higher complexity of the class component in direct comparison with **Hooks**. 
+Of course it can be discussed here that the call to change the `document.title` can be outsourced to a separate class method such as `setDocumentTitle()`, but these are details that do not really change the higher complexity of the class component in direct comparison with **Hooks**.
 
 Even then, the same \(now abstracted\) function would still have to be called twice in two different places \(namely `componentDidMount()` and `componentDidUpdate()`\). In addition, we would have another class method, which only inflates the class further and thus resolves the duplication only at the expense of an abstraction.
 
-### Access to context with useContext\(\)
+## Access to context with useContext\(\)
 
-The third basic hook in the bundle is `useContext()`. It makes it child's play to consume data from a context provider without having to use a provider component with a Function as a Child. 
+The third basic hook in the bundle is `useContext()`. It makes it child's play to consume data from a context provider without having to use a provider component with a Function as a Child.
 
-The `useContext()` hook gets a context created with `React.createContext()` and then returns the value of the next higher provider in the component hierarchy. If the value of the context is changed in the provider, the `useContext()` hook triggers a rendering with the updated data from the provider. This means that everything has already been said about how it works. 
+The `useContext()` hook gets a context created with `React.createContext()` and then returns the value of the next higher provider in the component hierarchy. If the value of the context is changed in the provider, the `useContext()` hook triggers a rendering with the updated data from the provider. This means that everything has already been said about how it works.
 
 The Hook is actually rather simple in nature:
 
@@ -252,3 +252,4 @@ ReactDOM.render(<App />, document.getElementById("root"));
 Here we see how the `ContextExample` component uses data \(in this example pseudo account data\) from the `AccountContext` provider without everything having to be enclosed by an `AccountContext.Consumer` component. This not only saves a few lines of code in the component itself, but also results in a much clearer tree in the debug view, since the nesting depth is flatter.
 
 However, this simplification is completely optional and anyone who likes can continue to use the familiar consumer component to access data from a context provider.
+

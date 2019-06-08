@@ -1,20 +1,20 @@
 # Forms
 
-Forms have a small special place in React and work somewhat differently than other DOM elements, because forms have a kind of **own state** that has nothing in common with the React state. 
+Forms have a small special place in React and work somewhat differently than other DOM elements, because forms have a kind of **own state** that has nothing in common with the React state.
 
-The state of text fields, for example, consists of the entered value, the state of checkboxes or radio buttons results from the fact whether these are selected or not, selection lists \(`<select></select>`\) hold the selected value as the state or, in the case of multiple selection, the selected values. React does not change this behaviour for the time being. If you want to, you can keep it that way and don't have to worry about anything else. 
+The state of text fields, for example, consists of the entered value, the state of checkboxes or radio buttons results from the fact whether these are selected or not, selection lists \(`<select></select>`\) hold the selected value as the state or, in the case of multiple selection, the selected values. React does not change this behaviour for the time being. If you want to, you can keep it that way and don't have to worry about anything else.
 
-In React jargon, we are then talking about **Uncontrolled Components****. Uncontrolled because React does not take care of the state management of these components. The state handling is either completely independent of React or only works from the direction of the DOM form elements towards React State, but **not in the opposite direction**. A form element gets nothing from an update at the react state and shows the same value \(or status for checkboxes, selects and radio buttons\) as before.
+In React jargon, we are then talking about **Uncontrolled Components\*\***. Uncontrolled because React does not take care of the state management of these components. The state handling is either completely independent of React or only works from the direction of the DOM form elements towards React State, but **not in the opposite direction**. A form element gets nothing from an update at the react state and shows the same value \(or status for checkboxes, selects and radio buttons\) as before.
 
-On the other hand there are the **Controlled Components****. Here an update at the react state updates the value \(or status\) of the form element and likewise an update at the respective form element updates the react state. **Controlled Components** are somewhat more complex to implement, but are also the "safer" variant, since we do not run the risk of both states differing from each other.
+On the other hand there are the **Controlled Components\*\***. Here an update at the react state updates the value \(or status\) of the form element and likewise an update at the respective form element updates the react state. **Controlled Components** are somewhat more complex to implement, but are also the "safer" variant, since we do not run the risk of both states differing from each other.
 
 ## Uncontrolled Components / Uncontrolled Components
 
 **Uncontrolled components** can essentially occur in two different forms. The first variant simply renders form elements that are processed on the server side and do not interact with React in any way. A completely static form, if you will. React **doesn't take care of the connection to the React-State by itself** but **leaves the developer all freedom**!
 
-In the second variant, changes to a form element **are written to the react state**, e.g. to validate the data in the background or to output the entered data elsewhere. A change to the react state elsewhere in the application has no direct effect on the form fields. 
+In the second variant, changes to a form element **are written to the react state**, e.g. to validate the data in the background or to output the entered data elsewhere. A change to the react state elsewhere in the application has no direct effect on the form fields.
 
-An example of such an uncontrolled component: 
+An example of such an uncontrolled component:
 
 ```jsx
 class Uncontrolled extends React.Component {
@@ -111,9 +111,9 @@ Here are some more things to keep in mind. So the value of the `value` attribute
 
 ![Warning for a controlled textfield with the value &quot;null&quot;](../.gitbook/assets/react-uncontrolled-null.png)
 
-An exception are `select` elements that have a `multiple` attribute. Here, the `value` attribute must be an **array**. 
+An exception are `select` elements that have a `multiple` attribute. Here, the `value` attribute must be an **array**.
 
-Wait a minute, are you thinking. Which `value` attribute for `<select>`? I select options by setting the `selected` attribute at the respective `<option>`! And yes, that's correct in HTML, in React it works a little different. Here the controlled value is also set via the `value` attribute. The same is true for the `<textarea>` element, whose initial value is usually determined by its `textContent`. Not so in React. 
+Wait a minute, are you thinking. Which `value` attribute for `<select>`? I select options by setting the `selected` attribute at the respective `<option>`! And yes, that's correct in HTML, in React it works a little different. Here the controlled value is also set via the `value` attribute. The same is true for the `<textarea>` element, whose initial value is usually determined by its `textContent`. Not so in React.
 
 React unifies the mechanism for changing values a bit and requires for the three elements `input` \(all types except `checkbox` and `radio`\), `textarea` and `select` a `value` attribute! For simple values this must **always be a string**, for a selection list with the `multiple` attribute as just mentioned an **array consisting of strings**!
 
@@ -231,8 +231,10 @@ If a value is changed, as is the case with text input or radio buttons, we set a
 1. the user changes the value by means of text input
 2. a `onChange` event is triggered and processed in the event handler
 3. the event handler sets the state property to the new value
-React re-renders the user interface and sets the `value` property of the input field to the new value from `this.state`.
-5 The user sees his newly entered value. 
+
+   React re-renders the user interface and sets the `value` property of the input field to the new value from `this.state`.
+
+   5 The user sees his newly entered value. 
 
 For the user this is **Business as Usual**. He doesn't notice that the form works differently than he knows from the browser. And yet React took care of the logic in the background and drew a new "frame" in the user interface.
 
@@ -246,7 +248,7 @@ Radio buttons are a kind of hybrid element. Like checkboxes, they are also contr
 
 Let's start with the simple case: simple `<select>` selection lists also change their value like text fields, trigger a rendering and display the selected value in the newly drawn user interface. Multiple selection lists are an exception here.
 
-Unlike text fields or simple selection lists, multiple selection lists do not expect a string as a value, but an **array of strings**. However, we have to build this ourselves, because `e.target.value` contains only one value for multiple selection lists, even when multiple options are selected. This is where `e.target.selectedOptions` helps us. This property is an object of type `HTMLCollection`, with the `<option>` elements currently selected. We can easily convert this object into an array with the static array method `Array.from()` from ES2015. By iterating over this using `Array.map()`, we can also create a new array containing all the values relevant to us: 
+Unlike text fields or simple selection lists, multiple selection lists do not expect a string as a value, but an **array of strings**. However, we have to build this ourselves, because `e.target.value` contains only one value for multiple selection lists, even when multiple options are selected. This is where `e.target.selectedOptions` helps us. This property is an object of type `HTMLCollection`, with the `<option>` elements currently selected. We can easily convert this object into an array with the static array method `Array.from()` from ES2015. By iterating over this using `Array.map()`, we can also create a new array containing all the values relevant to us:
 
 ```jsx
 Array.from(selectedOptions).map((option) => option.value);
@@ -258,9 +260,9 @@ Alternatively it would also be possible to pass the `changeValue` method as even
 
 ### Special features of controlled components
 
-In the above examples I used the `name` attribute of each element as a key to store its value in the state. This is particularly useful when working with server-side React and, for example, automatically generating and processing forms on the basis of a database schema. However, this is not a prerequisite for a functioning controlled component. Theoretically, neither a `name` attribute is required, nor does the name of the state property have to match the `name` attribute. 
+In the above examples I used the `name` attribute of each element as a key to store its value in the state. This is particularly useful when working with server-side React and, for example, automatically generating and processing forms on the basis of a database schema. However, this is not a prerequisite for a functioning controlled component. Theoretically, neither a `name` attribute is required, nor does the name of the state property have to match the `name` attribute.
 
-You can also nest the stored values, which is useful if you have multiple forms in one component \(**Note:** React Antipattern!\). In addition, it is not even necessary to use the react state to map **Controlled Components**. On the contrary, in practice an external state container such as **Redux**, **Unstated** or **MobX** is often used instead. 
+You can also nest the stored values, which is useful if you have multiple forms in one component \(**Note:** React Antipattern!\). In addition, it is not even necessary to use the react state to map **Controlled Components**. On the contrary, in practice an external state container such as **Redux**, **Unstated** or **MobX** is often used instead.
 
 ## Conclusion
 
@@ -271,6 +273,4 @@ Forms in React may occur in \(by React\) controlled or uncontrolled form.
 
 Unlike traditional HTML, React expects the value of texttareas, selects, and input fields with text input in the `value` attribute.
 {% endhint %}
-
-
 

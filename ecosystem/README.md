@@ -1,8 +1,8 @@
-# V – The Ecosystem
+# V – Das Ecosystem
 
-Für die einen Fluch, für die anderen Segen: die **Freiheit** die **React** dem Entwickler bietet. 
+Für die einen Fluch, für die anderen Segen: die **Freiheit** die **React** dem Entwickler bietet.
 
-Während vollwertige Frameworks wie Angular sehr klare Vorgaben darüber machen, wie eine Anwendung strukturiert werden soll und auch gleich eigene Methoden für Datenhaltung, Services und Business-Logik mitbringen sowie klare Wege vorgeben, funktioniert das in React eher nach dem Motto „bring your own“ – also bringe dein eigenes Werkzeug mit. 
+Während vollwertige Frameworks wie Angular sehr klare Vorgaben darüber machen, wie eine Anwendung strukturiert werden soll und auch gleich eigene Methoden für Datenhaltung, Services und Business-Logik mitbringen sowie klare Wege vorgeben, funktioniert das in React eher nach dem Motto „bring your own“ – also bringe dein eigenes Werkzeug mit.
 
 Wie bereits zu Beginn dieses Buches erwähnt, ist React erst einmal nur eine **Bibliothek zur Entwicklung von User Interfaces** \(Kleine Anekdote am Rande: Dieser Satz ist einer der wenigen, die ich in diesem Buch aus der Doku zitiert habe, die sich im Laufe der Arbeit an diesem Buch nicht geändert hat ;\)\). In der Welt der klassischen MVC \(_Model View Controller_\) Architektur also sozusagen nur der View-Layer. Wer darüber hinaus ein erweitertes State-Management möchte, wer seine Anwendung mehrsprachig entwickeln möchte oder clientseitiges Routing benötigt, wird hier mit React allein oftmals nicht glücklich.
 

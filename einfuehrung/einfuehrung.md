@@ -1,4 +1,4 @@
-# General
+# Allgemeines
 
 Even if the explanation is very short, you can derive from it all the essential things that are important for working with React and to understand what it is all about. React is first of all just a _Library_, not a complete framework with countless functions, with which you can develop complex web applications without further dependencies. And here we come to the second part of the sentence: _for building user interfaces_.
 
@@ -8,7 +8,7 @@ React offers a **declarative** way to describe the **state** of a user interface
 
 The logic itself is located completely in the JavaScript part of the application \(where it should always belong\) and not in the templates themselves, as is the rule with most other Web frameworks. Sounds complicated at first, but as the process progresses it becomes clearer and clearer what it actually means.
 
-React works **component-based**, i.e. it develops **encapsulated, functional components**, which can be composed \(_composed_\) and reused as desired. Extension or inheritance of components is theoretically possible, but very unusual in the React world. The _Composition-_approach is also propagated here by the official side, in which several components are combined to form an "overall picture" instead of working with _Inheritance_ \ (i.e. inheritance\).
+React works **component-based**, i.e. it develops **encapsulated, functional components**, which can be composed \(_composed_\) and reused as desired. Extension or inheritance of components is theoretically possible, but very unusual in the React world. The _Composition-\_approach is also propagated here by the official side, in which several components are combined to form an "overall picture" instead of working with \_Inheritance_  \(i.e. inheritance\).
 
 So does that mean I can't develop complex web applications with React? No. Absolutely not. React has a very large, very active and for the most part very high quality ecosystem of libraries, which in turn are based on React, extend or add to it and make it a powerful tool that doesn't have to hide behind large frameworks like Ember or Angular. On the contrary. Once you've immersed yourself in the world of the React ecosystem and gained an overview, you've quickly found a number of really good tools and libraries with which you can develop professional, super individual and highly complex applications.
 
@@ -24,16 +24,15 @@ Imperative in this case means telling the browser what to do, whereas _declarati
 
 React was originally developed by or on **Facebook** and later, as early as 2013, made available to the public as open source under the BSD license, which was changed to an MIT license after some protests. And so a very large part of Facebook is based on React. Meanwhile there are even more than **50,000** of their own components in use - which is nice in that Facebook naturally has a great interest in permanent further development and you don't have to fear that your application has been developed on the basis of a technology that is suddenly no longer being further developed.
 
-The React Core developers are doing a very good job of involving the community in decisions at an early stage and allowing them to participate in discussions. There is also a GitHub repository with [React RFCs](https://github.com/reactjs/rfcs) \(_"Request for Comments"_\), which allows planned changes to be discussed at an early stage and allows the React team to make their own suggestions. 
+The React Core developers are doing a very good job of involving the community in decisions at an early stage and allowing them to participate in discussions. There is also a GitHub repository with [React RFCs](https://github.com/reactjs/rfcs) \(_"Request for Comments"_\), which allows planned changes to be discussed at an early stage and allows the React team to make their own suggestions.
 
-**Breaking Changes** follow a fixed **Deprecation Schema** and thus methods, properties and functions, which are planned to be removed, are provided with meaningful **Deprecation Warnings** for some time and even tools are provided, with which old code can be adapted as automatically as possible \([React-Codemod](https://github.com/reactjs/react-codemod)\). React adheres strictly to Semver conventions. 
+**Breaking Changes** follow a fixed **Deprecation Schema** and thus methods, properties and functions, which are planned to be removed, are provided with meaningful **Deprecation Warnings** for some time and even tools are provided, with which old code can be adapted as automatically as possible \([React-Codemod](https://github.com/reactjs/react-codemod)\). React adheres strictly to Semver conventions.
 
-This means that only new _Major-Releases_ contain \(`16.x.x` on `17.x.x`\) Breaking Changes, _Minor-Releases_ contain \(e.g. `16.6.x` on `16.7.x`\) contain new features or get deprecation warnings that prepare the developer for upcoming major releases, while _Patch releases_ \(e.g. `16.8.0` on `16.8.1`\) contain only bug fixes. 
+This means that only new _Major-Releases_ contain \(`16.x.x` on `17.x.x`\) Breaking Changes, _Minor-Releases_ contain \(e.g. `16.6.x` on `16.7.x`\) contain new features or get deprecation warnings that prepare the developer for upcoming major releases, while _Patch releases_ \(e.g. `16.8.0` on `16.8.1`\) contain only bug fixes.
 
 Before major or minor releases are released, there are also alpha, beta and RC \(_"Release Candidate"_\) versions on a regular basis, with which you can take a look at upcoming features in advance. However, these should be taken with caution, as the functionality of new features may change before the final release.
 
-This is surely due to the fact that Facebook also uses a lot of React components and you can't just make profound changes without causing problems. The thoughts and justifications of the developers can be followed in detail in the GitHub Issue Tracker, all important changes are summarized in so called[ Umbrella-Tickets](https://github.com/facebook/react/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20umbrella).  
-
+This is surely due to the fact that Facebook also uses a lot of React components and you can't just make profound changes without causing problems. The thoughts and justifications of the developers can be followed in detail in the GitHub Issue Tracker, all important changes are summarized in so called[ Umbrella-Tickets](https://github.com/facebook/react/issues?utf8=✓&q=is%3Aissue%20is%3Aopen%20umbrella).
 
 ## What is React and what isn't?
 

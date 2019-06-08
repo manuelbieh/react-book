@@ -1,6 +1,6 @@
-# Typechecking with PropTypes, Flow and TypeScript
+# Typechecking mit PropTypes, Flow and TypeScript
 
-**Typechecking** is a simple method to avoid potential errors in an application. The principle here is quite simple: Components should be "pure", as we already learned in the introduction. So they should not trigger any page effects and above all they should also generate the **identical output** for the **same input parameters** \(which are **props** and their derived **state** in the case of components).
+**Typechecking** is a simple method to avoid potential errors in an application. The principle here is quite simple: Components should be "pure", as we already learned in the introduction. So they should not trigger any page effects and above all they should also generate the **identical output** for the **same input parameters** \(which are **props** and their derived **state** in the case of components\).
 
 This means that it should be as predictable and as strict as possible which **props** can be entered into a component and which are processed by it. To ensure this, we can make use of the so-called **Typechecking**. JavaScript is basically an untyped language. A variable that was originally a **String** can be converted into a **Number** or even a **Object** without any problems for the JavaScript interpreter.
 
@@ -129,7 +129,7 @@ const user = {};
 <Greeting name={user.name} />
 ```
 
-This uses the `defaultValue`, in this case **Guest**, because of the missing or undefined `name` prop and displays it in both cases: **React is smart enough to recognize if a `defaultValue` exists if a prop is missing but marked as `isRequired` and displays a warning only if a prop is missing and a `defaultValue` has not been defined at the same time.
+This uses the `defaultValue`, in this case **Guest**, because of the missing or undefined `name` prop and displays it in both cases: \*\*React is smart enough to recognize if a `defaultValue` exists if a prop is missing but marked as `isRequired` and displays a warning only if a prop is missing and a `defaultValue` has not been defined at the same time.
 
 {% hint style="info" %}
 When deploying **Deployment in Production**, it is worth using the **Babel Plugin Transform React Remove Prop Types**. This saves a few more bytes of bandwidth as the `propType` definitions are removed from the build as they are **only considered in development mode** anyway.
@@ -333,7 +333,7 @@ This means that the **Type Definitions** provided by React were also imported at
 
 In the JavaScript community **TypeScript** is becoming more and more popular and also in connection with React it is found more and more often. For this reason I don't want to leave it unmentioned here, but at the same time I don't want to go into too much depth because **TypeScript** alone would provide enough material for your own book.
 
-With regard to React, it is important to know that TypeScript files usually have a `.ts' file extension, if a file also contains JSX, the file must end with `.tsx`.
+With regard to React, it is important to know that TypeScript files usually have a `.ts' file extension, if a file also contains JSX, the file must end with`.tsx\`.
 
 With the release of Babel 7 the integration was also simplified and it no longer needs the **TypeScript** compiler \(`tsc`\) but can be used as a Babel plugin. The plugin is installed with the Babel preset `@babel/preset-typescript`.
 

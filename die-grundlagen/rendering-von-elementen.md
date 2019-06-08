@@ -1,4 +1,4 @@
-# Rendering of elements
+# Rendering of Elements
 
 In the previous chapters I mentioned them several times as a matter of course, but what exactly are **React elements**?
 
@@ -28,7 +28,7 @@ Imagine you have a `div` with the ID `root` in your HTML document, which should 
 </html>
 ```
 
- The corresponding call is then the following:
+The corresponding call is then the following:
 
 ```jsx
 const myFirstElement = <div>My first react element</div>;
@@ -78,7 +78,7 @@ setInterval(changeTime, 1000);
 The advantage of the **declarative** approach is that we only describe **states** and say how something should be displayed, not how we want to achieve this target state every step of the way. This makes many things simpler, clearer and at the same time much less prone to errors, especially with more complex applications.
 
 {% hint style="info" %}
-In practice, it is more common to call `ReactDOM.render()` only once, usually when opening a page. The repeated call of the `render()` method here only serves to illustrate how **ReactDOM** and **React elements** interact. 
+In practice, it is more common to call `ReactDOM.render()` only once, usually when opening a page. The repeated call of the `render()` method here only serves to illustrate how **ReactDOM** and **React elements** interact.
 
 Rendering is then usually triggered by **components** by changing their state or by new props being submitted to them from outside. The next chapter continues with components!
 {% endhint %}

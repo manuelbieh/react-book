@@ -46,21 +46,21 @@ class MyComponent extends React.Component {
 
 **Create React App** supports the **Class Property Syntax** by default and since many React projects today are completely or at least partially based on the CRA setup or variants of it, this syntax is used and can be used in most projects today. Should this not be the case in a project, I strongly recommend the installation and use of the Babel plugin, as it really saves many unnecessary lines of code in the daily work with React, while at the same time it is set up in just a few minutes.
 
-Once the **State** has been defined, we can access it within the **class component** using `this.state` **reading**. **Reading is a key word here. Because even if it is possible in principle to change the state directly via `this.state`, this should be avoided for various reasons.
+Once the **State** has been defined, we can access it within the **class component** using `this.state` **reading**. \*\*Reading is a key word here. Because even if it is possible in principle to change the state directly via `this.state`, this should be avoided for various reasons.
 
 ## Change the state with this.setState\(\)
 
-To change state, React provides its own method within a **class component**: 
+To change state, React provides its own method within a **class component**:
 
 ```javascript
  this.setState(updatedState)
 ```
 
-Whenever the state within a component is to be changed, `this.setState()` should be used. Calling `this.setState()` will cause React to execute corresponding **Lifecycle methods** \(like e.g. `componentDidUpdate()`\) and render a component **new!** If we would change the state directly instead, e.g. write `this.state.counter = 1;`, this would have no effect on our component for the time being and everything would look like before, because the rendering process **wouldn't be triggered** **. React then has no knowledge of the change to the State!
+Whenever the state within a component is to be changed, `this.setState()` should be used. Calling `this.setState()` will cause React to execute corresponding **Lifecycle methods** \(like e.g. `componentDidUpdate()`\) and render a component **new!** If we would change the state directly instead, e.g. write `this.state.counter = 1;`, this would have no effect on our component for the time being and everything would look like before, because the rendering process **wouldn't be triggered** \*\*. React then has no knowledge of the change to the State!
 
 The method, however, is somewhat more complex than it might seem at first glance. And so not only is the old state replaced by the new state and a rendering triggered; a lot of other things happen as well. One at a time.
 
-First of all, the function **can accept two different types of arguments**. This is a **object** with new or updated state properties, as well as a **Updater function,** which returns an object or `null` if nothing is to be changed. Existing properties of the same name within the state object are **overwritten**, all others remain ** untouched!** If we want to reset a property in the state, we have to set it explicitly to `null` or `undefined`. The transferred state is therefore always merged with the existing state ****, never **replaced!**
+First of all, the function **can accept two different types of arguments**. This is a **object** with new or updated state properties, as well as a **Updater function,** which returns an object or `null` if nothing is to be changed. Existing properties of the same name within the state object are **overwritten**, all others remain  **untouched!** If we want to reset a property in the state, we have to set it explicitly to `null` or `undefined`. The transferred state is therefore always merged with the existing state **\*\*, never** replaced!\*\*
 
 Let's take again our state defined above with a `counter` property, whose initial value for this example is first of all `0`. Now we change the state and want to add a `date` property with the current date. Deliver as object would be our call:
 
@@ -111,7 +111,7 @@ this.setState({ counter: this.state.counter + 1 });
 this.setState({ counter: this.state.counter + 1 });
 ```
 
-What do you think the new state is like when the initial state was `0`? `3`? Wrong. He's "1"! This is where React's **batching mechanism** comes in. To avoid a user interface that updates too quickly, React waits here for the time being. At the end you can roughly equate the above code **expressed in simple terms **from the functional principle** with:
+What do you think the new state is like when the initial state was `0`? `3`? Wrong. He's "1"! This is where React's **batching mechanism** comes in. To avoid a user interface that updates too quickly, React waits here for the time being. At the end you can roughly equate the above code **expressed in simple terms** from the functional principle\*\* with:
 
 ```javascript
 this.state = Object.assign(
@@ -122,9 +122,9 @@ this.state = Object.assign(
 );
 ```
 
-The `counter` property overwrites itself again and again during a batch update, but always takes `this.state.counter` as the base value for the increase by 1. After all state updates have been executed, React then calls the `render()` method of the component again. 
+The `counter` property overwrites itself again and again during a batch update, but always takes `this.state.counter` as the base value for the increase by 1. After all state updates have been executed, React then calls the `render()` method of the component again.
 
-If a **Updater function** is used, the most current state is passed to this function as a parameter and we have access to the state valid at the time of the function call: 
+If a **Updater function** is used, the most current state is passed to this function as a parameter and we have access to the state valid at the time of the function call:
 
 ```javascript
 this.setState((state) => ({ counter: state.counter + 1 });
@@ -149,9 +149,9 @@ this.setState(
 
 ## Lifecycle methods
 
-**Lifecycle methods** can be implemented as methods of a **class component** and are executed by React at different times during a **component lifecycle** \(hence the name\). 
+**Lifecycle methods** can be implemented as methods of a **class component** and are executed by React at different times during a **component lifecycle** \(hence the name\).
 
-The **Lifecycle** of a component starts at the moment it is **instantiated** or **mounted**, i.e. it is within the `render()` method of a parent component and is actually part of the returned component tree. The lifecycle ends when the component is removed from the tree of elements to be rendered. Meanwhile, there are still **lifecycle methods** that react to **updates** and errors. Or just to the fact that they are now removed \(unmounted"_\).
+The **Lifecycle** of a component starts at the moment it is **instantiated** or **mounted**, i.e. it is within the `render()` method of a parent component and is actually part of the returned component tree. The lifecycle ends when the component is removed from the tree of elements to be rendered. Meanwhile, there are still **lifecycle methods** that react to **updates** and errors. Or just to the fact that they are now removed \(unmounted"\_\).
 
 ### Overview of lifecycle methods
 
@@ -161,11 +161,11 @@ In the following the list of **Lifecycle methods** in the order, when and in whi
 
 The following methods are called **once** when a component is rendered for the first time, that is, when it is added to the DOM for the first time:
 
-* ¶¶constructor(props)¶¶
+* ¶¶constructor\(props\)¶¶
 * `static getDerivedStateFromProps(nextProps, prevState)`
 * `componentWillMount(nextProps, nextState)` \(deprecated in React 17\)
-* ``render()``
-* ¶ `componentDidMount()``
+* `render()`
+* ¶ \`componentDidMount\(\)\`\`
 
 #### Update phase
 
@@ -173,9 +173,9 @@ The following methods are called when components receive an update either by ent
 
 * `componentWillReceiveProps(nextProps)` \(deprecated in React 17\)
 * `static getDerivedStateFromProps(nextProps, prevState)`
-* `shouldComponentUpdate(nextProps, nextState)``
+* \`shouldComponentUpdate\(nextProps, nextState\)\`\`
 * `componentWillUpdate(nextProps, nextState)` \(deprecated in React 17\)
-* ``render()``
+* `render()`
 * `getSnapshotBeforeUpdate(prevProps, prevState)`
 * `componentDidUpdate(prevProps, prevState, snapshot)`
 
@@ -183,13 +183,13 @@ The following methods are called when components receive an update either by ent
 
 There's only one method here. This is called as soon as the component is removed from the DOM. This is useful to remove event listeners or `setTimeout()`/`setInterval()` calls added when mounting the component:
 
-* ¶ `componentWillUnmount()``
+* ¶ \`componentWillUnmount\(\)\`\`
 
 #### Error handling
 
 Finally, there is a new method added to React 16 that is called whenever an error occurs during rendering, in one of the lifecycle methods, or in the constructor of a **child component**:
 
-* ¶ `componentDidCatch()``
+* ¶ \`componentDidCatch\(\)\`\`
 
 Components that implement a `componentDidCatch()` method are also called **Error Boundary** and are used to represent an alternative to the erroneous element tree. This can be a high-level component \(related to its position within the component hierarchy\) that basically displays an error page and prompts the user to reload the application should an error occur. However, it can also be a low-level component that only outputs a short error text next to a button if the action triggered by the button has thrown an error.
 
@@ -205,7 +205,7 @@ class Clock extends React.Component {
   state = {
     date: new Date(),
   };
-  
+
   componentDidMount() {
     this.intervalId = setInterval(() => {
       this.setState(() => ({
@@ -213,11 +213,11 @@ class Clock extends React.Component {
       }));
     }, 1000);
   }
-  
+
   componentWillUnmount() {
     clearTimeout(this.intervalId);
   }
-  
+
   render() {
     return (
       <div>{this.state.date.toLocaleTimeString()}</div>
@@ -237,8 +237,8 @@ This method is called immediately before React removes the component from the DO
 If we should forget this, React's development mode will remind us with a warning at the latest when calling `this.setState()` in an already removed component:
 
 {% hint style="danger" %}
-**{*Warning:** Can't call setState \(or forceUpdate\) on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.  
-    in clock
+**{\*Warning:** Can't call setState \(or forceUpdate\) on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.  
+in clock
 {% endhint %}
 
 Unlike in some previous examples, here we call the `ReactDOM.render()` method only once. The component then "takes care of itself" and triggers a render process as soon as its **State** has been updated. This is the usual procedure for developing applications based on React. A single `ReactDOM.render()` call and from there the app manages itself, allows interaction with the user, reacts to state changes and regularly renders the interface anew.
@@ -449,7 +449,7 @@ And so the game starts again: `constructor()`, `getDerivedStateFromProps()` and 
 
 #### `componentDidMount()`
 
-If such a component is reached, it is the `componentDidMount()` method's turn. This method is called once a component and all its child components have been rendered. From this moment on, the DOM node of the component can be accessed if necessary. The method is also the right place to start e.g. timeouts or intervals or to initiate network requests e.g. via XHR/Fetch. 
+If such a component is reached, it is the `componentDidMount()` method's turn. This method is called once a component and all its child components have been rendered. From this moment on, the DOM node of the component can be accessed if necessary. The method is also the right place to start e.g. timeouts or intervals or to initiate network requests e.g. via XHR/Fetch.
 
 The method is called "from inside to outside". So it is the child components' turn as soon as they have been rendered, then the parent components' turn. So we can see in the log output above that the `componentDidMount()` method of the `ChildComponent` is called first, only after that the `ParentComponent` is called.
 
@@ -459,7 +459,7 @@ In our example we start a `setTimeout()` call once in the `ParentComponent` whic
 
 If a component is updated, this is always the case if the component changes its state or receives props from outside, `shouldComponentUpdate()` is called. But be careful, here there is a difference depending on whether the props have changed or the state: if a component gets new props from outside, `getDerivedStateFromProps()` is called first.
 
-The `shouldComponentUpdate()` method serves as a "help" to tell React if expensive rendering is necessary at all. The method gets the **next props** and the **next state** as parameters and can decide on their basis whether a rendering should be executed. The method must either return `true`, which will trigger a rendering, or `false`, which will prevent both `componentDidUpdate()` , `getSnapshotBeforeUpdate()` and `render()` from being called in this component. 
+The `shouldComponentUpdate()` method serves as a "help" to tell React if expensive rendering is necessary at all. The method gets the **next props** and the **next state** as parameters and can decide on their basis whether a rendering should be executed. The method must either return `true`, which will trigger a rendering, or `false`, which will prevent both `componentDidUpdate()` , `getSnapshotBeforeUpdate()` and `render()` from being called in this component.
 
 In complex applications it is often the case that the update cycle is only triggered because something has changed in another part of the application, in a parent component, but this change is irrelevant for child components. The `shouldComponentUpdate()` method is very helpful when it comes to optimizing rendering performance, as it prevents unnecessary renderings.
 
@@ -491,7 +491,7 @@ And that concludes the **Update cycle** as well as the **Mount cycle**. While th
 
 #### `componentWillUnmount()`
 
-Admittedly, I cheated a bit in the log above, because the `componentWillUnmount()` method is always executed \(and only then\) when a component is completely removed from the DOM. It never will in the corresponding code example. A component is considered unmounted if it is explicitly removed by calling `ReactDOM.unmountComponentAtNode()` (this applies especially to mount nodes\) or if it is implicitly no longer returned from the render\(\) method of a parent component.
+Admittedly, I cheated a bit in the log above, because the `componentWillUnmount()` method is always executed \(and only then\) when a component is completely removed from the DOM. It never will in the corresponding code example. A component is considered unmounted if it is explicitly removed by calling `ReactDOM.unmountComponentAtNode()` \(this applies especially to mount nodes\) or if it is implicitly no longer returned from the render\(\) method of a parent component.
 
 Whenever this happens, the `componentWillUnmount()` method of a component is called; of course, as with all methods except `render()`, only if it has been implemented. This **Lifecycle method** is essential when it comes to "cleaning up". Here you can and **should** call up all the functions that are required so that the component does not "leave tracks". These can be outstanding timeouts \(`setTimeout`\) or continuous intervals \(`setInterval`\) but also DOM modifications, which were made outside the own component JSX, still running network connections or XHR/Fetch calls or also own event listeners, which were added by means of the DOM API method `Element.addEventListener()`.
 
@@ -500,6 +500,4 @@ Event Listener. Good cue. We'll take care of that in the next chapter, because i
 ### Diagram of lifecycle methods
 
 ![diagram of the different lifecycle methods in their respective phases \(CC0 Dan Abramov\)](../.gitbook/assets/lifecycle-methods-2.jpg)
-
-
 

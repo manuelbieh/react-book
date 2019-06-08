@@ -4,10 +4,9 @@
 
 We already implemented a first simple `HelloWorld` component when we jumped into the cold water. But of course this was deliberately a very simple component, which was not very practical and did not contain everything React offered us. But it served as a good first illustration to get to know the basic functionality of **React** and **React components**.
 
-The principle of **components** is simple: a **component** allows to divide complex user interfaces into small pieces. These are ideally reusable, insulated and self-contained. They process any input from outside in the form of so-called **Props** \(engl. for "Properties") and finally describe on the basis of their `render()` function what appears on the screen.
+The principle of **components** is simple: a **component** allows to divide complex user interfaces into small pieces. These are ideally reusable, insulated and self-contained. They process any input from outside in the form of so-called **Props** \(engl. for "Properties"\) and finally describe on the basis of their `render()` function what appears on the screen.
 
-Components can occur roughly in two different variants: in the form of a simple function \(**Function Component**\), and **Class Components**, which represent an ordinary ES2015 class.
-Until the introduction of the React **Hooks** it was not possible to manage a local state in **Function Components**, so in some places the term **Stateless Functional Component** is still used, which comes from a time when **Function Components** could not hold a state. How **Hooks** work in detail and how State can be used in **Function Components** since React 16.8.0 is explained in detail in the chapter about **Hooks**.
+Components can occur roughly in two different variants: in the form of a simple function \(**Function Component**\), and **Class Components**, which represent an ordinary ES2015 class. Until the introduction of the React **Hooks** it was not possible to manage a local state in **Function Components**, so in some places the term **Stateless Functional Component** is still used, which comes from a time when **Function Components** could not hold a state. How **Hooks** work in detail and how State can be used in **Function Components** since React 16.8.0 is explained in detail in the chapter about **Hooks**.
 
 ### Function Components
 
@@ -23,7 +22,7 @@ This function fulfills all criteria of a valid **React component**: It has as `r
 
 ### Class Components / Class Components
 
-The second possibility how a **React component** can be created is shown in the example below: **Class Components** or in good German **Class Components**. These consist of an ES2015 class that derives from the `React.Component` or `React.PureComponent`\(more on this later) class and have at least one method called `render()`:
+The second possibility how a **React component** can be created is shown in the example below: **Class Components** or in good German **Class Components**. These consist of an ES2015 class that derives from the `React.Component` or `React.PureComponent`\(more on this later\) class and have at least one method called `render()`:
 
 ```jsx
 class Hello extends React.Component {
@@ -193,13 +192,13 @@ The `<MyApp>` component returns a `<div>` that uses the `Hello` component from t
 
 Important: A component may only ever return a single **Root element**! This may be:
 
-- a single React element:
+* a single React element:
 
 ```jsx
 <Hello name="Manuel />
 ```
 
-- Also in nested form, as long as there is only a single element on the outer layer:
+* Also in nested form, as long as there is only a single element on the outer layer:
 
 ```jsx
 <Parent>
@@ -207,19 +206,19 @@ Important: A component may only ever return a single **Root element**! This may 
 </Parent>
 ```
 
-- a DOM-element \(also this element may be nested and contain other elements\):
+* a DOM-element \(also this element may be nested and contain other elements\):
 
 ```jsx
 <div>...</div>
 ```
 
-- ...or self-closing:
+* ...or self-closing:
 
 ```jsx
 <img src="logo.jpg" alt="Picture: Logo" />
 ```
 
-- Or even:
+* Or even:
 
 ```javascript
 nil;
@@ -229,19 +228,19 @@ nil;
 
 Since **React 16.0.0\*\*** these may also be:
 
-- an array containing valid return values \(s.o.\):
+* an array containing valid return values \(s.o.\):
 
 ```jsx
 [<div key="1">Hello</div>, <Hello key="2" name="Manuel" />];
 ```
 
-- A simple string:
+* A simple string:
 
 ```javascript
 Hello World
 ```
 
-- or a so-called "fragment" - a kind of special "component" that does not itself appear in the rendered output and can serve as a container if, on the other hand, you would violate the rule of returning only a root element from the function or creating invalid HTML:
+* or a so-called "fragment" - a kind of special "component" that does not itself appear in the rendered output and can serve as a container if, on the other hand, you would violate the rule of returning only a root element from the function or creating invalid HTML:
 
 ```jsx
 <React.Fragment>
@@ -385,7 +384,7 @@ It is important to note that whenever a component receives new **props** from th
 
 ### Props are readonly within a component
 
-Regardless of how the **props** land in whatever kind of component, they have one thing in common: they are readonly** within the component **always, so \(and can\) only be read, not modified! The connoisseur also speaks here of **Immutability** or **Immutable Objects**. To work with variable data, the React **State** comes into play later. But one thing at a time.
+Regardless of how the **props** land in whatever kind of component, they have one thing in common: they are readonly **within the component** always, so \(and can\) only be read, not modified! The connoisseur also speaks here of **Immutability** or **Immutable Objects**. To work with variable data, the React **State** comes into play later. But one thing at a time.
 
 If a function does not modify its input and also has no external dependency, then in functional programming one speaks of a pure function \(**Pure Function**\) and the idea behind it is quite simple: This is to ensure that a function is self-contained and therefore remains unimpressed if something changes outside the function. The function receives all required parameters, is free of side effects \(engl: **Side Effects**\) and thus always achieves exactly identical output with the same input values. \*\*Same input, same output.
 
@@ -603,7 +602,7 @@ Within our component we are and remain _pure_. We don't modify the input value a
 
 #### Props are an abstracted functional argument
 
-Since props, reduced to the essentials, are nothing more than a functional argument, they can also appear in their various forms. Anything that functions or constructors in JavaScript accept as an argument can also be used as a value for a prop. From a simple string to objects, functions or even other react elements \(which, as we already know, are nothing else than a call to `createElement()`\) behind the scenes) this can be almost anything, as long as it is a valid expression.
+Since props, reduced to the essentials, are nothing more than a functional argument, they can also appear in their various forms. Anything that functions or constructors in JavaScript accept as an argument can also be used as a value for a prop. From a simple string to objects, functions or even other react elements \(which, as we already know, are nothing else than a call to `createElement()`\) behind the scenes\) this can be almost anything, as long as it is a valid expression.
 
 ```jsx
 <MyComponent
@@ -652,12 +651,13 @@ ReactDOM.render(
 ### The most important points at a glance
 
 {% hint style="info" %}
+
 Components must behave as **Pure Functions** with regard to their props and always generate the same output for the same props.
 
-- Props within a component are always to be regarded as **readonly**.
-- Components can get any number of props\*\* passed to them
-- In JSX, you pass props in a similar form to HTML attributes.
-- Unlike HTML, JSX allows various types of values. Values that are not of type String are enclosed in **curly braces**.
-- Props can accept **all JavaScript expressions** \("Expressions"\) as value
-- Received props can be passed on to child elements as many levels deep in the component tree as you like
-  {% endhint %}
+* Props within a component are always to be regarded as **readonly**.
+* Components can get any number of props\*\* passed to them
+* In JSX, you pass props in a similar form to HTML attributes.
+* Unlike HTML, JSX allows various types of values. Values that are not of type String are enclosed in **curly braces**.
+* Props can accept **all JavaScript expressions** \("Expressions"\) as value
+* Received props can be passed on to child elements as many levels deep in the component tree as you like
+

@@ -1,4 +1,4 @@
-# About the author
+# About the Author
 
 **Manuel Bieh,** since 2012 freelancer in frontend/JavaScript development.
 
@@ -7,3 +7,4 @@ Before I decided to work as a freelancer, I also had almost 10 years experience 
 In the beginning, I was a bit of a stranger - like many new to React, by the way, but the longer and more I studied React, the more my initial scepticism turned into enthusiasm. Since then React has packed me in such a way that I have selected all my projects in such a way that React is in use there \(and its use also makes sense!\). During this time I learned a lot \(and still learn every day\), worked in small teams with under 5 and in quite large teams with over 30 people, brought in my React knowledge and took new impressions and knowledge with me again and again.
 
 However, the complexity of React should not be underestimated. This makes it possible to develop an application with React relatively quickly and in a relatively short time. But if you value high quality, there are a lot of adjustment screws you can use to improve code quality, performance and maintainability; some of them are unknown to people who have developed a lot with React for a long time. And so, even after several years of intensive and daily work with React, I would certainly still not call myself an absolute expert. But I think that with time enough knowledge has come together, which I can pass on in the form of this book, to make it easier for you to get started and also to give you one or two professional tips.
+

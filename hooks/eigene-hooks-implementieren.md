@@ -2,7 +2,7 @@
 
 Besides the **internal hooks** like `useState` or `useEffect` it is also possible to create **own hooks**, which in turn make use of the **internal hooks** or of other **own hooks** and encapsulate own logic of any kind in reusable form. So-called custom hooks. The development of such **Custom Hooks** is particularly useful if the same logic is to be used in several components. Even if the logic in a component becomes more and more complex, it can be useful to split it into **own hooks** with easy to understand names in order to keep the actual **Function Component** clearer.
 
-### The first custom hook of your own
+## The first custom hook of your own
 
 Let's start with a very simple example and assume that we want to implement a **custom hook** to trigger a side effect and change the background color whenever a component is mounted. A typical name for such a **custom hook** - we remember that hooks always have to start with `use` - would be `useBackgroundColor()`. The hook expects a valid CSS color and sets it as the background color when a component that makes use of this hook is mounted or passes a new value to the **custom hook**.
 
@@ -27,7 +27,7 @@ const useBackgroundColor = (color) => {
 export default useBackgroundColor;
 ```
 
-As an example for the usage we create a small `Tabs` component, which shows three buttons, which in turn show other content when clicking. Depending on which component is displayed, we want to change the background of our application. We use our newly created `useBackgroundColor()` Hook. 
+As an example for the usage we create a small `Tabs` component, which shows three buttons, which in turn show other content when clicking. Depending on which component is displayed, we want to change the background of our application. We use our newly created `useBackgroundColor()` Hook.
 
 The whole thing then turns out as follows:
 
@@ -79,11 +79,11 @@ Alternatively, we could manually implement the `useEffect()`-Hook, which we use 
 
 While the simple creation of reusable components at the display level \(i.e. in the user interface layer\) is the great strength of React and JSX, hooks at the logic level offer us for the first time a way to ensure reusability with React on-board resources without having to make compromises.
 
-### Working with data from hooks
+## Working with data from hooks
 
 Data transfer in **Custom Hooks** is not a one-way street. In our first own hook we have seen how we pass data \(in this case a color\) to the **custom hook**. Namely as simple function parameters. However, the hook can also return data that can then be used in the component. The form in which data is returned from the **Hook** is entirely up to the developer. From a simple string over a tuple like the internal `useState()`-**Hook** up to whole React components or elements or even a mix of everything there are no limits to your own fantasy.
 
-Suppose we want to access the data of an API. We want to make it parameterizable which exact data is accessed. The hook is designed to get us the data - whatever component we use it in - and then return it to the component that needs the data. In a real example this could be user data from GitHub. This will be our next own hook: `useGitHubUserData`. 
+Suppose we want to access the data of an API. We want to make it parameterizable which exact data is accessed. The hook is designed to get us the data - whatever component we use it in - and then return it to the component that needs the data. In a real example this could be user data from GitHub. This will be our next own hook: `useGitHubUserData`.
 
 We pass a GitHub user name to the hook and get an object with all relevant information back to the user. The hook takes care of getting the data via the GitHub API and then passing it back to the component:
 

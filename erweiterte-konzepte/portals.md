@@ -2,9 +2,9 @@
 
 With **Portals** \, React provides the ability to render components in DOM nodes that are _outside_ the parent node of the component hierarchy, but still have access to the current component environment. A possible \(but by far not their only\) use case for this are overlays, which are rendered in their own `<div>` outside the actual application.
 
-A portal is located further in the context of the component that creates the portal and thus has access to all data that is available in the parent component \(such as the props or the state\) but is located in HTML at a possibly completely different location than the rest of the application. This is important if, for example, data from the state of the parent component or a common context such as translations is to be accessed within the portal. 
+A portal is located further in the context of the component that creates the portal and thus has access to all data that is available in the parent component \(such as the props or the state\) but is located in HTML at a possibly completely different location than the rest of the application. This is important if, for example, data from the state of the parent component or a common context such as translations is to be accessed within the portal.
 
-### Create a portal
+## Create a portal
 
 The creation of such a portal is very easy. So a component only has to call the `createPortal()` method from ReactDOM, give it a valid component as _first_ and a \(existing\) target node as _second_ parameter.
 
@@ -102,7 +102,7 @@ The `<body>` of our HTML document is then the following:
 
 So the portal is rendered to the `#portal` node instead of the `#root` node where the component is located. A portal is always rendered when the component is _mounted_ and is therefore _removed_ from the DOM when the component that contains the portal is removed from the component tree.
 
-### A portal in interaction with its parent component
+## A portal in interaction with its parent component
 
 In order to demonstrate the functionality of a portal even more clearly, the next step - surprise - is to develop a modal portal. As a starting point we use the identical HTML as in the introduction before. So we have two divs in which we render our application and our portal.
 
@@ -166,10 +166,9 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
 ```
 
-The `this.closeModal` method is of particular interest here. This is defined as the method of the app component, but is called within the `ModalPortal` component when clicking the "Close Modal" button in the context of the `App` component. 
+The `this.closeModal` method is of particular interest here. This is defined as the method of the app component, but is called within the `ModalPortal` component when clicking the "Close Modal" button in the context of the `App` component.
 
 So it can easily change the `modalIsOpen` state of the component. And this although the component is not located inside `<div id="root>` like the rest of our small app. This is possible because it is a portal whose content is **from react view** in the same component tree as the app itself, but not **from HTML view**.
 

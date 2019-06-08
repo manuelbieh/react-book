@@ -1,4 +1,4 @@
-# JSX - an introduction
+# JSX – an Introduction
 
 ## JSX as an important component in React development
 
@@ -188,7 +188,7 @@ Warning: Invalid DOM property `class`. Did you mean `className`?
 
 Who wants to know it exactly: here is the complete list of supported HTML attributes as it is written in the official React-Doku \(to hold, becomes long\):
 
-> `accept acceptCharset accessKey action allowFullScreen alt async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked cite classID className colSpan cols content contentEditable contextMenu controlsList coords crossOrigin data dateTime default defer dir disabled download draggable encType form formAction formEncType formMethod formNoValidate formTarget frameBorder headers height hidden high href hrefLang htmlFor httpEquiv icon id inputMode integrity is keyParams keyType child label long list loop low manifest marginHeight marginWidth max maxLength mediaGroup method min minLength multiple muted name noValidate nonce open optimum pattern placeholder poster preload profile radioGroup readOnly rel required reversed roleSpan rows sandbox scope scoped scrolling seamless selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step style summary tabIndex target title type useMap value width wmode wrap` wrap` wrap
+> `accept acceptCharset accessKey action allowFullScreen alt async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked cite classID className colSpan cols content contentEditable contextMenu controlsList coords crossOrigin data dateTime default defer dir disabled download draggable encType form formAction formEncType formMethod formNoValidate formTarget frameBorder headers height hidden high href hrefLang htmlFor httpEquiv icon id inputMode integrity is keyParams keyType child label long list loop low manifest marginHeight marginWidth max maxLength mediaGroup method min minLength multiple muted name noValidate nonce open optimum pattern placeholder poster preload profile radioGroup readOnly rel required reversed roleSpan rows sandbox scope scoped scrolling seamless selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step style summary tabIndex target title type useMap value width wmode wrap` wrap\` wrap
 
 The same is true for SVG elements, which can also be used within JSX, because SVG is valid XML! The list of supported SVG-attributes is however well and gladly 3 times as long and long not so relevant in everyday life, why I must refer you in this case however really to the appropriate place in the official documentary: [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
 
@@ -233,10 +233,10 @@ This should also give you enough knowledge about JSX to understand the following
 ## Conclusion
 
 {% hint style="info" %}
+
 * Multiline JSX must always be placed in parentheses
 * JSX can process JavaScript expressions. These must be placed in curly brackets and can then also be used in props.
 * To set attributes for HTML elements the spelling of the DOM element interface must be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
 * CSS Inline-Styles are written as JavaScript Object
 * Comments are also enclosed in braces and use multi-line comment syntax: `{/* */}`
-{% endhint %}
 
