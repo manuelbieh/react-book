@@ -1,4 +1,4 @@
-# Typechecking mit PropTypes, Flow and TypeScript
+# Typechecking with PropTypes, Flow and TypeScript
 
 **Typechecking** is a simple method to avoid potential errors in an application. The principle here is quite simple: Components should be "pure", as we already learned in the introduction. So they should not trigger any page effects and above all they should also generate the **identical output** for the **same input parameters** \(which are **props** and their derived **state** in the case of components\).
 

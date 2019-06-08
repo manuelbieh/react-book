@@ -1,4 +1,4 @@
-# About the Author
+# About the Autor
 
 **Manuel Bieh,** since 2012 freelancer in frontend/JavaScript development.
 

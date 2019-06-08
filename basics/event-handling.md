@@ -1,4 +1,4 @@
-# Event-Handling
+# Event Handling
 
 An essential part in the development of applications with a complex user interface is of course the interaction between the user and the interface itself - especially in the form of **events**.
 

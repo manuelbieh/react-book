@@ -1,4 +1,4 @@
-# Principles and rules of Hooks
+# Principles and Rules of Hooks
 
 The use of **Hooks** is linked to some principles and rules, which have to be observed, so that there are no unpleasant surprises and unexpected bugs, of which **Hooks** are supposed to have less. We are assisted by **ESLint** and the ESLint plugin `eslint-plugin-react-hooks` developed by the React team itself to comply with these rules. I had already recommended the use of ESLint in the chapter about **Tools and Setup** and this recommendation has not changed since then.
 

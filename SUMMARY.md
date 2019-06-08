@@ -1,6 +1,6 @@
 # Table of contents
 
-* [React lernen und verstehen](README.md)
+* [Learning React](README.md)
 * [Foreword](foreword.md)
 * [About the Autor](about-the-autor.md)
 * [I – Introduction](introduction/README.md)
