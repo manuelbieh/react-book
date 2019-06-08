@@ -1,52 +1,52 @@
 # State Management
 
-Mit zunehmender Größe einer Anwendung wachsen meist auch deren Komplexität und die Daten, die mit der Anwendung verwaltet werden sollen. Also anders gesagt: Der **Application State** wird schwieriger und unübersichtlicher zu verwalten. Wann gebe ich wie welcher Komponente welche Props hinein? Wie wirken sich diese Props auf den State meiner Komponente aus und was passiert wenn ich den State in einer Komponente modifiziere?
+As an application grows in size, so does its complexity and the data it is designed to manage. In other words: The **Application State** becomes more difficult and confusing to manage. When do I add which props to which components and how? How do these props affect the state of my component and what happens if I modify the state in a component?
 
-Auch wenn React hier in den letzten Jahren zunehmend deutlich besser geworden ist und gerade mit der neuen **Context API** und dem **useReducer-Hook** einiges zur besseren Übersichtlichkeit von komplexen Datenstrukturen getan hat, ist es noch immer nicht ganz einfach, stets alle Daten und Datentransformationen im Blick zu haben. Um dieses Problem zu lösen, gibt es einige externe Tools für **globales State Management**, die sich im Ecosystem um React herum gebildet haben. 
+Even though React has become much better in recent years and has done a lot to improve the clarity of complex data structures with the new **Context API** and the **useReducer hook**, it is still not easy to keep an eye on all data and data transformations. To solve this problem, there are some external tools for **global state management** that have formed around React in the ecosystem. 
 
-Zu den bekannteren Tools dieser Art zählt hier einerseits **MobX**, das sich selbst als _„Simple, scalable state management“_ beschreibt, also als Werkzeug für _simples und skalierbares State Management_. Auf der anderen Seite haben wir **Redux**, zweifellos der „Platzhirsch“ in der React-Welt, mitentwickelt unter anderem von Dan Abramov und Andrew Clark, die inzwischen auch dem offiziellen React-Team angehören. Redux bezeichnet sich als _„A predictable state container for JavaScript apps“_  also als _„vorhersehbarer State Container für JavaScript-Anwendungen“_.
+One of the better known tools of this kind here is **MobX****, which describes itself as _"Simple, scalable state management"_, i.e. as a tool for _simples and scalable state management_. On the other hand, we have **Redux**, undoubtedly the "top dog" in the React world, co-developed by Dan Abramov and Andrew Clark, among others, who now also belong to the official React team. Redux refers to itself as _"A predictable state container for JavaScript apps"_ i.e. as _"predictable state container for JavaScript applications"_.
 
-In diesem Kapitel soll es insbesondere um **Redux** gehen. Einerseits, weil ich selbst mit **Redux** in vielen Projekten gearbeitet habe und sehr gute Erfahrungen damit machen durfte, andererseits aber auch, weil es mit \(laut npmjs.com\) wöchentlich rund **4 Millionen Installationen** ganz klar deutlich mehr im Mainstream angekommen ist als **MobX**, mit immer noch respektablen, verglichen jedoch mit **Redux** doch überschaubaren **200.000 Installationen**.
+This chapter will focus in particular on **Redux**. On the one hand, because I myself have worked with **Redux** in many projects and had very good experiences with it, on the other hand, because with \(according to npmjs.com\) about **4 million installations** per week, it has clearly arrived in the mainstream much more than **MobX**, with still respectable, but compared to **Redux** manageable **200,000 installations**.
 
-**Redux** erfreut sich dabei noch immer an steigender Beliebtheit und hat wachsende Downloadzahlen zu verzeichnen, obwohl es bereits mehrmals von irgendwelchen Propheten totgesagt wurde. Als die finale **Context API** in **React 16.3.0** veröffentlicht wurde, hieß es, dass **Redux** damit obsolet würde \(wurde es nicht\), als mit **React 16.8.0** die **Hooks** und hier insbesondere der stark an **Redux** angelehnte **useReducer-Hook** eingeführt wurde, gab es diese Stimmen erneut. 
+**Redux** is still enjoying increasing popularity and has growing download numbers to record, although it has already been declared dead several times by some prophets. When the final **Context API** was released in **React 16.3.0**, it was said that **Redux** would become obsolete \(it didn't\), when **React 16.8.0** introduced the **Hooks** and especially the **useReducer-Hook**, which is very similar to **Redux**, there were these votes again. 
 
-In der Realität sieht das so aus, dass die Zahl der Installationen auch nach Einführung von **Context** und **Hooks** weiter steigen und **Redux** selbst intern **Gebrauch** dieser neuen Möglichkeiten macht, um einerseits die Performance zu verbessern und andererseits die Verwendung der eigenen API zu vereinfachen. Darüber hinaus hat **Redux** inzwischen ein unheimlich großes Ecosystem an eigenen Addons und Tools um sich versammelt, das auch durch die in React neu hinzugekommenen Funktionen nicht ersetzt wird.
+In reality, this means that the number of installations continues to increase even after the introduction of **Context** and **Hooks** and **Redux** itself makes internal **use** of these new possibilities to improve performance on the one hand and simplify the use of its own API on the other. In addition, **Redux** has gathered an incredibly large ecosystem of its own addons and tools around it, which will not be replaced by the new functions added in React.
 
-### Einführung in Redux
+### Introduction to Redux
 
-Bei **Redux** handelt es sich also wie beschrieben um einen _vorhersehbaren State Container_. Doch was bedeutet das genau? An dieser Stelle möchte ich gern etwas weiter ausholen, da ich es für wichtig erachte, das Grundprinzip zu verstehen um hinterher Fehler zu vermeiden, die schnell gemacht werden, hat man das Prinzip hinter **Redux** nicht zumindest in sehr groben Ansätzen verinnerlicht.
+As described above, **Redux** is a _predictable state container_. But what exactly does that mean? At this point I would like to go a little further, since I consider it important to understand the basic principle in order to avoid mistakes that are made quickly afterwards, the principle behind **Redux** has not been internalized at least in very rough approaches.
 
-Erst einmal haben wir mit **Redux** ein Tool, das in Teilen angelehnt ist an die Prinzipien der **Flux-Architektur**. Diese wurde - wie auch **React** selbst - von **Facebook** entwickelt, um die Entwicklung clientseitiger Web Anwendungen zu vereinfachen. Das Grundprinzip sieht dabei einen **unidirektionalen Datenfluss** vor, bei dem Daten immer nur **in eine Richtung** fließen. Also das Prinzip, wie wir es bereits aus **React** selbst kennen: eine **Aktion** \(bspw. ausgelöst durch einen Button-Klick\) ändert den **State**, die **State-Änderung** löst ein **Rerendering** aus und erlaubt es dann weitere Aktionen auszuführen. 
+First of all, with **Redux** we have a tool that is partly based on the principles of the **Flux architecture**. Like **React** itself, it was developed by **Facebook** to simplify the development of client-side web applications. The basic principle is **unidirectional data flow**, where data always flows **in one direction**. So the principle, as we already know it from **React** itself: an **Action** \(e.g. triggered by a button-click\) changes the **State**, the **State-Change** triggers a **Rerendering** and then allows to execute further actions. 
 
-Nach diesem Prinzip funktioniert auch **Redux**, mit dem entscheidenden Unterschied jedoch, dass der State statt nur innerhalb einer Komponente eben **global** verwaltet wird und somit alle Komponenten, egal wo im Seitenbaum sich diese befinden, auf **sämtliche Daten** zugreifen können. 
+This principle also works **Redux**, with the decisive difference that the state is managed **global** instead of just within one component, so that all components, no matter where they are in the page tree, can access **all data**. 
 
-Um Redux in einem Projekt zu nutzen, müssen wir es natürlich zuerst wieder einmal über die Kommandozeile installieren:
+Of course, to use Redux in a project, we must first install it again from the command line:
 
 ```bash
 npm install redux react-redux
 ```
 
-bzw. mit Yarn:
+or with yarn:
 
 ```bash
 yarn add redux react-redux
 ```
 
-Installiert werden hier **zwei** Pakete. Die Library `redux` selbst und `react-redux`. Während mit dem `redux` Paket die eigentliche State Management Library installiert wird, werden mit `react-redux` die sog. **Bindings** installiert. Auf gut Deutsch gesagt ist dies einfach nur ein Paket mit einigen **React-Komponenten** die konkret für die Verwendung von **Redux** mit **React** entwickelt und daraufhin optimiert wurden. Keine große Magie. 
+Here you can install **two** packages. The library `redux` itself and `react-redux`. While with the `redux` package the actual State Management Library is installed, with `react-redux` the so-called **Bindings** are installed. In plain English, this is simply a package with some **React components** that are specifically designed and optimized for using **Redux** with **React**. Not much magic. 
 
-Theoretisch wäre auch die Verwendung von **Redux** alleine möglich, allerdings müssten wir uns dann selbst darum kümmern zu schauen, wann Komponenten neu gerendert werden und darum, wie Daten aus einer Komponente in den State Container rein und wieder raus kommen. Da wir das nicht wollen, weil sich jemand anderes \(der sich viel besser damit auskennt als wir alle\) das bereits gemacht hat, nutzen wir eben zusätzlich `react-redux`.
+Theoretically, it would also be possible to use **Redux** alone, but then we'd have to take care of when components are re-rendered and how data from a component gets in and out of the state container. Since we don't want that because someone else \(who knows it much better than all of us\) has already done it, we use `react-redux` in addition.
 
-### Store, Actions und Reducer
+### Store, Actions and Reducer
 
-Nicht von den möglicherweise noch unbekannten Begriffen verunsichern lassen. Wir gehen sie der Reihe nach durch und irgendwann macht es Klick.
+Do not let the possibly still unknown terms unsettle you. We go through them one by one and at some point it clicks.
 
-Alle Daten in **Redux** befinden sich in einem sogenannten **Store**, der sich um die Verwaltung des globalen **States** kümmert. Theoretisch kann eine Anwendung auch mehrere Stores haben, im Konzept von Flux ist das sogar explizit so vorgesehen, in **Redux** ist das jedoch um Komplexität zu reduzieren eher unüblich und so beschränken sich React-Anwendungen, die **Redux** einsetzen, meist auch auf lediglich einen _einzigen_ **Store** als **Single Source of Truth**, also als _die_ einzige wahre Quelle für alle Daten. Der Store stellt Methoden bereit, um die sich in ihm befindlichen Daten zu verändern \(`dispatch`\), zu lesen \(`getState`\), und auf Änderungen zu reagieren \(`subscribe`\).
+All data in **Redux** are located in a so-called **Store**, which takes care of the administration of the global **State**. Theoretically an application can have multiple stores, in the concept of Flux this is even explicitly provided for, but in **Redux** this is rather unusual in order to reduce complexity and so React applications using **Redux** are usually limited to only one _single_ **Store** as **Single Source of Truth**, so as _the_ only true source for all data. The store provides methods to modify the data contained in it \(`dispatch`\), to read \(`getState`\), and to react to changes \(`subscribe`\).
 
-Die einzige Möglichkeit um Daten in einem **Store** zu verändern, ist dabei das Auslösen \(_„dispatchen“_\) von **Actions**. Auch hier lässt sich **Redux** wieder von Ideen aus der Flux-Architektur inspirieren und macht es erforderlich diese **Actions** im Format der **Flux Standard Actions** \(FSA\) zu halten. Eine solche **FSA** bestehen aus einem simplen JavaScript-Objekt, das immer **zwingend** eine `type`-Eigenschaft besitzen _muss_ und darüber hinaus die drei weiteren Eigenschaften `payload`, `meta` und `error` besitzen _kann_, wobei uns in erster Linie einmal die `payload` interessieren soll, mit der wir es in 9 von 10 Fällen, in denen wir eine **Action** _dispatchen_, zu tun haben werden. 
+The only way to change data in a **Store** is to trigger \(_"dispatchen"_\) **Actions**. Again **Redux** is inspired by ideas from the Flux architecture and makes it necessary to keep these **Actions** in the format of the **Flux Standard Actions** \(FSA\). Such a **FSA** consists of a simple JavaScript object, which always **forcibly** has to have a `type` property _must_ and in addition the three other properties `payload`, `meta` and `error` have _can_, whereby we should primarily be interested in the `payload`, which we will have to deal with in 9 of 10 cases in which we have a **Action** _dispatchen_. 
 
-Die **Payload** stellt sozusagen den _Inhalt_ einer **Action** dar und kann vom simplen Boolean oder String, über numerische Werte, bis hin zu komplexen Arrays oder Objekten beliebige Daten beinhalten, die serialisierbar sind, also in Form einer JSON-Repräsentation gespeichert werden können.
+The **Payload** represents the _content_ of a **Action** and can contain any data from simple Boolean or String, over numeric values, up to complex arrays or objects, which are serializable, thus in form of a JSON representation can be stored.
 
-Beispiel für eine typische **Action** in **Redux**:
+Example of a typical **Action** in **Redux**:
 
 ```javascript
 {
@@ -58,9 +58,9 @@ Beispiel für eine typische **Action** in **Redux**:
 }
 ```
 
-Wird eine **Action** durch die vom **Store** bereitgestellte `dispatch`Methode ausgelöst, wird der zum Zeitpunkt des Aufrufs aktuelle **State** zusammen mit der ausgelösten **Action** an die **Reducer** übergeben. Ein **Reducer** ist eine **pure Function**, die wir ebenfalls bereits aus React kennen, und dient dazu, aus dem **aktuellen State** und der jeweiligen Action mit ihren `type`- und `payload`-Eigenschaften einen **neuen State** zu erzeugen. Zur Erinnerung: Eine **pure Function** erzeugt stets die **selbe Ausgabe** bei **gleichen Eingabeparametern**, egal wie oft diese aufgerufen wird. Dieses Verhalten ist es, das sie vorhersehbar und dadurch auch gleichzeitig einfach testbar macht.
+If a **Action** is triggered by the `dispatch` method provided by the **Store**, the **State** current at the time of the call is passed to the **Reducer** together with the triggered **Action**. A **Reducer** is a **pure function**, which we already know from React, and is used to create a **new state** from the **current state** and the respective action with its `type` and `payload` properties. Remember: A **pure Function** always generates the **same output** with **same input parameters**, no matter how often it is called. It is this behavior that makes them predictable and thus also easy to test.
 
-Beispiel für einen **Reducer**:
+Example for a **Reducer**:
 
 ```javascript
 const reducer = (state, action) => {
@@ -78,20 +78,20 @@ const reducer = (state, action) => {
 };
 ```
 
-Ein **Store** erwartet bei seiner Erstellung grundsätzlich einen einzigen **Reducer**, jedoch bietet **Redux** hier mit der `combineReducers()`-Funktion eine Möglichkeit, diese **Reducer**-Funktion zur besseren Verständlichkeit und Lesbarkeit in beliebig viele kleine Teilstücke zu splitten und anschließend zu einem großen, gemeinsamen **Reducer** zusammen zu setzen, auch **Root-Reducer** genannt. Wird dann eine Action _dispatched_, wird jeder **Reducer** mit jeweils den gleichen Parametern, nämlich dem **State** und der **Action**, aufgerufen. Diese Methode schauen wir uns später in diesem Kapitel noch etwas genauer an.
+A **Store** basically expects a single **Reducer** when it is created, but **Redux** with the `combineReducers()`-function offers the possibility to split this **Reducer**-function into as many small parts as you like to make it easier to understand and read, and then to put them together to a large, common **Reducer**, also called **Root-Reducer**. If an action is _dispatched_, each **Reducer** is called with the same parameters, namely the **State** and the **Action**. We will take a closer look at this method later in this chapter.
 
-Da jeder **Reducer** auf die `type`-Eigenschaft einer **Action** reagiert, ist es ein Stück weit zur Konvention geworden, alle verwendeten Types in gleichnamige Variablen auszulagern, da ein Tippfehler im ersten Moment nicht immer gleich auffällt \(bspw. `USER_ADDDED`\), der JavaScript-Interpreter jedoch beim Zugriff auf eine nicht definierte Variable einen Fehler wirft. So findet man in Apps, in denen **Redux** eingesetzt wird, zu Beginn einer Datei oft einen Code-Block von folgendem Format:
+Since every **Reducer** reacts to the `type` property of a **Action**, it has become a bit of a convention to store all used types in variables of the same name, since a typo is not always immediately noticeable \(e.g. `USER_ADDDED`\), but the JavaScript interpreter makes an error when accessing an undefined variable. In apps where **Redux** is used, you will often find a code block of the following format at the beginning of a file:
 
 ```javascript
 const PLUS = 'PLUS';
 const MINUS = 'MINUS';
 ```
 
-Dies dient eben dazu, um Kohärenz bei den verwendeten **Action Types** sicherzustellen.
+This is to ensure coherence in the **Action Types** used.
 
-### Einen Store erstellen
+### Create a store
 
-Um einen Store zu erstellen, der unseren globalen State verwalten wird, importieren wir die `createStore` Funktion aus dem `redux` Paket, rufen diese auf und übergeben ihr eine **Reducer**-Funktion. Die Funktion gibt uns daraufhin das Store-Objekt zurück mit Methoden, um mit dem Store zu arbeiten: `dispatch`, `getState` sowie `subscribe`, wobei letztere eine eher untergeordnete Rolle bei der Arbeit mit React spielt, da die Komponenten aus dem `react-redux` Paket sich um das Rerendering von Komponenten kümmern, die von einer Änderung am **State** betroffen sind.
+To create a store that will manage our global state, we import the `createStore` function from the `redux` package, call it and pass it a **Reducer** function. The function then returns the store object with methods for working with the store: `dispatch`, `getState`, and `subscribe`, the latter playing a minor role in working with React, since the components in the `react-redux` package are responsible for rendering components affected by a change to the **State**.
 
 ```javascript
 import { createStore } from "redux";
@@ -115,27 +115,27 @@ const counterReducer = (state = initialState, action) => {
 const store = createStore(counterReducer);
 ```
 
-Hier haben wir einen ersten und noch sehr simplen Store mit einem Counter-Reducer erstellt. Da wir der `createStore`-Funktion hier nur den ersten Parameter übergeben, wird die `counterReducer`-Funktion beim Initialisieren mit `undefined` als vorherigen `state` aufgerufen, weshalb der `initialState` als Standardparameter eingesetzt wird. Dieser entspricht hier dem numerischen Wert `0`. 
+Here we have created a first and still very simple store with a counter-reducer. Since we only pass the first parameter to the `createStore` function here, the `counterReducer` function is called when initializing with `undefined` as the previous `state`, which is why the `initialState` is used as the default parameter. This corresponds here to the numeric value `0`. 
 
-Übergeben wir der `createStore`-Funktion einen zweiten Parameter, so würde dieser als erster State beim Initialisieren an die Reducer-Funktion übergeben werden:
+If we pass a second parameter to the `createStore` function, it would be passed to the Reducer function as the first state during initialization:
 
 ```javascript
 const store = createStore(counterReducer, 3);
 ```
 
-Hier wäre der Startwert für unseren `state`-Parameter der an die `counterReducer`-Funktion übergeben wird `3` statt `undefined`, der `initialState` Standardparameter würde nicht einspringen und unser Counter würde bei `3` beginnen zu zählen statt bei `0`.
+Here would be the starting value for our `state` parameter passed to the `counterReducer` function `3` instead of `undefined`, the `initialState` default parameter would not step in and our counter would start counting at `3` instead of `0`.
 
-Als initiale **Action** wird eine Redux-interne Action _dispatched_, die die Form `{type: '@@redux/INIT5.3.p.j.l.8'}` besitzt. Daher greift in unserem `switch`-Block der `default`-Fall und gibt einfach nur den übergebenen `state` \(der in diesem Fall dem `initialState` entspricht\) zurück. 
+The initial **Action** is a Redux internal action _dispatched_ with the form `{type: '@@redux/INIT5.3.p.j.l.8'}`. Therefore in our `switch` block the `default` case takes effect and simply returns the passed `state` \(which in this case corresponds to the `initialState`\). 
 
-Ein solcher `default`-Fall ist wichtig. Greift kein anderer `case` im `switch`, muss stets der letzte Stand des States aus der Funktion zurückgegeben werden, um unerwünschte Seiteneffekte zu vermeiden. Die `Reducer`-Funktion wird bei **jedem** `dispatch`-Aufruf ausgeführt und ihr Rückgabewert bestimmt immer den **nächsten State!**
+Such a 'default' case is important. If there is no other `case` in the `switch`, the last state of the state must always be returned from the function to avoid unwanted side effects. The `Reducer` function is executed on **every** `dispatch` call and its return value always determines the **next state!**
 
-Rufen wir nun gleich nach der Initialisierung `store.getState()` auf, erhalten wir unseren `initialState` zurück: `0`:
+If we call `store.getState()` right after the initialization, we get our `initialState` back: `0`:
 
 ```javascript
 console.log(store.getState()); // 0
 ```
 
-Wir können nun etwas rumspielen, verschiedene **Actions dispatchen** und schauen, wie unser **State** auf die **Actions** jeweils reagiert:
+We can now play around, dispatch different **Actions** and see how our **State** reacts to the **Actions**:
 
 ```javascript
 store.dispatch({ type: "PLUS", payload: 2 });
@@ -148,25 +148,25 @@ store.dispatch({ type: "MINUS", payload: 2 });
 console.log(store.getState()); // 1
 ```
 
-Hier _dispatchen_ wir zweimal eine **Action** mit dem `type` `PLUS` und einmal eine Action vom `type` `MINUS`. Wir übergeben jeweils eine `payload`, mit der wir angeben, um wie viele Ziffern wir den letzten State hoch- oder runterzählen wollen. Unsere **State-Mutation** findet also wie folgt statt:
+Here we _dispatchen_ twice an **Action** with the `type` `PLUS` and once an action of the `type` `MINUS`. We pass a `payload`, with which we specify by how many digits we want to count up or down the last state. Our state mutation takes place as follows:
 
 ```javascript
-0 (initialer State) + 2 (payload) = 2 (neuer State)
-2 (alter State)     + 1 (payload) = 3 (neuer State)
-3 (alter State)     - 2 (payload) = 1 (neuer State)
+0 (initial state) + 2 (payload) = 2 (new state)
+2 (old state) + 1 (payload) = 3 (new state)
+3 (old state) - 2 (payload) = 1 (new state)
 ```
 
-Dieser State ist dabei noch denkbar simpel und besteht lediglich aus einem einzigen Wert. Später werden wir uns noch anschauen, wie wir komplexeren **State** aus verschiedenen Objekten und mit mehreren **Reducern** erstellen.
+This state is still very simple and consists only of a single value. Later, we will look at how to create more complex **State** from different objects and with multiple **Reducers**.
 
 ### Action Creators vs. Actions
 
-Wer Artikel über **Redux** liest oder auch in die offizielle Doku schaut, wird immer wieder mit den Begriffen **Action** und **Action Creator** konfrontiert. Mir selbst fiel es anfangs etwas schwer, die Unterschiede zu verstehen und ich weiß auch von anderen, dass es nicht nur mir so erging. Erschwerend kommt hinzu, dass die Begriffe auch gelegentlich synonym verwendet werden obwohl sie es nicht sind. Daher möchte ich an dieser Stelle kurz einen keinen Exkurs einwerfen um die beiden Begriffe **Action Creator** und **Action** voneinander abzugrenzen.
+Anyone who reads articles about **Redux** or even looks at the official documentary will always be confronted with the terms **Action** and **Action Creator**. At first it was a bit difficult for me to understand the differences and I also know from others that it wasn't just me. To make matters worse, the terms are also occasionally used synonymously although they are not. Therefore I would like to briefly throw in no excursus at this point to distinguish the two terms **Action Creator** and **Action** from each other.
 
-Die **Action** haben wir oben bereits kennengelernt. Sie ist ein einfaches und möglichst _serialisierbares_ **Objekt**, mit dem wir beschreiben, wie wir den State verändern wollen. Dieses enthält immer zwingend eine `type`-Eigenschaft und meist auch eine `payload`.
+We already got to know the action upstairs. It is a simple and if possible _serializable_ **object**, with which we describe how we want to change the state. This always contains a `type` property and usually also a `payload`.
 
-Ein **Action** _**Creator**_ hingegen ist eine **Funktion**, die schlussendlich eine **Action** **zurückgibt**, also sozusagen eine **Factory**, die eine **Action** _erstellt_ \(daher: _Creator_\). Meist werden **Action Creators** dazu verwendet um in ihnen **Logik zu kapseln**, die zur Erstellung einer **Action** notwendig ist. Manchmal werden sie aber auch einfach verwendet, um die doch recht umständliche Natur der **Actions** hinter einer einprägsamen Funktion weg zu abstrahieren. **Action Creators** werden dann an Stelle der ursprünglichen **Action** als Parameter der `dispatch`-Methode aufgerufen.
+A **Action** _**Creator**_ is a **Function**, which finally returns a **Action** **Factory**, so to speak a **Factory**, which creates a **Action** _\(hence: _Creator_\). Usually **Action Creators** are used to encapsulate **logic**, which is necessary to create a **Action**. Sometimes, however, they are simply used to abstract the rather cumbersome nature of **Actions** behind a memorable function. **Action Creators** are then called instead of the original **Action** as parameters of the `dispatch` method.
 
-Typische **Action Creators** aus unserem obigen Beispiel würden dann bspw. so aussehen:
+Typical **Action Creators** from our example above would look like this:
 
 ```javascript
 const add = (number) => {
@@ -178,14 +178,14 @@ const subtract = (number) => {
 }
 ```
 
-Oder wer mit den **Shorthand Notationen** aus **ES2015+** vertraut ist, kann das Ganze auch noch weiter abkürzen:
+Or if you are familiar with the **short hand notations** from **ES2015+**, you can shorten the whole thing even further:
 
 ```javascript
 const add = (payload) => ({ type: 'PLUS', payload });
 const subtract = (payload) => ({ type: 'MINUS', payload });
 ```
 
-Anschließend werden die entsprechenden **Action Creators** als Parameter der `dispatch`-Methode aufgerufen, statt die **Actions** direkt zu übergeben:
+Then the corresponding **Action Creators** are called as parameters of the `dispatch` method instead of passing the **Actions** directly:
 
 ```javascript
 store.dispatch(add(2));
@@ -193,13 +193,13 @@ store.dispatch(add(1));
 store.dispatch(subtract(2));
 ```
 
-Dies geht bei entsprechender Benennung der **Action Creator** Funktionen deutlich zu Gunsten besserer Verständlichkeit des Codes. **Action Creator** sind dabei ein wichtiges Puzzlestück im Redux-Konzept und aus der täglichen Arbeit nicht wegzudenken, da sie uns viel Schreibarbeit und Wiederholungen ersparen und somit auch potentielle Fehlerquellen wie bspw. Tippfehler beim `type` einer **Action** verringern \(etwa `PLSU` statt `PLUS`\).
+If the **Action Creator** functions are named accordingly, this is clearly in favour of better comprehensibility of the code. **Action Creators** are an important puzzle piece in the Redux concept and are an indispensable part of our daily work, as they save us a lot of paperwork and repetition and thus also reduce potential sources of error such as typos in the `type` of an **Action** \(e.g. `PLSU` instead of `PLUS`\).
 
-### Komplexe Reducer
+### Complex reducers
 
-Die bisherigen Beispiele dienten dazu, mit dem Konzept von **Actions** und **Reducern** vertraut zu werden und um zu verstehen, wie **Actions** verwendet werden, um mit dem **Reducer** den **Store** zu mutieren. Typischerweise besteht der **State** in einer React-Anwendung aber aus deutlich komplexeren Daten und Objekten. Werfen wir also einen Blick auf einen Store, wie er realistisch in einer kleinen Anwendung aussehen könnte.
+The previous examples were used to become familiar with the concept of **Actions** and **Reducers** and to understand how **Actions** are used to mutate the **Store** with the **Reducer**. Typically, the **State** in a React application consists of much more complex data and objects. So let's take a look at a store to see how it could look realistic in a small application.
 
-Als Beispiel soll uns das State-Management für eine fiktive kleine **Todo-App** dienen, die sowohl eine Liste mit Todos verwaltet, als auch einen eingeloggten Benutzer beinhaltet. Unser State halt also die beiden Toplevel-Eigenschaften `todos` \(vom Typ Array\) und `user` \(vom Typ Objekt\). Dies bilden wir in unserem initialen State auch so ab:
+As an example we want to use the state management for a fictitious little **Todo app**, which manages a list of todos as well as a logged-in user. So our state has the two top level properties `todos` \(of type Array\) and `user` \(of type Object\). We map this in our initial state in the same way:
 
 ```javascript
 const initialState = Object.freeze({
@@ -208,9 +208,9 @@ const initialState = Object.freeze({
 });
 ```
 
-Zusätzlich, da wir sicherstellen wollen, dass bei jedem Aufruf ein neues State-Objekt erzeugt wird und nicht das alte mutiert wird, umschließen wir unseren initialen State mit einem `Object.freeze()`. Dies sorgt dafür, dass wir einen `TypeError` bekommen, sollte das **State-Objekt** direkt mutiert werden.
+Additionally, since we want to make sure that a new state object is created with every call and not the old one is mutated, we enclose our initial state with an `Object.freeze()`. This ensures that we get a `TypeError` if the **State object** is mutated directly.
 
-Schauen wir uns an, wie eine **Reducer**-Funktion aussehen könnte, mit der wir den eingeloggten Benutzer setzen, neue Todos hinzufügen und entfernen sowie deren Status ändern können:
+Let's take a look at what a **Reducer** function might look like, allowing us to set the logged in user, add and remove new todos, and change their status:
 
 ```javascript
 const rootReducer = (state = initialState, action) => {
@@ -263,21 +263,21 @@ const rootReducer = (state = initialState, action) => {
 const store = createStore(rootReducer);
 ```
 
-Ich möchte gar nicht auf alles was hier passiert im Detail eingehen, da es hier darum gehen soll, wie ein großer, unübersichtlicher **Reducer** in mehrere kleinere und idealerweise übersichtlichere aufgeteilt werden kann. Doch einige Stellen sind für das generelle Verständnis nicht unwichtig. Gehen wir also der Reihe nach den `switch`-Block durch, bei dem uns jeder `case`-Block ein neues State-Objekt zurückgibt.
+I don't want to go into everything that happens here in detail, because this is about how a big, confusing **Reducer** can be divided into several smaller and ideally clearer ones. But some passages are not unimportant for the general understanding. So let's go through the `switch` block one by one, where each `case` block returns a new state object.
 
-Angefangen bei `SET_USER`: das hier erzeugte **State-Objekt** ändert das `user`-Objekt und setzt dessen `name`-Eigenschaft auf `action.payload.name`, sowie die `accessToken`-Eigenschaft auf `action.payload.accessToken`. Wer mag, kann hier stattdessen auch `user` auf `action.payload` setzen, dann würden alle in der entsprechenden **Payload** der **Action** übergebenen Eigenschaften im `user`-Objekt landen. Dabei sollte dann aber sichergestellt sein, dass die `action.payload` immer ein Objekt ist, da wir ansonsten die Ausgangsform des `user`-Objekts verändern würden, was zu Problemen führen kann, wenn bspw. auch andere Teile des **Reducers** auf das Objekt zugreifen und das Objekt plötzlich keines mehr ist. In unserem Beispiel ignorieren wir aber alle anderen Eigenschaften, indem wir explizit nur `name` und `accessToken` aus der **Payload** der ausgelösten Action holen. 
+Starting with `SET_USER`: the **State object** created here changes the `user` object and sets its `name` property to `action.payload.name`, and the `accessToken` property to `action.payload.accessToken`. If you like, you can set `user` to `action.payload` instead, then all properties passed in **Payload** of **Action** would end up in the `user` object. However, you should make sure that the `action.payload` is always an object, because otherwise we would change the initial form of the `user` object, which can lead to problems if other parts of the **reducer** access the object and the object is suddenly no longer an object. In our example, however, we ignore all other properties by explicitly getting only `name` and `accessToken` from the **Payload** of the triggered action. 
 
-Neben dem modifizierten `user` geben wir auch eine `todos`-Eigenschaft zurück, die wir auf `state.todos` setzen, also beim bisherigen Wert belassen. **Dies ist wichtig**, da in unserem State-Objekt die `todos` ansonsten komplett aus dem State entfernt werden würden und wir nun zwar den Benutzer gesetzt, unsere Todos jedoch aus dem State verloren hätten!
+Besides the modified `user` we also return a `todos` property, which we set to `state.todos`, i.e. leave it at the previous value. **This is important** because in our state object the `todos` would otherwise be completely removed from the state and we would have set the user, but lost our todos from the state!
 
-Weiter geht es mit `ADD_TODO`: Hier ist es andersherum und wir geben zuerst einmal den `user`-Ast unseres State-Trees unverändert zurück. Anschließend fügen wir das neue Todo-Item mittels `.concat()`-Methode dem `todo`-Array hinzu. Hier ist es wichtig, `concat()` und nicht `push()` zu benutzen, da `push()` eine sog. _mutative_ Methode ist, also den bestehenden State verändert statt einen neuen State zu erzeugen. Mittels `state.todos.concat` nehmen wir das aktuelle `todos`-Array als Basis und erzeugen daraus ein neues Array mit dem neuen Todo-Item und geben dieses zurück.
+Continue with `ADD_TODO`: Here it is the other way around and we first return the `user` branch of our state tree unchanged. Then we add the new todo item to the `todo` array using the `.concat()` method. Here it is important to use `concat()` and not `push()`, since `push()` is a so-called _mutative_ method, i.e. it changes the existing state instead of creating a new one. Using `state.todos.concat` we take the current `todos` array as base and create a new array with the new todo-item and return it.
 
-Sehr ähnliches passiert im nächsten Fall: `REMOVE_TODO`. Hier geben wir wieder zuerst den `user`-Ast zurück, ehe wir im `todos`-Array nach dem zu entfernenden Eintrag suchen, um diesen anschließend herauszufiltern. Welcher Eintrag zu entfernen ist, das übergeben wir der Action als `action.payload` in Form einer Todo-ID. Das gefilterte Array ist dann unser neuer `todos`-State. Wir nutzen hier die `Array.filter()`-Methode, da diese anders als bspw. `Array.splice()` nicht _mutativ_ ist und ein neues Array erzeugt.
+Very similar happens in the next case: `REMOVE_TODO`. Here we first return the `user` branch before searching for the entry to remove in the `todos` array and filtering it out. Which entry to remove is passed to the action as `action.payload` in the form of a todo-ID. The filtered array is then our new `todos` state. We use the `Array.filter()` method here, because it is not _mutative_ unlike e.g. `Array.splice()` and creates a new array.
 
-Zuletzt haben wir den `CHANGE_TODO_STATUS` Fall. Mit diesem ändern wir den Status des Todo-Elements, also von _Zu erledigen_ \(`false`\) auf _Erledigt_ \(`true`\) - oder eben andersherum. Dazu geben wir erneut das unveränderte `user`-Objekt aus dem vorherigen State zurück und iterieren anschließend mittels `state.todos.map()` durch alle Todos. In der Map-Funktion schauen wir, ob die ID des aktuellen Todo-Objekts der ID aus der `action.payload` entspricht. Ist dies nicht der Fall, geben wir einfach jeweilige Todo-Element unverändert zurück. 
+Last we have the `CHANGE_TODO_STATUS` case. With this we change the status of the todo element, i.e. from _ToDo_ \(`false`\) to _Done_ \(`true`\) - or vice versa. We return the unchanged `user` object from the previous state and iterate through all todos using `state.todos.map()`. In the map function, we check whether the ID of the current todo object corresponds to the ID from the `action.payload`. If this is not the case, we simply return the respective todo element unchanged. 
 
-Entspricht die ID aus der Payload der ID des aktuellen Todo-Elements, erzeugen wir ein neues Objekt, schreiben alle Eigenschaften mit ihren jeweiligen Werten mittels ES2015+ Spread-Syntax \(`{ ...todo }`\) in das neu erzeugte Objekt und überschreiben die `done`-Eigenschaft mit dem neuen Wert aus der Action-Payload. Wir generieren hier ein neues Objekt statt einfach das bestehende zu überschreiben, da wir ja einen neuen State erzeugen müssen, damit unser **Reducer** eine **Pure Function** bleibt. Die Verwendung der `Array.map()`-Methode sorgt bereits dafür, dass wir außerdem ein neues Array erzeugen.
+If the ID from the payload corresponds to the ID of the current todo element, we create a new object, write all properties with their respective values using ES2015+ spread syntax \(`{ ...todo }`\) into the newly created object and overwrite the `done` property with the new value from the action payload. We generate a new object here instead of simply overwriting the existing one, since we have to create a new state so that our **Reducer** remains a **Pure Function**. Using the `Array.map()` method already causes us to create a new array as well.
 
-Hier haben wir es lediglich mit zwei Ästen in unserem State-Tree zu tun: `user` und `todos` - und dennoch wird unsere **Reducer**-Funktion bereits sehr lang. Bei steigender Komplexität des States wird die Funktion entsprechend noch länger und vor allem: **fehleranfälliger**. Da wir neben dem veränderten Teil des States auch immer alle anderen Teile zurückgeben müssen - also etwa den unveränderten `user`, wenn wir die `todos` modifizieren oder eben die `todos`, wenn wir den `user` modifizieren – wird die Funktion sehr schnell unübersichtlich und schwierig zu verwalten. Zur Erleichterung könnten wir hier auch die **Object Spread Syntax** aus ES2015+ nutzen, aus dem bisherigen State einen neuen State erzeugen und anschließend den veränderten Ast des State-Trees überschreiben. Das könnte dann am Beispiel des `ADD_TODO` Falls so aussehen:
+Here we are only dealing with two branches in our state tree: `user` and `todos` - and yet our **Reducer** function is already very long. With the increasing complexity of the state, the function becomes correspondingly longer and above all: **More error-prone. Since we always have to return all other parts besides the changed part of the state - for example the unchanged `user` if we modify the `todos` or the `todos` if we modify the `user` - the function quickly becomes confusing and difficult to manage. To make things easier, we could also use the **Object Spread Syntax** from ES2015+, create a new state from the previous state and then overwrite the changed branch of the state tree. This could look like this using the example of the `ADD_TODO` case:
 
 ```javascript
 case "ADD_TODO": {
@@ -288,11 +288,11 @@ case "ADD_TODO": {
 }
 ```
 
-Aber auch das macht die Sache nur unwesentlich einfacher für uns, da es uns noch immer recht schnell passieren kann, dass wir vergessen den alten, unveränderten Teil des States mit zurückzugeben.
+But even that doesn't make things much easier for us, as it can still happen quite quickly that we forget to return the old, unchanged part of the state.
 
-Aus diesem Grund stellt **Redux** die `combineReducer()`-Methode bereit. Mit ihr wird es möglich, unsere **Reducer** \(bzw. den **State**, den diese erzeugen\) in einzelne benannte Teilbereiche aufzuteilen, die sich dann jeweils um eine bestimmte Aufgabe kümmern und in eigene Dateien ausgelagert werden können. 
+For this reason, **Redux** provides the `combineReducer()` method. It makes it possible to divide our **Reducers** \(or the **State** they generate\\) into individual named sub-areas, which then each take care of a specific task and can be stored in their own files. 
 
-Ausgehend von unserem Beispiel hätten wir hier also die beiden **Reducer-**Funktionen `user` und `todos`. Beide befinden sich in einer eigenen Datei, die die **Reducer-**Funktion als `default` exportiert:
+Starting from our example, here we have the two **Reducer-**functions `user` and `todos`. Both are in a separate file that exports the **Reducer-**function as `default`:
 
 ```javascript
 // user/reducer.js
@@ -343,9 +343,9 @@ export default (state = initialState, action) => {
 };
 ```
 
-Wer genau hinschaut, stellt fest, dass unsere große, unübersichtliche **Reducer**-Funktion nicht nur in zwei kleinere und deutlich übersichtlichere Funktionen aufgeteilt wurde. Die Funktionen selbst wurden darüber hinaus auch vereinfacht. Statt jeweils auch den _unveränderten_ Teil des **State-Trees** aus dem **Reducer** zurück zu geben, geben wir nur noch den Teil des States zurück, der _relevant für den jeweiligen_ **Reducer** ist. Im **User-Reducer** ist das eben der **Benutzer**, im **Todos-Reducer** entsprechend die **Todos**.
+If you take a closer look, you will notice that our large, confusing **Reducer** function has not only been divided into two smaller and much clearer functions. The functions themselves have also been simplified. Instead of returning the _unchanged_ part of the **State tree** from the **Reducer**, we only return the part of the state that is _relevant for the respective_ **Reducer**. In the **User-Reducer** this is also the **User**, in the **Todos-Reducer** this is correspondingly the **Todos**.
 
-Um unsere beiden _kleineren_ **Reducer** nun wieder zu einer _großen_ **Reducer**-Funktion zusammenzufügen, die wir dann als einzige an die `createStore()`-Funktion übergeben können, nutzen wir `combineReducers()`. Diese Funktion erwartet ein Objekt, dessen Eigenschaftennamen denen des erzeugten State-Trees entsprechen. Die Werte müssen jeweils selbst gültige **Reducer** sein:
+To reassemble our two _smaller_ **Reducers** into one _big_ **Reducer** function, which we can then pass to the `createStore()` function, we use `combineReducers()`. This function expects an object whose property names correspond to those of the created state tree. The values must be valid **reducers** themselves:
 
 ```javascript
 import { combineReducers, createStore } from "redux";
@@ -360,65 +360,65 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 ```
 
-Die `combineReducers()`-Funktion fügt dabei alle Reducer aus dem übergebenen Objekt zu einer neuen Funktion zusammen, die nun als unser **Root Reducer** an die `createStore()`-Funktion übergeben werden kann. Die erzeugte Funktion ruft dabei beim Auslösen einer Action _jeden_ übergebenen Reducer auf und erstellt aus deren Rückgabewerten dann ein neues State-Objekt, das von seiner Form der, des initial übergebenen Objekts entspricht. In unserem Beispiel von oben ist der initiale State also:
+The `combineReducers()`-function combines all reducers from the given object to a new function, which can now be passed as our **Root Reducer** to the `createStore()`-function. When an action is triggered, the generated function calls _each_ transferred reducer and then creates a new state object from its return values. This state object has the same form as the initially transferred object. So in our example from above the initial state is:
 
 ```javascript
 {
   "todos": [],
-  "user": {}
+  "User": {}
 }
 ```
 
-Tipp: durch die geschickte Nutzung der ES2015+ Object Shorthand Notation können wir noch ein klein wenig Code sparen, indem wir die Imports so nennen wie die Eigenschaften, die sie im State später einmal repräsentieren. Also:
+Tip: by cleverly using the ES2015+ Object Shorthand Notation, we can save a little code by naming the imports as the properties they will later represent in the state. So:
 
 ```javascript
 import user from './store/user/reducer';
 import todos from './store/todos/reducer';
 ```
 
-Das Objekt, das an `combineReducers()` übergeben wird, schrumpft dann auf ein übersichtlicheres:
+The object passed to `combineReducers()` then shrinks to a clearer one:
 
 ```javascript
 const rootReducer = combineReducers({ todos, user });
 ```
 
-Die Nutzung von `combineReducers()` ist allerdings an einige formelle Regeln gebunden, die, einmal verinnerlicht, aber nicht wirklich hinderlich oder gar schwer zu merken sind. So muss jede Reducer-Funktion, die an `combineReducers()` übergeben wird, die folgenden Kriterien erfüllen:
+The use of `combineReducers()` is however bound to some formal rules, which, once internalized, are not really obstructive or even hard to remember. So every Reducer function passed to `combineReducers()` must meet the following criteria:
 
-* Für jede unbekannte **Action** \(also jede **Action**, auf deren `type`-Eigenschaft wir nicht reagieren\) die ein **Reducer** \(in seinem _zweiten_ Argument\) übergeben bekommt, muss der `state` zurückgegeben werden, den der **Reducer** stets als _erstes_ Argument bekommt.
-* Anders als „von Hand“ erzeugte, einfache **Root Reducer** darf eine innerhalb von `combineReducer()` verwendete **Reducer**-Funktion niemals `undefined` zurückgeben. Die `combineReducers()`-Funktion wirft dann einen **Error**, um auf diesen Umstand hinzuweisen und dabei die Suche der Fehler-Ursache nicht durch Verlagerung des Fehlers an andere Stelle unnötig zu erschweren. In unserem Beispiel tun wir das, indem wir im `default`-Fall innerhalb des `switch`-Blocks den `state` zurückgeben.
-* Wenn der im ersten Argument übergebene `state` vom Typ `undefined` ist, muss der **initiale State** zurückgegeben werden. Dazu ist es am einfachsten, den initialen State als Standardwert zu setzen, wie wir es im obigen Beispiel auch getan haben via `state = initialState`.
+* For every unknown **Action** \(i.e. every **Action** whose `type` property we don't react to\) that a **Reducer** \(in its _second_ Argument\) gets passed, the `state` that the **Reducer** always gets as _first_ argument must be returned.
+* Unlike manually generated, simple **Root Reducer**, a **Reducer** function used within `combineReducer()` must never return `undefined`. The `combineReducers()` function then throws a **Error** to point out this circumstance and not to unnecessarily complicate the search for the cause of the error by moving the error to another location. In our example we do this by returning in the `default` case within the `switch` block the `state`.
+* If the `state` passed in the first argument is of type `undefined`, the **initial state** must be returned. The easiest way to do this is to set the initial state as the default value, as we did in the above example via `state = initialState`.
 
-**Übrigens:** `combineReducer()` lässt sich auch beliebig „verschachteln“. Und so können auch die **Reducer**-Funktionen, die an `combineReducer()` übergeben werden, selbst bereits durch `combineReducer()` erzeugt worden sein. Dabei sollte allerdings beachtet werden, dass zu fein granulare Aufteilung in immer kleinere State-Äste den Code irgendwann nicht mehr unbedingt übersichtlicher macht. In der Praxis habe ich persönlich bisher mit einer Verschachtelungstiefe von maximal _einer_ Ebene \(also insgesamt zwei `combineReducer()`-Aufrufen, einer innen, einer außen\) gearbeitet.
+**By the way:** `combineReducer()` can also be "nested" arbitrarily. And so the **Reducer** functions passed to `combineReducer()` may have already been created by `combineReducer()` themselves. However, it should be noted that too finely granular division into ever smaller state branches does not necessarily make the code any more clearer at some point. In practice, I have personally worked with a maximum nesting depth of _one_ level \(i.e. a total of two `combineReducer()`calls, one inside, one outside\).
 
-### Asynchrone Actions
+### Asynchronous actions
 
-Alle **Actions** in vorherigen Beispielen wurden bisher immer **synchron** ausgeführt. D.h. ihre **Action Creators** wurden ausgeführt, wann immer wir den State modifizieren wollten, ohne dass wir auf das Ergebnis asynchroner Prozesse warten mussten. In dynamischen Web-Anwendungen, in denen die Stärken von **React** am meisten zum Vorschein kommen, haben wir jedoch regelmäßig mit **asynchronen Datenflüssen** zu tun, insbesondere mit Netzwerk-Requests. Hier helfen uns unsere _synchronen_ **Action Creator**-Funktionen nicht wirklich weiter, da die `dispatch`-Methode eines **Stores** ja zwingend eine **Action** erwartet, die, wie wir bereits gelernt haben ein simples und einfaches Objekt mit einer `type`-Eigenschaft ist.
+All **Actions** in previous examples were always executed **synchronously**. I.e. their **Action Creators** were executed whenever we wanted to modify the state without having to wait for the result of asynchronous processes. However, in dynamic web applications, where the strengths of **React** are most apparent, we regularly deal with **asynchronous data flows**, especially network requests. Here our _synchronous_ **Action Creator** functions don't really help us, because the `dispatch` method of a **Store** necessarily expects a **Action**, which, as we already learned, is a simple and simple object with a `type` property.
 
-Hier kommt jetzt das **Middleware**-Konzept von **Redux** ins Spiel, und mit ihr insbesondere die **Redux Thunk Middleware**. Doch der Reihe nach.
+This is where the **Middleware** concept of **Redux** comes into play, and with it especially the **Redux Thunk Middleware**. But one thing at a time.
 
-Die `createStore`-Funktion aus dem `redux`-Paket, die wir etwas weiter oben bereits benutzt haben um verschiedene Stores zu erzeugen, verarbeitet bis zu drei Parameter:
+The `createStore` function from the `redux` package, which we used earlier to create different stores, processes up to three parameters:
 
-* Die **Reducer**-Funktion, die als einziger Parameter zwingend angegeben werden **muss** und sich in Verbindung mit den ausgelösten **Actions** um die Mutation unseres **States** kümmert indem sie mit jeder ausgelösten **Action** einen **State** zurückgibt.
-* Einen **initialen State**, der bspw. beim Initialisieren des Stores bereits mit Daten befüllt sein kann. Dieser initiale State wird bei der Initialisierung des Stores auch an die **Reducer**-Funktion übergeben.
-* Eine sog. **Enhancer**-Funktion \(zu dt. etwa: _Erweiterungs-Funktion_\), mit der wir unseren erzeugten Store um eigene Funktionalität erweitern können. Wie etwa die eben angesprochene **Middleware**. 
+* The **Reducer** function, which is the only parameter that must be specified **must** and, in connection with the triggered **Actions**, takes care of the mutation of our **State** by returning a **State** with each triggered **Action**.
+* An **initial state**, which can already be filled with data when initializing the store, for example. This initial state is also transferred to the **Reducer** function when the store is initialized.
+* A so-called **Enhancer** function \(for example: _Extension function_\), with which we can add our own functionality to our store. Like the **middleware** just mentioned. 
 
-Bekommt die `createStore`-Funktion zwei Parameter übergeben, behandelt sie den zweiten Parameter als **Enhancer,** wenn der Parameter eine **Funktion** ist. Andernfalls wird der zweite Parameter als **initialer State** an die **Reducer**-Funktion übergeben.
+If the `createStore` function receives two parameters, it treats the second parameter as an **enhancer,** if the parameter is a **function**. Otherwise, the second parameter is passed as **initial state** to the **reducer** function.
 
-Eine **Middleware** in **Redux** legt sich dabei um die `dispatch`-Methode, fängt Aufrufe an diese ab, erlaubt es, die aufgerufene **Action** zu modifizieren _bevor_ diese an den **Reducer** übergeben wird und gibt am Ende ihrer Ausführung eine neue `dispatch`-Funktion zurück. Möchten wir nun bspw. asynchrone Funktionen bzw. Promises als Parameter an die `dispatch()`-Methode übergeben, können wir den **Store-Enhancer** nutzen, um **Middleware** zu registrieren, die es uns erlaubt, genau dies zu tun. Die bekannteste dieser Art ist besagte **Thunk Middleware**.
+A **Middleware** in **Redux** wraps itself around the `dispatch` method, intercepts calls to it, allows the called **Action** to be modified _before_ it is passed to the **Reducer**, and returns a new `dispatch` function at the end of its execution. For example, if we want to pass asynchronous functions or promises as parameters to the `dispatch()` method, we can use the **StoreEnhancer** to register **Middleware**, which allows us to do exactly that. The best known of this kind is said **Thunk Middleware**.
 
-Zur Installation:
+To the installation:
 
 ```bash
 npm install redux-thunk
 ```
 
-oder in Yarn:
+or Yarn:
 
 ```bash
 yarn add redux-thunk
 ```
 
-Ist die **Thunk Middleware** installiert, müssen wir sie über die **Redux**-eigene `applyMiddleware()`-Funktion beim **Enhancer** _registrieren_. Dazu importieren wir die **Middleware** und die `applyMiddleware()`-Funktion direkt aus **Redux** und übergeben ihr jede **Middleware,** die wir nutzen wollen als eigenen Parameter. In unserem Fall ist das erst einmal nur `thunk`:
+If the **Thunk Middleware** is installed, we have to _register_ it with the **Enhancer** using the **Redux** own `applyMiddleware()` function. To do this we import the **Middleware** and the `applyMiddleware()` function directly from **Redux** and pass each **Middleware,** we want to use as our own parameter. In our case this is first of all only `thunk`:
 
 ```javascript
 import { applyMiddleware, createStore } from 'redux';
@@ -432,7 +432,7 @@ const store = createStore(
 );
 ```
 
-Durch die Einbindung der **Thunk-Middleware** können wir nun **Action Creator** schreiben, die _asynchronen_ Code ausführen und ihre **Actions** dann _dispatchen,_ wenn ein Ergebnis vorliegt. Eine **Thunk**-Funktion ist dabei ein **Action Creator**, der selbst wiederum eine Funktion zurückgibt, deren beiden Parameter eine `dispatch()` und `getState()` Funktion sind. In der **Thunk Action Creator**-Funktion können wir dann selbst entscheiden, wann der Zeitpunkt gekommen ist um unsere Action zu _dispatchen_.
+By including the **Thunk middleware** we can now write **Action Creator**, execute the _asynchronous_ code and _dispatch their **Actions** when a result is available. A **Thunk** function is a **Action Creator**, which itself returns a function whose two parameters are a `dispatch()` and `getState()` function. In the **Thunk Action Creator** function we can then decide for ourselves when the time has come to _dispatch_ our action.
 
 ```javascript
 const delayedAdd = (newTodo) => {
@@ -448,16 +448,16 @@ const delayedAdd = (newTodo) => {
 
 store.dispatch(delayedAction({
   id: 1,
-  text: 'Thunk Actions erklären',
+  text: 'Explain Thunk Actions',
   done: false,
 }));
 ```
 
-In diesem Beispiel erzeugen wir einen `delayedAdd` **Action Creator**. Dieser erhält das neue Todo-Element und gibt dann eine neue Funktion in der Form `(dispatch, getState) => {}` zurück. Die **Thunk-Middleware** sorgt dann dafür, dass dieser Funktion die `dispatch()`- und `getState()`-Funktionen entsprechend hereingereicht werden. Nach einer Verzögerung von \(in diesem Beispiel\) 500 ms rufen wir die `dispatch()`-Funktion mit der `ADD_TODO`-**Action** auf und fügen das neue Objekt hinzu. 
+In this example we create a `delayedAdd` **Action Creator**. This will get the new todo element and then return a new function in the form `(dispatch, getState) => {}`. The **Thunk middleware** then makes sure that the `dispatch()`- and `getState()`-functions are submitted to this function accordingly. After a delay of \(in this example\) 500 ms we call the `dispatch()` function with the `ADD_TODO`-**Action** and add the new object. 
 
-Um die Action zu _dispatchen,_ können wir den _asynchronen_ **Action Creator** nun genauso verwenden wie wir auch bisher unsere _synchronen_ **Action Creators** _dispatched_ haben, nämlich durch das Übergeben der aufgerufenen Funktion an die `dispatch()`-Funktion des **Store**: `store.dispatch(ActionCreator)`. Die Thunk-Middleware erkennt dann, dass es sich um eine **Thunk**-Funktion handelt, führt sie aus und reicht ihr die beiden Argumente `dispatch` und `getState` hinein.
+To _dispatch the action,_ we can now use the _asynchronous_ **Action Creator** just like we used to _dispatch our _synchronous_ **Action Creators** _dispatched_ by passing the called function to the `dispatch()` function of the **Store**: `store.dispatch(ActionCreator)`. The thunk middleware then recognizes that it is a **thunk** function, executes it and passes the two arguments `dispatch` and `getState` into it.
 
-Wer bereits mit der **Arrow Function Syntax** aus ES2015 vertraut ist, kann das Ganze übrigens auch noch weiter abkürzen:
+If you are already familiar with the **Arrow Function Syntax** from ES2015, you can shorten the whole thing even further:
 
 ```javascript
 const delayedAdd = (newTodo) => (dispatch, getState) => {
@@ -470,19 +470,19 @@ const delayedAdd = (newTodo) => (dispatch, getState) => {
 };
 ```
 
-Hier geben wir über die verkürzte **Arrow Function** mit **impliziten Rückgabewert** direkt die dann von der **Thunk-Middleware** aufgerufene Funktion zurück, ohne das `return`-Schlüsselwort dafür verwenden zu müssen. Das spart noch einmal zwei Zeilen Code, macht den Code aber gerade zu Beginn etwas schwieriger zu verstehen.
+Here we use the shortened **Arrow Function** with **implicit return value** to directly return the function called by the **Thunk middleware** without having to use the `return` keyword. This saves another two lines of code, but makes the code more difficult to understand, especially at the beginning.
 
-### Ein typisches Beispiel für asynchrone Actions aus der Praxis
+### A typical example of asynchronous actions in practice
 
-In vielen Anwendungen, in denen mit Schnittstellen \(APIs\) gearbeitet wird, ist es ein gängiges Muster den Benutzer auf den Lade-Status hinzuweisen, sobald Daten von der API bezogen werden. Bspw. über einen grafischen Spinner oder auch nur durch einen Text-Hinweis wie etwa _„Daten werden geladen“_. Hier eignet sich eine entsprechende **Thunk Action** hervorragend, um diesen Anwendungsfall mit einem entsprechenden **Reducer** abzudecken. 
+In many applications where interfaces \(APIs\) are used, it is a common pattern to notify the user of the load status as soon as data is retrieved from the API. E.g. via a graphical spinner or just by a text hint like _"Data will be loaded"_. Here a corresponding **Thunk Action** is excellently suited to cover this application with a corresponding **Reducer**. 
 
-Dazu erstellen wir im **Reducer** drei Fälle, in denen wir auf die folgenden **Actions** reagieren:
+To do this, we create three cases in the **Reducer** in which we react to the following **Actions**:
 
-* `FETCH_REPOS_REQUEST`, um zu Beginn des Netzwerk-Requests etwa Fehler aus voran gegangenen Requests zurückzusetzen und um unseren Lade-Status zu initiieren,
-* `FETCH_REPOS_SUCCESS`, die wir bei erfolgreich erfolgtem Request aufrufen und die das Ergebnis des Requests bekommt sowie das Datum der letzten Aktualisierung dieser Daten, und
-* `FETCH_REPOS_FAILURE`, mit der wir auf aufgetretene Fehler reagieren und bspw. einen `error`-Flag setzen, um den Benutzer davon in Kenntnis zu setzen, dass sein Request fehlgeschlagen ist.
+* `FETCH_REPOS_REQUEST` to reset errors from previous requests at the beginning of the network request and to initiate our load status,
+* `FETCH_REPOS_SUCCESS`, which we call if the request is successful and which receives the result of the request and the date of the last update of this data, and
+* `FETCH_REPOS_FAILURE`, which we use to react to errors that have occurred and, for example, set a `error` flag to inform the user that his request has failed.
 
-In Form von Code könnte dies dann bspw. so aussehen:
+In the form of code this could look like this:
 
 ```javascript
 import { applyMiddleware, createStore } from 'redux';
@@ -490,10 +490,10 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 
 const initialState = Object.freeze({
-  error: null,
+  error: zero,
   items: [],
   isFetching: false,
-  lastUpdated: null,
+  lastUpdated: zero,
   selectedAccount: 'manuelbieh',
 });
 
@@ -503,7 +503,7 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         isFetching: true,
-        error: null,
+        error: zero,
       };
     }
     case 'FETCH_REPOS_SUCCESS': {
@@ -555,50 +555,50 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 store.dispatch(fetchGithubRepos());
 ```
 
-_Dispatchen_ wir hier den `fetchGithubRepos()` **Action Creator,** passiert folgendes: 
+_Dispatchen_ we here the `fetchGithubRepos()` **Action Creator,** the following happens: 
 
-Zunächst erkennt die **Thunk-Middleware**, dass es sich nicht um eine einfache **Action** \(also ein Objekt\), sondern um eine Funktion handelt, führt diese aus in der Form `Action()(dispatch, getState)`. Der **Action Creator** erhält die `dispatch`-Funktion übergeben, um selbst wiederum **Actions** aus der **Action Creator** Funktion heraus _dispatchen_ zu können.
+First the **Thunk middleware** recognizes that it is not a simple **Action** \(an object\), but a function, executes it in the form `Action()(dispatch, getState)`. The **Action Creator** receives the `dispatch` function, in order to _dispatch_ itself **Actions** from the **Action Creator** function.
 
-Im **Action Creator** _dispatchen_ wir nun zunächst einmal die `FETCH_REPOS_REQUESTED` Action. Der **Reducer** reagiert auf die Action, erzeugt ein neues **State-Objekt** indem der _bestehende_ **State** per **ES2015+ Spread Operator** in ein neues Objekt kopiert wird und außerdem einen ggf. existierenden `error` zurücksetzt auf `null`. Gleichzeitig wird der State mittels `isFetching` davon in Kenntnis gesetzt, dass nun ein Request folgen wird. Das ist hier etwas Geschmackssache und so bevorzugen es einige, die `error`-Eigenschaft erst dann wieder auf `null` zu setzen, wenn der anstehende Request auch tatsächlich erfolgreich war.
+In the **Action Creator** _dispatchen_ we now first of all the `FETCH_REPOS_REQUESTED` Action. The **Reducer** reacts to the action, creates a new **State object** by copying the _existing_ **State** into a new object via **ES2015+ Spread Operator** and also resets any existing `error` to `null`. At the same time the state is informed by `isFetching` that a request will follow. This is a matter of taste here, so some prefer not to set the `error' property to `null` until the pending request has actually been successful.
 
-Für den Request holen wir uns nun mittels `getState()` zunächst den _aktuellen_ **State**, aus diesem holen wir uns aus `selectedAccount` dann den ausgewählten Account, zu dem wir uns anschließend über den API-Request die GitHub-Repos besorgen. Wir starten den Request \(und nutzen hier wie schon in früheren Beispielen Axios zur Vereinfachung\) und reagieren auf zwei mögliche Fälle:
+For the request we first get the _current_ **State** using `getState()`, from this we then get the selected account from `selectedAccount`, for which we then get the GitHub repos via the API request. We start the request \(and use Axios for simplification here as in previous examples\) and react to two possible cases:
 
-* Der Request ist erfolgreich und wir beziehen Daten von der GitHub API. Wir _dispatchen_ dann die nächste **Action**, `FETCH_REPOS_SUCCESS`, übergeben die aktuelle Uhrzeit \(die wir später bspw. für Caching oder automatische Reloads benutzen können\) sowie das Array mit den Repos, die sich in `response.data` verbergen. Da der Request außerdem nicht mehr aktiv ist, setzen wir `isFetching` wieder zurück auf `false`.
-* Der Request schlägt fehlt. In diesem Fall _dispatchen_ wir die `FETCH_REPOS_FAILURE` Action und übergeben die Fehlermeldung die Axios hier in `error.response.data` als Payload bereithält. Auch hier setzen wir `isFetching` wieder zurück auf `false`, da der Request auch hier beendet ist, wenn auch mit einem für uns unschönen Ergebnis, nämlich einem Fehler.
+* The request is successful and we get data from the GitHub API. We _dispatchen_ then the next **Action**, `FETCH_REPOS_SUCCESS`, pass the current time \(which we can use later e.g. for caching or automatic reloads\) as well as the array with the repos hidden in `response.data`. Since the request is also no longer active, we reset `isFetching` to `false`.
+* The request is missing. In this case _dispatchen_ we will do the `FETCH_REPOS_FAILURE` action and pass the error message that Axios holds here in `error.response.data` as payload. Also here we reset `isFetching` back to `false`, because the request is finished here, too, even if with an unpleasant result for us, namely an error.
 
-Unser State enthält nun die GitHub-Repos des laut `state.selectedAccount` ausgewählten Benutzers, wenn der Request erfolgreich war oder eine Fehlermeldung, wenn er es nicht war. Auf beide Fälle könnten wir nun in unserem User Interface entsprechend reagieren!
+Our state now contains the GitHub repos of the user selected according to `state.selectedAccount` if the request was successful or an error message if it was not. In both cases we could now react accordingly in our user interface!
 
-### Debugging mit den Redux Devtools
+### Debugging with the Redux Devtools
 
-Zum Inspizieren des Stores haben wir diverse Möglichkeiten, so gibt es bspw. eine praktische **Logger-Middleware**, die uns für jede dispatchte **Action** den vorherigen State, die Action selbst und den neuen State in die Browser-Console logged: [https://github.com/LogRocket/redux-logger](https://github.com/LogRocket/redux-logger)
+To inspect the store we have several possibilities, e.g. there is a practical **logger middleware**, which logs the previous state, the action itself and the new state into the browser console for each dispatched **action**: [https://github.com/LogRocket/redux-logger](https://github.com/LogRocket/redux-logger)
 
-Wir können selbstverständlich jederzeit auch manuell mittels `console.log(store.getState())` den aktuellen State ausgeben, wobei das mühsam ist und insbesondere bei asynchronen Actions manchmal etwas verwirrend sein kann. 
+Of course, we can also output the current state manually with `console.log(store.getState())` at any time, which is tedious and can sometimes be confusing, especially with asynchronous actions. 
 
-Und dann gibt es die **Redux Devtools**. Diese kommen als Browser-Extension daher und integrieren sich nahtlos in die Developer Tools in Chrome und Firefox, auch mit künftigen Edge-Versionen ist die Verwendung der **Redux Devtools** möglich, sobald die Browser-Engine erst einmal final auf Chromium umgestellt wurde. Gefunden werden können die Extensions in den jeweiligen Add-On Stores:
+And then there's the Redux Devtools. These come as a browser extension and integrate seamlessly into the developer tools in Chrome and Firefox, even with future Edge versions, the use of **Redux Devtools** is possible once the browser engine has been finally converted to Chromium. The extensions can be found in the respective Add-On Stores:
 
-* Chrome: [https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)
+* &lt;font color="#ffff00"&gt;Chrome: [https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)
 * Firefox: [https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
-Sind die **Redux Devtools** erst einmal installiert, bekommen die Developer Tools im Browser einen neuen Tab **„Redux“**, unter dem wir sie finden können. Doch zur Verwendung müssen wir einige Vorkehrungen in unserem Code treffen. Wir müssen sie als weiteren **Enhancer** zu unserem **Store** hinzufügen.
+Once the **Redux Devtools** are installed, the Developer Tools get a new tab in the browser **"Redux "**, where we can find them. But to use it, we need to take some precautions in our code. We need to add her as another enhancer to our store.
 
-![Browser Devtools mit installiertem Redux Addon](../.gitbook/assets/redux-devtools.png)
+![Browser Devtools with installed Redux Addon](../.gitbook/assets/redux-devtools.png)
 
-Die **Redux Devtools** registrieren sich mit zwei eigenen globalen Variablen auf dem `window`-Objekt im Browser: `window.REDUX_DEVTOOLS_EXTENSION` und `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE`. Nutzen wir keine eigenen Store Enhancer, wie z.B. `applyMiddleware()` um bspw. Middlewares wie Thunk zu registrieren, ist die Sache recht simpel: Wir schauen mittels Logical AND Operator \(`&&`\), ob die **Redux Devtools** installiert sind und übergeben, wenn das der Fall ist, einen Aufruf der `window.REDUX_DEVTOOLS_EXTENSION` an die `createStore()`-Funktion:
+The **Redux Devtools** register themselves with two own global variables on the `window` object in the browser: `window.REDUX_DEVTOOLS_EXTENSION` and `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE`. If we don't use our own store enhancers, like `applyMiddleware()` to register middlewares like Thunk, for example, the thing is quite simple: We use Logical AND Operator \(`&&`\) to see if the **Redux Devtools** are installed and, if so, pass a call to the `createStore()` function to the `window.REDUX_DEVTOOLS_EXTENSION`:
 
 ```javascript
 createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ &&   window.__REDUX_DEVTOOLS_EXTENSION__()
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 ```
 
-Damit sehen wir nun automatisch jede ausgelöste **Action** in den **Devtools**, können uns in Detail anschauen, welche **Action** mit welcher **Payload** _dispatched_ wurde und können sogar manuell **Actions** _dispatchen_. Außerdem gibt es die Möglichkeit des **Time Travelings**, also dem „Zurückblättern“ zu vorherigen Zuständen des Stores. Dies ist mitunter sehr hilfreich beim Debugging. 
+Now we automatically see every **Action** triggered in the **Devtools**, can see in detail which **Action** was _dispatched_ with which **Payload** and can even manually **Actions** _dispatchen_. There is also the option of **Time Traveling**, i.e. "leafing back" to previous states of the store. This is sometimes very helpful for debugging. 
 
-Hier ist es besonders wichtig, dass unsere **Reducer** _Pure Functions_ sind, damit sie beim Durchblättern durch die Historie des **Stores** auch jedesmal wieder erneut den gleichen **State** erzeugen wie beim ursprünglichen Aufruf. Ansonsten läuft man möglicherweise einem Bug hinterher, der einfach nicht reproduzierbar ist, da er mit jedem Aufruf einen unterschiedlichen **State** erzeugt.
+Here it is particularly important that our **Reducers** are _Pure Functions_, so that they generate the same **State** as the original call each time they browse through the history of the **Store**. Otherwise you might run after a bug that is simply not reproducible, because it creates a different **State** with every call.
 
-Wird wie bei unserem letzten Beispiel bereits eine Enhancer-Funktion verwendet, nutzen wir stattdessen die `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE`-Funktion. Diese Funktion ist eine `compose`-Funktion die es ermöglicht _mehrere_ **Enhancer**-Funktionen zu einer _einzelnen_ zu kombinieren die dann der Reihe nach aufgerufen werden. Also das gleiche Prinzip, wie wir es schon bei der `combineReducers()`-Methode für **Reducer** kennengelernt haben. 
+If, as in our last example, an Enhancer function is used, we use the `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE` function instead. This function is a `compose` function that allows _several_ **Enhancer** functions to be combined into one _individual_ function, which is then called one after the other. So it's the same principle as the `combineReducers()`-method for **Reducer**. 
 
-Auch Redux selbst bietet mit `compose` eine solche Funktion, um mehrere Enhancer-Funktionen zu einer einzelnen zu kombinieren. Diese importieren wir der Einfachheit halber um eine neue, eigene `composeEnhancer()`-Funktion zu erstellen, die nun von einer Bedingung abhängt: Sind die Redux Devtools installiert, nutzt sie die `REDUX_DEVTOOLS_EXTENSION_COMPOSE`-Funktion, um die **Devtools** dem **Store-Enhancer** hinzuzufügen. Sind sie nicht installiert, nutzen wir stattdessen die Redux-eigene `compose()`-Funktion, um eine Funktion von gleicher Signatur zu erzeugen:
+With `compose`, Redux itself also offers such a function to combine several enhancer functions into a single one. For the sake of simplicity we import these to create a new `composeEnhancer()` function which now depends on one condition: If the Redux Devtools are installed, it uses the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to add the **Devtools** to the **StoreEnhancer**. If they are not installed, we use Redux's own `compose()` function instead to create a function with the same signature:
 
 ```javascript
 import { applyMiddleware, compose, createStore } from 'redux';
@@ -621,19 +621,19 @@ const store = createStore(
     
 ```
 
-Wer sich jetzt hier von den ganzen Funktionen und Begrifflichkeiten überwältigt fühlt, den kann ich etwas trösten: Es ist in der Praxis normal gar nicht so sehr von Relevanz das alles zu verstehen und zu beherrschen. Ich selbst nutze die **Redux Devtools** in jedem Projekt, in dem ich **Redux** verwende und noch immer muss ich jedesmal erneut nachschlagen, wie genau das doch gleich funktionierte mit der Einbindung der Devtools. Speziell dieser Text dient daher also primär dazu, das Bewusstsein dafür zu schaffen, wie das Debugging von **Redux-Stores** möglich ist und denjenigen, die gern Genaueres darüber wissen möchten, einen kleinen Leitfaden mit an die Hand zu geben.
+If you feel overwhelmed by all the functions and concepts here, I can comfort you a little: In practice, it is normally not so relevant to understand and master all this. I myself use the **Redux Devtools** in every project in which I use **Redux** and I still have to look up every time how exactly this worked with the integration of the Devtools. This text in particular therefore serves primarily to raise awareness of how debugging **Redux stores** is possible and to provide a small guide for those who would like to know more about it.
 
-### Verwendung von Redux mit React
+### Using Redux with React
 
-Nun haben wir bereits ziemlich genau kennengelernt, wie wir einen neuen **Store** erzeugen, wie wir **Actions** _dispatchen_, welche Rolle der **Reducer** spielt und wie wir **Middleware** einsetzen. Doch wie bringen wir das jetzt unter einen Hut mit **React?** 
+Now we already know pretty much how to create a new **Store**, how to **Actions** _dispatchen_, what role the **Reducer** plays and how to use **Middleware**. But how do we reconcile this with **React?** 
 
-Hier kommt nun das `react-redux`-Paket ins Spiel, das gleich zu Beginn des Kapitels bereits einmal angerissen wurde. Dies sind die _„offiziellen React Bindings für Redux“_, also die offizielle Anbindung von **Redux** an **React**, die von den Redux-Entwicklern gepflegt wird und ursprünglich von Dan Abramov entwickelt wurde, der inzwischen auch Teil des offiziellen React Core Teams ist.
+This is where the `react-redux` package comes into play, which was already touched on at the beginning of the chapter. These are the _"official React Bindings for Redux"_, i.e. the official connection of **Redux** to **React**, which is maintained by the Redux developers and was originally developed by Dan Abramov, who is now also part of the official React Core Team.
 
-Das Paket besteht im Wesentlichen aus lediglich zwei React-Komponenten, bzw. einer Komponente und einer Funktion, die eine **Higher Order Component** erzeugt \(plus einer weiteren Funktion, die von React Redux selbst intern verwendet wird, in der täglichen Arbeit aber praktisch nicht von Relevanz ist\). Da wäre zum einen die `Provider`-Komponente, die wir um den Teil unseres Komponenten-Baums legen, innerhalb dessen wir später auf den gemeinsam genutzten **Store** zugreifen wollen, sowie die `connect()`-Funktion, die eine **Higher Order Component** zurückgibt, mit Hilfe derer wir einzelne Komponenten dann mit dem Store _verbinden_ können.
+The package essentially consists of only two React components, or a component and a function that creates a **Higher Order Component** \(plus another function that is used internally by React Redux itself, but is practically irrelevant in daily work\). First, there is the `Provider` component, which we place around the part of our component tree within which we later want to access the shared **Store**, and the `connect()` function, which returns a **Higher Order Component**, which we can use to _connect_ individual components to the store.
 
-#### Die Provider-Komponente
+#### The Provider Component
 
-Da eine Anwendung in den meisten Fällen nur einen **Store** besitzt und alle Komponenten dieser Anwendung auf genau diesen Zugriff bekommen sollen, wird die `Provider`-Komponente üblicherweise sehr weit oben in der Komponenten-Hierarchie eingesetzt; nicht selten als die erste und damit oberste Komponente überhaupt. Die `Provider`-Komponente bekommt dabei einen **Redux Store** als `store`-Prop übergeben und enthält darüber hinaus Kind-Elemente. Alle ihre Kind-Elemente haben dann entsprechend die Möglichkeit, auf den in der `store`-Prop angegebenen **Store** zuzugreifen, diesen also zu lesen und durch das Auslösen von **Actions** zu verändern:
+Since in most cases an application has only one **Store** and all components of this application should have access to exactly this store, the `Provider` component is usually used very high up in the component hierarchy; not seldom as the first and therefore highest component at all. The `Provider` component gets a **Redux Store** as `store` prop and also contains child elements. All their child elements then have the corresponding option to access the **Store** specified in the `store` prop, i.e. to read it and change it by triggering **Actions**:
 
 ```jsx
 import React from 'react';
@@ -648,7 +648,7 @@ const dummyReducer = (state = {}, action) => {
 const store = createStore(dummyReducer);
 
 const App = () => (
-  <p>Hier haben wir nun Zugriff auf den erzeugten Redux-Store</p>
+  <p>Here we now have access to the created Redux store</p>
 );
 
 ReactDOM.render(
@@ -659,25 +659,25 @@ ReactDOM.render(
 );
 ```
 
-Statt wie in den meisten anderen Beispielen in diesem Buch übergeben wir hier der `ReactDOM.render()`-Methode diesmal nicht nur das `<App />`-Element, sondern umschließen dieses außerdem mit der `Provider`-Komponente, die den zuvor erzeugten \(Dummy-\)Store übergeben bekommt. 
+Instead of passing the `ReactDOM.render()`-method this time not only the `<App />`-element, but also the `Provider`-component, which gets the previously created \(dummy\)store passed to it, instead of most of the other examples in this book. 
 
-Die `Provider`-Komponente kann auch ineinander geschachtelt werden. Komponenten die mit dem Store verbunden werden, nutzen dann immer den **Store** der _nächsthöheren_ `Provider`-Komponente. Ein solches Vorgehen ist aber eher unüblich und man würde in einer solchen Situation, in der zwei Stores parallel existieren sollen, wohl eher die Reducer beider Stores über die `combineReducer()`-Funktion zu einem gemeinsamen Store verbinden, um schließlich wieder nur noch ein gemeinsames `Provider`-Element für alle Komponenten zu nutzen.
+The `Provider` component can also be nested into each other. Components that are connected to the store then always use the **Store** of the _next higher_ `Provider` component. Such a procedure is however rather unusual and in such a situation, in which two stores should exist in parallel, one would probably rather connect the reducers of both stores via the `combineReducer()` function to a common store, in order to use finally again only one common `provider` element for all components.
 
-#### Komponenten via connect-Funktion mit dem Store verbinden
+#### Connecting components to the store via the connect function
 
-Dies war noch die eher leichtere Übung. Etwas umständlicher wird es beim zweiten Teil, nämlich dem **Verbinden** einer React-Komponente mit dem **Redux Store** über besagte `connect()`-Funktion. Diese kann bis zu 4 Parameter erhalten, wovon die ersten 3 Funktionen sind, die selbst wiederum zum Teil bis zu 3 Parameter übergeben bekommen können. Au weia. Die gute Nachricht: in den deutlich überwiegenden Fällen benötigen wir in der Praxis maximal 2 der 4 Parameter und bei diesen beiden auch jeweils nur jeweils den ersten Parameter. Arbeiten wir uns der Reihe nach daran ab, von simpel zu komplex. 
+This was the easier exercise. The second part, namely the **connecting** of a React component with the **Redux Store** via said `connect()` function, becomes a bit more complicated. This can receive up to 4 parameters, of which the first 3 are functions, which can themselves receive up to 3 parameters. Oh, boy. The good news: in the vast majority of cases, in practice we need a maximum of 2 of the 4 parameters and for these two only the first parameter in each case. Let's work it out one by one, from simple to complex. 
 
-Die grundsätzliche Funktionssignatur ist die folgende:
+The basic function signature is the following:
 
 ```javascript
 connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
 ```
 
-Zuerst einmal erzeugt der Aufruf der `connect()`-Funktion eine **Higher Order Component**. Diese können wir nutzen, um bestimmte Teile des States aus dem Store an die von dieser umschlossenen Komponente zu übergeben. Um zu entscheiden, welcher Teil des States an die Komponente übergeben wird, nutzen wir den ersten Parameter, der meist als `mapStateToProps`-Funktion bezeichnet wird, so, wie sie auch in der Doku genannt wird.
+First of all, calling the `connect()` function creates a **Higher Order Component**. We can use this to pass certain parts of the state from the store to the component enclosed by it. To decide which part of the state to pass to the component, we use the first parameter, usually called the `mapStateToProps` function, as mentioned in the documentation.
 
-#### Zugriff auf Teile des globalen States über mapStateToProps
+#### Access to parts of the global state via mapStateToProps
 
-Die `mapStateToProps`-Funktion bekommt als ersten Parameter den kompletten **State** von Redux übergeben, als zweiten, optionalen Parameter die in der Doku als `ownProps` bezeichneten „eigenen“ Props der Komponente. Also diejenigen, die ggf. an die erzeugte HOC übergeben werden. Je nachdem, ob nur einer oder zwei Parameter übergeben werden, wird die Funktion dann entweder immer nur dann aufgerufen, wenn sich etwas im **Redux State** ändert _oder_ auch dann, wenn sich die **Props** ändern, die der Komponente ggf. übergeben werden.
+The `mapStateToProps` function gets as first parameter the complete **State** of Redux, as second, optional parameter the "own" props of the component, called `ownProps` in the documentation. Those that are passed to the generated HOC, if necessary. Depending on whether only one or two parameters are passed, the function is then only called if something changes in the **Redux State** _or_ even if the **Props** that are passed to the component change.
 
 ```javascript
 const mapStateToProps = (state, ownProps) => {
@@ -685,9 +685,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 ```
 
-In beiden Fällen wird von der Funktion ein **Objekt** als Rückgabewert erwartet. Die Eigenschaften dieses Objekts werden dann als die sog. `stateProps` an die Komponente übergeben. Erinnern wir uns nochmal zurück an unseren Todo-Store von etwas weiter oben. Als Beispiel möchten wir nun einer Komponente die Todos vorgefiltert nach ihrem Status \(erledigt oder nicht erledigt\) übergeben, sowie die Anzahl der Todos insgesamt. 
+In both cases the function expects a **object** as return value. The properties of this object are then passed to the component as the so-called `stateProps`. Let's remember back to our todo store from a little further up. As an example, we now want to give a component the todos prefiltered by their status \(done or not done\), as well as the total number of todos. 
 
-Unsere `mapStateToProps`-Funktion sieht dann etwa so aus:
+Our `mapStateToProps` function looks like this:
 
 ```jsx
 const mapStateToProps = (state) => {
@@ -699,13 +699,13 @@ const mapStateToProps = (state) => {
 };
 ```
 
-Die Eigenschaften dieses Objekts, also `openTodos`, `completedTodos` und `totalCount` werden dann als **Props** an die umschlossene Komponente übergeben. Dies passiert, indem wir der `connect()`-Funktion die `mapStateToProps`-Funktion übergeben. Diese gibt uns dann eine HOC zurück, der wir wiederum die Komponente übergeben, in der wir auf unsere drei Props aus dem State zugreifen wollen:
+The properties of this object, i.e. `openTodos`, `completedTodos` and `totalCount` are then passed as **Props** to the enclosed component. This is done by passing the `mapStateToProps` function to the `connect()` function. This then returns an HOC to which we pass the component in which we want to access our three props from the state:
 
 ```jsx
 const ConnectedTodoList = connect(mapStateToProps)(TodoList); 
 ```
 
-Nutzen wir nun im **JSX** ein `<ConnectedTodoList />`-Element und befindet sich dieses auch innerhalb eines von der `Provider`-Komponente umschlossenen Teils der Anwendung, wird die `TodoList` gerendert mit den obigen Props aus dem globalen **Redux Store:**
+If we now use a `<ConnectedTodoList />` element in the **JSX** and this element is also inside a part of the application enclosed by the `Provider` component, the `TodoList` will be rendered with the above props from the global **Redux Store:**.
 
 ```jsx
 import React from "react";
@@ -722,8 +722,8 @@ const store = createStore(rootReducer);
 const TodoList = (props) => (
   <div>
     <p>
-      {props.totalCount} Todos. Davon {props.completedTodos.length} abgeschlossen 
-      und {props.openTodos.length} noch offen.
+      {props.totalCount} Todos. Of which {props.completedTodos.length} completed 
+      and {props.openTodos.length} still open.
     </p>
   </div>
 );
@@ -746,9 +746,9 @@ ReactDOM.render(
 );
 ```
 
-Hier rendern wir eine ziemlich spartanische `TodoList`-Komponente, die uns zu Demonstrationszwecken lediglich die Anzahl aller Todos, sowie die Anzahl der offenen und bereits erledigten Todos anzeigt.
+Here we render a rather spartan `TodoList` component, which shows us for demonstration purposes only the number of all todos, as well as the number of open and already completed todos.
 
-Über den zweiten möglichen Parameter der `mapStateToProps`-Funktion, üblicherweise als `ownProps` bezeichnet, ist es möglich, innerhalb der Funktion auf die **Props** der Komponente zuzugreifen um bspw. darüber entscheiden zu können, welchen Teil des States wir in die verbundene Komponente hereinreichen wollen. Möchten wir also bspw. entweder immer nur die offenen Todos _oder_ die geschlossenen Todos zurückgeben, und soll die Entscheidung darüber auf einer Prop basieren, könnte der entsprechende Teil so aussehen:
+Using the second possible parameter of the `mapStateToProps` function, usually called `ownProps`, it is possible to access the **Props** of the component within the function, e.g. to decide which part of the state we want to pass into the connected component. For example, if we always want to return only the open todos _or_ the closed todos, and if the decision is to be based on a prop, the corresponding part could look like this:
 
 ```jsx
 const mapStateToProps = (state, ownProps) => {
@@ -773,13 +773,13 @@ ReactDOM.render(
 );
 ```
 
-Über `ownProps.type` schauen wir zunächst, ob wir die erledigten Todos anzeigen wollen oder die offenen. Anschließend filtern wir `state.todos` entsprechend und geben jeweils nur die gewünschten Todos aus dem State zurück. Da wir nun die übergebenen Todos nicht mehr nach Typ unterteilen, sondern in der `mapStateToProps`-Funktion bereits eine Vorauswahl treffen, geben wir die Todos unter einer allgemeinen `todos`-Eigenschaft zurück, wodurch wir nun via `props.todos` innerhalb der Komponente auf diese zugreifen können.
+Via `ownProps.type` we first look whether we want to display the completed todos or the open ones. Then we filter `state.todos` accordingly and return only the desired todos from the state. Since we no longer subdivide the passed todos by type, but already preselect them in the `mapStateToProps` function, we return the todos under a general `todos` property, so we can now access them via `props.todos` within the component.
 
-Über die `mapStateToProps()`-Funktion erhalten wir also Lese-Zugriff auf den kompletten **State** aus unserem **Redux Store**. Sämtliche Daten, die wir in einer Komponente nutzen wollen, geben wir hier als Objekt zurück. Die entsprechende React-Komponente wird dann immer nur neu gerendert, wenn sich auch tatsächlich die relevanten Daten im Store geändert haben. Dann wird entsprechend ein Rerendering der verbundenen Komponente ausgelöst.
+Using the `mapStateToProps()` function we get read access to the complete **State** from our **Redux Store**. All data that we want to use in a component is returned here as an object. The corresponding React component will only be re-rendered if the relevant data in the store has actually changed. A rendering of the connected component is then triggered accordingly.
 
-#### Actions dispatchen über mapDispatchToProps
+#### Dispatching actions via mapDispatchToProps
 
-Weiter geht es mit dem zweiten Parameter für die `connect()`-Funktion: `mapDispatchToProps`:
+Next is the second parameter for the `connect()` function: `mapDispatchToProps`:
 
 ```javascript
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -787,7 +787,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 ```
 
-oder alternativ:
+or alternatively:
 
 ```javascript
 const mapDispatchToProps = {
@@ -795,12 +795,12 @@ const mapDispatchToProps = {
 };
 ```
 
-Während wir mittels `mapStateToProps` **lesend** auf den Store zugreifen, erlaubt es uns `mapDispatchToProps` durch das Dispatchen von Actions, **schreibend** auf den Store einzuwirken. Die Funktionssignatur ist dabei sogar erst einmal recht ähnlich zu `mapStateToProps`, nur bekommen wir als ersten Parameter eben nicht den State übergeben, sondern die `dispatch`-Methode des Stores, mit dem wir uns verbinden. Der zweite Parameter entspricht auch hier den `ownProps`, also den **Props**, die der Komponente selbst übergeben werden. Als kleine Besonderheit ist es möglich, ein `mapDispatchToProps`-**Objekt** statt einer Funktion an den `connect()`-Aufruf zu übergeben. Doch dazu später mehr. Schauen wir uns zuerst einmal, an wie die `mapDispatchToProps`-**Funktion** verwendet wird.
+While we are accessing the store using `mapStateToProps` **reading**, `mapDispatchToProps` allows us to control the store by dispatching actions, **writing**. The function signature is quite similar to `mapStateToProps`, but the first parameter we get is not the state, but the `dispatch` method of the store we connect to. The second parameter also corresponds here to the `ownProps`, i.e. the **Props**, which are passed to the component itself. As a small feature it is possible to pass a `mapDispatchToProps`-**object** to the `connect()` call instead of a function. But more about that later. Let's first look at how the `mapDispatchToProps`-**function** is used.
 
-Dazu wollen wir unsere `TodoList`-Komponente um die Möglichkeit erweitern, neue Todos hinzuzufügen, als erledigt zu markieren oder ganz aus der Liste zu löschen. Die entsprechenden **Actions** sind im Beispiel über **Reducer** weiter oben in diesem Kapitel bereits vorgesehen: `ADD_TODO`, `REMOVE_TODO` und `CHANGE_TODO_STATUS`. Nun wollen wir es ermöglichen, dass ein Benutzer, der mit unserer Anwendung interagiert, diese **Actions** auslösen kann:
+For this purpose we want to extend our `TodoList` component by the possibility to add new todos, mark them as done or delete them completely from the list. The corresponding **Actions** are already provided in the example via **Reducer** earlier in this chapter: `ADD_TODO`, `REMOVE_TODO` and `CHANGE_TODO_STATUS`. Now we want to make it possible for a user who interacts with our application to trigger these **Actions**:
 
 ```javascript
-// Helper-Funktion zur Erzeugung einer (hoffentlich ;)) eindeutigen ID
+// Helper function to create a (hopefully ;)) unique ID
 const getPseudoRandomId = () =>
   Math.random()
     .toString(36)
@@ -833,7 +833,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 ```
 
-Hier geben wir ein Objekt mit den drei Eigenschaften `addTodo`, `removeTodo` und `changeStatus` zurück, die unter jeweils genau diesem Namen an eine verbundene Komponente, also in unserem Fall an die `TodoList`, in ihren **Props** übergeben wird. Dazu übergeben wir die `mapStateToProps()`-Funktion als zweiten Parameter an `connect()`:
+Here we return an object with the three properties `addTodo`, `removeTodo` and `changeStatus`, which is passed under exactly this name to a connected component, in our case to the `TodoList`, in its **Props**. We pass the `mapStateToProps()` function as a second parameter to `connect()`:
 
 ```javascript
 const ConnectedTodoList = connect(
@@ -842,7 +842,7 @@ const ConnectedTodoList = connect(
 )(TodoList);
 ```
 
-Die **Actions**, die wir hier in `mapDispatchToProps` inline übergeben, werden für gewöhnlich in entsprechende **Action Creator** Funktionen extrahiert. Diese sorgen für bessere Lesbarkeit, sind leichter testbar und normalerweise auch verständlicher:
+The **Actions** that we pass inline here in `mapDispatchToProps` are usually extracted into corresponding **Action Creator** functions. These provide for better readability, are easier to test and normally also more understandable:
 
 ```javascript
 const addTodo = (text) => ({
@@ -867,7 +867,7 @@ const changeStatus = (id, done) => ({
 });
 ```
 
-Unsere `mapStateToProps`-Funktion verkürzt sich dann und wird deutlich übersichtlicher:
+Our `mapStateToProps` function then shortens and becomes much clearer:
 
 ```javascript
 const mapDispatchToProps = (dispatch) => {
@@ -879,9 +879,9 @@ const mapDispatchToProps = (dispatch) => {
 };
 ```
 
-Doch diese Variante hat noch einen weiteren entscheidenden Vorteil: Da wir hier einiges an Wiederholung im Code haben und Entwickler Wiederholungen natürlich möglichst vermeiden, bietet uns Redux eine Abkürzung. Stimmen die Funktionssignaturen der **Action Creators** mit denen der Funktionen überein, wie wir sie aus `mapDispatchToProps` zurückgeben, können wir unsere **Action Creators** als **ES2015+ Shorthand Objekt** zurückgeben! **Redux** setzt den notwendigen `dispatch()`-Aufruf dann von allein um alle Funktionen herum. 
+But this variant has another decisive advantage: Since we have a lot of repetition in the code and developers avoid repetitions as much as possible, Redux offers us a shortcut. If the function signatures of the **Action Creators** match those of the functions as we return them from `mapDispatchToProps`, we can return our **Action Creators** as **ES2015+ Shorthand Object**! **Redux** sets the necessary `dispatch()` call around all functions by itself. 
 
-Mit dem folgenden Code erreichen wir also die identische Funktionalität wie mit dem Code aus dem vorherigen Beispiel:
+With the following code we achieve the same functionality as with the code from the previous example:
 
 ```javascript
 const mapDispatchToProps = {
@@ -891,28 +891,28 @@ const mapDispatchToProps = {
 }
 ```
 
-Doch Vorsicht: Dies funktioniert tatsächlich nur wenn auch alle **Action Creator**-Funktionen mit den gleichen Funktionen aus der verbundenen React-Komponente aufgerufen werden und `mapDispatchToProps` genau in dieser Form als Objekt übergeben wird!
+But beware: This only works if all **Action Creator** functions are called with the same functions from the connected React component and `mapDispatchToProps` is passed as object in exactly this form!
 
-Durch die Verwendung der beiden Funktionen `mapStateToProps` und `mapDispatchToProps` ergibt sich ein Aufruf, der in etwa dem Folgenden entspricht:
+By using the two functions `mapStateToProps` and `mapDispatchToProps` you get a call which is similar to the following one:
 
 ```jsx
 <TodoList todos={...} addTodo={...} removeTodo={...} changeStatus={...} />
 ```
 
-Alle Eigenschaften, die die wir aus `mapStateToProps` wie auch die, die wir aus `mapDispatchToProps` zurückgeben, werden an die Komponente übergeben, die mittels `connect()`-Funktion mit dem **Store** verbunden wird. In der Komponente \(in obigen Beispiel in der `TodoList`-Komponente\) können wir dann über die **Props** darauf zugreifen und durch den Aufruf der Funktionen aus `mapDispatchToProps` **Actions** _dispatchen_ oder durch den Zugriff auf die Eigenschaften aus `mapStateToProps` den State aus dem **Store** auslesen.
+All properties we return from `mapStateToProps` as well as those we return from `mapDispatchToProps` are passed to the component connected to the **Store** by the `connect()` function. In the component \(in the above example in the `TodoList` component\) we can then access it via the **Props** and by calling the functions from `mapDispatchToProps` **Actions** _dispatchen_ or by accessing the properties from `mapStateToProps` we can read the state from the **Store**.
 
-Möchten wir nur `mapDispatchToProps()` an den `connect()`-Aufruf übergeben, um aus einer Komponente heraus **Actions** dispatchen zu können, müssen jedoch den State selbst in der Komponente nicht lesen, kann als erster Parameter `null` übergeben werden:
+If we just want to pass `mapDispatchToProps()` to the `connect()` call to be able to dispatch **Actions** from a component, but don't need to read the state itself in the component, we can pass `null` as the first parameter:
 
 ```javascript
 const ConnectedTodoList = connect(
-  null,
+  zero,
   mapDispatchToProps
 )(TodoList);
 ```
 
-#### Die StateProps und die DispatchProps zusammenführen mit mergeProps
+#### Merging the StateProps and the DispatchProps with mergeProps
 
-Der dritte Parameter deckt einen Fall ab, der in der Praxis eher äußerst selten vorkommt. Ich möchte ihn daher an dieser Stelle der Vollständigkeit halber nicht unerwähnt lassen, aber auch nicht zu sehr im Detail drauf eingehen. Hier handelt es sich um die `mergeProps()`-Funktion:
+The third parameter covers a case that is extremely rare in practice. For the sake of completeness, I would therefore not like to leave it unmentioned at this point, but I would also not like to go into it too much in detail. This is the `mergeProps()` function:
 
 ```javascript
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
@@ -920,13 +920,13 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 ```
 
-Die Funktion bekommt als ersten Parameter das Ergebnis von `mapStateToProps` und`mapDispatchToProps`, sowie abermals `ownProps` übergeben. Als Rückgabewert wird ein neues Objekt erwartet, dessen Eigenschaften dann ebenfalls über die Props an die mit dem Store verbundene Komponente übergeben werden.
+The function gets as first parameter the result of `mapStateToProps` and `mapDispatchToProps`, as well as `ownProps` again. A new object is expected as the return value, whose properties are then also transferred to the component connected to the store via the props.
 
-Diese Funktion kann hilfreich sein, wenn man bspw. ohne die Verwendung der **Thunk Middleware** gewisse **Actions** dispatchen möchte, die auf Daten aus dem State angewiesen sind. Auch denkbar wäre es, die **Actions** zu filtern, basierend auf dem State, so dass eine Komponente bspw. eine mögliche `updateProfile()` **Action** nicht hereingereicht bekommt, wenn `state.profile` nicht existiert, der Benutzer also etwa nicht eingeloggt ist. Solche Bedingungen lassen sich aber innerhalb der Komponenten selbst in der Regel deutlich eleganter lösen.
+This function can be helpful if you want to dispatch certain **Actions** without using the **Thunk Middleware**, which depend on data from the state. It would also be possible to filter the **Actions**, based on the state, so that a component e.g. a possible `updateProfile()` **Action** is not submitted if `state.profile` does not exist, i.e. the user is not logged in. However, such conditions can usually be solved much more elegantly within the components themselves.
 
-#### Zuletzt: die Optionen als vierter Parameter für connect\(\)
+#### Last: the options as fourth parameter for connect\(\)
 
-Wer soweit ist, den 4. Parameter zu benötigen, der sollte ziemlich genau wissen, was er dort tut. Redux ist standardmäßig so optimiert, dass die Optionen nur in sehr seltenen Ausnahmefällen überhaupt benutzt werden müssen. So kann etwa ein eigener Context angegeben werden, den Redux nutzen soll oder es können eigene Vergleichsfunktionen übergeben werden, mittels denen festgestellt wird, ob eine Komponente neu gerendert werden soll oder nicht. Die komplette Liste der verfügbaren Optionen ist die folgende:
+If you are ready to need the 4th parameter, you should know pretty much what you are doing there. Redux is optimized by default so that the options only need to be used in very rare exceptional cases. For example, you can specify your own context that Redux should use, or you can pass your own comparison functions to determine whether a component should be re-rendered or not. The complete list of available options is the following:
 
 ```javascript
 {
@@ -940,11 +940,11 @@ Wer soweit ist, den 4. Parameter zu benötigen, der sollte ziemlich genau wissen
 }
 ```
 
-Wer das Gefühl hat, die Optionen zu benötigen \(meist ist die Antwort darauf „nein“\), schaut am besten einmal in die offizielle Doku: [https://react-redux.js.org/api/connect\#options-object](https://react-redux.js.org/api/connect#options-object)
+If you feel you need the options \(usually the answer is "no"\), take a look at the official documentary: [https://react-redux.js.org/api/connect\#options-object](https://react-redux.js.org/api/connect#options-object)
 
-#### Wie wir alle Teile des Puzzles miteinander verbinden
+#### How to connect all the pieces of the puzzle together
 
-Nun wissen wir, welchen Zweck der `Provider` erfüllt und wie wir die `connect()`-Funktion einsetzen. Werfen wir nun doch einmal einen Blick auf ein sehr umfangreiches, aber dafür auch vollständiges Beispiel einer voll funktionsfähigen TodoList-App, mit der wir neue Todos hinzufügen, diese als erledigt oder nicht erledigt markieren und auch wieder entfernen können:
+Now we know the purpose of the `provider` and how to use the `connect()` function. Let's take a look at a very comprehensive, but also complete example of a fully functional TodoList app, with which we can add new todos, mark them as done or not done and remove them again:
 
 ```javascript
 // store/todos/reducer.js
@@ -1025,10 +1025,10 @@ const TodoList = (props) => {
               onClick={() => {
                 props.removeTodo(todo.id);
               }}>
-              löschen
+              delete
             </button>
             <label
-              style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>
+              style={{ textDecoration: todo.done ? line-through : 'none' }}>
               <input
                 type="checkbox"
                 name={todo.id}
@@ -1050,7 +1050,7 @@ const TodoList = (props) => {
           props.addTodo(todoText);
           setTodoText('');
         }}>
-        hinzufügen
+        add
       </button>
     </div>
   );
@@ -1096,15 +1096,15 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-Hier definieren wir zunächst mal unseren `todosReducer`, sowie die drei **Actions** `addTodo`, `removeTodo` und `changeStatus`, die uns jeweils aus vorherigen Beispielen bekannt vorkommen dürften. Zur besseren Übersicht lagern wir sowohl **Reducer** als auch **Actions** in eigene Dateien aus, die wir in ein eigenes Unterverzeichnis `./store/todos` legen.
+Here we first define our `todosReducer`, as well as the three **Actions** `addTodo`, `removeTodo` and `changeStatus`, which should seem familiar to us from previous examples. For a better overview, we store both **Reducer** and **Actions** in our own files, which we put in our own subdirectory `./store/todos`.
 
 {% hint style="warning" %}
-Achtung, kontrovers: Über die „korrekte“ Ordnerstruktur beim Aufteilen einer Anwendung in mehrere Dateien werden immer wieder hitzige Debatten geführt. Ich selbst habe mit vielen unterschiedlichen Strukturen gearbeitet und fand die Aufteilung nach Domäne \(also etwa `todos`, `user`, `repositories`, …\) und nach Typ \(`actions`, `reducer`, ...\) am übersichtlichsten. Andere wiederum bevorzugen es, alle Actions in einem Ordner `actions` zu sammeln, alle Reducer in einem Ordner `reducer`. Wieder andere vermeiden die Aufteilung von Actions und Reducern in separate Dateien. 
+Attention, controversial: There are always heated debates about the "correct" folder structure when splitting an application into several files. I myself have worked with many different structures and found the division by domain \(i.e. `todos`, `user`, `repositories`, ...\) and by type \(`actions`, `reducer`, ...\) to be the clearest. Others prefer to collect all actions in one folder `actions`, all reducers in one folder `reducer`. Still others avoid splitting actions and reducers into separate files. 
 
-Hier gibt es kein eindeutiges _Richtig_ oder _Falsch_.  Dies hängt einerseits von den persönlichen Vorlieben ab, andererseits aber auch ein Stück weit vom sonstigen Aufbau der Anwendung, ihrer Größe, ihrer Komplexität und letztendlich auch davon, wie und von wem die Anwendung auf Entwicklerseite verwendet wird.
+There is no unique _correct_ or _false_ here.  This depends on the one hand on the personal preferences, but on the other hand also to a certain extent on the other structure of the application, its size, its complexity and finally also on how and by whom the application is used on the developer side.
 {% endhint %}
 
-Weiter erstellen wir eine neue Datei, die unsere `TodoList`-Komponente beinhalten wird: `./TodoList.js`.  Mit ihr werden wir gleich unsere Todos anzeigen, neue anlegen oder wieder entfernen, sowie einzelne Todos als erledigt markieren können. Dazu verbinden wir die Komponente über `connect()` mit dem Store. Dementsprechend müssen wir in der Komponente auch unsere **Actions** importieren, die wir in `mapDispatchToProps` an `connect()` übergeben werden. Der besseren Übersichtlichkeit halber nutzen wir die **Object Shorthand Syntax**:
+We also create a new file that will contain our `TodoList` component: `./TodoList.js`.  With it we will immediately be able to display our todos, create new ones or remove them again, as well as mark individual todos as done. We connect the component to the store via `connect()`. Accordingly, we must also import our **Actions** into the component, which we pass to `connect()` in `mapDispatchToProps`. For better clarity we use the **Object Shorthand Syntax**:
 
 ```javascript
 const mapDispatchToProps = {
@@ -1114,52 +1114,51 @@ const mapDispatchToProps = {
 };  
 ```
 
-Die Funktionen werden dann von React Redux automatisch von einem `dispatch`-Aufruf umschlossen. 
+The functions are then automatically enclosed by a `dispatch` call to React Redux. 
 
-In `mapStateToProps` legen wir fest, dass wir den `todos`-Ast unseres Stores an die Komponente übergeben wollen. Sowohl `mapStateToProps` als auch `mapDispatchToProps` übergeben wir dann an die `connect()`-Funktion:
+In `mapStateToProps` we specify that we want to pass the `todos` branch of our store to the component. We then pass both `mapStateToProps` and `mapDispatchToProps` to the `connect()` function:
 
 ```javascript
-connect(
+connect
   mapStateToProps,
   mapDispatchToProps
 )
 ```
 
-Doch das ist noch nicht alles: die `connect()`-Funktion erzeugt uns eine neue **HOC**, an die wir unsere `TodoList`-Komponente übergeben:
+But that's not all: the `connect()` function creates a new **HOC** to which we pass our `TodoList` component:
 
 ```javascript
 connect(...)(TodoList);
 ```
 
-Unsere `TodoList`-Komponente ist nun mit dem **Redux-Store** verbunden und wir müssen nur darauf achten, dass wir sie entsprechend auch nur innerhalb eines `<Provider>`-Elements verwenden. Wir nutzen außerdem `export default` vor dem Aufruf der `connect()`-Funktion, um unsere mit dem Store verbundene Komponente zu exportieren.
+Our `TodoList` component is now connected to the **Redux-Store** and we just have to make sure that we use it only within one `<Provider>` element. We also use `export default` before calling the `connect()` function to export our store connected component.
 
-Zuletzt werfen wir einen Blick auf die `index.js`, die letztendlich den „Einstiegspunkt“ unserer App darstellt. Hier findet der `ReactDOM.render()`-Aufruf statt, mit dem wir unsere App in das jeweilige DOM-Element rendern. Doch bevor es soweit ist, passiert hier noch einiges:
+Finally, we take a look at the `index.js`, which ultimately represents the "entry point" of our app. This is where the `ReactDOM.render()` call takes place, with which we render our app into the respective DOM element. But before that happens, a lot is happening here:
 
-Wir importieren `combineReducers` und `createStore` aus `redux`. Damit erstellen wir gleich unser `store`-Objekt. Dazu importieren wir unseren ausgelagerten `todosReducer`, den wir an `combineReducers()` übergeben, um einen neuen **Root Reducer** zu erstellen. Das wäre an dieser Stelle noch unnötig, da wir ohnehin nur einen einzigen **Reducer** haben und diesen daher direkt an `createStore()` übergeben könnten. Allerdings gehen wir in diesem Fall bereits vorsorglich davon aus, dass unsere Anwendung noch weiter wachsen wird und wir mit der Zeit sicherlich noch weitere **Reducer** hinzufügen werden.
+We import `combineReducers` and `createStore` from `redux`. With this we create our `store` object. To do this, we import our outsourced `todosReducer`, which we pass to `combineReducers()` to create a new **Root Reducer**. This would be unnecessary at this point, since we only have one **Reducer** anyway and could therefore pass it directly to `createStore()`. However, as a precautionary measure in this case we assume that our application will continue to grow and that we will certainly add more **reducers** over time.
 
-Wir importieren außerdem die `Provider`-Komponente aus `react-redux`. An diese übergeben wir später den eben erstellten **Store**. Aus der `TodoList.js` importieren wir unsere verbundene Komponente, die wir letztlich in unserer `App`-Komponente _innerhalb_ der `Provider`-Komponente mit unserem `store`-Objekt verwenden.
+We also import the `Provider` component from `react-redux`. We will later transfer the newly created **Store** to them. From the `TodoList.js` we import our connected component, which we ultimately use in our `App` component _within_ the `Provider` component with our `store` object.
 
-Interagieren wir nun mit der `TodoList`, können wir entsprechend neue Todos anlegen, diese über eine Checkbox als erledigt markieren oder über den Löschen-Button vollständig wieder entfernen.
+If we now interact with the `TodoList`, we can create new todos, mark them as done via a checkbox or remove them completely via the delete button.
 
-An dieser Stelle macht es sicherlich am meisten Sinn etwas mit der Komponente rumzuspielen und zu schauen wie sich die Interaktion auf den Store auswirkt. Dazu sollten die Redux-Devtools für unseren Store aktiviert werden. Dazu ändern wir in der `index.js` die Zeile:
+At this point it certainly makes the most sense to play around with the component and see how the interaction affects the store. For this you should activate the Redux-Devtools for our store. Therefore we change the line in the `index.js`:
 
 ```javascript
 const store = createStore(rootReducer);
 ```
 
-In die folgende:
+The following one:
 
 ```javascript
 const store = createStore(rootReducer, __REDUX_DEVTOOLS_EXTENSIONS__());
 ```
 
-Dabei muss sichergestellt sein, dass im verwendeten Browser die Redux Devtools installiert sind.
+It must be ensured that the Redux Devtools are installed in the browser used.
 
-### Fazit
+### Conclusion
 
-Ich muss gestehen, dass ich die Komplexität dieses Kapitels bei weitem unterschätzt habe. **Redux** gehört für mich in vielen Projekten seit Jahren zum Alltagsgeschäft und so fühlt sich die Verwendung von **Redux** mittlerweile ein Stück weit sehr _natürlich_ an, also wie etwas, über dass ich nicht viel nachdenken muss. Grundsätzlich würde ich **Redux** als Tool beschreiben, dass es schafft, sehr komplexes State Management sehr einfach, nachvollziehbar und eben _vorhersehbar_ zu machen.
+I have to admit that I far underestimated the complexity of this chapter. **Redux** has been part of my everyday business for years in many projects and so the use of **Redux** now feels a bit very _natural_, like something I don't have to think about much about. Basically I would describe **Redux** as a tool that manages to make very complex state management very simple, comprehensible and even _predictable_.
 
-Beim Schreiben dieses Kapitels habe ich dann erst einmal wieder gemerkt, wie überwältigend **Redux** aber gerade für Einsteiger sein kann und so kann ich mir vorstellen, dass einige der in diesem Kapitel beschriebenen Dinge trotz meiner Erläuterungen nicht unbedingt gleich verständlich sein werden. Hier sollte es aber tatsächlich helfen, mit geöffneten Devtools etwas mit den **Actions** und den **Reducern** herumzuspielen um zu verstehen, wie das eine das andere beeinflusst und wie die das Zusammenspiel aller Komponenten, also dem Store, dem State, den Props einer Komponente, der `connect()`-Funktion sowie der **Actions** und **Reducer** letztendlich ablaufen.
+While writing this chapter I noticed how overwhelming **Redux** can be, but especially for beginners, and so I can imagine that some of the things described in this chapter will not necessarily be immediately understandable despite my explanations. But here it should actually help to play around with the **Actions** and the **Reducers** with open devtools to understand how one influences the other and how the interaction of all components, i.e. the store, the state, the props of a component, the `connect()` function as well as the **Actions** and **Reducer** finally work.
 
-Sollte es danach immer noch Fragen geben, könnt ihr euch jederzeit gern mit Bezug auf dieses Buch an mich wenden!
-
+If you still have any questions after that, please feel free to contact me with regard to this book!

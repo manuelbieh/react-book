@@ -2,15 +2,15 @@
 description: Readme
 ---
 
-# React lernen und verstehen
+# React learn and understand
 
-Dieses Buch gibt es auch als ePub-, PDF- und Mobi-Version käuflich zu erwerben:
+This book is also available as ePub, PDF and Mobi version:
 
-* [Bei Leanpub kaufen](https://www.leanpub.com/react-lernen)
-* [Bei Gumroad kaufen](https://gum.co/react-lernen)
-* [Für Apple Books kaufen](https://books.apple.com/de/book/react-lernen-und-verstehen/id1461226151)
+* [Buy from Leanpub](https://www.leanpub.com/react-lernen)
+* [Buy from Gumroad](https://gum.co/react-lernen)
+* [Buy for Apple Books](https://books.apple.com/de/book/react-lernen-und-verstehen/id1461226151)
 
-Wenn dir das Buch gefällt, freue ich mich, wenn du meine Arbeit mit einem Kauf des E-Books unterstützt! Und nun viel Spaß beim Lesen!
+If you like the book, I would be happy if you support my work with a purchase of the e-book! And now have fun reading!
 
 ![](.gitbook/assets/books-mockup-lying-on-a-white-surface-a17401.png)
 

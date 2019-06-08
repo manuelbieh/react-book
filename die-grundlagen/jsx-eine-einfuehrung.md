@@ -1,107 +1,107 @@
-# JSX – eine Einführung
+# JSX - an introduction
 
-## JSX als wichtiger Bestandteil in der React-Entwicklung
+## JSX as an important component in React development
 
-Bevor wir tiefer in die Entwicklung von Komponenten einsteigen möchte ich zuerst einmal auf **JSX** eingehen, da JSX einen wesentlichen Teil bei der Arbeit mit React darstellt. Wie eingangs schon erwähnt stellt JSX einen ganz grundlegenden Teil der meisten React-Komponenten dar und ist aus meiner Sicht einer der Gründe, warum React so schnell und positiv von so vielen Entwicklern angenommen wurde. Mittlerweile bieten auch andere Frameworks wie Vue.js die Möglichkeit JSX zur komponentengetriebenen Entwicklung einzusetzen.
+Before we go any deeper into the development of components, I'd like to look at **JSX** first, because JSX is an essential part of working with React. As I mentioned at the beginning, JSX is a very basic part of most React components and I think it's one of the reasons why React has been accepted so quickly and positively by so many developers. Meanwhile other frameworks like Vue.js also offer the possibility to use JSX for component-driven development.
 
-JSX sieht auf den ersten Blick erst einmal gar nicht sehr viel anders aus als HTML, oder eher noch XML, da in JSX, eben wie auch in XML und XHTML jedes geöffnete Element ein schließendes Element \(`</div>`\) besitzen oder selbstschließend \(`<img />`\) sein muss. Mit dem grundlegenden Unterschied, dass JSX auf **JavaScript-Ausdrücke** zurückgreifen kann und dadurch sehr mächtig wird.
+At first glance, JSX doesn't look much different from HTML, or rather XML, because in JSX, as in XML and XHTML, every opened element must have a closing element \(`</div>`\) or be self-closing \(`<img />`\). With the basic difference that JSX can rely on **JavaScript expressions** and thus becomes very powerful.
 
-Unter der Haube werden in JSX verwendete Elemente in einem späteren Build-Prozess in verschachtelte `React.createElement()`-Aufrufe umgewandelt. Wir erinnern uns zurück an die Einleitung. Dort hatte ich bereits kurz erwähnt, dass React eine Baumstruktur an Elementen erzeugt, die selbst aus verschachtelten `React.createElement()`-Aufrufen besteht.
+Under the hood, elements used in JSX are converted into nested `React.createElement()` calls in a later build process. We remember back to the introduction. There I mentioned briefly that React creates a tree structure of elements, which itself consists of nested `React.createElement()` calls.
 
-Klingt jetzt alles fürchterlich kompliziert, ist aber ganz einfach. Sehen wir uns als Beispiel einmal das folgende kurze HTML-Snippet an:
+It all sounds terribly complicated now, but it's very simple. Let's have a look at the following short HTML snippet as an example:
 
 ```jsx
 <div id="app">
-  <p>Ein Paragraph in JSX</p>
-  <p>Ein weiterer Paragraph</p>
+  <p>A paragraph in JSX</p>
+  <p>Another paragraph</p>
 </div>
 ```
 
-Wird dieses HTML so in dieser Form in **JSX** verwendet, werden diese Elemente später durch Babel in das folgende ausführbare JavaScript transpiliert:
+If this HTML is used in this form in **JSX**, these elements will later be transposed by Babel into the following executable JavaScript:
 
 ```javascript
 React.createElement(
-  'div',
+  div,
   { id: 'app' },
-  React.createElement('p', null, 'Ein Paragraph in JSX'),
-  React.createElement('p', null, 'Ein weiterer Paragraph')
+  React.createElement('p', null, 'A paragraph in JSX'),
+  React.createElement('p', null, 'Another paragraph')
 );
 ```
 
-Das erste Funktionsargument für `createElement()` ist dabei jeweils der Tag-Name eines DOM-Elements als String-Repräsentation oder ein anderes JSX-Element, dann allerdings als Funktionsreferenz.
+The first function argument for `createElement()` is the tag name of a DOM element as string representation or another JSX element, but then as function reference.
 
-Das zweite Argument repräsentiert die **Props** eines Elements, also in etwa vergleichbar mit HTML-Attributen, wobei die Props in React deutlich flexibler sind und anders als herkömmliche HTML-Attribute nicht auf Strings beschränkt sind, sondern auch Arrays, Objekte oder gar andere React-Komponenten als Wert enthalten können.
+The second argument represents the **props** of an element, i.e. roughly comparable to HTML attributes, whereby the props in React are much more flexible and, unlike conventional HTML attributes, are not limited to strings, but can also contain arrays, objects or even other React components as values.
 
-Alle weiteren Argumente stellen die Kind-Elemente \(_„children“_\) des Elements dar. Im obigen Beispiel hat unser `div` zwei Paragraphen \(`<p>`\) als Kind-Elemente, welche selbst keine eigenen Props haben \(`null`\) und lediglich einen Text-String \(`Ein Paragraph in JSX` bzw `Ein weiterer Paragraph`\) als Kind-Element besitzt.
+All other arguments represent the child elements \(_"children"_\) of the element. In the above example, our `div` has two paragraphs \(`<p>`\) as child elements, which have no props of their own \(`null`\) and only one text string \(`One paragraph in JSX` or `Another paragraph`\) as child element.
 
-Wem das jetzt zu kompliziert klingt den kann ich beruhigen: Das geht in der Praxis hinterher wie von selbst von der Hand. Fast so, als würde man HTML-Markup schreiben. Dennoch halte ich es für wichtig die Hintergründe zumindest einmal gelesen zu haben um spätere Beispiele besser nachvollziehen zu können.
+If that sounds too complicated to you now, I can reassure you: In practice, this happens afterwards as if by itself. Almost like writing HTML markup. Nevertheless I consider it important to have read the backgrounds at least once to be able to understand later examples better.
 
-## Ausdrücke in JavaScript
+## Expressions in JavaScript
 
-Was bedeutet dies nun für unsere JavaScript-Ausdrücke, auf die wir ja nun auch in JSX zurückgreifen können?
+What does this mean for our JavaScript expressions, which we can now also use in JSX?
 
-Zuerst einmal ist ein Ausdruck in JavaScript, kurz gesagt, ein Stück Code, das am Ende einen „Wert“ erzeugt bzw ein „Ergebnis“ zur Folge hat. Vereinfacht gesagt: alles was man bei der Variablenzuweisung auf die **rechte** Seite des Gleich-Zeichens \(=\) schreiben kann.
+First of all, an expression in JavaScript is, in short, a piece of code that generates a "value" or a "result" at the end. Put simply: everything you can write on the **right** side of the equals sign \(=\) when assigning variables.
 
 ```javascript
 1 + 5;
 ```
 
-… ist ein solcher Ausdruck, dessen Wert `6` beträgt.
+... is such an expression whose value is `6`.
 
 ```javascript
-'Hal' + 'lo';
+Hal + lo;
 ```
 
-… ist ein anderer Ausdruck der die zwei Strings `Hal` und `lo` per **String Concatenation** zu einem Wert `Hallo` zusammenfügt.
+... is another expression that combines the two strings `Hal` and `lo` by **String Concatenation** to a value `Hallo`.
 
-Stattdessen könnten wir aber auch einfach gleich schreiben:
+But instead we could just write the same:
 
 ```javascript
 6
-'Hallo'
+Hello.
 [1,2,3,4]
 {a: 1, b: 2, c: 3}
 true
-null
+nil
 ```
 
-… da **JavaScript-Datentypen** allesamt auch als Ausdruck verwendet werden können.
+... because **JavaScript data types** can all be used as expressions.
 
-Die ES2015 **Template String Syntax**, die Backticks \(\`\`\`\) benutzt, ist ebenfalls ein Ausdruck. Klar, sind sie doch letztlich nichts anderes als ein String:
+The ES2015 **Template String Syntax** that uses Backticks \(\`\`\`\) is also an expression. Sure, they're nothing but a string after all:
 
 ```javascript
-`Hallo ${name}`;
+Hello ${name};
 ```
 
-Was hingegen **kein** Ausdruck ist, ist:
+What's **not** an expression, on the other hand:
 
 ```javascript
-if (active && visibility === 'visible') { … }
+if (active && visibility == 'visible') { ... }
 ```
 
-… da ich zum Beispiel auch nicht schreiben könnte:
+I couldn't write, for example:
 
 ```javascript
-const isVisible = if (active && visibility === 'visible') { … }
+const isVisible = if (active && visibility === 'visible') { ... }
 ```
 
-Das würde mir jeder JavaScript-Interpreter wegen ungültiger Syntax um die Ohren hauen.
+Any JavaScript interpreter would bomb me with this because of invalid syntax.
 
-Lasse ich das `if` hier jedoch weg, habe ich einen **Logical AND Operator**, der wiederum ein Ausdruck ist und einen Wert zum Ergebnis hat \(in diesem Fall `true` oder `false`\):
+But if I omit the `if` here, I have a **Logical AND Operator**, which is an expression and has a value to the result \(in this case `true` or `false`\):
 
 ```javascript
 const isVisible = active && visibility === 'visible';
 ```
 
-Ebenso ist der Ternary-Operator \( ? : \) ein Ausdruck:
+Likewise, the Ternary operator \( ? : \) is an expression:
 
 ```javascript
-Bedingung ? wahr : unwahr;
+Condition ? true : untrue;
 ```
 
-Ausdrücke sind aber nicht auf boolsche Werte, Nummern und Strings beschränkt sondern können auch Objekte, Arrays, Funktionsaufrufe und sogar Arrow-Functions sein, die ebenfalls neu in ES2015 eingeführt werden und uns hier nicht das letzte Mal begegnet sein werden.
+Expressions are not limited to boolean values, numbers and strings, but can also be objects, arrays, function calls and even arrow functions, which will also be introduced in ES2015 and will not be the last time we encounter them here.
 
-Beispiel für eine Arrow-Function:
+Example of an Arrow function:
 
 ```javascript
 (number) => {
@@ -109,11 +109,11 @@ Beispiel für eine Arrow-Function:
 };
 ```
 
-All das wird später noch wichtig werden. Um dem Ganzen jetzt endgültig die Krone aufzusetzen, können Ausdrücke wiederum selbst JSX beinhalten und so kann man das Spiel endlos weiterführen. Uff.
+All this will become important later. In order to put the crown on the whole thing, expressions can contain JSX themselves and so you can continue the game endlessly. Whew.
 
-Da das später noch wichtig wird, hier nochmal einige Beispiele für JSX, das gültige Ausdrücke beinhaltet:
+Since this will be important later, here are some more examples of JSX that contains valid expressions:
 
-### Simple Mathematik
+### Simple mathematics
 
 ```jsx
 <span>5 + 1 = {5 + 1}</span>
@@ -122,16 +122,16 @@ Da das später noch wichtig wird, hier nochmal einige Beispiele für JSX, das g�
 ### Ternary Operator
 
 ```jsx
-<span>Heute ist {new Date().getDay() === 1 ? 'Montag' : 'nicht Montag'}</span>
+<span>Today is {new Date().getDay() === 1 ? 'Monday' : 'not Monday'}</span>
 ```
 
-### Ternary Operator als Wert einer Prop
+### Ternary operator as value of a prop
 
 ```jsx
-<div className={user.isAdmin ? 'is-admin' : null}>…</div>
+<div className={user.isAdmin ? is-admin' : null}>...</div>
 ```
 
-### Array.map\(\) mit JSX als Rückgabewert, das wiederum einen Ausdruck enthält
+### Array.map\(\) with JSX as return value, which in turn contains an expression
 
 ```jsx
 <ul>
@@ -141,35 +141,35 @@ Da das später noch wichtig wird, hier nochmal einige Beispiele für JSX, das g�
 </ul>
 ```
 
-### Zahlenwerte in Props
+### numerical values in props
 
 ```jsx
 <input type="range" min={0} max={100} />
 ```
 
-All dies sind erste Beispiele dessen, wie Ausdrücke dafür verwendet werden können, aus JSX mehr als nur simples HTML zu machen.
+All these are first examples of how expressions can be used to make JSX more than just simple HTML.
 
-## Was man außerdem wissen sollte
+## What you also need to know
 
-Wer die Beispiele aufmerksam studiert hat, dem werden je nach JavaScript-Kenntnissen vielleicht einige Dinge aufgefallen sein. Zuerst einmal tauchen in den Beispielen scheinbar willkürlich Klammern auf. Dies hat den Hintergrund, dass JSX stets in Klammern, also „`(`“ und „`)`“ geschrieben werden muss, wenn sich das JSX sich über mehr als eine Zeile erstreckt \(also doch nicht willkürlich\).
+If you have studied the examples carefully, you may have noticed some things depending on your JavaScript knowledge. First of all, the examples seem to have arbitrary brackets. This has the background that JSX must always be written in brackets, i.e. "`(`"" and "`)`", if the JSX extends over more than one line \(i.e. not arbitrarily\).
 
-Prinzipiell schadet es nicht sein komplettes JSX immer in Klammern zu schreiben, auch wenn es sich nur um eine einzige Zeile handelt. Viele Leute bevorzugen das sogar aus Gründen der Einheitlichkeit, wirklich zwingend notwendig ist das aber nur bei mehrzeiligem JSX.
+In principle, it doesn't hurt to always write your complete JSX in brackets, even if it's only a single line. Many people prefer this even for reasons of uniformity, but it is really necessary only for multi-line JSX.
 
-Möchten wir statt eines **Strings** einen **Ausdruck** innerhalb der Props nutzen wie im Beispiel _„Ternary Operator als Wert einer Prop“_, so nutzen wir dafür statt einfacher oder doppelter Attribut-Anführungszeichens auch hier die geschweiften Klammern um React mitzuteilen: hier drin befindet sich ein Ausdruck.
+If we want to use a **expression** within the props instead of a **string**, as in the example _"Ternary Operator as value of a prop"_, we use the curly braces instead of single or double attribute quotes to tell React: there is an expression inside.
 
 {% hint style="warning" %}
-Bei Objekten als Wert müssen jeweils **zwei** öffnende und schließende Klammern geschrieben werden. Die äußeren Klammern leiten den Ausdruck ein \(bzw. beenden diesen\) und die inneren sind die, des eigentlichen Objekts:
+For objects as a value, **two** opening and closing brackets must be written. The outer brackets introduce the expression \(or end it\) and the inner brackets are those of the actual object:
 
-`<User data={{ name: 'Manuel', location: 'Berlin' }} />`
+`<User data={ name: 'Manuel', location: 'Berlin' }} />`
 
-Das gilt in ähnlicher Form auch für Array-Literals, natürlich mit dem Unterschied, dass die inneren Klammern die eckigen sind, die das Array-Literal kennzeichnen:
+This also applies in a similar way to array literals, with the difference, of course, that the inner brackets are the square brackets that identify the array literals:
 
 `<List items={[1, 2, 3, 4, 5]} />`
 {% endhint %}
 
-Weiter könnte manch einem aufgefallen sein, dass im gleichen Beispiel die Prop `className` verwendet wird. Wer jemals mit der DOM Element API im Browser gearbeitet hat, dem wird vielleicht im Gedächtnis geblieben sein, dass mittels `Element.className` auf das `class`-Attribute eines Elements zugegriffen werden kann. Ganz genau so ist das auch in React, das sich an den Eigenschaften der DOM `Element` Klasse bedient.
+Furthermore some people might have noticed that in the same example the prop `className` is used. If you have ever worked with the DOM Element API in your browser, you may have remembered that you can access the `class` attributes of an element using `Element.className`. This is exactly the same in React, which uses the properties of the DOM `Element` class.
 
-Möchte man gewisse HTML-Attribute in JSX setzen, ist dafür also die JavaScript-Entsprechung zu verwenden. `class` ist ein geschütztes Keyword in JavaScript um eine Klasse zu kennzeichnen, also verwenden wir an dieser Stelle stattdessen `className`. Gleiches gilt für `for`, was in JavaScript als Keyword benutzt wird um Schleifen einzuleiten, in HTML aber hingegen um `<label>` Elementen mitzuteilen, welches Eingabefeld sie beschreiben. Statt `for` schreiben wir in JSX also angelehnt an das DOM [HTMLLabelElement Interface](https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor) `htmlFor`:
+If you want to set certain HTML attributes in JSX, you have to use the JavaScript equivalent. `class` is a protected keyword in JavaScript to identify a class, so we use `className` instead. The same is true for `for`, which is used as a keyword in JavaScript to initiate loops, but in HTML to tell `<label>` elements which input field they describe. Instead of `for` we write in JSX based on the DOM [HTMLLabelElement Interface](https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor) `htmlFor`:
 
 ```jsx
 <fieldset>
@@ -178,65 +178,65 @@ Möchte man gewisse HTML-Attribute in JSX setzen, ist dafür also die JavaScript
 </fieldset>
 ```
 
-Dieses Muster zieht sich konsequent durch alle bekannten HTML-Attribute. Möchtest du ein HTML-Attribut in JSX setzen, musst du dafür die Schreibweise der entsprechenden **JavaScript DOM Element-Eigenschaft** verwenden. So wird aus `tabindex` eben `tabIndex`, `readonly` wird zu `readOnly`, `maxlength` wird zu `maxLength`, usw.
+This pattern runs consistently through all known HTML attributes. If you want to set an HTML attribute in JSX, you must use the spelling of the corresponding **JavaScript DOM Element property**. So `tabindex` becomes `tabIndex`, `readonly` becomes `readOnly`, `maxlength` becomes `maxLength`, and so on.
 
-Aber: Keine Angst! Im Development-Modus gibt React eine entsprechende Warnung in der Browser Console aus, sodass es dir selten passieren sollte, dass du entsprechenden fehlerhaften Code nicht bemerkst:
+But: Don't be afraid! In development mode, React will issue a warning in the browser console, so you should seldom not notice any of the incorrect code:
 
 {% hint style="danger" %}
 Warning: Invalid DOM property `class`. Did you mean `className`?
 {% endhint %}
 
-Wer es genau wissen will: hier die vollständige Liste unterstützter HTML-Attribute wie sie in der offiziellen React-Doku steht \(festhalten, wird lang\):
+Who wants to know it exactly: here is the complete list of supported HTML attributes as it is written in the official React-Doku \(to hold, becomes long\):
 
-> `accept acceptCharset accessKey action allowFullScreen alt async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked cite classID className colSpan cols content contentEditable contextMenu controls controlsList coords crossOrigin data dateTime default defer dir disabled download draggable encType form formAction formEncType formMethod formNoValidate formTarget frameBorder headers height hidden high href hrefLang htmlFor httpEquiv icon id inputMode integrity is keyParams keyType kind label lang list loop low manifest marginHeight marginWidth max maxLength media mediaGroup method min minLength multiple muted name noValidate nonce open optimum pattern placeholder poster preload profile radioGroup readOnly rel required reversed role rowSpan rows sandbox scope scoped scrolling seamless selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step style summary tabIndex target title type useMap value width wmode wrap`
+> `accept acceptCharset accessKey action allowFullScreen alt async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked cite classID className colSpan cols content contentEditable contextMenu controlsList coords crossOrigin data dateTime default defer dir disabled download draggable encType form formAction formEncType formMethod formNoValidate formTarget frameBorder headers height hidden high href hrefLang htmlFor httpEquiv icon id inputMode integrity is keyParams keyType child label long list loop low manifest marginHeight marginWidth max maxLength mediaGroup method min minLength multiple muted name noValidate nonce open optimum pattern placeholder poster preload profile radioGroup readOnly rel required reversed roleSpan rows sandbox scope scoped scrolling seamless selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step style summary tabIndex target title type useMap value width wmode wrap` wrap` wrap
 
-Dasselbe gilt übrigens auch für SVG-Elemente, die man ebenfalls innerhalb von JSX verwenden kann, da SVG valides XML ist! Die Liste der unterstützten SVG-Attribute ist aber gut und gerne 3 mal so lang und längst nicht so relevant im Alltag, weswegen ich dich in diesem Fall aber nun wirklich an die entsprechende Stelle in der offiziellen Doku verweisen muss: [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
+The same is true for SVG elements, which can also be used within JSX, because SVG is valid XML! The list of supported SVG-attributes is however well and gladly 3 times as long and long not so relevant in everyday life, why I must refer you in this case however really to the appropriate place in the official documentary: [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
 
-## Sonderfall Inline-Styles
+## Special case Inline-Styles
 
-Natürlich gibt es auch Sonderfälle. Das style-Attribut ist ein solcher. Während Inline-Styles in HTML mit den originalen CSS-Eigenschaftsnamen und als String geschrieben werden, benutzt React, du ahnst es: JavaScript-Eigenschaften und außerdem ein Objekt statt eines einfachen Strings.
+Of course, there are also special cases. The style attribute is one such attribute. While inline styles are written in HTML with the original CSS property names and as a string, React uses you suspect it: JavaScript properties and also an object instead of a simple string.
 
-Schreibst du in herkömmlichem HTML:
+Are you writing in traditional HTML:
 
 ```markup
 <div style="margin-left: 12px; border-color: red; padding: 8px"></div>
 ```
 
-Sieht das Gegenstück in JSX so aus:
+Does the counterpart in JSX look like this?
 
 ```jsx
-<div style={{ marginLeft: '12px', borderColor: 'red', padding: '8px' }} />
+<div style={ marginLeft: '12px', borderColor: 'red', padding: '8px' }} />
 ```
 
-Ein weiterer Sonderfall sind Events. Da diese sehr umfangreich sind, widmen wir uns dem Thema später in einem eigenen Kapitel nochmal.
+Events are another special case. Since these are very extensive, we will deal with the topic again later in a separate chapter.
 
-## Kommentare in JSX
+## Comments in JSX
 
-Auch Kommentare sind möglich in JSX, funktionieren aber nicht wie in HTML in der Form:
+Comments are also possible in JSX, but do not work like HTML in the form:
 
 ```markup
-<!-- Dies ist ein Beispiel für einen Kommentar -->
+<!-- This is an example of a comment -->
 ```
 
-… sondern werden ebenfalls wie Ausdrücke in geschweifte Klammern gefasst und dann in Form eines JavaScript Mehrzeilenkommentars geschrieben:
+... but are also enclosed in curly brackets like expressions and then written in the form of a JavaScript multiline comment:
 
 ```jsx
 {
-  /* So sieht ein Kommentar in JSX aus */
+  /* This is what a comment in JSX looks like */
 }
 ```
 
-Derartige Kommentare können sich natürlich auch über mehrere Zeilen erstrecken. Einzeilige JavaScript Kommentare, die mit einem doppelten Slash \(`//`\) eingeleitet werden, sind hingegen nicht möglich in JSX. Hier muss also auch bei einem kurzen einzeiligen Kommentar die `/* */` Syntax für mehrzeilige Kommentare verwendet werden.
+Such comments can, of course, extend over several lines. Single-line JavaScript comments introduced with a double slash \(`//`\) are not possible in JSX. Here you have to use the `/* */` syntax for multiline comments even for a short single-line comment.
 
-Damit solltest du auch schon ausreichend Kenntnisse über JSX erlangt haben, um die nachfolgenden Beispiele und Beschreibungen im weiteren Verlauf immer besser verstehen und nachvollziehen zu können
+This should also give you enough knowledge about JSX to understand the following examples and descriptions better and better in the course of time
 
-## Fazit
+## Conclusion
 
 {% hint style="info" %}
-* Mehrzeiliges JSX muss stets in Klammern gesetzt werden
-* JSX kann JavaScript-Ausdrücke verarbeiten. Diese müssen in geschweifte Klammern gesetzt werden und können dann auch in Props verwendet werden
-* Um Attribute für HTML-Elemente zu setzen muss die Schreibweise des DOM Element Interface benutzt werden \(`htmlFor` statt `for`, `className` statt `class`\)
-* CSS Inline-Styles werden als JavaScript Object geschrieben
-* Kommentare werden ebenfalls in geschweifte Klammern gesetzt und verwenden Multiline-Comment Syntax: `{/* */}`
+* Multiline JSX must always be placed in parentheses
+* JSX can process JavaScript expressions. These must be placed in curly brackets and can then also be used in props.
+* To set attributes for HTML elements the spelling of the DOM element interface must be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
+* CSS Inline-Styles are written as JavaScript Object
+* Comments are also enclosed in braces and use multi-line comment syntax: `{/* */}`
 {% endhint %}
 

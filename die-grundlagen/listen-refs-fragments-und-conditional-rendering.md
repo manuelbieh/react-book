@@ -1,34 +1,34 @@
-# Listen, Fragments und Conditional Rendering
+# Lists, fragments and conditional rendering
 
-Bis hierher habt ihr schon eine ganze Menge über React erfahren. Ihr wisst, wofür die **Props** sind, was der **State** ist und wie er sich von den **Props** unterscheidet, ihr wisst wie eine React-Komponente implementiert wird, was der Unterschied einer React-**Komponente** und einem React-**Element** ist und wie ihr mit **JSX** einen Elementenbaum beschreibt, der später in eurer Anwendung gerendert wird. **Lifecycle-Methoden** helfen euch, auf Änderungen eurer Daten zu reagieren. Damit habt ihr auch schon alles beisammen um eine simple React-Anwendung zu entwickeln. 
+So far you've learned a lot about React. You know what the **Props** are for, what the **State** is for and how it differs from the **Props**, you know how to implement a React component, what is the difference between a React**** component** and a React** element** and how to use **JSX** to describe an element tree that will later be rendered in your application. **Lifecycle methods help you react to changes in your data. So you already have everything together to develop a simple React application. 
 
-Allerdings gibt es noch einige Details, die in den vorherigen Kapiteln bisher gar keine Erwähnung fanden oder ohne weitere Erklärung in Beispielen benutzt wurden, die aber mit steigender Komplexität eurer Anwendung zunehmend relevanter werden.
+However, there are still some details which have not been mentioned in the previous chapters or which have been used in examples without further explanation, but which become more and more relevant as the complexity of your application increases.
 
-Im Speziellen betrifft das die Arbeit mit **Listen**, also Arrays mit Daten, sogenannte **Refs**, damit sind Referenzen zu DOM-Repräsentationen von React-Elementen gemeint, **Fragments**, eine spezielle Art Komponente, die keine Spuren im gerenderten Output hinterlässt und **Conditional Rendering**, also Unterscheidungsmöglichkeiten, wann ihr was rendert, basierend auf **Props** und **State**.
+In particular this concerns the work with **Lists**, arrays with data, so called **Refs**, which means references to DOM representations of React elements, **Fragments**, a special kind of component, which leaves no traces in the rendered output and **Conditional Rendering**, which means discrimination, when you render what, based on **Props** and **State**.
 
-Die Themen haben eins gemeinsam: sie sind zu wichtig um sie nicht im Grundlagenteil dieses Buchs zu erwähnen aber gleichzeitig nicht umfänglich genug, um ihnen jeweils ein komplettes eigenes Kapitel zu widmen.
+The topics have one thing in common: they are too important not to be mentioned in the basic part of this book, but at the same time they are not comprehensive enough to be devoted a complete chapter of their own.
 
-## Listen
+## Lists
 
-Mit Listen sind hier tatsächlich stumpfe JavaScript-Arrays gemeint, also einfache **Daten**, durch die iteriert werden kann. Sie sind bei der Arbeit \(nicht nur mit React\) alltäglich und keine Anwendung kommt ohne sie aus. **ES2015+** bietet uns mit `Array.map()`, `Array.filter()` oder `Array.find()` schöne deklarative Methoden, die wir als Ausdrücke in JSX innerhalb von geschweiften Klammern `{}` nutzen können.
+Lists here actually mean blunt JavaScript arrays, i.e. simple **data** through which iterations can be performed. They are commonplace at work \(not just with React\) and no application can do without them. **ES2015+** offers us with `Array.map()`, `Array.filter()` or `Array.find()` nice declarative methods, which we can use as expressions in JSX within curly braces `{}`.
 
-Welche Rolle Ausdrücke in JSX spielen und wie wir Ausdrücke in JSX nutzen können, habe ich bereits im Kapitel über JSX angesprochen. Kurz aufgefrischt: Arrays können als Ausdruck in JavaScript genutzt werden und somit auch in JSX. Das heißt sie können in geschweiften Klammern stehen und werden dann von beim Transpiling von JSX als Child-Node behandelt.
+The role of expressions in JSX and how we can use expressions in JSX have already been discussed in the chapter about JSX. Briefly refreshed: Arrays can be used as expressions in JavaScript and thus also in JSX. This means that they can be placed in curly braces and are then treated as child nodes by JSX during transpiling.
 
-Das ist aber noch nicht alles, denn `Array.map()` kann bspw. modifizierte Items zurückgeben, die selbst wiederum JSX beinhalten. Das ist insofern praktisch, als es uns weitere Flexibilität verschafft und es uns ermöglicht, Datensammlungen in React-Elemente zu verwandeln.
+But that's not all, because `Array.map()` can return modified items which contain JSX themselves. This is convenient in that it gives us more flexibility and allows us to turn data collections into react elements.
 
-Nehmen wir als Beispiel an, wir wollen eine Liste aus Cryptocurrencies anzeigen. Unser Array mit den entsprechenden Daten hat die folgende Form:
+Let's assume, for example, that we want to display a list of cryptocurrencies. Our array with the corresponding data has the following form:
 
 ```jsx
 const cryptos = [
     {
         id: 1,
-        name: 'Bitcoin',
+        name: Bitcoin,
         symbol: 'BTC',
         quotes: { EUR: { price: 7179.92084586 } }
     },
     {
         id: 2,
-        name: 'Ethereum',
+        name: Ethereum,
         symbol: 'ETH',
         quotes: { EUR: { price: 595.218568203 } }
     },
@@ -41,7 +41,7 @@ const cryptos = [
 ];
 ```
 
-Dargestellt werden sollen die Daten erst einmal als einfache ungeordnete Liste in simplem HTML. Die entsprechende Komponente könnte dann zum Beispiel so aussehen:
+The data should first be displayed as a simple unordered list in simple HTML. The corresponding component could then look like this, for example:
 
 ```jsx
 const CryptoList = ({ currencies }) => (
@@ -56,19 +56,19 @@ const CryptoList = ({ currencies }) => (
 );
 ```
 
-Und würde dann etwa so benutzt werden:
+And would be used like this:
 
 ```jsx
 <CryptoList currencies={cryptos} />
 ```
 
-Heraus kommt eine Liste mit den entsprechenden Kryptowährungen und ihrem jeweiligen Preis. Allerdings bekommen wir auch direkt eine Warnung von React an den Kopf geworfen:
+The result is a list with the corresponding crypto currencies and their respective prices. However, we also get a direct warning from React thrown to our head:
 
-![Fehlermeldung bei fehlender key-Prop in einer durch einen Iterator erzeugten Liste](../.gitbook/assets/react-missing-key.png)
+![Error message if key-prop is missing in a list generated by an iterator](../.gitbook/assets/react-missing-key.png)
 
-React erwartet bei allen Arrays und von einem Iterator zurückgegebenen Werten eine `key`-Prop. Diese dient dazu, dem **Reconciler** \(also dem React-Vergleichsalgorithmus\) eine Möglichkeit zu geben, um Listen-Elemente zu identifizieren und letztendlich vergleichen zu können. Der **Reconciler** erkennt dadurch, welche Array-Elemente hinzugefügt, entfernt oder modifiziert wurden. Die `key`-Prop nimmt dabei die Funktion einer eindeutigen ID ein und muss **innerhalb dieses Arrays einmalig** sein. In der Praxis wird hier typischerweise die ID eines Datensatzes verwendet. 
+React expects a `key` prop for all arrays and values returned by an iterator. This serves to give the **Reconciler** \ (i.e. the React comparison algorithm\) a possibility to identify list elements and finally to compare them. The **Reconciler** recognizes which array elements have been added, removed or modified. The `key` prop takes the function of a unique ID and must be **unique within this array**. In practice, the ID of a data set is typically used here. 
 
-In unserem Fall haben wir eine solche ID vorliegen; das oberste Element, das aus der `map()`-Methode zurückgegeben wird, würde also korrekt so aussehen:
+In our case we have such an ID, so the top element returned from the `map()` method would look correct:
 
 ```jsx
 const CryptoList = ({ currencies }) => (
@@ -83,13 +83,13 @@ const CryptoList = ({ currencies }) => (
 );
 ```
 
-Der Key muss dabei nur **innerhalb eines Arrays/Iterators inmitten seiner Geschwister-Elemente einmalig sein, nicht innerhalb der Komponente!** Dies bedeutet, dass wir die gleiche `CryptoList`-Komponente mit denselben Keys an anderer Stelle, auch in der gleichen Komponente, problemlos noch ein zweites Mal verwenden könnten. Nur eben nicht innerhalb dieses einen Loops. 
+The key only has to be unique **within an array/Iterator in the middle of its sibling elements, not within the component!** This means that we could use the same `CryptoList` component with the same keys elsewhere, even in the same component, a second time. Just not inside that one loop. 
 
-Sind zu einer Liste aus Datensätzen keine eindeutigen Schlüssel vorhanden, kann als letzter Ausweg der **Index** des Array-Elements verwendet werden. Davon wird jedoch **ausdrücklich abgeraten**, da dies zu Problemen bei der Performance sowie zu unvorhersehbarem Verhalten beim Rendering des User Interfaces führen kann.
+If there are no unique keys for a list of records, the **Index** of the array element can be used as a last resort. However, this is **recommended**, as it can lead to performance problems and unpredictable behavior when rendering the user interface.
 
-Wichtig ist außerdem, dass die `key`-Prop immer **direkt in der von der Iterator-Funktion** zurückgegebenen **Toplevel-Komponente** oder dem **Array-Element** vorhanden sein muss, nicht in der von dieser Komponente zurückgegebenen JSX. 
+It is also important that the `key` prop must always be **directly present in the **Toplevel component** returned by the Iterator function** or the **Array element**, not in the JSX returned by that component. 
 
-Um besser zu veranschaulichen was das genau bedeutet, machen wir aus unserem obigen Listen-Element eine eigene kleine `CryptoListItem`-Komponente:
+To better illustrate exactly what this means, we make our above list element into its own little `CryptoListItem` component:
 
 ```jsx
 const CryptoListItem = ({ name, symbol, quotes }) => (
@@ -100,7 +100,7 @@ const CryptoListItem = ({ name, symbol, quotes }) => (
 );
 ```
 
-Was fällt auf? Richtig: die `key`-Prop, die wir zuvor hinzugefügt haben ist nun nicht mehr da. Unser `map()`-Aufruf würde sich dafür wie folgt verändern:
+What stands out? Correct: the `key` prop we added before is no longer there. Our `map()` call would change as follows:
 
 ```jsx
 const CryptoList = ({ currencies }) => (
@@ -117,9 +117,9 @@ const CryptoList = ({ currencies }) => (
 );
 ```
 
-Obwohl es das `<li></li>`-Element ist, welches letztendlich gerendert wird, muss dennoch die `<CryptoListItem />`-Komponente die `key`-Prop bekommen, da sie es ist, die von `Array.map()` an der entsprechenden Stelle im JSX zurückgegeben wird. 
+Although it is the `<li></li>` element that is ultimately rendered, the `<CryptoListItem />` component must still get the `key` prop, since it is it that is returned by `Array.map()` at the appropriate location in the JSX. 
 
-Offtopic: die `CryptoList`-Komponente könnte durch Verwendung der **Object-Spread Syntax** weiter vereinfacht werden:
+Offtopic: the `CryptoList` component could be further simplified by using the **Object spread syntax**:
 
 ```jsx
 const CryptoList = ({ currencies }) => (
@@ -129,9 +129,9 @@ const CryptoList = ({ currencies }) => (
 );
 ```
 
-Auf diese Art werden alle Eigenschaften des `currency`-Objekts entsprechend als gleichnamige Props an die `CryptoListItem`-Komponente übertragen.
+In this way, all properties of the `currency` object are transferred to the `CryptoListItem` component as props of the same name.
 
-Bei der direkten Arbeit mit Arrays, ohne einen Iterator wie `Array.map()` sähe das analog dazu so aus:
+When working directly with arrays, without an iterator like `Array.map()` this would look the same:
 
 ```jsx
 const MyList = () => (
@@ -147,7 +147,7 @@ const MyList = () => (
 
 ## Fragments
 
-Fragments sind eine Art Spezial-Komponente und dienen hilfsweise dazu, gültiges JSX zu erzeugen, ohne dabei sichtbare Spuren in der gerenderten Ausgabe zu hinterlassen. Gültiges JSX in dem Sinne, dass die `render()`-Methode immer nur ein Element auf oberster Ebene zurückgeben darf. Also etwa:
+Fragments are a kind of special component and serve alternatively to create valid JSX without leaving visible traces in the rendered output. Valid JSX in the sense that the `render()` method can only return one top-level element at a time. Like:
 
 ```jsx
 render() {
@@ -161,7 +161,7 @@ render() {
 }
 ```
 
-Aber eben nicht so etwas wie:
+But not something like that:
 
 ```jsx
 render() {
@@ -173,9 +173,9 @@ render() {
 }
 ```
 
-Hier geben wir aus der `render()`-Methode direkt und ohne umschließendes Eltern-Element mehrere `li`-Elemente zurück, was zu einer Fehlermeldung führt. Manchmal ist dies aber notwendig, bspw. wenn sich das umschließende Element in einer Eltern-Komponente befinden, die Kind-Elemente aber durch eine eigene Komponente erzeugt werden soll. 
+Here we return several `li` elements from the `render()` method directly and without an enclosing parent element, which leads to an error message. Sometimes this is necessary, e.g. if the enclosing element is located in a parent component, but the child elements are to be created by a separate component. 
 
-Innerhalb einiger Elemente \(`table`, `ul`, `ol`, `dl`, …\) ist es aber nicht erlaubt, bspw. ein `div`-Element als Zwischenebene zu verwenden, um die Regel zu erfüllen stets nur ein einzelnes Root-Element aus einer Komponente zurückzugeben. In diesem Fall kommt das **Fragment** ins Spiel und würde angewendet auf das obige Beispiel folgende Änderung bedeuten, um valides JSX zu erzeugen:
+Within some elements \(`table`, `ul`, `ol`, `dl`, ...\) it is not allowed to use e.g. a `div` element as an intermediate level in order to fulfill the rule and only return a single root element from a component. In this case, the **fragment** comes into play and, applied to the above example, would mean the following change to create valid JSX:
 
 ```jsx
 render() {
@@ -189,7 +189,7 @@ render() {
 }
 ```
 
-Dabei gilt auch hier die Regel, dass eine iterativ, also durch eine Schleife erzeugte Ausgabe eine `key`-Prop besitzen muss. Mit der `Fragment`-Komponente ist dies möglich. Schauen wir uns ein weiteres, etwas umfassenderes und praxisnäheres Beispiel an:
+Here, too, the rule applies that an iterative, i.e. looped output must have a `key` prop. This is possible with the `Fragment` component. Let's look at another example that is somewhat more comprehensive and practical:
 
 ```jsx
 import React from 'react';
@@ -218,7 +218,7 @@ ReactDOM.render(
 );
 ```
 
-Die so erzeugte Ausgabe wäre die folgende:
+The output generated in this way would be the following:
 
 ```markup
 <dl>
@@ -231,7 +231,7 @@ Die so erzeugte Ausgabe wäre die folgende:
 </dl>
 ```
 
-Hier wäre es beispielsweise nicht möglich, ein `div` oder `span` oder ein sonstiges Element um `<dt><dt>` und `<dd></dd>` zu wrappen. Dies würde zu folgender Ausgabe führen:
+For example, it would not be possible to wrap a `div` or `span` or any other element around `<dt><dt>` and `<dd></dd>`. This would result in the following output:
 
 ```markup
 <dl>
@@ -250,37 +250,37 @@ Hier wäre es beispielsweise nicht möglich, ein `div` oder `span` oder ein sons
 </dl>
 ```
 
-… und wäre damit ungültiges HTML, da ein `dl`-Element nur `dt` und `dd` als Kind-Element erlaubt. Das **Fragment** hilft uns hier also gültiges JSX zu erzeugen, ohne dabei gleichzeitig das HTML ungültig werden zu lassen. Dies war in React bis zur Einführung von Fragments in Version 16.3. ein Problemund führte dazu, dass Komponenten unnötig kompliziert implementiert werden mussten, um weder gegen JSX- noch gegen HTML-Regeln zu verstoßen.
+... and would be invalid HTML, because a `dl` element only allows `dt` and `dd` as child elements. The **Fragment** helps us to create valid JSX without invalidating the HTML at the same time. This was a problem in React until the introduction of Fragments in version 16.3, and led to components being unnecessarily complicated to implement in order not to violate either JSX or HTML rules.
 
-Die Fragment-Komponente kann auch als benannter Import direkt aus React importiert werden:
+The fragment component can also be imported as a named import directly from React:
 
 ```javascript
 import React, { Fragment } from 'react';
 ```
 
-Bei der Verwendung kann dann `<Fragment>` geschrieben werden statt `<React.Fragment>`. Dies kann, insbesondere wenn viele `Fragment`-Elemente verwendet werden noch etwas Schreibarbeit sparen.
+When used, `<Fragment>` can be written instead of `<React.Fragment>`. This can save some typing, especially if many `fragment` elements are used.
 
-Wer es noch etwas kürzer möchte, der sollte Babel 7 zur Transpilierung des Codes verwenden. Hier ist außerdem eine Kurzform der Fragment-Syntax möglich. Dazu wird lediglich ein _leeres_ Element erzeugt:
+If you want it a little shorter, you should use Babel 7 to transpose the code. A short form of the fragment syntax is also possible here. For this only an _empty_ element is created:
 
 ```jsx
-<>Fragment in Kurzform-Syntax</>
+<>fragment in short form syntax</>
 ```
 
-Eine komfortable Möglichkeit, um sich noch etwas mehr Schreibarbeit zu ersparen. Doch aufgepasst: die Verwendung der Fragment-Kurzform in einer Schleife ist hier nicht möglich, da die Kurzform-Syntax von `Fragment` keine Props besitzen kann, alle Elemente, die in einer Schleife verwendet werden jedoch eben eine `key`-Prop besitzen müssen. In diesem Fall muss dann doch wieder auf `<React.Fragment>` zurückgegriffen werden.
+A comfortable way to save yourself a little more paperwork. But beware: the use of the fragment short form in a loop is not possible here, because the short form syntax of `fragment` cannot have props, but all elements used in a loop must have a `key` prop. In this case you have to use `<React.Fragment>` again.
 
-## Conditional Rendering
+## Conditional rendering
 
-**Conditional Rendering**, also das Rendering von Komponenten auf Basis verschiedener Bedingungen ist ein zentrales Konzept in React. Da React-Komponenten unter der Haube lediglich eine Komposition aus JavaScript-Funktionen, -Objekten und -Klassen sind, funktionieren und verhalten sich Bedingungen hier exakt wie auch in herkömmlichem JavaScript.
+**Conditional rendering**, i.e. the rendering of components on the basis of different conditions, is a central concept in React. Because React components under the hood are just a composition of JavaScript functions, objects, and classes, conditions here work and behave exactly as they do in traditional JavaScript.
 
-Eine React-Komponente rendert **Zustände** eines **User Interfaces** basierend auf ihren **Props** und ihrem **aktuellen State**, optimalerweise **frei von Seiten-Effekten.** Um also korrekt auf diese verschiedenen Parameter reagieren zu können, machen wir uns Rendering-Funktionen zunutze, die an verschiedene Bedingungen geknüpft sind. Ist mein Parameter A, rendere dies; ist mein Parameter B, rendere das. Habe ich eine Liste mit Daten, zeige mir die Daten in einer HTML-Liste an. Habe ich keinerlei Daten, zeige mir stattdessen einen Platzhalter an.
+A React component renders **states** of a **User interface** based on its **props** and its **current state**, optimally **free of page effects.** So in order to react correctly to these different parameters, we take advantage of rendering functions that are tied to different conditions. If my parameter is A, render this; if my parameter is B, render this. If I have a list of data, display the data in an HTML list. If I don't have any data, display a placeholder instead.
 
-Was so einfach klingt, ist es im Grunde genommen auch. Aber man sollte die richtigen Wege kennen, insbesondere in JSX. Die `render()`-Funktion von Komponenten, also sowohl von **Class Components** als auch **Stateless Functional Components** kann grundsätzlich ein **React-Element** \(natürlich auch in Form von JSX\), einen **String**, eine **Nummer**, `null` \(für den Fall, dass nichts gerendert werden soll\) oder ein **Array** aus den zuvor genannten Typen zurückgeben.
+What sounds so simple is basically simple. But you should know the right ways, especially in JSX. The `render()` function of components, i.e. of both **Class Components** and **Stateless Functional Components** can return a **React element** \(of course also in the form of JSX\), a **String**, a **Number**, `null` \(in case nothing is to be rendered\) or a **Array** of the aforementioned types.
 
-Darüber hinaus gibt es einige Möglichkeiten, die `render()`-Methoden in den Komponenten übersichtlich zu halten. Diese Möglichkeiten werde ich euch hier vorstellen.
+In addition, there are several ways to keep the `render()` methods clear in the components. I will introduce these possibilities to you here.
 
 ### if/else
 
-Die wohl einfachste und wahrscheinlich auch gängigste Form des **Conditional Renderings** ist ein klassisches `if`/`else`-Konstrukt. 
+Probably the simplest and probably most common form of **Conditional Rendering** is a classic `if`/`else` construct. 
 
 ```jsx
 const NotificationList = ({ items }) => {
@@ -293,13 +293,13 @@ const NotificationList = ({ items }) => {
       </ul>
     );
   }
-  return <p>Keine neuen Benachrichtigungen</p>
+  return <p>No new notifications </p>
 };
 ```
 
-Einfacher Anwendungsfall. Wir haben eine Komponente `NotificationList`, die eine Liste an Items in Form einer Prop entgegen nimmt. Enthält diese Liste Einträge, werden diese als simple ungeordnete Liste ausgegeben. Ist die Liste hingegen leer, lassen wir unsere Komponente stattdessen eben den Hinweis ausgeben, dass keine neuen Benachrichtigungen vorhanden sind.
+Simple application. We have a `NotificationList` component that accepts a list of items in the form of a prop. If this list contains entries, these are output as a simple unordered list. If the list is empty, we let our component display the message that there are no new notifications instead.
 
-Ein weiteres Beispiel mit einem komplexeren Fall. Wir haben einen Wert und möchten diesen editierbar machen. Unsere Komponente kennt zwei verschiedene Modi: `edit` und `view`. Je nachdem, ob wir uns im **View-Mode** oder im **Edit-Mode** befinden, möchten wir nur den Text anzeigen oder ein vorausgefülltes Textfeld mit dem jeweiligen letzten aktuellen Wert.
+Another example with a more complex case. We have a value and want to make it editable. Our component has two different modes: `edit` and `view`. Depending on whether we are in **View mode** or **Edit mode**, we only want to display the text or a prefilled text field with the respective last current value.
 
 ```jsx
 import React from 'react';
@@ -307,7 +307,7 @@ import { render } from 'react-dom';
 
 class EditableText extends React.Component {
   state = {
-    value: null,
+    value: zero,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -316,7 +316,7 @@ class EditableText extends React.Component {
         value: nextProps.initialValue || '',
       };
     }
-    return null;
+    return zero;
   }
 
   handleChange = (e) => {
@@ -328,7 +328,7 @@ class EditableText extends React.Component {
 
   setMode = (mode) => () => {
     this.setState(() => ({
-      mode,
+      fashion,
     }));
   }
 
@@ -363,18 +363,18 @@ render(
 
 ```
 
-Der für dieses Kapitel relevante Teil spielt sich innerhalb der `render()`-Methode der Komponente ab. Wir prüfen hier auf den Wert der State-Eigenschaft `mode`:  Ist dieser `edit`,  geben wir direkt das Eingabefeld zurück \(„early return“\). Ist dieser nicht `edit`, gehen wir davon aus, dass der „Standardfall“ eintritt, der in diesem Falle der Ansichtsmodus \(`view`\) wäre. Der `else`-Teil der Condition ist hier also gar nicht nötig und würde lediglich unnötig Komplexität hinzufügen. Gerendert wird jeweils der Text, einmal editierbar als `value` eines `input`-Felds, einmal lediglich als Textknoten und dazu jeweils ein Button, um die State-Eigenschaft `mode` der Komponente zwischen `view` und `edit` hin und her zu wechseln.
+The part relevant to this chapter takes place within the `render()` method of the component. We check here for the value of the state property `mode`: If this is `edit`, we directly return the input field \("early return"\). If this is not `edit`, we assume that the "standard case" occurs, which in this case would be the view mode \(`view`\). The `else` part of the condition is not necessary here and would only add unnecessary complexity. The text is rendered, once editable as `value` of an `input` field, once only as a text node and a button to switch the state property `mode` of the component between `view` and `edit`.
 
-Derartige `if`, `if`/`else` oder `if`/`else if`/`else`-Konstrukte sind in verschiedenen Varianten, auf die ich hier gleich noch eingehen werde, eine häufige Form wenn es darum geht, eine Ausgabe auf Basis von **State** und **Props** innerhalb einer Komponente zu erzeugen.
+Such `if`, `if`/`else` or `if`/`else if`/`else` constructs are in different variants, which I'll discuss here in a moment, a common form when it comes to creating an output based on **State** and **Props** within a component.
 
-### null
+### zero
 
-Nein, die Überschrift ist kein Fehler. `null` zurückzugeben ist wohl der einfachste Fall für **Conditional Rendering.** Gibt die `render()`-Methode einer Komponente `null` zurück, wird diese nicht gerendert und erscheint daher auch nicht im DOM. Dies kann manchmal sinnvoll sein, bspw. wenn eine Fehler-Komponente nur dann angezeigt werden soll, wenn auch ein Fehler aufgetreten ist.
+No, the headline's not a mistake. Returning `null` is probably the simplest case for **Conditional Rendering.** If the `render()` method of a component returns `null`, it is not rendered and therefore does not appear in the DOM. This can sometimes be useful, e.g. if an error component is only to be displayed if an error has occurred.
 
 ```jsx
 render() {
   if (!this.state.error) {
-    return null;
+    return zero;
   }
 
   return (
@@ -383,13 +383,13 @@ render() {
 }
 ```
 
-Hier wird geprüft, ob im State der Komponente eine error-Eigenschaft gesetzt ist. Ist dies nicht der Fall, wird `null` zurückgegeben und somit auch nichts gerendert. Existiert die Eigenschaft hingegen, wird die entsprechende Fehlermeldung in einem `div` ausgegeben, wozu wir wieder auf das Conditional Rendering mit einem einfachen `if` zurückgreifen.
+This checks whether an error property is set in the state of the component. If this is not the case, `null` is returned and nothing is rendered. If, on the other hand, the property exists, the corresponding error message is output in a `div`, for which we again use conditional rendering with a simple `if`.
 
 ### Ternary Operator
 
-Dies waren Beispiele für Bedingungen, die relativ grundlegende Unterschiede in ihren Komponenten ausgeben. Oftmals möchte man allerdings nur kleine Unterschiede ausgeben, etwa eine CSS-Klasse hinzufügen, wenn ein bestimmter State gesetzt ist. Hier hilft uns der Ternary Operator weiter. Kurze Auffrischung: der **Ternary Operator** ist ein Ausdruck und hat die Form `Bedingung ? Erfüllt : Nicht Erfüllt`. Also etwa: `isLoggedIn ? 'Logout' : 'Login';` 
+These were examples of conditions that output relatively fundamental differences in their components. But often you only want to output small differences, like adding a CSS class when a certain state is set. This is where the Ternary Operator comes in. Short refresh: the **Ternary Operator** is an expression and has the form `Condition ? Fulfilled : Not fulfilled`. Like: `isLoggedIn ? 'Logout' : 'Login';`` 
 
-Und damit hätten wir auch schon unser erstes Beispiel für die Verwendung des **Ternary Operators** innerhalb von JSX. Er kann sowohl innerhalb von Props verwendet werden, als auch einfach um je nach Bedingung, verschiedene Elemente zu rendern. Ein konkreter Anwendungsfall für das eben genannte Beispiel wäre die Ausgabe von Text in Abhängigkeit zu einer Bedingung:
+This would also be our first example of using the **Ternary Operator** within JSX. It can be used both within props and simply to render different elements depending on the condition. A concrete use case for the above example would be the output of text dependent on a condition:
 
 ```jsx
 render() {
@@ -400,22 +400,22 @@ render() {
 }
 ```
 
-In diesem Fall würden wir stets einen Button ausgeben, dieser hätte aber abhängig von seiner `isLoggedIn`-Prop entweder die Beschriftung **Logout** oder **Login**. 
+In this case we would always output a button, but depending on its `isLoggedIn` prop it would have either the label **Logout** or **Login**. 
 
-Genau in der gleichen Form kann der **Ternary Operator** in Props verwendet werden. Nehmen wir an, wir wollen eine Liste mit Benutzern ausgeben, von denen einige deaktiviert wurden. In diesem Fall möchten wir eine Klasse setzen, um diese mittels CSS markieren zu können. Ein entsprechendes Markup könnte dann bspw. so aussehen:
+The **Ternary Operator** can be used in props in exactly the same form. Suppose we want to print a list of users, some of whom have been disabled. In this case we want to set a class to be able to mark it with CSS. A corresponding markup could look like this:
 
 ```jsx
 render() {
   const { user } = this.props;
   return (
-    <div className={user.isDisabled ? 'is-disabled' : 'is-active'}>{user.name}</div>
+    <div className={user.isDisabled ? is-disabled
   );
 }
 ```
 
-Deaktivierte Benutzer würden hier mit einer Klasse `is-disabled` gekennzeichnet, aktive Benutzer hingegen mit einer Klasse `is-active`. 
+Deactivated users would be marked with a class `is-disabled`, active users with a class `is-active`. 
 
-Auch komplexeres JSX lässt sich mittels **Ternary Operator** abbilden. Dazu muss lediglich die allgemein gültige Regel befolgt werden, dass sich über mehrere Zeilen erstreckendes JSX in Klammern gefasst werden muss:
+Even more complex JSX can be mapped using the **Ternary Operator**. All you have to do is follow the general rule that JSX that extends over several lines must be enclosed in parentheses:
 
 ```jsx
 render() {
@@ -426,7 +426,7 @@ render() {
       {country === 'de' ? (
         <select name="state">
           <option value="bw">Baden-Württemberg</option>
-          <option value="by">Bayern</option>
+          <option value="by">Bavaria</option>
           <option value="be">Berlin</option>
           <option value="bb">Brandenburg</option>
           […]
@@ -439,11 +439,11 @@ render() {
 }
 ```
 
-In diesem Fall rendern wir also eine Select-Liste mit allen deutschen Bundesländern, wenn das zuvor ausgewählte Land **Deutschland** \(`de`\) ist. In allen anderen Fällen zeigen wir dem Benutzer nur ein Textfeld an, in das dieser sein entsprechendes Bundesland frei eintragen kann. Hier sollte jedoch immer abgewogen werden ob dies sinnvoll ist, denn der **Ternary Operator** kann insbesondere in komplexerem JSX schnell unübersichtlich werden.
+In this case we render a select list with all German states if the previously selected country is **Germany** \(`de`\). In all other cases, we only show the user a text field in which he can freely enter his corresponding state. Here, however, you should always consider whether this makes sense, because the **Ternary Operator** can quickly become confusing, especially in complex JSX.
 
-### Logical AND \(`&&`\) und Logical OR \(`||`\)
+### Logical AND \(`&&`\) and Logical OR \(`||`\)
 
-Der **Logical Operator** hat auf den ersten Blick Ähnlichkeit zum **Ternary Operator**, jedoch mit dem Unterschied, dass er noch kürzer und prägnanter ist. Anders als beim **Ternary Operator** wird hier kein „zweiter Fall“ benötigt, also ein Wert der verwendet wird, falls die Bedingung nicht erfüllt ist. Ist die Bedingung in einem **Logical AND Operator** nicht erfüllt, ist der Ausdruck `undefined` und verursacht somit keinerlei sichtbare Ausgabe im User Interface:
+At first glance, the **Logical Operator** is similar to the **Ternary Operator**, but with the difference that it is even shorter and more concise. Unlike the **Ternary Operator**, no "second case" is required here, i.e. a value that is used if the condition is not fulfilled. If the condition in a **Logical AND Operator** is not fulfilled, the expression is `undefined` and therefore causes no visible output in the user interface:
 
 ```jsx
 render() {
@@ -456,9 +456,9 @@ render() {
 }
 ```
 
-In diesem Fall würde eine Komponente prüfen, ob der Wert der `isMenuVisible`-Prop `true` ist **und** dann eine `Menu`-Komponente anzeigen. Ist der Wert `false`, gibt der Ausdruck `undefined` zurück und die Komponente rendert dementsprechend keine Ausgabe an dieser Stelle. 
+In this case, a component would check if the value of the `isMenuVisible` prop is `true` **and** then display a `Menu` component. If the value is `false`, the expression returns `undefined` and the component accordingly renders no output at this point. 
 
-In Verbindung mit dem **Logical OR Operator** kann hier ein Fall wie beim **Ternary Operator** herbeigeführt werden:
+In conjunction with the **Logical OR Operator**, a case similar to the **Ternary Operator** can be brought about here:
 
 ```jsx
 render() {
@@ -469,13 +469,13 @@ render() {
 }
 ```
 
-Die Beschriftung des Buttons ist in diesem Fall **Logout**, wenn die `isLoggedIn` **Prop** `true` ist, der Benutzer also eingeloggt ist oder **Login**, wenn der Benutzer nicht eingeloggt ist.
+In this case, the button label is **Logout** if the `isLoggedIn` **Prop** is `true`, so the user is logged in, or **Login** if the user is not logged in.
 
-### Eigene `render()`-Methoden
+### Own `render()`-Methods
 
-Eine Möglichkeit, die Übersicht bei **Conditional Rendering** zu erhöhen, ist bestimmte Teile aus der `render()`-Methode in eigene `renderXY()`-Methoden zu verfrachten. Die `render()`-Methode stellt so gesehen den Kern einer Komponente dar, ist sie doch dafür verantwortlich zu entscheiden, was ein Benutzer später auf seinem Bildschirm sieht. Sie sollte also nicht zu komplex werden, nicht unnötig viel Logik enthalten und lesbar sein.
+One way to increase the overview of **Conditional Rendering** is to move certain parts of the `render()` method to your own `renderXY()` methods. The `render()` method represents the core of a component, since it is responsible for deciding what a user sees on his screen later. It should therefore not become too complex, contain unnecessary logic and be readable.
 
-Nicht unüblich ist es daher, sehr komplexe und lange `render()`-Methoden in kleine, übersichtliche Häppchen zu unterteilen und als eigene Klassenmethoden zu implementieren. Dies führt bei sinnvoller Benennung der jeweiligen Methoden meist zur Erhöhung und zu besserer Verständlichkeit des Codes. Meist werden die einzelnen `render()`-Methoden noch mit `if`-Blöcken kombiniert:
+It is therefore not uncommon to divide very complex and long `render()` methods into small, clear bits and implement them as separate class methods. This usually leads to an increase and a better comprehensibility of the code if the respective methods are named in a meaningful way. Usually the individual `render()` methods are still combined with `if` blocks:
 
 ```jsx
 class Countdown extends React.Component {
@@ -499,21 +499,21 @@ class Countdown extends React.Component {
 }
 ```
 
-Dies **kann** bei kluger Verwendung die Lesbarkeit einer `render()`-Methode erhöhen, führt aber unweigerlich auch dazu, dass sich die Komplexität einer Komponente \(in etwas geringerem Maß\) erhöht. Viele Leute – ich zähle mich dazu – raten daher eher dazu Teile des Codes wiederum in eigene gekapselte **Function Components** auszulagern statt `renderXY()`-Methoden zu verwenden.
+This **can** increase the readability of a `render()` method when used wisely, but inevitably also increases the complexity of a component \(to a lesser extent\). Many people - and I count myself one of them - therefore prefer to outsource parts of the code to their own encapsulated **Function Components** instead of using `renderXY()` methods.
 
 {% hint style="info" %}
-Sobald die Überlegung ansteht eine weitere `render()`-Methode innerhalb einer Komponente zu implementieren sollte darüber nachgedacht werden, stattdessen eine eigene, separate **Function Component** zu erstellen.
+As soon as you are considering implementing another `render()` method within a component, you should consider creating your own separate **Function Component** instead.
 {% endhint %}
 
-### Eigene Komponenten bei komplexen Conditions
+### Custom components for complex conditions
 
-Statt weiterer `render()`-Methoden innerhalb einer Komponente können wie eben bereits angesprochen auch eigene, neue, bevorzugterweise **Function Components** erstellt werden. Diese bekommen dann entsprechende **Props** aus ihrer Eltern-Komponente hereingereicht und kümmern sich dann als eigenständige, unabhängige, wiederverwendbare und testbare Komponente um die Anzeige der ihnen übergebenen Daten. 
+Instead of additional `render()` methods within a component, you can also create your own, new, preferably **Function Components**, as mentioned earlier. These then receive the corresponding **props** from their parent component and then take care of the display of the data transferred to them as an independent, reusable and testable component. 
 
-An erster Stelle sollte die Überlegung stehen, wie einfach sich die Daten aus der ursprünglichen Eltern-Komponente in die neue\(n\) Kind-Komponente\(n\) übertragen lassen und vor allem, welche Daten überhaupt in eine neue Komponente ausgelagert werden sollten. Dabei sollte beachtet werden, dass die neuen Komponenten selbst wiederum nicht wieder zuviel Logik oder gar State enthalten sollten.
+First and foremost, we should consider how easy it is to transfer data from the original parent component to the new\(n\) child component\(n\) and, above all, which data should be outsourced to a new component at all. It should be noted that the new components themselves should not again contain too much logic or even state.
 
-Dieses Vorgehen bietet sich vor allem dann an, wenn wiederkehrende Elemente in einer Komponente verwendet werden oder eine `render()`-Methode eben zu groß und unübersichtlich wird. 
+This procedure is particularly useful if recurring elements are used in a component or if a `render()` method becomes too large and confusing. 
 
-Stellen wir uns ein Formular vor, das aus zumeist sehr ähnlichen Textfeldern besteht. Jedes Textfeld befindet sich in einem eigenen Paragraphen, hat ein Label und natürlich auch ein `type`-Attribute. Zum Label gehört außerdem auch eine id, die ebenfalls für jedes Feld angegeben werden muss:
+Let's imagine a form that usually consists of very similar text fields. Each text field is in its own paragraph, has a label and of course a `type` attribute. The label also includes an id, which must also be specified for each field:
 
 ```jsx
 render() {
@@ -521,14 +521,14 @@ render() {
     <form>
       <p>
         <label for="email">
-          Email
+          enamel
         </label>
         <br />
         <input type="email" name="email" id="email" />
       </p>
       <p>
         <label for="password">
-          Password
+          password
         </label>
         <br />
         <input type="password" name="password" id="password" />
@@ -539,9 +539,9 @@ render() {
 }
 ```
 
-In diesem Fall haben wir lediglich zwei Formularfelder. Oft ist es aber bereits in durchschnittlich komplexen Anwendungen so, dass es deutlich größere Formulare mit deutlich mehr Feldern gibt. Doch bereits in diesem Fall kann es sinnvoll sein, die sich wiederholenden Felder in eigene Komponenten auszulagern, da wir uns viel Schreibarbeit ersparen können.
+In this case we only have two form fields. Often, however, it is already the case in averagely complex applications that there are significantly larger forms with significantly more fields. But already in this case it can be useful to outsource the repeating fields into own components, because we can save a lot of paperwork.
 
-Wir erstellen also zunächst eine `TextField`-Komponente und lagern das sich wiederholende JSX aus unserer Formular-Komponente dorthin aus:
+So we first create a `TextField` component and store the repeating JSX from our form component there:
 
 ```jsx
 const TextField = ({ id, label, ...HTMLInputAttributes }) => (
@@ -557,9 +557,9 @@ const TextField = ({ id, label, ...HTMLInputAttributes }) => (
 export default TextField;
 ```
 
-Unsere neue Komponente empfängt eine `id`, die wir benötigen, um das Label mit dem Eingabefeld zu verknüpfen und ein Label als solches. Mittels **Object Rest/Spread** fügen wir dem `input`-Element dann außerdem alle weiteren Props, die der Komponente übergeben werden, als Attribut hinzu.
+Our new component receives an `id` that we need to associate the label with the input field and a label as such. Using **Object Rest/Spread** we then add all other props passed to the component to the `input` element as attributes.
 
-Unsere Komponente von oben sieht dann wie folgt aus:
+Our component from above then looks like this:
 
 ```jsx
 render() {
@@ -573,5 +573,5 @@ render() {
 }
 ```
 
-Aus einem langen und potentiell sehr unübersichtlichen Markup haben wir also eine übersichtliche, prägnante `render()`-Methode gemacht, die auf oberster Ebene aus wenigen Komponenten besteht. Möchten wir in Zukunft außerdem eine Änderung vornehmen, die sich auf alle Textfelder auswirkt, bspw. eine neue Klasse hinzufügen, muss dies nur noch an einer einzigen Stelle geändert werden – in der neuen `TextField`-Komponente.
+From a long and potentially very confusing markup, we have created a clear, concise `render()` method that consists of a few components at the top level. If we also want to make a change in the future that affects all text fields, e.g. add a new class, this only has to be changed in one place - in the new `TextField` component.
 

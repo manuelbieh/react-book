@@ -1,21 +1,21 @@
 # Hooks API
 
-In diesem Kapitel möchte ich auf alle verfügbaren internen Hooks einmal eingehen, ihre genaue Verwendung und ihre Einsatzbereiche beschreiben. In der React-Dokumentation werden diese unterteilt in drei generelle \(_basic_\) und sieben zusätzliche \(_additional_\) Hooks. Die zusätzlichen Hooks sind insbesondere für spezielle Anwendungsfälle \(bspw. Performance-Optimierung\) gedacht oder sie sind Abwandlungen der generellen Hooks.
+In this chapter I would like to describe all available internal hooks, their exact use and their fields of application. In the React documentation, these are divided into three general \(_basic_\) and seven additional \(_additional_\) hooks. The additional hooks are intended especially for special applications \(e.g. performance optimization\) or they are modifications of the general hooks.
 
-Zu den drei **generellen Hooks** gehören die bereits in den vorherigen Kapiteln vorgestellten Hooks:
+The three **general hooks** include the hooks already presented in the previous chapters:
 
 * `useState`
 * `useEffect`
-* `useContext`
+* ¶ `useContext`
 
-Die sieben **weiteren Hooks** sind:
+The seven more hooks are:
 
-* `useReducer` 
-* `useCallback` 
+* ¶ `useReducer` 
+* ¶ `useCallback` 
 * `useMemo` 
-* `useRef` 
+* ¶ `useRef` 
 * `useImperativeHandle` 
-* `useLayoutEffect` 
+* ¶ `useLayoutEffect` 
 * `useDebugValue`
 
 ## useState
@@ -24,17 +24,17 @@ Die sieben **weiteren Hooks** sind:
 const [state, setState] = useState(initialState);
 ```
 
-Dieser Hook gibt uns einen **Wert** zurück und eine **Funktion,** um selbigen zu aktualisieren. Während des ersten Renderings einer Komponente, die den `useState()`-Hook nutzt, entspricht dieser Wert dem als `initialState` übergebenen Parameter. Ist der übergebene Parameter eine Funktion nutzt React den Rückgabewert der Funktion als initialen Wert.
+This hook returns a **value** and a **function,** to update it. During the first rendering of a component that uses the `useState()` hook, this value corresponds to the parameter passed as `initialState`. If the passed parameter is a function, React uses the function's return value as the initial value.
 
-Bei der Update-Funktion stellt React sicher, dass diese stets die selbe **Identität** hat, erstellt die Funktion also nicht bei jedem Aufruf des Hooks neu. Dies ist wichtig, um unnötige Re-Renderings zu verhindern und führt außerdem dazu, dass sie nicht als **Dependency** an andere **Hooks** wie `useEffect()` oder `useCallback()` übergeben werden muss.
+With the update function React makes sure that it always has the same **identity**, so the function does not rebuild every time the hook is called. This is important to avoid unnecessary rendering and also means that it does not have to be passed as **Dependency** to other **Hooks** like `useEffect()` or `useCallback()`.
 
-Ganz konkret gibt `useState()` ein **Array** zurück in dem das erste Element immer der **Wert** des States ist und das zweite Element immer eine **Funktion**, um diesen Wert zu aktualisieren. Für die Benennung von Wert und Funktion gibt es durch die Array Destructuring Syntax keine formellen Einschränkungen. Jedoch hat es sich schnell herauskristallisiert, dass in den deutlich überwiegenden Fällen die Form `value`/`setValue` eingehalten werden. Also etwa `user` und `setUser`. Aber auch andere Namen wie `changeUser` oder `updateUserState` wären natürlich denkbar.
+Specifically, `useState()` returns a **Array** in which the first element is always the **value** of the state and the second element is always a **function** to update this value. The array destructuring syntax does not impose any formal restrictions on the naming of values and functions. However, it quickly became clear that in the vast majority of cases the form `value`/`setValue` is adhered to. Like `user` and `setUser`. But also other names like `changeUser` or `updateUserState` would be possible.
 
-Der Mechanismus zum Aktualisieren des States funktioniert hier ansatzweise ähnlich wie `this.setState()` in Klassen-Komponenten. So kann der Funktion entweder ein **neuer Wert** übergeben werden, der dann an die Stelle des alten Werts tritt oder eine **Updater-Funktion**. Diese bekommt den letzten Wert übergeben und nutzt den **Rückgabewert** aus der Funktion als neuen State.
+The mechanism for updating the state here works similar to `this.setState()` in class components. Thus, either a **new value** can be passed to the function, which then replaces the old value, or a **Updater function**. This receives the last value and uses the **return value** from the function as the new state.
 
-Doch Achtung, es gibt einen entscheidenden Unterschied: anders als bei `this.setState()` werden Objekte **nicht zusammengeführt** mit dem bestehenden State, sondern der State wird **komplett** durch den neuen State **ersetzt!**
+But beware, there is a decisive difference: unlike `this.setState()` objects **are not merged** with the existing state, but the state is **completely** replaced by the new state **!**.
 
-Um diesen Unterschied zu illustrieren schauen wir uns einmal den direkten Vergleich an:
+To illustrate this difference, let's take a look at the direct comparison:
 
 ```jsx
 import React, { useState, useEffect } from "react";
@@ -82,9 +82,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-Während die `StateClass` die Daten aller Aufrufe von `this.setState()` sammelt und mit dem bestehenden State zusammenführt, überschreibt die `setState()`-Funktion im `StateHook` jeweils den kompletten State und ersetzt den kompletten alten Wert mit dem neuen Wert. Die Ausgabe ist also in der **Klassen-Komponente**: `{a: 1, b: 2, c: 3, d: 4}` und in der **Function Component** mit dem Hook ein einfaches `{d: 4}`, da dieses zuletzt in den State geschrieben wurde.
+While the `StateClass` collects the data of all calls of `this.setState()` and merges it with the existing state, the `setState()` function in the `StateHook` overwrites the complete state and replaces the complete old value with the new value. So the output is in the **class component**: `{a: 1, b: 2, c: 3, d: 4}` and in the **function component** with the hook a simple `{d: 4}`, because this was last written into the state.
 
-Gibt die Update-Funktion als neuen State exakt den gleichen Wert zurück wie den vorherigen, kommt das dem Abbruch eines State-Updates gleich und es wird kein Rerendering ausgelöst und auch keine Seiten-Effekte ausgelöst.
+If the update function returns exactly the same value as the previous one as the new state, this is equivalent to aborting a state update and no rendering is triggered and no page effects are triggered.
 
 ## useEffect
 
@@ -92,19 +92,19 @@ Gibt die Update-Funktion als neuen State exakt den gleichen Wert zurück wie den
 useEffect(effectFunction, dependenciesArray);
 ```
 
-Dieser **Hook** ist für **imperative Seiteneffekte** vorgesehen, wie etwa API Requests, Timer oder globale Event-Listener. Diese sind innerhalb von **Function Components** grundsätzlich nicht erlaubt oder zumindest zu vermeiden, da sie zu nicht nachvollziehbarem Verhalten und möglicherweise zu schwer zu behebenden Bugs führen können und werden.
+This **Hook** is intended for **imperative side effects** such as API requests, timers or global event listeners. These are not allowed within **Function Components**, or at least should be avoided, as they can and will lead to untraceable behavior and possibly hard-to-fix bugs.
 
-Der `useEffect()`-**Hook** schafft hier Abhilfe und erlaubt die _sichere_ Verwendung von Seiten-Effekten auch innerhalb einer **Function Component**.
+The `useEffect()`-**Hook** provides a remedy and allows the _safe_ use of page effects even within a **Function Component**.
 
-Der **Hook** erwartet eine **Funktion** als ersten Parameter und optional ein **Dependency Array** als zweiten Parameter. Die Funktion wird aufgerufen **nachdem** eine Komponente gerendert wurde. Wird ein optionales **Dependency Array** übergeben, wird die Funktion nur dann ausgeführt wenn sich mindestens einer der Werte aus dem **Dependency Array** seit der letzten Ausführung der Funktion geändert hat. Wird ein leeres **Dependency Array** übergeben, also `[]`, wird die Funktion nur beim **ersten** Rendering der Komponente aufgerufen, vergleichbar also mit der `componentDidMount()` **Lifecycle Methode**, die wir bereits aus Klassen-Komponenten kennen.
+The **Hook** expects a **Function** as first parameter and optionally a **Dependency Array** as second parameter. The function is called **after** a component has been rendered. If an optional **Dependency Array** is passed, the function is only executed if at least one of the values from the **Dependency Array** has changed since the last execution of the function. If an empty **Dependency Array** is passed, i.e. `[]`, the function is only called during the **first** rendering of the component, comparable to the `componentDidMount()` **Lifecycle method**, which we already know from class components.
 
-### Seiteneffekte aufräumen
+### Clean up side effects
 
-In einigen Fällen hinterlassen Seiteneffekte "Spuren", die wieder aufgeräumt werden müssen wenn eine Komponente nicht mehr verwendet wird. Werden beispielsweise Intervalle mittels `setInterval()` gestartet, sollten diese beim Entfernen der Komponente via `clearTimeout()` gestoppt werden, andernfalls kann es zu Problemen wie im schlimmsten Falle Memory Leaks führen.
+In some cases, side effects leave "tracks" that need to be cleaned up when a component is no longer in use. For example, if intervals are started using `setInterval()`, they should be stopped when removing the component via `clearTimeout()`, otherwise it can lead to problems such as memory leaks in the worst case.
 
-Auch global registrierte Event Listener wie `resize` oder `orientationchange` die dem `window`-Objekt mittels `addEventListener()` hinzugefügt werden, sollten spätestens beim Unmounting einer Komponente wieder durch `removeEventListener()` entfernt werden, damit der Code nicht mehr ausgeführt wird, wenn die Komponente sich gar nicht mehr im Seitenbaum befindet.
+Globally registered event listeners like `resize` or `orientationchange` which are added to the `window` object via `addEventListener()` should also be removed by `removeEventListener()` at the latest when unmounting a component, so that the code is no longer executed when the component is no longer in the page tree.
 
-Zu diesem Zweck ist es möglich eine **Cleanup-Funktion** aus der **Effekt-Funktion** zurück zu geben. Gibt eine **Effekt-Funktion** eine **Cleanup-Funktion** zurück, wird diese vor jedem Aufruf der **Effekt-Funktion** ausgeführt, außer vor dem ersten Aufruf:
+For this purpose it is possible to return a **Cleanup function** from the **Effect function**. If a **Effect function** returns a **Cleanup function**, it is executed before each call to the **Effect function**, except before the first call:
 
 ```javascript
 import React, { useState, useEffect } from "react";
@@ -128,19 +128,19 @@ const Clock = () => {
 ReactDOM.render(<Clock />, document.getElementById("root"));
 ```
 
-Im obigen Beispiel installieren wir ein Intervall beim **Mounting** der Komponente. Beim **Unmounting** der Komponente halten wir den Timer an, da wir sonst den State einer Komponente ändern würden, die sich nicht mehr im Seitenbaum befindet. Dies würde uns React mit einer Fehlermeldung quittieren, vor Memory Leaks warnen und uns darauf hinweisen, dass Subscriptions und andere asynchrone Tasks in der **Cleanup**-Funktion aufgeräumt werden müssen:
+In the above example, we install an interval when **mounting** the component. When **unmounting** the component, we stop the timer, as otherwise we would change the state of a component that is no longer in the page tree. This would acknowledge React with an error message, warn us of memory leaks, and tell us that subscriptions and other asynchronous tasks in the **Cleanup** function need to be cleaned up:
 
 {% hint style="danger" %}
 Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
 {% endhint %}
 
-Indem wir eine Aufräum-Funktion aus der Effekt-Funktion zurückgeben, können wir das Intervall durch den Aufruf von `clearInterval()` abbrechen. Dies passiert vor jedem erneuten Aufruf der Effekt-Funktion, spätestens jedoch beim Unmounting.
+By returning a cleanup function from the effect function, we can cancel the interval by calling `clearInterval()`. This happens before each new call of the effect function, but at the latest during unmounting.
 
-### Bedingte Aufrufe der Effekt-Funktion
+### Conditional calls of the effect function
 
-Standardmäßig wird der `useEffect()`-Hook bzw. dessen Effekt-Funktion nach jedem Rendering der Komponente erneut ausgeführt. Damit ist sichergestellt, dass der Effekt jedesmal ausgeführt wird, wenn sich einige der von ihm verwendeten Abhängigkeiten \(_Dependencies_\) ändern. Greifen wir also innerhalb der Effekt-Funktion bspw. auf den State oder die Props einer Komponente zu, soll auch der Seiteneffekt erneut ausgeführt werden, wenn sich eine dieser Dependencies ändert. Möchten wir etwa Profildaten zu einem Benutzer anzeigen und beziehen diese über eine API, so soll der API-Request natürlich auch initiiert werden wenn der Benutzer dessen Profil wir anschauen wollen sich ändert während die Komponente gemounted ist.
+By default, the `useEffect()` hook or its effect function is executed again after each rendering of the component. This ensures that the effect is executed every time some of the dependencies it uses \(_Dependencies_\) change. If we access the state or the props of a component within the effect function, for example, the side effect should also be executed again if one of these dependencies changes. If we want to display profile data about a user and get it via an API, the API request should of course also be initiated if the user whose profile we want to view changes while the component is mounted.
 
-Dies führt aber mitunter zu sehr vielen unnötigen Aufrufen der Funktion und auch dazu, dass die Funktion unter gewissen Umständen auch ausgeführt wird, wenn sich gar keine Daten seit dem letzten Rendering geändert haben, die für den Seiteneffekt relevant sind. Zu diesem Zweck bietet uns React die Möglichkeit, ein **Dependency Array** als zweiten Parameter zu definieren. Dort können und sollen wir alle Werte eintragen, die eine erneute Ausführung der Effekt-Funktion herbeiführen sollen. Nur wenn sich mind. ein Wert im **Dependency Array** geändert hat, wird die Funktion erneut ausgeführt. Um am Beispiel unseres Benutzerprofils zu bleiben, wäre das hier etwa der Benutzername oder die ID, über die wir die Benutzerdaten von der API abrufen.
+However, this sometimes leads to many unnecessary calls of the function and also to the function being executed under certain circumstances if no data relevant to the page effect has changed since the last rendering. For this purpose React offers us the possibility to define a **Dependency Array** as a second parameter. Here we can and should enter all values that should cause the effect function to be executed again. The function is only executed again if at least one value in the **Dependency Array** has changed. To take our user profile as an example, here would be the user name or ID that we use to retrieve user data from the API.
 
 ```javascript
 useEffect(
@@ -152,35 +152,35 @@ useEffect(
 );
 ```
 
-Beim Erstellen eines solchen **Dependency Arrays** sollte man genau darauf achten, dass sämtliche Werte, die innerhalb der Funktion verwendet werden und die sich im Laufe der Lebenszeit der Komponente ändern können, auch dort aufgelistet sind. Soll die Effekt-Funktion nur einmalig ausgeführt werden, also einen ähnlichen Zweck erfüllen wie `componentDidMount()` in Klassen-Komponenten, wird ein leeres Array \(d.h. `[]`\) übergeben.
+When creating such a **Dependency Array** you should make sure that all values that are used within the function and that can change during the lifetime of the component are listed there. If the effect function is to be executed only once, i.e. for a purpose similar to `componentDidMount()` in class components, an empty array \(i.e. `[]`\) is passed.
 
 {% hint style="info" %}
-Um die Arbeit bei der Erstellung von **Dependency Arrays** zu erleichtern oder gar zu automatisieren gibt es im `eslint-plugin-react-hooks` die `exhaustive-deps`-Regel, die bei entsprechender Editor-Konfiguration \(z.B. _Format on Save_\) die in der Effekt-Funktion benutzten Abhängigkeiten automatisch in das **Dependency Array** einträgt oder zumindest warnt, sollten Unstimmigkeiten gefunden werden.
+To facilitate or even automate the work of creating **Dependency Arrays**, the `eslint-plugin-react-hooks` contains the `exhaustive-deps` rule in the `eslint-plugin-react-hooks`, which automatically enters the dependencies used in the effect function into the **Dependency Array** or at least warns if inconsistencies are found, if the editor is configured accordingly \(e.g. _Format on Save_\).
 
-Aktiviert werden kann sie durch den Eintrag `"exhaustive-deps": "warn"` im `rules` Block der ESLint-Konfiguration.
+It can be activated by the entry `"exhaustive-deps": "warn"` in the `rules` block of the ESLint configuration.
 {% endhint %}
 
-### Zeitliche Abfolge
+### Temporal sequence
 
-Die **Effekt-Funktion** wird **asynchron** mit Verzögerung nach den **Layout-** und **Paint-Phasen** vom Browser ausgeführt. Das sollte für die meisten Seiteneffekte völlig ausreichend sein. Jedoch kann es Situationen geben in denen um **synchron** ausgeführte Seiteneffekte kein Weg dran vorbei führt. Dies kann der Fall sein, wenn etwa DOM-Mutationen involviert sind und die verzögerte Ausführung dazu führen würde, dass der Benutzer ein kurzes Flackern oder ein inkonsistentes User Interface wahrnehmen könnte.
+The **Effect** function is executed **asynchronously** by the browser with a delay after the **Layout-** and **Paint phases**. This should be sufficient for most side effects. However, there may be situations where there is no way around **synchronous** side effects. This may be the case if, for example, DOM mutations are involved and the delayed execution would cause the user to experience a short flicker or inconsistent user interface.
 
-Zu diesem Zweck wurde der `useLayoutEffect()`-Hook eingeführt. Er funktioniert identisch zum `useEffect()`-Hook, erwartet ebenso eine **Effekt-Funktion**, diese kann in der gleichen Form eine **Aufräum-Funktion** zurückgeben und auch das **Dependency Array** funktioniert identisch zum `useEffect()`-Hook. Der Unterschied besteht hier darin, dass sie synchron ausgeführt wird \(statt asynchron\), und zwar nachdem alle DOM-Mutationen geschrieben wurden.
+For this purpose, the `useLayoutEffect()` hook was introduced. It works identical to the `useEffect()` hook, expects a **Effect function** as well, can return a **Cleanup function** in the same form, and the **Dependency Array** works identical to the `useEffect()` hook. The difference here is that it is executed synchronously \(instead of asynchron\) after all DOM mutations have been written.
 
-Der `useLayoutEffect()`-Hook kann also aus dem DOM lesen und diesen ebenfalls synchron modifizieren, **bevor** der Browser die Änderungen in seiner Paint-Phase darstellt.
+The `useLayoutEffect()`-Hook can therefore read from the DOM and also modify it synchronously, **before** the browser displays the changes in its paint phase.
 
-### Asynchrone Effekt-Funktionen
+### Asynchronous effect functions
 
-Auch wenn **Effekt-Funktionen** verzögert ausgeführt werden, dürfen sie selbst nicht asynchron sein bzw. keine Promises zurückgeben. Andernfalls bekommen wir eine Fehlermeldung, in der uns React auf diesen Umstand hinweist:
+Even if **effect functions** are executed with a delay, they themselves must not be asynchronous or return any promises. Otherwise we get an error message in which React informs us of this fact:
 
 {% hint style="danger" %}
 Warning: An Effect function must not return anything besides a function, which is used for clean-up.
 
-It looks like you wrote useEffect\(async \(\) =&gt; ...\) or returned a Promise. Instead, you may write an async function separately and then call it from inside the effect \[…\]
+It looks like you wrote useEffect\(async \(\) =&gt; ...\) or returned a Promise. Instead, you may write an async function separately and then call it from inside the effect \[...\]
 
 In the future, React will provide a more idiomatic solution for data fetching that doesn't involve writing effects manually.
 {% endhint %}
 
-Im obigen Beispiel hätte der **inkorrekte** `useEffect()`-Hook etwa so ausgesehen:
+In the above example, the **incorrect** `useEffect()` hook would have looked something like this:
 
 ```javascript
 useEffect(async () => {
@@ -188,11 +188,11 @@ useEffect(async () => {
   const accountData = await response.json();
   setGitHubAccount(accountData);
 
-  fetchGitHubAccount("manuelbieh");
+  fetchGitHubAccount("manual");
 }, []);
 ```
 
-Dies ist **nicht erlaubt**, da die Effekt-Funktion mit dem `async` Schlüsselwort als _asynchron_ deklariert wird. Wie also lösen wir das Problem? Nun, die Lösung ist in diesem Fall relativ simpel: Wir verschieben den asynchronen Teil der Funktion in eine eigene, asynchrone Funktion **innerhalb der Effekt-Funktion** und rufen diese Funktion dann lediglich auf:
+This is **not allowed**, because the effect function is declared as _asynchronous_ with the `async` keyword. So how do we solve the problem? Well, the solution in this case is relatively simple: We move the asynchronous part of the function into a separate, asynchronous function **within the effect function** and then just call this function:
 
 ```jsx
 import React, { useEffect, useState } from "react";
@@ -212,7 +212,7 @@ const App = (props) => {
   }, [props.username]);
 
   if (!gitHubAccount) {
-    return null;
+    return zero;
   }
 
   return (
@@ -228,9 +228,9 @@ ReactDOM.render(
 );
 ```
 
-In diesem Fall ist nicht mehr die Effekt-Funktion selbst asynchron, sondern die asynchrone Funktionalität wird in die asynchrone Funktion `fetchGitHubAccount()` ausgelagert, die wir **innerhalb** des `useEffect()`-Hooks definieren.
+In this case, the effect function itself is no longer asynchronous, but the asynchronous functionality is outsourced to the asynchronous function `fetchGitHubAccount()`, which we define **within** the `useEffect()` hook.
 
-Die asynchrone Funktion muss dabei nicht zwingend **in** der Effekt-Funktion erzeugt werden. Die Effekt-Funktion selbst darf nur eben nicht selbst asynchron sein.
+The asynchronous function does not necessarily have to be created **in** the effect function. The effect function itself must not be asynchronous.
 
 ## useContext
 
@@ -238,11 +238,11 @@ Die asynchrone Funktion muss dabei nicht zwingend **in** der Effekt-Funktion erz
 const myContextValue = useContext(MyContext);
 ```
 
-Dieser Hook erwartet als einzigen Parameter einen Context-Typen, der mittels `React.createContext()` erstellt wurde und gibt dann den Wert des in der Komponenten-Hierarchie nächsthöheren Context-Providers des entsprechenden Typs zurück.
+This hook expects a context type created with `React.createContext()` as the only parameter and then returns the value of the next higher context provider of the corresponding type in the component hierarchy.
 
-Der `useContext()`-Hook verhält sich dabei wie eine Context-Consumer-Komponente und verursacht ein Rerendering der **Function Component,** sobald der Wert des Contexts im jeweiligen Provider-Element geändert wurde.
+The `useContext()` hook behaves like a context consumer component and causes a rendering of the **Function Component,** as soon as the value of the context in the respective provider element has been changed.
 
-Die Verwendung des Hooks ist optional und so ist es auch weiterhin möglich, Context-Consumer im **JSX** der **Function Component** zu verwenden. Allerdings ist der Hook die deutlich übersichtlichere Variante, da dieser keine neue Hierarchie-Ebene im Komponentenbaum erzeugt.
+The use of the hook is optional and so it is still possible to use context consumer in the **JSX** of the **Function Component**. However, the hook is the much clearer variant because it does not create a new hierarchy level in the component tree.
 
 ## useReducer
 
@@ -250,11 +250,11 @@ Die Verwendung des Hooks ist optional und so ist es auch weiterhin möglich, Con
 const [state, dispatch] = useReducer(reducerFunc, initialState, initFunc)
 ```
 
-Der `useReducer()`-Hook ist eine Alternative zu `useState()`, die es erlaubt auch komplexere States zu managen. Der Hook ist angelehnt an die Flux-Architektur, bei der, kurz gesagt, eine **Reducer-** Funktion einen **neuen State erzeugt**, indem sie den **letzten State** und eine sog. **Action** übergeben bekommt.
+The `useReducer()` hook is an alternative to `useState()` that allows you to manage more complex states. The hook is based on the Flux architecture where, in short, a **Reducer-** function creates a **new state** by passing the **last state** and a so-called **Action**.
 
-Die **Reducer**-Funktion wird durch den Aufruf einer **Dispatch**-Funktion aufgerufen, die wiederum eine **Action** übergeben bekommt. Die **Action** selbst ist dabei ein Objekt, das zwingend eine `type` Eigenschaft und oftmals \(optional\) eine `payload`-Eigenschaft besitzt. Aus dieser **Action** und dem **letzten State** erzeugt die **Reducer**-Funktion dann den **neuen State**. Die **Reducer**-Funktion hat also die Form `(oldState, action) => newState`.
+The **Reducer** function is called by calling a **Dispatch** function, which in turn receives a **Action**. The **Action** itself is an object that has a `type` property and often \(optional\) a `payload` property. From this **Action** and the **last state** the **Reducer** function then generates the **new state**. The **Reducer** function therefore has the form `(oldState, action) => newState`.
 
-Schauen wir uns auch hierzu einmal ein simples Beispiel an und entwickeln zu diesem Zweck eine einfache `Counter`-Komponente, mit der wir über zwei Buttons \(`+` und `-`\) einen Wert rauf- und runterzählen können:
+Let's take a look at a simple example and develop a simple `counter` component for this purpose, with which we can count up and down a value using two buttons \(`+` and `-`\):
 
 ```jsx
 import React, { useReducer } from "react";
@@ -271,7 +271,7 @@ const reducerFunction = (state, action) => {
     case "DECREMENT":
       return { count: state.count - 1 };
     default:
-      throw new Error('Unbekannte Action');
+      throw new Error;
   }
 };
 
@@ -290,19 +290,19 @@ const Counter = () => {
 ReactDOM.render(<Counter />, document.getElementById("root"));
 ```
 
-Wir definieren zunächst den initialen State \(`initialState`\) und die Reducer-Funktion \(`reducerFunction`\). Der **initiale State** besteht lediglich aus einem Objekt mit einer `count`-Eigenschaft, die initial `0` ist. Die **Reducer**-Funktion erwartet einen `state` und eine `action`. die von React später über den Aufruf der **Dispatch**-Funktion an den Reducer übergeben werden. Aus diesen beiden Parametern erzeugen wir dann den neuen State. **Wichtig:** Hier müssen wir stets einen neuen State erzeugen statt den bestehenden zu mutieren, da eine Mutation des bestehenden States zu ungewünschten Seiteneffekten und fehlerhafter Darstellung führen kann. Eine **Reducer**-Funktion muss also eine **Pure Function** sein!
+First we define the initial state \(`initialState`\) and the reducer function \(`reducerFunction`\). The **initial state** consists of only one object with a `count` property that is initial `0`. The **Reducer** function expects a `state` and an `action`. These are passed by React to the Reducer later by calling the **Dispatch** function. We then generate the new state from these two parameters. **Important:** Here we must always create a new state instead of mutating the existing one, since a mutation of the existing state can lead to unwanted side effects and incorrect representation. A **Reducer** function must therefore be a **Pure Function**!
 
-Die **Reducer**-Funktion und den initialen State geben wir dann in den `useReducer()`-Hook hinein, der uns daraufhin ähnlich wie der `useState()`-Hook einen Tupel zurückgibt, in dem das erste Element immer der **aktuelle State** in der aktuellen Rendering-Phase ist, das zweite Element ist dann die besagte **Dispatch**-Funktion.
+We then put the **Reducer** function and the initial state into the `useReducer()` hook, which then returns a tuple similar to the `useState()` hook, in which the first element is always the **current state** in the current rendering phase, the second element is then the said **Dispatch** function.
 
-Möchten wir nun den State verändern, rufen wir in der Komponente die `dispatch`-Funktion auf und übergeben ihr eine **Action**. Dies passiert in unserer Beispiel-Komponente per Klick auf einen der beiden Buttons, die dann die Action `{type: "INCREMENT"}` \(zum Raufzählen\) oder `{type: "DECREMENT"}` \(zum Runterzählen\) „dispatchen“.
+If we now want to change the state, we call the `dispatch` function in the component and pass a **Action** to it. This happens in our example component by clicking on one of the two buttons, which then "disperse" the action `{type: "INCREMENT"}` \(to count up\) or `{type: "DECREMENT"}` \(to count down\)".
 
-Wird eine Action _dispatched_ und wird dabei ein neuer State erzeugt, löst React ein Rerendering aus und der neu erzeugte State steht in der von der Reducer-Funktion zurückgegebenen `state` Variable zur Verfügung. Wird hingegen der gleiche State von der **Reducer**-Funktion zurückgegeben, wird **kein** Rerendering ausgelöst!
+If an action is _dispatched_ and a new state is created, React triggers a rendering and the newly created state is available in the `state` variable returned by the Reducer function. However, if the same state is returned by the **Reducer** function, **no** rendering is triggered!
 
-### Der dritte Parameter
+### The third parameter
 
-Neben der `reducer`-Funktion und dem `initialState`, die jeweils zwingend angegeben werden müssen, kann der `useReducer()`-Hook aber noch einen dritten, optionalen Parameter erhalten, nämlich eine `init`-Funktion zum Errechnen des initialen States. Die Funktion kann verwendet werden, um bspw. den initialen Wert des **Reducers** in einer externen Funktion außerhalb des Reducers zu berechnen.
+In addition to the `reducer` function and the `initialState`, which must be specified, the `useReducer()` hook can also have a third optional parameter, namely an `init` function for calculating the initial state. The function can be used, for example, to calculate the initial value of the **Reducer** in an external function outside the Reducer.
 
-Wird eine solche `init`-Funktion übergeben, wird diese vom Hook beim **ersten** Aufruf aufgerufen und der `initialState` wird ihr als **initiales Argument** übergeben. Dies kann insbesondere dann sinnvoll sein, wenn der **initiale State** auf den **Props** einer Komponente basiert. Diese können dann im zweiten Parameter an die `init`-Funktion weitergereicht werden, die darauf basierend den initialen State des Reducers erzeugen kann:
+If such an `init` function is passed, it is called by the hook at the **first** call and the `initialState` is passed as its **initial argument**. This can be particularly useful if the **initial state** is based on the **props** of a component. These can then be passed on in the second parameter to the `init` function, which can generate the initial state of the reducer based on this:
 
 ```jsx
 import React, { useReducer } from "react";
@@ -315,7 +315,7 @@ const reducerFunction = (state, action) => {
     case "DECREMENT":
       return { count: state.count - 1 };
     default:
-      throw new Error("Unbekannte Action");
+      throw new Error;
   }
 };
 
@@ -340,31 +340,31 @@ const Counter = (props) => {
 ReactDOM.render(<Counter startValue={3} />, document.getElementById("root"));
 ```
 
-In diesem Beispiel erweitern wir den `useReducer()`-Hook um den dritten, optionalen Parameter: die **Init-** Funktion. Aus dem `initialState` im ersten Beispiel wird ein Argument für die **Init-**Funktion. Der Wert für dieses Funktions-Argument wird der Komponente hier als `startValue` über die Props übergeben.
+In this example, we extend the `useReducer()` hook with the third optional parameter: the **Init-** function. The `initialState` in the first example becomes an argument for the **Init-**function. The value for this function argument is passed to the component here as `startValue` via the props.
 
-### Reducer in der Praxis
+### Reducer in practice
 
-Das Prinzip von **Reducern** dürfte einem großen Teil der React-Community wohl erstmals durch den Aufstieg von **Redux** nahegebracht worden sein. **Redux** ist ein Paket um globalen State komfortabel managen zu können und wurde in der Vergangenheit häufig verwendet, wenn das Handling von lokalen States in React zu unübersichtlich wurde oder über zu viele Komponenten hinweg durch sog. „Props Drilling“ \(also dem Weiterreichen von Props über mehrere Hierarchie-Ebenen hinweg\) zu umständlich wurde.
+The principle of **Reducers** might have been first introduced to a large part of the React community by the rise of **Redux**. **Redux** is a package to manage global states comfortably and was often used in the past, if the handling of local states in React became too confusing or over too many components away by so-called "Props Drilling". \(i.e., passing props across multiple hierarchical levels\) became too cumbersome.
 
-**Redux** \(und daher der Name\) besteht in seinem Kern darin, Reducer-Funktionen zu verwalten und deren State und Dispatch-Funktion in den Komponenten verfügbar zu machen, die den globalen State lesen oder verändern sollen. Mit dem `useReducer()`-Hook bekommt React nun eine eigene Funktion um komplexes State-Management mittels Reducer-Funktionen zu bewerkstelligen.
+**Redux** \(and therefore the name\) consists in its core in administering Reducer functions and making their state and dispatch functions available in the components that are to read or change the global state. With the `useReducer()`-Hook React now gets its own function to manage complex state management with Reducer functions.
 
-Ein typischer Anwendungsfall für Reducer ist dabei die Status-Verwaltung bei API Requests. Als gewohntes Muster hat sich hier bspw. herauskristallisiert, drei verschiedene Actions je API Request zu definieren:
+A typical use case for Reducer is status management for API requests. As a familiar pattern, it has emerged here, for example, to define three different actions for each API request:
 
-* eine Action, die die Anwendung davon in Kenntnis setzt, dass Daten geladen werden, wenn der Request gestartet wird,
-* eine Action, die den Lade-Status zurücksetzt und, wenn der Request fehlgeschlagen ist, den State darüber in Kenntnis setzt, dass ein Fehler aufgetreten ist \(und ggf. auch welcher\),
-* eine Action, die die von der API erhaltenen Daten in den State schreibt, wenn der Request erfolgreich war
+* An action that informs the application that data is loaded when the request is started,
+* an action that resets the load status and, if the request failed, notifies the state that an error occurred \(and if applicable, which\),
+* An action that writes the data received from the API to the state if the request was successful.
 
-Werfen wir hierzu einen Blick auf ein solches Beispiel und laden wieder unsere Account-Daten via GitHub-API:
+Let's take a look at such an example and reload our account data via the GitHub API:
 
 ```jsx
 import React, { useEffect, useReducer } from "react";
 import ReactDOM from "react-dom";
 
 const initialState = {
-  data: null,
+  data: zero,
   isLoading: false,
   isError: false,
-  lastUpdated: null,
+  lastUpdated: zero,
 };
 
 const accountReducer = (state, action) => {
@@ -424,20 +424,20 @@ const RepoInfo = (props) => {
   }, [props.username]);
 
   if (state.isError) {
-    return <p>Ein Fehler ist aufgetreten.</p>;
+    return <p>An error has occurred.</p>;
   }
 
   if (state.isLoading) {
-    return <p>Daten werden geladen.</p>;
+    return <p>Data is loaded.</p>;
   }
 
   if (!state.data) {
-    return <p>Es wurde kein GitHub-Account geladen</p>;
+    return <p>No GitHub account was loaded</p>;
   }
 
   return (
     <p>
-      {state.data.name} hat {state.data.public_repos} öffentliche Repos
+      {state.data.name} has {state.data.public_repos} public repos
     </p>
   );
 };
@@ -448,91 +448,91 @@ ReactDOM.render(
 );
 ```
 
-Wir benutzen wieder den `useReducer()`-Hook und übergeben ihm die `accountReducer`-Funktion. In dieser Funktion reagieren wir auf die drei **Actions** vom **Typ** `REQUEST_START`, `REQUEST_SUCCESS` und `REQUEST_ERROR`.
+We use the `useReducer()` hook again and pass the `accountReducer` function to it. In this function we react to the three **Actions** of the **Type** `REQUEST_START`, `REQUEST_SUCCESS` and `REQUEST_ERROR`.
 
-Der `initialState` besteht aus einem Objekt mit einer leeren `data`-Eigenschaft, den beiden Flags `isFetching` und `isError`, die unserer Komponente später mitteilen ob Daten geladen werden oder ob ein Fehler aufgetreten ist, sowie einer `lastUpdated`-Eigenschaft, in der wir den Zeitpunkt des letzten erfolgreichen Requests speichern. Diese können wir später nutzen, um etwa Requests nur einmal pro Minute auszuführen oder dem Benutzer zu signalisieren, dass er Daten sieht, die schon für längere Zeit nicht aktualisiert wurden.
+The `initialState` consists of an object with an empty `data` property, the two flags `isFetching` and `isError`, which later tell our component whether data is being loaded or whether an error has occurred, and a `lastUpdated` property, in which we store the time of the last successful request. We can use these later to execute requests only once per minute, for example, or to signal to the user that he sees data that has not been updated for a long time.
 
-Wir nutzen außerdem einen `useEffect()`-Hook um das Laden der Daten zu veranlassen, sobald sich der in den **Props** übergebene GitHub-Benutzername ändert. Ist dies der Fall, wird zuallererst die `REQUEST_START`-**Action** dispatched. Der **Reducer** erzeugt daraufhin den folgenden neuen State:
+We also use a `useEffect()` hook to cause the data to load when the GitHub username passed to the **Props** changes. If this is the case, the `REQUEST_START`-**Action** is dispatched first. The **Reducer** then creates the following new state:
 
 ```diff
 {
-  data: null,
+  data: zero,
 - isLoading: false,
 + isLoading: true,
   isError: false,
-  lastUpdated: null,
+  lastUpdated: zero,
 }
 ```
 
-Dadurch greift in unserer Komponente weiter unten nun folgende Bedingung:
+As a result, the following condition now applies in our component below:
 
 ```jsx
 if (state.isLoading) {
-  return <p>Daten werden geladen.</p>;
+  return <p>Data is loaded.</p>;
 }
 ```
 
-Und signalisiert dem Benutzer, dass momentan Daten geladen werden.
+And signals to the user that data is currently being loaded.
 
-Als nächstes können zwei Fälle eintreten: Entweder der Request schlägt fehl oder wir beziehen erfolgreich Daten von der API.
+Next, two cases can arise: Either the request fails or we successfully obtain data from the API.
 
-Schlägt der Request fehl, dann würde die `REQUEST_ERROR`-**Action** dispatched. Unser State würde sich daraufhin wie folgt verändern:
+If the request fails, the `REQUEST_ERROR`-**Action** would be dispatched. Our state would then change as follows:
 
 ```diff
 {
-  data: null,
+  data: zero,
 - isLoading: true,
 + isLoading: false,
 - isError: false,
 + isError: true,
-  lastUpdated: null,
+  lastUpdated: zero,
 };
 ```
 
-Da kein Request mehr durchgeführt wird, wird die `isLoading`-Flag von `true` wieder auf `false` zurückgesetzt um dem Benutzer nicht fälschlicherweise zu signalisieren, dass wir noch Daten laden würden. Da ein Fehler aufgetreten ist, setzen wir gleichzeitig `isError` von `false` auf `true`. Statt der Lade-Nachricht greift nun folgende Bedingung und setzt den Benutzer vom aufgetretenen Fehler in Kenntnis:
+Since no more requests are made, the `isLoading` flag is reset from `true` to `false` so as not to falsely signal to the user that we are still loading data. Since an error occurred, we set `isError` from `false` to `true` at the same time. Instead of the load message, the following condition now applies and informs the user of the error that has occurred:
 
 ```jsx
 if (state.isError) {
-  return <p>Ein Fehler ist aufgetreten.</p>;
+  return <p>An error has occurred.</p>;
 }
 ```
 
-An dieser Stelle wäre es durchaus ratsam dem Benutzer mitzuteilen, was falsch gelaufen ist und wie er den Fehler ggf. beheben kann. Vielleicht existiert der übergebene Benutzername nicht und man könnte ihm die Chance geben, diesen zu korrigieren oder die API ist gerade nicht erreichbar, dann könnte man dem Benutzer die Möglichkeit geben, den Request zu einem späteren Zeitpunkt noch einmal zu wiederholen.
+At this point it would be advisable to tell the user what went wrong and how to fix the problem. Maybe the given username does not exist and you could give it the chance to correct it or the API is not available at the moment, then you could give the user the possibility to repeat the request at a later time.
 
-Für den Fall, dass alles geklappt hat und wir korrekt Daten von der API beziehen konnten, wird die `REQUEST_SUCCESS`-**Action** dispatched. Diese enthält neben der `payload`, die den geladenen Daten entspricht, auch eine `meta`-Eigenschaft, mit der wir den Zeitpunkt des Requests mitgeben.
+In case everything went fine and we could get data correctly from the API, the `REQUEST_SUCCESS`-**Action** is dispatched. In addition to the `payload`, which corresponds to the loaded data, this also contains a `meta` property with which we specify the time of the request.
 
-Der **neue State**, der vom **Reducer** erzeugt wird, unterscheidet sich dann folgendermaßen vom letzten State:
+The **new state** generated by the **reducer** differs from the last state as follows:
 
 ```diff
 {
-- data: null,
+- data: zero,
 + data: {
-+   "login": "manuelbieh",
-+   "name": "Manuel Bieh",
-+   "public_repos": 59,
-+   [...]
++ "login": "manuelbieh",
++ "name": "Manuel Bieh",
++ "public_repos": 59,
++ [...]
 + },
 - isLoading: true,
 + isLoading: false,
   isError: false,
-- lastUpdated: null,
-+ lastUpdated: "2019-03-19T02:29:10.756Z",
+- lastUpdated: zero,
++ "2019-03-19T02:29:10.756Z."
 }
 ```
 
-Unsere `data`-Eigenschaft enthält nun die Daten, die wir von der API bekommen haben. Der `isLoading`-Status wird wieder auf `false` zurückgesetzt, die `lastUpdated`-Eigenschaft setzen wir auf den Zeitpunkt, zu dem wir auch die Daten in den State geschrieben haben. In unserer Komponente sollte nun die gewünschte Ausgabe erzeugt werden:
+Our `data` property now contains the data we got from the API. The `isLoading` status is reset to `false`, the `lastUpdated` property is set to the time when we also wrote the data into the state. The desired output should now be generated in our component:
 
 ```jsx
 return (
   <p>
-    {state.data.name} hat {state.data.public_repos} öffentliche Repos
+    {state.data.name} has {state.data.public_repos} public repos
   </p>
 );
 ```
 
-Damit haben wir neben dem ersten komplexeren Reducer auch zugleich ein erstes Zusammenspiel der beiden **Hooks** `useEffect()` und `useReducer()` in einem praxisnahen Beispiel implementiert!
+So we have implemented the first complex Reducer as well as the first interaction of both **Hooks** `useEffect()` and `useReducer()` in a practical example!
 
-Übrigens: Genau wie beim `useState()`-Hook löst auch der `useReducer()`-Hook kein erneutes Rendering aus, wenn die Reducer-Funktion den gleichen State wie vorher zurückgibt!
+By the way: Just like the `useState()`-Hook, the `useReducer()`-Hook does not trigger a new rendering if the Reducer function returns the same state as before!
 
 ## useCallback
 
@@ -540,13 +540,13 @@ Damit haben wir neben dem ersten komplexeren Reducer auch zugleich ein erstes Zu
 const memoizedFunction = useCallback(callbackFunction, dependencyArray);
 ```
 
-Der `useCallback()`-Hook dient zur Optimierung hinsichtlich der Performance einer Anwendung. Er erwartet eine Funktion und erzeugt eine **eindeutige Identität** dieser Funktion, die so lange Bestand hat, bis sich die **Dependencies** des Hooks ändern.
+The `useCallback()` hook is used to optimize the performance of an application. It expects a function and creates a **unique identity** of that function that will persist until the **dependencies** of the hook change.
 
-Dies ist dazu gedacht, eine immer gleiche Referenz zu einer Funktion an Komponenten zu übergeben die entweder `PureComponents`, eine eigene `shouldComponentUpdate()`-Methode implementieren oder die mittels `React.memo()` umschlossen werden.
+This is intended to always pass the same reference to a function to components that either implement `PureComponents`, their own `shouldComponentUpdate()` method, or are enclosed by `React.memo()`.
 
-Der `useCallback()`-Hook erwartet eine Funktion als erstes Argument und einen Dependency Array \(wie beim `useEffect()`-Hook\) und gibt im Gegenzug dafür eine „stabile“ Referenz zur hereingereichten Funktion zurück. Stabil heißt in dem Fall, dass sie sich nur dann ändert, wenn sich die **Dependencies** des Hooks verändert haben. Bis zu diesem Zeitpunkt ist eine via `useCallback()` erzeugte Referenz für `PureComponents` oder Komponenten mit `React.memo()` dieselbe.
+The `useCallback()`-Hook expects a function as first argument and a Dependency Array \(like the `useEffect()`-Hook\) and in return returns a "stable" reference to the submitted function. Stable means that it only changes when the **Dependencies** of the hook have changed. Up to this point, a reference created via `useCallback()` for `PureComponents` or components with `React.memo()` is the same.
 
-Was erst einmal kompliziert klingen mag, lässt sich wie so häufig am Besten anhand eines Beispiels erklären:
+What may sound complicated at first can best be explained, as is so often the case, by means of an example:
 
 ```jsx
 import React, { useState, useCallback } from "react";
@@ -584,13 +584,13 @@ const Form = () => {
 ReactDOM.render(<Form />, document.getElementById("root"));
 ```
 
-Hier sehen wir die zwei Komponenten `Form` und `FancyInput`. Die `Form`-Komponente rendert eine `FancyInput`-Komponente und übergibt ihr neben dem `name`-Attribut auch eine `onChange`-Funktion. Diese ändert bei jeder Änderung im Eingabefeld den State der `Form`-Komponente und löst somit ein Rendering aus.
+Here we see the two components `Form` and `FancyInput`. The `Form` component renders a `FancyInput` component and gives it a `onChange` function in addition to the `name` attribute. This changes the state of the `Form` component with every change in the input field and thus triggers a rendering.
 
-Die `changeHandler`-Funktion selbst wird **in der Form-Komponente erstellt**, und zwar mit jedem neuen Rendering erneut. D.h. **die Referenz zur Funktion ändert sich**, da wir mit jedem neuen Rendering eine neue Funktion erzeugen. Auf gut Deutsch gesagt: wir übergeben zwar die **gleiche**, nicht jedoch **dieselbe** Funktion.
+The `changeHandler` function itself is **created in the form component**, with each new rendering. I.e. ** the reference to the function changes**, because we create a new function with each new rendering. In plain English: we pass the **same**, but not **the same** function.
 
-Dadurch greift die Optimierung von `React.memo()`, die wir um die `FancyInput`-Komponente gelegt haben, **nicht**. Kurz zur Auffrischung: `React.memo()` prüft **vor** dem Rendering einer Komponente, ob sich deren **Props** ggü. des letzten Renderings geändert haben und löst ein Rerendering aus, falls diese Bedingung erfüllt ist. Da wir die `changeHandler`-Funktion bei jedem Rendering der `Form`-Komponente neu erstellen, ist diese Bedingung **immer** wahr und die `FancyInput`-Komponente wird entsprechend bei jedem Rendering der `Form`-Komponente ebenfalls neu gerendert.
+Thus the optimization of `React.memo()`, which we placed around the `FancyInput` component, **does not** apply. Briefly for refreshing: `React.memo()` checks **before** rendering a component whether its **props** have changed compared to the last rendering and triggers a rendering if this condition is met. Since we rebuild the `changeHandler` function with every rendering of the `Form` component, this condition **always** is true and the `FancyInput` component is also re-rendered accordingly with every rendering of the `Form` component.
 
-Hier kommt nun `useCallback` ins Spiel. Wrappen wir unsere `changeHandler`-Funktion in diesem Hook, erzeugt React eine Funktion mit einer **eindeutigen** und **stabilen** Referenz und gibt uns diese zurück, damit wir sie sicher an die `FancyInput`-Komponente weitergeben können, ohne jedesmal ein Rerendering auszulösen:
+This is where `useCallback` comes in. Wrapping our `changeHandler` function in this hook, React creates a function with a **unambiguous** and **stable** reference and returns it to us so that we can safely pass it on to the `FancyInput` component without triggering a rendering every time:
 
 ```jsx
 const changeHandler = useCallback((e) => {
@@ -605,12 +605,12 @@ const changeHandler = useCallback((e) => {
 }, []);
 ```
 
-Hier nutzen wir nun die Optimierungsmöglichkeiten von `React.memo()` \(oder in Klassen-Komponenten `PureComponent`\) und lösen nicht mehr ungewollt ein Rerendering der jeweiligen Kind-Komponente aus.
+Here we now use the optimization possibilities of `React.memo()` \(or in class components `PureComponent`\) and do not unintentionally trigger a rendering of the respective child component.
 
-Beruht die Funktion auf Werten, die sich während der Lebensdauer der Komponente ändern können, können diese wie auch schon beim `useEffect()`-Hook in einem **Dependency Array** als zweiter Parameter von `useCallback()` angegeben werden. React erstellt dann eine neue Funktion mit neuer Referenz, sobald sich eine Dependency ändert.
+If the function is based on values that can change during the lifetime of the component, these can be specified as the second parameter of `useCallback()` in a **Dependency Array**, just like in the `useEffect()` hook. React then creates a new function with a new reference when a dependency changes.
 
 {% hint style="info" %}
-Wie auch schon beim `useEffect()`-Hook hilft die `exhaustive-deps` Regel des `eslint-plugin-react-hooks` bei der korrekten Erstellung des **Dependency Arrays**.
+Like the `useEffect()`-Hook, the `exhaustive-deps` rule of the `eslint-plugin-react-hooks` helps to create the **Dependency Array** correctly.
 {% endhint %}
 
 ## useMemo
@@ -619,23 +619,23 @@ Wie auch schon beim `useEffect()`-Hook hilft die `exhaustive-deps` Regel des `es
 const memoizedValue = useMemo(valueGetterFunction, dependencyArray);
 ```
 
-Der `useMemo()`-Hook ist neben `useCallback()` der zweite **Hook** zur hardcore **Performance-Optimierung**. Dabei funktioniert `useMemo()` recht ähnlich; allerdings mit dem entscheidenden Unterschied, dass hier nicht die hinein gegebene Funktion mit einer eindeutigen Identität versehen wird, sondern der Rückgabewert aus der Funktion, die in den `useMemo()`-Hook hereingegeben wird.
+The `useMemo()` hook is next to `useCallback()` the second **hook** for hardcore **performance optimization**. `useMemo()` works quite similar, but with the decisive difference that the function given in is not provided with a unique identity, but with the return value from the function given in the `useMemo()` hook.
 
-Zusammengefasst bedeutet das:
+In a nutshell, that means:
 
 ```javascript
 useCallback(fn, deps);
 ```
 
-entspricht:
+corresponds to:
 
 ```javascript
 useMemo(() => fn, deps);
 ```
 
-Während uns `useCallback()` also die **hereingegebene Funktion** in einer _memoized_ \(dt. etwa: _gemerkten_\) Version zurückgibt, gibt uns `useMemo()` den **Rückgabewert** der hereingegebenen Funktion als _memoized_ Version zurück. Benutzt werden kann `useMemo()` für Funktionen, die sehr rechenintensive Aufgaben erfüllen und nicht bei jedem Rerendering erneut ausgeführt werden sollen.
+While `useCallback()` returns us the **input function** in a _memoized_ \ version, `useMemo()` returns the **return value** of the input function as _memoized_ version. `useMemo()` can be used for functions that perform very computation-intensive tasks and should not be executed every time a rendering is performed.
 
-Werfen wir einmal einen Blick auf eine nicht optimierte Komponente:
+Let's take a look at a non-optimized component:
 
 ```jsx
 import React, { useState, useMemo } from "react";
@@ -644,7 +644,7 @@ import ReactDOM from "react-dom";
 const fibonacci = (num) =>
   num <= 1 ? 1 : fibonacci(num - 1) + fibonacci(num - 2);
 
-const FibonacciNumber = ({ value }) => {
+const FibonacciNumber = (value }) => {
   const result = fibonacci(value);
   return (
     <p>{value}: {result}</p>
@@ -679,29 +679,29 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-Unsere kleine App besteht zunächst aus einem Eingabefeld für Nummern. Wird eine Nummer eingegeben und die **Enter**-Taste betätigt, wird diese Nummer in den `values`-State geschrieben. Dieser ist in diesem Fall ein Array, das all unsere eingegebenen Nummern vorhält. Die Komponente iteriert dann durch alle eingegebenen Nummern und rendert eine `FibonacciNumber`-Komponente, die den Wert \(also die jeweilige Nummer\) übergeben bekommt.
+Our small app consists first of all of an input field for numbers. If a number is entered and the **Enter** key is pressed, this number is written to the `values` state. In this case, this is an array that holds all our entered numbers. The component then iterates through all entered numbers and renders a `FibonacciNumber` component, which gets the value \ (the respective number\) passed.
 
-Die `FibonacciNumber`-Komponente berechnet die entsprechende Fibonacci-Zahl zu dieser Nummer und stellt diese dar. Je nach Nummer und Rechenkraft kann das Berechnen der übergebenen Nummer schon mal eine gewisse Zeit in Anspruch nehmen \(auf meinem Rechner sind das bei der 40. Fibonacci-Zahl bspw. 2-3 Sekunden\).
+The `FibonacciNumber` component calculates the corresponding Fibonacci number for this number and displays it. Depending on the number and the calculating power the calculation of the given number can take some time \(on my computer this is 2-3 seconds\ for the 40th Fibonacci number).
 
-Diese Berechnung wird nun bei **jeder** Eingabe einer Nummer für **jede** bereits vorhandene Fibonacci-Nummer erneut ausgeführt. Gebe ich also 40 ein, warte die ca. 3 Sekunden bis mein Computer fertig gerechnet hat und gebe erneut 40 ein, warte ich nun schon zweimal 3 Sekunden, da der Wert in beiden Komponenten erneut berechnet wird.
+This calculation is now carried out again when **every** number is entered for **every** existing Fibonacci number. So if I enter 40, wait about 3 seconds until my computer has finished calculating and enter 40 again, I wait already twice 3 seconds because the value in both components is calculated again.
 
-Nun kommt `useMemo()` ins Spiel. Durch eine vermeintlich simple Änderung der Zeile
+This is where `useMemo()` comes in. By a supposedly simple change of the line
 
 ```javascript
 const result = fibonacci(value);
 ```
 
-in diese:
+into these:
 
 ```javascript
 const result = useMemo(() => fibonacci(value), [value]);
 ```
 
-… erzeugen wir einen _memoisierten_ Wert.
+... we generate a _memoized_ value.
 
-Dies bedeutet, dass React die Berechnung des Werts beim **ersten Rendering** ausführt, sich den Wert **merkt** und erst dann wieder neu berechnet, wenn sich der Wert der `value` Prop für genau diese Komponente geändert hat. Ändert sich der Wert bzw. genauer die **Dependencies** zwischen zwei Renderings nicht, nutzt React den Wert der letzten Berechnung, ohne jedoch die Berechnung erneut auszuführen.
+This means that React calculates the value at **first rendering**, remembers the value **and recalculates it only when the value of the `value` prop for exactly this component has changed. If the value or more precisely the **Dependencies** between two renderings does not change, React uses the value of the last calculation, but without performing the calculation again.
 
-**Doch Vorsicht:** All dies passiert auf Basis jeweils **eines** Aufrufs des `useMemo()`-Hooks. Rufe ich dieselbe Funktion zweimal in zwei verschiedenen `useMemo()`-Hooks auf, wird die Berechnung für jeden der beiden Hooks separat ausgeführt, selbst wenn beide die gleiche Funktion mit den gleichen Parametern nutzen. Der zweite Hook nutzt **nicht** das Ergebnis der ersten Berechnung!
+**But beware:** All this happens on the basis of **a** call to the `useMemo()` hook. If I call the same function twice in two different `useMemo()` hooks, the calculation is performed separately for each of the two hooks, even if both use the same function with the same parameters. The second hook **does not** use the result of the first calculation!
 
 ## useRef
 
@@ -709,7 +709,7 @@ Dies bedeutet, dass React die Berechnung des Werts beim **ersten Rendering** aus
 const ref = useRef(initialValue);
 ```
 
-Der `useRef()`-Hook ist, wie der Name es erahnen lässt, die Hooks-Variante um **Refs** zu erzeugen:
+The `useRef()`-Hook is, as the name suggests, the hook variant to create **Refs**:
 
 ```jsx
 import React, { useEffect, useRef } from "react";
@@ -727,9 +727,9 @@ function App() {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-Doch dies ist nur die halbe Wahrheit, denn in **Function Components** dienen **Refs** noch einem weiteren Zweck: Mit ihnen ist es möglich eine **veränderbare Referenz** zu erzeugen, die während der gesamten Lebensdauer einer Komponente \(d.h. bis sie unmounted wird\) Bestand hat. Sie erfüllt sozusagen darüber hinaus auch die Aufgaben von Instanzvariablen bei Klassen-Komponenten.
+But this is only half of the truth, because in **Function Components**, **Refs** serve another purpose: They make it possible to create a **changeable reference** that will last for the entire lifetime of a component \(i.e. until it is unmounted\). It also performs the tasks of instance variables for class components.
 
-Von der Funktionsweise her funktioniert `useRef()` so, dass es einen optionalen Initialwert bekommt, und ein Objekt mit einer `current`-Eigenschaft zurückgibt, auf die dann innerhalb der **Function Component** zugegriffen werden kann. Und mit Zugriff ist hier sowohl lesend als auch schreibend gemeint. Möchten wir bspw. Daten vorhalten, deren Änderung kein Rerendering auslöst, deren Referenz aber dennoch zwischen zwei Renderings der Komponente erhalten bleiben, nutzen wir dafür den `useRef()`-Hook.
+The way `useRef()` works is that it gets an optional initial value, and returns an object with a `current` property that can then be accessed within the **Function Component**. And access here means both reading and writing. For example, if we want to keep data whose change does not trigger rendering, but whose reference remains between two renderings of the component, we use the `useRef()` hook.
 
 ## useLayoutEffect
 
@@ -737,13 +737,13 @@ Von der Funktionsweise her funktioniert `useRef()` so, dass es einen optionalen 
 useLayoutEffect(effectFunction, dependenciesArray);
 ```
 
-Den `useLayoutEffect()`-Hook hatte ich bei der Erklärung des `useEffect()`-Hooks schon einmal kurz angeteasert, er funktioniert grundsätzlich genau wie der `useEffect()`-Hook, unterscheidet sich jedoch durch den Zeitpunkt seiner Ausführung und seiner synchronen Natur vom `useEffect()`-Hook.
+I had already teased the `useLayoutEffect()`-Hook briefly during the explanation of the `useEffect()`-Hook, it works basically exactly like the `useEffect()`-Hook, but differs from the `useEffect()`-Hook by the time of its execution and its synchronous nature.
 
-Während `useEffect()` verzögert **nach** der **Layout-** und **Paint-**Phase des Browsers ausgeführt wird, werden Layout-Effekte synchron **nach** der **Layout**- und **vor** der **Paint**-Phase ausgeführt. Dies wiederum bedeutet, dass sie die Chance haben, das aktuelle Layout aus dem DOM auszulesen und zu verändern, **bevor** der Browser die Änderungen darstellt.
+While `useEffect()` delays **after** the **Layout** and **Paint-**phase of the browser, layout effects are executed synchronously **after** the **Layout** and **before** the **Paint** phase. This in turn means that they have the chance to read and change the current layout from the DOM **before** the browser displays the changes.
 
-Dieses Verhalten entspricht dem von `componentDidMount()` und `componentDidUpdate()` in **Klassen-Komponenten**, dennoch wird aus Gründen der Performance empfohlen, den `useEffect()`-Hook zu nutzen und nur dann auf `useLayoutEffect()` zurückzugreifen, wenn ihr entweder genau wisst, was ihr da tut \(und warum!\) oder wenn ihr bei der Migration einer **Klassen-Komponente** in eine **Function Component** Probleme habt, die auf den unterschiedlichen Zeitpunkt der Ausführung der Effekte zurückzuführen sind.
+This behavior is the same as `componentDidMount()` and `componentDidUpdate()` in **class components**, but for performance reasons it is recommended to use the `useEffect()` hook and only use `useLayoutEffect()` if you either know exactly what you are doing \(and why!).\) or if you have problems when migrating a **class component** to a **function component**, which are due to the different time of execution of the effects.
 
-Wird der `useLayoutEffect()`-Hook in Zusammenhang mit **Server Side Rendering** verwendet, ist Vorsicht geboten: Weder `useEffect()` noch `useLayoutEffect()` werden serverseitig ausgeführt. Während das beim `useEffect()`-Hook durch die verzögerte Ausführung nach den Layout- und Paint-Phasen kein Problem ist, kann es beim `useLayoutEffect()`-Hook jedoch zu einer Abweichung vom serverseitig gerenderten Markup zum initialen clientseitigen Rendering kommen. React weist dann in einer Konsolen-Warnung darauf hin. In diesem Fall sollte dann der `useEffect()`-Hook verwendet werden, oder aber die Komponente mit dem `useLayoutEffect()`-Hook erst nach der ersten Paint-Phase gemounted werden:
+If the `useLayoutEffect()` hook is used in conjunction with **Server Side Rendering**, be careful: Neither `useEffect()` nor `useLayoutEffect()` are executed on the server side. While the `useEffect()`-hook is not a problem due to the delayed execution after the layout and paint phases, the `useLayoutEffect()`-hook may deviate from the server-side rendered markup to initial client-side rendering. React will then display a console warning. In this case the `useEffect()` hook should be used, or the component with the `useLayoutEffect()` hook should be mounted after the first paint phase:
 
 ```jsx
 import React, { useState, useEffect } from 'react';
@@ -758,13 +758,13 @@ const App = () => {
 
   return mountLayoutComp 
     ? <ComponentWithLayoutEffect /> 
-    : null;
+    Zero;
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-In diesem Fall wird die Komponente mit dem `useLayoutEffect()` erst dann registriert, wenn die Komponente erstmals gemounted wurde. Dies passiert durch die Abfrage des entsprechenden `mountLayoutComp`-States erst nach dem ersten Durchlauf der Paint-Phase.
+In this case, the component with the `useLayoutEffect()` is not registered until the component has been mounted for the first time. This happens by querying the corresponding `mountLayoutComp` state only after the first run of the Paint phase.
 
 ## useDebugValue
 
@@ -772,7 +772,7 @@ In diesem Fall wird die Komponente mit dem `useLayoutEffect()` erst dann registr
 useDebugValue(value);
 ```
 
-Der `useDebugValue()`-Hook dient allein zur Verbesserung der Debugging-Erfahrung für Entwickler und hat keinen direkten Nutzen für den **Benutzer** einer Anwendung. Mit ihm ist es in **eigenen Hooks** möglich, einen Wert innerhalb des **Hooks** mit einem Label zu versehen, wenn dieser mit den **React-Devtools** inspiziert wird:
+The `useDebugValue()`-Hook is solely for improving the debugging experience for developers and has no direct benefit for the **user** of an application. With it it is possible in **own hooks** to apply a label to a value within the **hook**, if this value is inspected with the **React-Devtools**:
 
 ```jsx
 import React, { useDebugValue, useEffect } from "react";
@@ -787,23 +787,23 @@ const usePageTitle = (title) => {
 export default usePageTitle;
 ```
 
-Hier implementieren wir einen eigenen kleinen **Hook,** um den Seitentitel im Browser zu ändern. In den **Devtools** erscheint dieser Wert nun wie folgt:
+Here we implement our own small **Hook,** to change the page title in the browser. In the **Devtools** this value now appears as follows:
 
-![Unser DebugValue erscheint neben dem Namen des entsprechenden Hooks](../.gitbook/assets/usedebugvalue.png)
+![Our DebugValue appears next to the name of the corresponding hook](../.gitbook/assets/usedebugvalue.png)
 
-### Verzögerte Formatierung des Debug Values
+### Delayed formatting of the debug value
 
-Eben erwähnte ich, dass der `useDebugValue()`-Hook keinen direkten **Nutzen** für den Benutzer hat. Dies bedeutet allerdings nicht, dass er auch keinen direkten **Einfluss** auf die User Experience hat. Denn eine langsame Berechnung bei der Anzeige des Debug Values hat durchaus Einfluss auf die Rendering-Performance einer Anwendung.
+I just mentioned that the `useDebugValue()` hook has no direct **benefit** for the user. However, this does not mean that he has no direct **influence** on the user experience. This is because a slow calculation when displaying the debug value has an influence on the rendering performance of an application.
 
-Aus diesem Grund ist es möglich, dem Hook als zweiten Parameter eine Formatierungsfunktion zu übergeben. Die Formatierung des Werts wird in diesem Fall dann erst ausgeführt, wenn ein Wert auch tatsächlich in den Devtools inspiziert wird. Diese hat folgende Form:
+For this reason, it is possible to pass a formatting function to the hook as a second parameter. In this case, the formatting of the value is only executed when a value is actually inspected in the devtools. This has the following form:
 
 ```javascript
 useDebugValue(value, (value) => formattedValue);
 ```
 
-Der Hook bekommt also wie bisher als erstes Argument den **Debug-Wert** übergeben. Als zweites Argument bekommt er eine Funktion, die anschließend die Formatierung ausführt. Diese wiederum bekommt vom **Hook** den **Wert** übergeben und es wird von ihr erwartet, dass sie den formatierten Wert zurückgibt.
+As before, the hook gets the **debug value** as the first argument. As a second argument it gets a function, which executes the formatting afterwards. This in turn receives the **value** from the **Hook** and is expected to return the formatted value.
 
-Wer einmal an einem zugegebenermaßen sehr abwegigen aber eindeutigen Beispiel selbst erleben möchte, wie sich der Unterschied bemerkbar macht, der nimmt einmal die Fibonacci-Funktion aus dem `useMemo()`-Beispiel, lässt sich diese einmal mit und einmal ohne Formatierungsfunktion als Debug-Wert anzeigen und beobachtet, wie sich die Zeit bis zum Anzeigen der App verändert:
+If you want to experience for yourself how the difference becomes noticeable in an admittedly very absurd but unambiguous example, take the Fibonacci function from the `useMemo()` example, display it as a debug value once with and once without a formatting function, and observe how the time until the app is displayed changes:
 
 ```jsx
 import React, { useDebugValue, useEffect } from "react";
@@ -814,7 +814,7 @@ const fibonacci = (num) =>
 
 const useNumber = (number) => {
   useDebugValue(number, (number) => fibonacci(number));
-  // ohne Formatierungsfunktion:
+  // without formatting function:
   // useDebugValue(fibonacci(number));
   useEffect(() => {});
   return number;
@@ -822,13 +822,13 @@ const useNumber = (number) => {
 
 function App() {
   useNumber(41);
-  return <p>Debug Value Formatter Beispiel</p>;
+  return <p>Debug Value Formatter Example</p>;
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-Hier erhöht sich die initiale Ladezeit der App deutlich, was sich natürlich auch auf den Benutzer und die User Experience auswirkt.
+This significantly increases the initial loading time of the app, which of course also affects the user and the user experience.
 
 ## useImperativeHandle
 
@@ -836,13 +836,13 @@ Hier erhöht sich die initiale Ladezeit der App deutlich, was sich natürlich au
 useImperativeHandle(ref, createHandle, [deps])
 ```
 
-Um es Vorweg zu nehmen: Dieser Hook hat mir einige graue Haare bereitet, denn es fiel mir wirklich schwer einen Anwendungsfall zu konstruieren, bei dem der Einsatz von `useImperativeHandle()` die Lösung darstellt. Als ich meinem Frust auf Twitter etwas Luft machen wollte, meldete sich dann auch noch Dan Abramov, Core-Entwickler im React-Team bei Facebook und bekräftigte mich darin, dass es ein Zeichen dafür ist, dass ich alles richtig machen würde, da der Hook bestenfalls gar nicht verwendet werden sollte und daher auch absichtlich einen langen Namen hat. Allerdings möchte ich in diesem Buch den Anspruch verfolgen, React eben auch zu verstehen und nicht nur zu wissen, dass es einen solchen Hook möglicherweise gibt.
+To start with: This hook gave me some grey hair, because it was really hard for me to construct an application where the use of `useImperativeHandle()` is the solution. When I wanted to vent some of my frustration on Twitter, Dan Abramov, core developer in the React team on Facebook, also contacted me and confirmed that it was a sign that I would do everything right, as the hook was not supposed to be used at all at best and therefore intentionally has a long name. However, in this book I would like to pursue the claim to understand React and not only to know that such a hook might exist.
 
-![Dan Abramov weist mich auf Twitter freundlich darauf hin, alles richtig zu machen](../.gitbook/assets/useimperativehandle.png)
+![Dan Abramov kindly reminds me on Twitter to do everything right](../.gitbook/assets/useimperativehandle.png)
 
-Nun habe ich mich tatsächlich lange mit diesem Hook beschäftigt und muss sagen: Ja, wer den `useImperativeHandle()`-Hook nutzt, der sollte schauen, ob das wirklich alles so sinnvoll ist und ob es nicht einen anderen Weg gibt, der die Verwendung genau dieses Hooks nicht beinhaltet. Auch die offizielle Doku spricht an dieser Stelle davon, den Hook nicht zu verwenden, da er, wie der Name bereits erahnen lässt, für imperativen Code ausgelegt ist und damit dem in React vorherrschenden deklarativen Stil entgegensteht. Manchmal ist dies aber eben notwendig, insbesondere wenn mit Klassen und Objekten gearbeitet wird, was häufig auch bei externen Libraries der Fall ist.
+Now I've actually been busy with this hook for a long time and have to say: Yes, if you use the `useImperativeHandle()`-Hook, you should see if everything really makes sense and if there is not another way that does not include the use of this hook. The official docu also talks about not using the hook at this point, because, as the name suggests, it is designed for imperative code and thus opposes the declarative style prevailing in React. Sometimes this is necessary, especially when working with classes and objects, which is often the case with external libraries.
 
-Hier daher ein mit Vorsicht zu genießendes Beispiel, die die Verwendung des **Hooks** illustriert. Im Beispiel erstellen wir eine eigene `FancyForm` Formular-Komponente. Diese gibt ihre **Kind-Elemente** aus und stellt einige Methoden bereit, die in der konsumierenden Eltern-Komponente aufgerufen werden können. So implementieren wir hier beispielhaft eine Methode `focusFirstInput`, um das erste Eingabefeld innerhalb unseres `FancyForm`-Formulars fokussieren zu können. Außerdem erweitern wir das Formular um eine eigene Methode `getFormValues`, mit der wir die aktuell eingegebenen Daten als JSON zurückgegeben bekommen. Weiterhin ermöglichen wir, das Formular programmatisch abzusenden und zurückzusetzen, indem wir der weitergeleiteten **ForwardRef** die Methoden `reset()` und `submit()` vom HTML-`<form>`-Element als imperative Methode zuweisen:
+Here is a cautious example illustrating the use of the **Hook**. In the example we create our own `FancyForm` form component. It outputs its **child elements** and provides some methods that can be called in the consuming parent component. For example, we implement a method `focusFirstInput` to focus the first input field within our `FancyForm` form. In addition, we extend the form with our own method `getFormValues`, which returns the currently entered data as JSON. Furthermore, we make it possible to send and reset the form programmatically by assigning the methods `reset()` and `submit()` from the HTML `<form>` element as imperative methods to the forwarded **ForwardRef**:
 
 ```jsx
 import React, { useImperativeHandle, useEffect, useRef } from "react";
@@ -898,4 +898,3 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
-

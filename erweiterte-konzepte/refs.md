@@ -1,22 +1,22 @@
 # Refs
 
-**Refs** \(also **References/Referenzen**\) erlauben es in React, direkt auf DOM-Elemente zuzugreifen, die während des Render-Prozesses erzeugt wurden. Auch wenn das in React in den meisten Fällen gar nicht notwendig ist, gibt es einige Situationen, in denen man nicht drumherum kommt, direkt auf die DOM-Elemente zuzugreifen. Etwa, wenn die Position oder die Größe eines Elements benötigt wird, um basierend darauf bspw. ein Tooltip einzublenden oder um ein Eingabefeld mittels `.focus()` nach dem Laden einer Komponente zu fokussieren.
+**References** \(i.e., **References**\) in React allow direct access to DOM elements generated during the rendering process. Although this is not necessary in React in most cases, there are some situations where it is not possible to avoid directly accessing the DOM elements. For example, when the position or size of an element is needed to show a tooltip based on it or to focus an input field with `.focus()` after loading a component.
 
-Hier hat sich React im Laufe der Zeit weiterentwickelt und hat uns so historisch bedingt verschiedene Möglichkeiten geschaffen, solche **Refs** zu erstellen. Die **Refs**, egal in welcher Form, werden dabei stets über die `ref`-Prop eines DOM-Elements im **JSX** bzw. `createElement()`-Aufruf definiert.
+Here React has evolved over time and so historically has given us various ways to create such **Refs**. The **Refs**, no matter in which form, are always defined by the `ref` prop of a DOM element in the **JSX** or `createElement()` call.
 
-Doch eine Warnung jedoch gleich noch vorweg: Auch wenn React es erlaubt, durch die Verwendung von **Refs** direkt auf DOM-Elemente zuzugreifen, sollte dies nur getan werden, wenn der deklarative Weg, also das Neurendern von Komponenten mit geänderten Props und State, nicht weiterhilft. Sämtliche Manipulation von Attributen oder Attribut-Werten, das Hinzufügen oder Entfernen bspw. von Klassen oder Event-Listenern oder das Ändern von anderen Eigenschaften wie `aria-hidden` sollte **immer deklarativ** über die Props, den State, JSX und entsprechende Re-Renderings realisiert werden!
+But a warning right away: Even though React allows direct access to DOM elements by using **Refs**, this should only be done if the declarative way, i.e. neurendering components with changed props and state, does not help. All manipulation of attributes or attribute values, adding or removing classes or event listers or changing other properties like `aria-hidden` should **always be done declaratively** via the props, the state, JSX and corresponding renderings!
 
-Dennoch gibt es einige wenige Fälle in denen die Verwendung einer Ref sinnvoll oder sogar notwendig ist. Dazu gehören:
+However, there are a few cases where the use of a ref is useful or even necessary. That includes:
 
-* Das Setzen eines Focus auf input-Elemente \(`input.focus()`\) oder der Aufruf anderer Methoden wie `.play()` oder `.pause()` auf `video`- und `audio`-Elementen
-* Das Auslösen imperativer Animationen
-* Das Lesen von Eigenschaften eines Elements im DOM \(bspw. via `.getBoundingClientRect()`\)
+* Setting a focus on input elements \(`input.focus()`\) or calling other methods like `.play()` or `.pause()` on `video` and `audio` elements
+* The triggering of imperative animations
+* Reading properties of an element in the DOM \(e.g. via `.getBoundingClientRect()`\)
 
 ### String Refs
 
-Die simpelste und älteste Variante sind die sogenannten **String Refs**. Mittlerweile wird von der Nutzung eher abgeraten, da sie die Performance beeinträchtigen können und in Zukunft ggf. entfernt werden. Der Vollständigkeit halber möchte ich sie dennoch erwähnen, da sie noch Teil der offiziellen API sind und euch gelegentlich auch noch bei der Arbeit mit React begegnen werden, insbesondere wenn ihr mit Legacy-Code zu tun habt.
+The simplest and oldest variants are the so-called **String Refs**. In the meantime, it is not recommended to use them, as they can impair performance and may be removed in the future. For the sake of completeness, I'd like to mention them anyway, as they're still part of the official API and you'll occasionally encounter them working with React, especially if you're dealing with legacy code.
 
-Um eine **String Ref** zu definieren, gebt ihr einem DOM-Element eine Prop mit dem Namen `ref` und weist dieser Prop einen **String** als Wert zu. Das enstprechende DOM-Element ist dann **innerhalb der Komponente** in der Instanz-Eigenschaft `this.ref` zugänglich.
+To define a **String Ref**, give a prop with the name `ref` to a DOM element and assign a **String** as value to this prop. The corresponding DOM element is then **accessible within the component** in the instance property `this.ref`.
 
 ```jsx
 import React from 'react';
@@ -40,24 +40,24 @@ ReactDOM.render(
 );
 ```
 
-Im obigen Beispiel können wir im `componentDidMount()` Lifecycle-Hook über `this.refs.wrapper` auf das umgebende div und über `this.refs.username` auf das Eingabefeld zugreifen. Über `this.refs.username.focus()` lässt sich letzteres dann bspw. fokussieren.
+In the above example, we can access the surrounding div in the `componentDidMount()` lifecycle hook via `this.refs.wrapper` and the input field via `this.refs.username`. With `this.refs.username.focus()` you can focus on the latter.
 
 ### Callback Refs
 
-Eine Alternative zu **String Refs** sind die sogenannten **Callback Refs**. Diese erlauben mehr Flexibilität, sind aber dafür natürlich auch etwas umständlicher zu implementieren, da ihr euch um deren Handling selbst kümmern müsst. Dafür ist es mit **Callback Refs** möglich, diese an **Kind-Komponenten** weiterzugeben um auch auf DOM-Elemente innerhalb dieser zugreifen zu können.
+An alternative to **String Refs** are the so-called **Callback Refs**. These allow more flexibility, but are of course more cumbersome to implement, since you have to take care of their handling yourself. With **Callback Refs** it is possible to pass them on to **Kind components** in order to access DOM elements within them.
 
-**Callback Refs** werden, wie der Name es vermuten lässt, in **Callback-Form** definiert und bekommen beim **Mounting** als einzigen Parameter das DOM-Element oder bei Anwendung auf eine React-Komponente deren Instanz übergeben, beim **Unmounting** wird der Callback erneut aufgerufen, dann allerdings mit `null` als Parameter. 
+**Callback Refs** are, as the name suggests, defined in **Callback-Form** and get **Mounting** as only parameter the DOM-Element or when applying to a React-Component the instance of the DOM-Element, when **Unmounting** the callback is called again, but then with `null` as parameter. 
 
-Was ihr dann damit macht, ist euch selbst überlassen. Ein gängiger Ansatz ist es jedoch, die Referenz zu diesem DOM-Element als Instanz-Eigenschaft zu speichern, um von innerhalb der Komponente überall darauf zugreifen zu können.
+What you do with them is up to you. However, a common approach is to store the reference to this DOM element as an instance property so that it can be accessed from anywhere within the component.
 
-Angewendet auf das obige Beispiel sähe das dann so aus:
+Applied to the example above, it would look like this:
 
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 class ComponentWithCallbackRef extends React.Component {
-  usernameEl = null;
+  usernameEl = zero;
 
   componentDidMount() {
     this.usernameEl.focus();
@@ -80,7 +80,7 @@ ReactDOM.render(
 );
 ```
 
-**Callback Refs** können auch in Kind-Komponenten benutzt und auf diese **Refs** dann von innerhalb der Eltern-Komponente zugegriffen werden. Dazu übergebt ihr die Callback-Funktion der Kind-Komponente in einer eigenen Prop, die nicht `ref` heißen darf, da dies ja ein reservierter Name ist:
+**Callback Refs** can also be used in child components and these **Refs** can then be accessed from within the parent component. For this you pass the callback function of the child component in a separate prop, which must not be called `ref`, because this is a reserved name:
 
 ```jsx
 import React from 'react';
@@ -99,7 +99,7 @@ class ComponentWithRefChild extends React.Component {
     this.usernameEl.focus();
   }
 
-  usernameEl = null;
+  usernameEl = zero;
 
   setUsernameRef = (el) => {
     this.usernameEl = el;
@@ -121,15 +121,15 @@ ReactDOM.render(
 );
 ```
 
-Würdet ihr die Prop hier `ref` nennen, also `<UsernameInput ref={this.setUsernameRef} />`, würdet ihr stattdessen eine Referenz zur `UsernameInput`-**Instanz** erhalten, statt zu deren Input-Element. Bei **Function Components** wäre `UsernameInput` sogar `null`, da SFCs nicht instanziiert werden!
+If you would name the prop `ref` here, `<UsernameInput ref={this.setUsernameRef} />`, you would get a reference to the `UsernameInput`-**instance** instead of its input element. With **Function Components** `UsernameInput` would even be `null`, because SFCs are not instantiated!
 
-Für die Weiterleitung von Refs in Kind-Komponenten sollte nach Möglichkeit jedoch die `forwardRef()`-Methode verwendet werden. Diese wird am Ende dieses Kapitels beschrieben.
+However, the `forwardRef()` method should be used for forwarding refs in child components if possible. This is described at the end of this chapter.
 
-### Refs über createRef\(\)
+### Refs about createRef\(\)
 
-Neu in React 16.3. eingeführt wurde die Top-Level-Methode `React.createRef()`. Sie ähnelt von der Art der Verwendung her ein wenig den **Callback Refs**, jedoch mit kleinen Unterschieden. So müsst ihr euch auch hier um das Handling selbst kümmern. Durch ihre Ähnlichkeit zu **Callback Refs**, ist es auch hier gängige Praxis, die **Refs** einer **Instanz-Eigenschaft** zuzuweisen.
+New in React 16.3. is the top-level method `React.createRef()`. It is a bit similar to the **Callback Refs** in the way it is used, but with small differences. So you have to take care of the handling yourself. Due to their similarity to **Callback Refs**, it is common practice to assign the **Refs** to an **Instance property**.
 
-Statt jedoch jedesmal eine nahezu identische Methode in der Form `(el) => { this.property = el }` zu übergeben, erstellt ihr bei der Instanziierung der Komponente bereits die Referenz und übergebt diese dann an die `ref`-Prop des jeweiligen Elements.
+Instead of passing an almost identical method in the form `(el) => { this.property = el }` each time, you create the reference when instantiating the component and pass it to the `ref` prop of the respective element.
 
 ```jsx
 import React from 'react';
@@ -155,15 +155,15 @@ ReactDOM.render(
 );
 ```
 
-Vom Prinzip her also sehr ähnlich zu den **Callback Refs**, allerdings mit einem weiteren entscheidenden Unterschied: Auf die entsprechende Referenz greift ihr hier via `this.usernameEl.current` zu. 
+In principle very similar to the **Callback Refs**, but with another decisive difference: You can access the corresponding reference here via `this.usernameEl.current`. 
 
-Die Referenz zum Element wird hier also nicht in der Instanz-Eigenschaft gespeichert, der ihr die Ref zuordnet, sondern in deren `.current` Eigenschaft. Ansonsten ist ihr Verhalten soweit vergleichbar mit den Callback Refs. Ihr könnt diese ebenfalls an Kind-Komponenten über deren Props weitergeben und dann aus der Eltern-Komponente auf das jeweilige DOM-Element zugreifen.
+The reference to the element is not stored in the instance property, which assigns the ref to it, but in its `.current` property. Otherwise their behavior is comparable to the Callback Refs. You can also pass these on to child components via their props and then access the respective DOM element from the parent component.
 
-Im direkten Vergleich hier noch einmal die **Callback Ref**:
+In the direct comparison here again the **Callback Ref**:
 
 ```jsx
 class MyComponent extends React.Component {
-  usernameEl = null;
+  usernameEl = zero;
   
   render () {
     return (
@@ -173,9 +173,9 @@ class MyComponent extends React.Component {
 }
 ```
 
-Zugriff auf das Element via:  `this.usernameEl` 
+Access to the element via:  `this.usernameEl` 
 
-Und alternativ dazu die mittels **`React.createRef()`** erstellte Referenz:
+And alternatively the reference created with **`React.createRef()`**:
 
 ```jsx
 class MyComponent extends React.Component {
@@ -189,15 +189,15 @@ class MyComponent extends React.Component {
 }
 ```
 
-Zugriff auf das Element via: `this.usernameEl.current`.
+Access to the element via: `this.usernameEl.current`.
 
-### Weiterleitung von Refs
+### Forwarding of Refs
 
-Das sog. **Ref forwarding**, also die _Weiterleitung von Refs_ \(Referenzen zu einer Komponente oder einem DOM Element\) ermöglicht es, eine Referenz durch eine Komponente hindurch zu einer Kind-Komponente zu übergeben. Dies ist in den allermeisten Fällen nicht notwendig, kann manchmal aber wichtig werden, insbesondere wenn man eine wiederverwendbare Komponenten-Bibliothek erstellt. 
+The so-called **Ref forwarding**, i.e. the _forwarding of Refs_ \ (references to a component or a DOM element\) makes it possible to pass a reference through a component to a child component. This is not necessary in the vast majority of cases, but can sometimes become important, especially when creating a reusable component library. 
 
-Weitergeleitet wird eine **Ref** über die Methode `React.forwardRef()`. Sie bekommt dabei als Parameter eine Funktion übergeben, an die sie wiederum Props, sowie die **Ref** übergibt.
+A **Ref** is forwarded via the method `React.forwardRef()`. It is given a function as a parameter to which it passes props and the **Ref**.
 
-Klingt wieder fürchterlich umständlich, werfen wir also einen Blick auf ein Code-Beispiel. Im folgenden Beispiel implementieren wir zunächst eine eigene Input-Komponente ohne ForwardRef:
+Sounds awfully awkward again, so let's take a look at a code example. In the following example, we first implement our own input component without ForwardRef:
 
 ```jsx
 import React from "react";
@@ -228,9 +228,9 @@ class App extends React.Component {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-Hier hätten wir in der `componentDidMount()` Lifecycle Methode keinen Zugriff auf unser Eingabefeld aus der `UsernameField`-Komponente. Stattdessen wäre die Instanz der Komponente selbst die **Ref**. Da `UsernameField` jedoch eine **Function Component** ist, existiert nicht mal eine Instanz der Komponente. Somit wäre die `console.log` Ausgabe an der Stelle: `{ current: null }` - unschön, wollen wir doch Zugriff auf das `input`-Element bekommen, um es bspw. fokussieren zu können.
+In the `componentDidMount()` Lifecycle method we would not have access to our input field from the `UsernameField` component. Instead, the instance of the component itself would be **Ref**. However, since `UsernameField` is a **Function Component**, not even an instance of the component exists. So the `console.log` output would be at the place: `{ current: null }` - ugly, we want to get access to the `input` element to focus it for example.
 
-Dazu reicht es aus, die `UsernameField`-Komponente von einem `React.forwardRef()`-Aufruf umschließen zu lassen. Im obigen Beispiel ändern wir die Komponente also wie folgt:
+It is sufficient to have the `UsernameField` component enclosed by a `React.forwardRef()` call. In the example above, we change the component as follows:
 
 ```jsx
 const UsernameField = React.forwardRef((props, ref) => (
@@ -240,19 +240,19 @@ const UsernameField = React.forwardRef((props, ref) => (
 ));
 ```
 
-Hier teilen wir React mit, dass es die `ref`-Prop auf dem `UsernameField` in unserer `App`-Komponente bitte an die Komponente weiterleiten soll. Diese bekommt die **Ref** dann als zweiten Parameter der Funktion übergeben und kann diese an ein beliebiges Element im DOM oder auch an eine weitere Komponente weiterreichen. 
+Here we tell React to please forward the `ref` prop on the `UsernameField` in our `App` component to the component. The **Ref** is then passed as the second parameter of the function and can be passed on to any element in the DOM or to another component. 
 
-Wird die **Ref** an eine weitere Komponente tiefer im Baum weitergereicht sollte beachtet werden dass hier die selben Restriktionen gelten: Die entsprechende Komponente muss entweder eine Klassen-Komponente sein - dann würde die Referenz auf die Instanz der Klasse zeigen - oder die Komponente muss ihrerseits wiederum eine Ref-Weiterleitung via `forwardRef()` machen.
+If the **Ref** is passed on to another component deeper in the tree, it should be noted that the same restrictions apply here: The corresponding component must either be a class component - then the reference would point to the instance of the class - or the component must in turn make a redirection via `forwardRef()`.
 
-#### Vorsicht bei Higher Order Components!
+#### Caution with Higher Order Components!
 
-Bei der Implementierung von **Higher Order Components** ist Vorsicht geboten. Ist unklar, ob in ihnen auf weitergeleitete Refs zugegriffen werden soll, müssen sie selbst von einem `forwardRef()`-Aufruf umschlossen werden.
+Caution is advised when implementing **Higher Order Components**. If it is unclear whether forwarded refs should be accessed in them, they themselves must be enclosed by a `forwardRef()` call.
 
-Erweitern wir unser Beispiel von oben und nehmen an, wir wollen eine **HOC** erstellen um Formular-Elemente in einem bestimmten einheitlichen Stil anzuzeigen. Dazu erstellen wir die **HOC** `withInputStyles`. Diese kann und wird `input`-Elemente umschließen und in diesen soll es nicht ausgeschlossen sein, dass wir ihnen eine Ref zuweisen. 
+Let's extend our example from above and assume we want to create a **HOC** to display form elements in a certain uniform style. Therefore we create the **HOC** `withInputStyles`. This can and will enclose `input` elements and in these it should not be excluded that we assign them a ref. 
 
-Das ganze Verfahren ist etwas kompliziert und es fiel mir enorm schwer es in Worte zu fassen, die leicht verständlich gewesen wären, weshalb ich hier stattdessen einmal mehr den mit Kommentaren versehenen Code sprechen lassen möchte. Sobald das Prinzip von **Higher Order Components** und **forwardRefs** klar ist, sollte das Beispiel ausreichend sein um die Implementierung zu verstehen. Und selbst wenn nicht, ein kleiner Trost vorab: Das ist ein Anwendungsfall der in der Praxis so selten sein sollte, dass man ihm in den seltensten Fällen in einer echten Anwendung benötigen wird. 
+The whole process is a bit complicated and it was very hard for me to put it into words that would have been easy to understand, so I'd like to let the commentated code speak instead. Once the principle of **Higher Order Components** and **forwardRefs** is clear, the example should be sufficient to understand the implementation. And even if not, a little consolation in advance: This is an application that should be so rare in practice that one will rarely need it in a real application. 
 
-Der Vollständigkeit halber möchte ich ihn hier dennoch erwähnt haben. Hier also das Beispiel:
+For the sake of completeness, however, I would like to mention it here. So here's the example:
 
 ```jsx
 import React from "react";
@@ -261,11 +261,11 @@ import ReactDOM from "react-dom";
 const withInputStyles = (InputComponent) => {
   class WithInputStyles extends React.Component {
     render() {
-      // Wir holen uns die weitergeleitete Ref aus den Props der Komponente
+      // We get the forwarded ref from the props of the component
       const { forwardedRef, ...props } = this.props;
       
-      // ... und setzen sie als Ref für die von der HOC umschlossenen 
-      // Komponente ein:
+      // ... and use it as a ref for the HOC-encapsulated 
+      // Component on:
       return (
         <InputComponent
           {...props}
@@ -276,24 +276,24 @@ const withInputStyles = (InputComponent) => {
     }
   }
   
-  // Wir geben einen ForwardRef aus der HOC zurück
+  // We return a ForwardRef from the HOC
   return React.forwardRef((props, ref) => (
-    // Wir geben die Ref als temporäre Prop `forwardedRef` weiter
+    // We pass the ref as a temporary prop `forwardedRef`.
     <WithInputStyles {...props} forwardedRef={ref} />
   ));
 };
 
-// Hier leiten wir die Ref unserer Komponente an das input weiter mittels 
-// eines gewöhnlichen React.forwardRef()-Aufrufs
+// Here we forward the ref of our component to the input using 
+// of an ordinary React.forwardRef() call
 const UsernameField = React.forwardRef((props, ref) => (
   <input ref={ref} {...props} />
 ));
 
-// Hier verbinden wir die HOC mit unserer UsernameField-Komponente
+// Here we connect the HOC with our UsernameField component
 const StyledUsername = withInputStyles(UsernameField);
 
 class App extends React.Component {
-  // Hier wird ganz gewöhnlich die Ref erstellt auf die wir später zugreifen
+  // This is where we usually create the ref that we access later.
   usernameEl = React.createRef();
 
   componentDidMount() {
@@ -309,6 +309,3 @@ class App extends React.Component {
   }
 }
 ```
-
-
-

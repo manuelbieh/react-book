@@ -1,4 +1,4 @@
-# V – Das Ecosystem
+# V – The Ecosystem
 
 Für die einen Fluch, für die anderen Segen: die **Freiheit** die **React** dem Entwickler bietet. 
 

@@ -1,14 +1,14 @@
-# Code Splitting
+# Code splitting
 
-Wer ein Projekt mit React entwickelt, nutzt in den allermeisten Fällen auch einen **Bundler** wie **Webpack,** **Browserify** oder **Rollup**. Diese sorgen dafür, dass alle einzelnen Dateien, alle Imports, später zu einer einzigen großen Datei gebündelt wird, die dann relativ einfach deployed werden kann, ohne dass sich ein Entwickler noch all zu viele Gedanken um relative Verlinkungen machen muss. Dieser Vorgang wird dementsprechend **Bundling** genannt. In sehr großen und komplexen Projekten kann so ein **Bundle** schnell mal ein Megabyte groß oder gar größer werden, insbesondere wenn viele Third-Party-Bibliotheken im Einsatz sind. Das ist in vielerlei Hinsicht ein Problem, denn große Bundles benötigen länger, um vom Browser heruntergeladen zu werden und auch das Ausführen unnötig großer Bundles führt unweigerlich zu Performance-Einbußen.
+If you develop a project with React, in most cases you also use a **Bundler** like **Webpack,** **Browserify** or **Rollup**. These ensure that all individual files, all imports, are later bundled into a single large file, which can then be deployed relatively easily without a developer having to worry too much about relative links. This process is accordingly called **bundling**. In very large and complex projects such a **Bundle** can quickly grow one megabyte in size or even larger, especially if many third-party libraries are in use. This is a problem in many ways, because large bundles take longer to download from the browser, and running unnecessarily large bundles inevitably results in performance degradation.
 
-Um dem Problem der großen Bundles zu begegnen, gibt es das sog. **Code Splitting**. Beim Code Splitting wird die Anwendung in mehrere kleinere Bundles aufgeteilt, die allesamt für sich allein gesehen lauffähig sind und weitere Bundles nachladen, sollten diese später benötigt werden. So ist die Aufteilung in ein Bundle mit den meist benutzten Abhängigkeiten \(bspw. React, React DOM, ...\) und jeweils ein Bundle pro Route eine recht gängige Methode beim **Code Splitting**.
+To counter the problem of large bundles, there is the so-called **Code Splitting**. Code splitting splits the application into several smaller bundles, all of which run on their own and load more bundles if they are needed later. The division into a bundle with the most frequently used dependencies \(e.g. React, React DOM, ...\) and one bundle per route is a quite common method for **Code Splitting**.
 
-Die einfachste Methode dazu ist die Verwendung der **Dynamic Import Syntax**. Diese ist momentan ein Proposal beim **TC39**, befindet sich also momentan im Standardisierungsprozess. Dank Webpack und Babel ist es aber auch heute schon möglich, die Verwendung zu benutzen. Notwendig ist hierfür das Babel Plugin `@babel/plugin-syntax-dynamic-import`. **Create React App** und andere Tools wie **next.js** oder **Gatsby** bringen von Haus aus Unterstützung für dynamische Imports mit und müssen nicht speziell für die Verwendung von **Code Splitting** konfiguriert werden.
+The simplest method is to use the **Dynamic Import Syntax**. This is currently a proposal for the **TC39**, so it is currently in the standardization process. But thanks to Webpack and Babel, it is still possible to use it today. You need the Babel plugin `@babel/plugin-syntax-dynamic-import`. **Create React App** and other tools such as **next.js** or **Gatsby** come with support for dynamic imports and do not need to be configured specifically to use **Code Splitting**.
 
-### Verwendung dynamischer Imports
+### Using dynamic imports
 
-Im Kapitel zu ES2015+ wurde die Import-Syntax bereits angesprochen. Die **Dynamic Import Syntax** ist eine Erweiterung dieser und erlaubt es, daher der Name, innerhalb einer Anwendung Imports dynamisch nachzuladen. Dabei funktioniert ein dynamischer Import nicht anders als ein Promise:
+The import syntax has already been mentioned in the chapter on ES2015+. The **Dynamic Import Syntax** is an extension of the **Dynamic Import Syntax** and allows, therefore, the name to load imports dynamically within an application. A dynamic import does not work any differently than a Promise:
 
 ```jsx
 // greeter.js
@@ -22,20 +22,20 @@ import('./greeter').then((greeter) => {
 });
 ```
 
-Findet Webpack einen dynamischen Import, nutzt es an dieser Stelle automatisch seine Code-Splitting-Funktion und lagert die entsprechende Datei beim Erstellen des Bundles in einen eigenen sog. _Chunk_ aus, also sozusagen ein Teilstück, den es dann selbstständig lädt, sobald dieser in der Anwendung benötigt wird. Dieses Verhalten wird allgemein als **Lazy Loading** bezeichnet, also etwa „Verzögertes Laden“.
+If Webpack finds a dynamic import, it automatically uses its code splitting function at this point and stores the corresponding file in its own so-called _Chunk_ when creating the bundle, i.e. a section, which it then loads independently as soon as it is needed in the application. This behaviour is generally referred to as **Lazy Loading**, i.e. "delayed loading".
 
-### Verzögertes Laden von Komponenten mit React.lazy\(\)
+### Delayed loading of components with React.lazy\(\)
 
-Und damit wären wir auch schon beim nächsten Thema: **Lazy Loading mit React**. Um die Entwickler-Erfahrung beim **Lazy Loading** möglichst angenehm zu gestalten, bietet React seit Version **16.6.** eine hauseigene Methode um Komponenten dynamisch nachzuladen. Diese wird kombiniert mit der **Dynamic Import Syntax** und erlaubt es dem Entwickler, bestimmte React-Komponenten erst zur Laufzeit der Anwendung zu laden und so die Größe der Bundles weiter zu verkleinern. 
+And that brings us to the next topic: **Lazy Loading with React. In order to make the developer experience with **Lazy Loading** as pleasant as possible, React offers since version **16.6.** an in-house method to dynamically reload components. This is combined with the **Dynamic Import Syntax** and allows the developer to load certain React components at runtime to further reduce the size of the bundles. 
 
-Ein via `React.lazy()` geladener Import kann in React als gewöhnliche Komponente verwendet werden. Ihr können Props übergeben werden wie auch Refs. Sie kann eigene Kind-Elemente beinhalten oder in sich geschlossen sein. Die Methode erwartet eine Funktion als Parameter, die einen dynamischen Import zurückgibt. Dieser Import muss eine Komponente importieren, die einen Default Export hat, der wiederum eine React-Komponente sein muss:
+An import loaded via `React.lazy()` can be used in React as an ordinary component. Props can be handed over to her as well as refs. It can contain its own child elements or be self-contained. The method expects a function as a parameter that returns a dynamic import. This import must import a component that has a default export, which in turn must be a React component:
 
 ```jsx
 // LazyLoaded.js
 import React from 'react';
 
 const LazyLoaded = () => (
-  <p>Diese Komponente wird erst bei ihrer Verwendung vom Server geladen</p>
+  <p>This component is not loaded from the server until it is used </p>
 );
 ```
 
@@ -44,10 +44,10 @@ const LazyLoaded = () => (
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 
-const LazyLoaded = React.lazy(() => import('./LazyLoaded.js'));
+const LazyLoaded = React.lazy(() => import('./LazyLoaded.js')));
 
 const App = () => (
-  <Suspense fallback={<div>Anwendung wird geladen</div>}>
+  <Suspense fallback={<div>Application is being loaded</div>}>
     <LazyLoaded />
   </Suspense>
 );
@@ -55,30 +55,30 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-In komplexen Komponenten und insbesondere bei wachsenden Anwendungen kann man so sehr schön die Größe des JavaScript-Bundles optimieren und relevante Dateien erst dann vom Server laden, wenn diese wirklich benötigt werden. Während die Datei vom Server geladen wird bis sie schließlich ausgeführt wurde, wird an der Stelle der Komponente der Hinweis `<div>Anwendung wird geladen</div>` angezeigt. Dafür sorgt eine weitere Neuerung, die in Version **16.6.** den Weg in React fand:
+In complex components and especially with growing applications you can optimize the size of the JavaScript bundle and load relevant files from the server only when they are really needed. While the file is being loaded from the server until it is finally executed, the component will display the message `<div>Application is being loaded</div>`. This is due to another innovation that found its way into React in version **16.6.**:
 
-### Darstellung von Platzhaltern mit React.Suspense
+### Display of placeholders with React.Suspense
 
-Die `Suspense`-Komponente auf dem React-Objekt hieß in ihrer ursprünglichen Version einmal **Placeholder** \(dt. _Platzhalter_\) und das beschreibt ziemlich genau, was sie macht: sie agiert als Platzhalter für Komponenten, die noch nicht geladen wurden und rendert eine Alternative. Dies kann wie im obigen Beispiel bspw. eine Nachricht sein, dass Teile der Anwendung geladen werden oder auch eine ganz klassische Lade-Animation. Der Platzhalter wird dabei als `fallback`-Prop angegeben und muss zwingend definiert werden. Als gültiger Wert der Prop kann jedes beliebige valide React-Element verwendet werden. Dazu gehören auch Strings. `<Suspense fallback="Wird geladen">[…]</Suspense>` wäre demnach also ebenfalls ein valider Platzhalter.
+The `Suspense` component on the React object was originally called **Placeholder** \ in its original version, and that pretty much describes what it does: it acts as a placeholder for components that haven't been loaded yet, and renders an alternative. As in the example above, this can be a message that parts of the application are loaded or a classic load animation. The placeholder is specified as `fallback` prop and must be defined. Any valid React element can be used as the valid value of the prop. This also includes strings. `<Suspense fallback="Will be loaded">[...]</Suspense>` would therefore also be a valid placeholder.
 
-Solange die zu ladende Komponente noch nicht vollständig geladen wurde, werden dann sämtliche Kind-Elemente des `Suspense`-Elements durch den festgelegten Platzhalter ersetzt und erst nach dem vollständigen Laden der Komponente durch den eigentlichen Inhalt ersetzt. Dabei können beliebig viele via `React.lazy()` geladene Komponenten innerhalb eines `Suspense`-Elements verwendet werden. Der `fallback`-Platzhalter wird dann so lange angezeigt, bis **sämtliche** Komponenten vollständig geladen sind und angezeigt werden können!
+As long as the component to be loaded has not yet been fully loaded, all child elements of the `Suspense' element will be replaced by the specified placeholder and only replaced by the actual content after the component has been fully loaded. Any number of components loaded via `React.lazy()` can be used within a `Suspense` element. The `fallback` placeholder is then displayed until **all** components are fully loaded and can be displayed!
 
-Auch eine Verschachtelung ist möglich und teilweise sogar sinnvoll. Gibt es z.B. Teile in der Seite, die eher unwichtig sind und das Rendering des User Interfaces nicht verzögern sollten wenn andere, wichtigere Teile bereits geladen sind, so kann der entsprechende Seitenbaum von einem eigenen `Suspense`-Element umschlossen werden. Dies führt dazu, dass die anderen, möglicherweise wichtigeren Teile des Interfaces angezeigt werden, sobald diese geladen sind, während für die anderen, unwichtigeren Teile erneut ein Platzhalter angezeigt wird.
+Nesting is also possible and sometimes even useful. For example, if there are parts in the page that are unimportant and should not delay rendering the user interface if other, more important parts are already loaded, the corresponding page tree can be enclosed by its own `Suspense` element. This results in the other, possibly more important parts of the interface being displayed as soon as they are loaded, while for the other, less important parts a placeholder is displayed again.
 
-Ein denkbares Szenario könnte eine Anwendung zur Bildbearbeitung sein. Hier kann es sinnvoll sein, das zu bearbeitende Bild bereits anzuzeigen, sobald die Komponente geladen wurde, die für die Anzeige des Bildes verantwortlich ist. Das User Interface mit den eigentlichen Funktionen zur Bearbeitung wird dann erst im nächsten Schritt angezeigt, sollte das Laden der entsprechenden Komponente länger dauern. Und nur dann.
+A conceivable scenario could be an application for image processing. Here it may be useful to display the image to be processed as soon as the component responsible for displaying the image has been loaded. The user interface with the actual functions for processing is then only displayed in the next step if loading the corresponding component takes longer. And only then.
 
 ```jsx
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 
 const ImageCanvas = React.lazy(() => import("./ImageCanvas"));
-const ImageToolbar = React.lazy(() => import("./ImageToobar"));
+const ImageToolbar = React.lazy(() => import("./ImageToobar")));
 
 function App() {
   return (
-    <Suspense fallback={<div>Anwendung wird geladen</div>}>
+    <Suspense fallback={<div>Application is being loaded</div>}>
       <ImageCanvas url="https://via.placeholder.com/350x240"/>
-      <Suspense fallback={<div>Bearbeitungsfunktionen werden geladen</div>}>
+      <Suspense fallback={<div>Editing functions are loaded</div>}>
         <ImageToolbar />
       </Suspense>
     </Suspense>
@@ -89,23 +89,23 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 ```
 
-Was hier passiert ist folgendes: die `ImageCanvas` \(zum Anzeigen des Bildes\) und die `ImageToolbar` \(für die Bearbeitungsfunktionen\) befinden sich in einem `Suspense`-Element. Dieses zeigt die Platzhalter-Nachricht: _„Die Anwendung wird geladen“_  solange, bis die `ImageCanvas`-Komponente vom Server geladen wurde. 
+What happens here is that the `ImageCanvas` \(for displaying the image\) and the `ImageToolbar` \(for the editing functions\) are in a `Suspense` element. This displays the wildcard message: _"The application will load"_ until the `ImageCanvas` component is loaded from the server. 
 
-Sollte dies passieren, **bevor** die `ImageToolbar` geladen wurde, wird sie bereits angezeigt und das zweite, innere `Suspense`-Element kommt zum Einsatz. Dieses sorgt dafür, dass die Nachricht _„Bearbeitungsfunktionen werden geladen“_ angezeigt wird bis diese tatsächlich geladen wurden.
+If this happens **before** loading the `ImageToolbar`, it will already be displayed and the second, inner `Suspense` element will be used. This ensures that the message _"Editing functions are loaded"_ is displayed until they have actually been loaded.
 
-Ist die `ImageCanvas`-Komponente erst geladen, **nachdem** die `ImageToolbar`-Komponente geladen wurde, wird das innere `Suspense`-Element aufgelöst, jedoch verhindert das äußere Suspense-Element die anzeige der Toolbar und zeigt diese erst an, sobald auch die `ImageCanvas` geladen ist. Dann jedoch ohne weitere Verzögerung.
+Once the `ImageCanvas` component is loaded, **after** the `ImageToolbar` component has been loaded, the inner `Suspense` element is resolved, but the outer Suspense element prevents the toolbar from displaying it and only displays it once the `ImageCanvas` component is loaded. Then, however, without further delay.
 
-Unser User Interface kennt also drei mögliche Darstellungen:
+So our user interface knows three possible representations:
 
-* `ImageCanvas` und `ImageToolbar` wurden erfolgreich geladen und werden beide dargestellt
-* `ImageCanvas` wurde noch nicht geladen und es erscheint nur die „Anwendung wird geladen“ Nachricht, unabhängig vom Lade-Status der `ImageToolbar`
-* `ImageCanvas` wude geladen, `ImageToolbar` jedoch noch nicht. Dann würde die `ImageCanvas` bereits angezeigt werden, anstelle der Toolbar stünde jedoch der Hinweis „Bearbeitungsfunktionen werden geladen“, bis diese auch tatsächlich geladen wurden.
+* `ImageCanvas` and `ImageToolbar` have been successfully loaded and are both displayed
+* `ImageCanvas` has not been loaded yet and only the "Application is loading" message appears, regardless of the load status of the `ImageToolbar`.
+* `ImageCanvas` was loaded, `ImageToolbar` not yet. Then the `ImageCanvas` would already be displayed, but instead of the toolbar there would be the note "Editing functions will be loaded" until they have actually been loaded.
 
-Wir schließen somit also bewusst aus, dass ein Benutzer zwar bereits die Bearbeitungsfunktionen für ein Bild sieht, nicht jedoch die Zeichenfläche auf der das zu bearbeitende Bild angezeigt wird. Eine kluge Verschachtelung von `Suspense` gibt uns so alle Flexibilität die nötig ist um sehr fein granular festzulegen wann welche Teile der Anwendung bereits angezeigt werden sollen und wo wir vorübergehend einen Platzhalter anzeigen wollen.
+So we deliberately exclude the possibility that a user already sees the editing functions for an image, but not the drawing area on which the image to be edited is displayed. A clever nesting of `Suspense` gives us all the flexibility we need to fine-tune when which parts of the application should already be displayed and where we want to temporarily display a placeholder.
 
-Momentan wird **Suspense** als Platzhalter offiziell nur für das Laden von Komponenten mittels `React.lazy()` unterstützt. In Zukunft soll auch das asynchrone Laden von Daten verschiedenster Art \(wie z.B. API-Abfragen\) durch **Suspense** unterstützt werden.
+Currently **Suspense** is only officially supported as a placeholder for loading components using `React.lazy()`. In the future, the asynchronous loading of data of various types \ (such as API queries\) will also be supported by **Suspense**.
 
 {% hint style="warning" %}
-**Vorsicht:** momentan werden **Lazy** und **Suspense** nur bei der Verwendung in **clientseitigen** Anwendungen unterstützt. Unterstützung für **serverseitiges** Rendering gibt es für dieses Feature aktuell noch nicht und befindet sich derzeit in Arbeit.
+**Caution:** Currently, **Lazy** and **Suspense** are supported only when used in **client side** applications. Support for **server-side** rendering is currently not available for this feature and is currently in the works.
 {% endhint %}
 

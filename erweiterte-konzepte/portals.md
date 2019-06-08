@@ -1,29 +1,29 @@
 # Portals
 
-Mit **Portals** \(dt. _Portale_\) bietet React die Möglichkeit, Komponenten in DOM Nodes zu rendern, die sich _außerhalb_ der Parent-Node der jeweiligen Komponenten-Hierarchie befinden, aber dennoch Zugriff auf die aktuelle Komponenten-Umgebung haben. Ein möglicher \(aber bei weitem nicht ihr einziger\) Anwendungsfall hierfür sind u.a. Overlays, die in einem eigenen `<div>` außerhalb der tatsächlichen Anwendung gerendert werden.
+With **Portals** \, React provides the ability to render components in DOM nodes that are _outside_ the parent node of the component hierarchy, but still have access to the current component environment. A possible \(but by far not their only\) use case for this are overlays, which are rendered in their own `<div>` outside the actual application.
 
-Ein Portal befindet sich dabei weiter im Kontext der Komponente, die das Portal erstellt und hat somit Zugriff auf alle Daten, die in der Eltern-Komponente zur Verfügung stehen \(wie etwa die Props oder den State\) befindet sich im HTML jedoch an einer ggf. völlig anderen Stelle als die restliche Anwendung. Dies ist wichtig, wenn innerhalb des Portals bspw. auf Daten aus dem State der Eltern-Komponente oder auf einen gemeinsamen Context wie bspw. Übersetzungen zugegriffen werden soll. 
+A portal is located further in the context of the component that creates the portal and thus has access to all data that is available in the parent component \(such as the props or the state\) but is located in HTML at a possibly completely different location than the rest of the application. This is important if, for example, data from the state of the parent component or a common context such as translations is to be accessed within the portal. 
 
-### Ein Portal erstellen
+### Create a portal
 
-Die Erstellung eines solchen Portals ist dabei denkbar einfach. So muss eine Komponente dazu lediglich die `createPortal()`-Methode aus ReactDOM aufrufen, ihr eine gültige Komponente als _ersten_ und eine \(existierende\) Ziel-Node als _zweiten_ Parameter übergeben.
+The creation of such a portal is very easy. So a component only has to call the `createPortal()` method from ReactDOM, give it a valid component as _first_ and a \(existing\) target node as _second_ parameter.
 
-Nehmen wir einmal folgendes HTML-Dokument an:
+Let's assume the following HTML document:
 
 ```markup
 <!doctype html>
 <html>
 <head>
-<title>Portale in React</title>
+<title>Portals in React</title>
 </head>
 <body>
-<div id="root"><!-- hier befindet sich unsere React App --></div>
-<div id="portal"><!-- und hier landet gleich der Inhalt unseres Portals --></div>
+<div id="root"><!-- here is our React App --></div>
+<div id="portal"><!-- and here the content of our portal lands --></div>
 </body>
 </html>
 ```
 
-Und dazu die folgende einfache React App:
+And the following simple React App:
 
 ```jsx
 import React from 'react';
@@ -32,7 +32,7 @@ import ReactDOM from 'react-dom';
 const App = () => {
   return (
     <div>
-      <h1>Portale in React</h1>
+      <h1>Portals in React</h1>
     </div>
   )
 }
@@ -40,20 +40,20 @@ const App = () => {
 ReactDOM.render(<App />, document.querySelector('#root'));
 ```
 
-Da wir unsere `<App />` in das `div` mit der id `root` rendern, sähe der `<body>` unserer obigen App nun entsprechend wie folgt aus:
+Since we render our `<App />` into the `div` with the id `root`, the `<body>` of our above app would look like this:
 
 ```markup
 <body>
   <div id="root">
     <div>
-      <h1>Portale in React</h1>
+      <h1>Portals in React</h1>
     </div>
   </div>
-  <div id="portal"><!-- und hier landet gleich der Inhalt unseres Portals --></div>
+  <div id="portal"><!-- and here the content of our portal lands --></div>
 </body>
 ```
 
-Jede weitere Komponente bzw. jedes weitere HTML Element, das wir im JSX unserer App-Komponente verwenden, würde entsprechend im `<div id="root">` landen. Außer eben, es handelt sich um ein **Portal**. Eine solche Komponente würde dann so aussehen:
+Any additional component or HTML element we use in the JSX of our app component would end up in the `<div id="root">` accordingly. Unless, of course, it's a portal. Such a component would then look like this:
 
 ```jsx
 import React from 'react';
@@ -61,13 +61,13 @@ import ReactDOM from 'react-dom';
 
 const PortalExample = () => {
   return ReactDOM.createPortal(
-    <div>Hallo aus dem Portal</div>,
+    <div>Hello from the portal</div>,
     document.querySelector('#portal')
   );
 }
 ```
 
-Neben dem JSX, das wir an der Stelle ausgeben möchten, geben wir also noch den Ziel-Container an und verpacken beides zusammen hübsch in einem `ReactDOM.createPortal()`-Aufruf, den wir dann statt des reinen JSX aus der Komponente \(bzw. aus der `render()`-Methode bei Class Components\) zurückgeben. Ergänzen wir unsere Beispiel-App von oben, sähe die Benutzung wie folgt aus:
+In addition to the JSX that we want to output at this point, we also specify the target container and package both together nicely in a `ReactDOM.createPortal()` call, which we then return from the component \(or from the `render()` method for Class Components\) instead of the pure JSX. If we add our example app from above, the usage would look as follows:
 
 ```jsx
 import React from 'react';
@@ -76,7 +76,7 @@ import ReactDOM from 'react-dom';
 const App = () => {
   return (
     <div>
-      <h1>Portale in React</h1>
+      <h1>Portals in React</h1>
       <PortalExample />
     </div>
   )
@@ -85,32 +85,32 @@ const App = () => {
 ReactDOM.render(<App />, document.querySelector('#root'));
 ```
 
-Der `<body>` unseres HTML-Dokuments ist dann folgender:
+The `<body>` of our HTML document is then the following:
 
 ```markup
 <body>
   <div id="root">
     <div>
-      <h1>Portale in React</h1>
+      <h1>Portals in React</h1>
     </div>
   </div>
   <div id="portal">
-    <div>Hallo aus dem Portal</div>
+    <div>Hail from the portal</div>
   </div>
 </body>
 ```
 
-Das Portal wird also in die `#portal`-Node gerendert statt in die `#root`-Node, in der sich die Komponente befindet. Dabei wird ein Portal immer dann gerendert, wenn die Komponente _gemounted_ wird und folglich auch wieder aus dem DOM _entfernt_, wenn die Komponente, die das Portal enthält, aus dem Komponenten-Baum entfernt wird.
+So the portal is rendered to the `#portal` node instead of the `#root` node where the component is located. A portal is always rendered when the component is _mounted_ and is therefore _removed_ from the DOM when the component that contains the portal is removed from the component tree.
 
-### Ein Portal im Zusammenspiel mit seiner Eltern-Komponente
+### A portal in interaction with its parent component
 
-Um die Funktionsweise eines Portals noch einmal deutlicher zu demonstrieren, entwickeln wir im nächsten Schritt – Überraschung – ein Modal-Portal. Als Ausgangsbasis nutzen wir hierbei das identische HTML wie auch schon in der Einleitung zuvor. Wir haben also zwei divs, in die wir einmal unsere Anwendung und einmal unser Portal rendern.
+In order to demonstrate the functionality of a portal even more clearly, the next step - surprise - is to develop a modal portal. As a starting point we use the identical HTML as in the introduction before. So we have two divs in which we render our application and our portal.
 
-Das Portal öffnen wir diesmal jedoch erst, nachdem der Benutzer einen Button geklickt hat. Im Portal selbst befindet sich dann ein Button, der das Fenster wieder schließt. Dabei setzen wir die State-Eigenschaft `modalIsOpen` in der Eltern-Komponente entsprechend auf `true` oder `false`. Die `ModalPortal`-Komponente rendern wir über ein `&&`-Conditional in JSX, also nur dann, wenn der Wert von `this.state.modalIsOpen` auch tatsächlich `true` ist.
+This time, however, we will only open the portal after the user has clicked a button. The portal itself then contains a button that closes the window again. We set the state property `modalIsOpen` in the parent component to `true` or `false` accordingly. We render the `ModalPortal` component via a `&&` conditional in JSX, i.e. only if the value of `this.state.modalIsOpen` is actually `true`.
 
-In dem Moment, in dem der Wert von `false` auf `true` wechselt, wird die `ModalPortal`-Komponente gemounted und das Modal-Popup wird mit einem leicht transparenten schwarzen Hintergrund in das `<div id="portal">` gerendert. Wechselt der Wert von `true` zurück auf `false`, nehmen wir es in der App-Komponente aus der Komponenten-Hierarchie heraus und React sorgt dann automatisch dafür, dass sich die `ModalPortal`-Komponente mitsamt ihres Inhalts nicht mehr in der Seite befindet.
+The moment the value changes from `false` to `true`, the `ModalPortal` component is mounted and the modal popup is rendered with a slightly transparent black background in the `<div id="portal">`. If the value changes from `true` back to `false`, we take it out of the component hierarchy in the app component and React then automatically ensures that the `ModalPortal` component and its contents are no longer in the page.
 
-Und im Code ergibt das dann das folgende Bild:
+And in the code this results in the following image:
 
 ```jsx
 import React from "react";
@@ -128,7 +128,7 @@ const ModalPortal = (props) => {
         width: "100vw",
       }}
     >
-      <div style={{ background: "white", margin: 16, padding: 16 }}>
+      <div style={ background: "white", margin: 16, padding: 16 }}>
         {props.children}
       </div>
     </div>,
@@ -152,12 +152,12 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Portale in React</h1>
-        <button onClick={this.openModal}>Modal öffnen</button>
+        <h1>Portals in React</h1>
+        <button onClick={this.openModal}>OpenModal</button>
         {this.state.modalIsOpen && (
           <ModalPortal>
-            <p>Dieser Teil wird in einem Modal-Fenster geöffnet.</p>
-            <button onClick={this.closeModal}>Modal schließen</button>
+            <p>This part is opened in a modal window.</p>
+            <button onClick={this.closeModal}>Close Modal</button>
           </ModalPortal>
         )}
       </div>
@@ -169,7 +169,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 ```
 
-Ein besonderes Augenmerk gilt hier der `this.closeModal` Methode. Diese wird als Methode der App-Komponente definiert, wird aber innerhalb der `ModalPortal`-Komponente beim Klick auf den „Modal schließen“-Button im Kontext der `App`-Komponente aufgerufen. 
+The `this.closeModal` method is of particular interest here. This is defined as the method of the app component, but is called within the `ModalPortal` component when clicking the "Close Modal" button in the context of the `App` component. 
 
-Sie kann also problemlos den `modalIsOpen` State der Komponente verändern. Und das, obwohl die Komponente sich gar nicht innerhalb `<div id="root>` befindet wie der Rest unserer kleinen App. Dies ist möglich, da es sich eben um ein Portal handelt, deren Inhalt sich **aus React-Sicht** im selben Komponenten-Baum wie die App selbst befindet, nicht jedoch **aus HTML-Sicht**.
+So it can easily change the `modalIsOpen` state of the component. And this although the component is not located inside `<div id="root>` like the rest of our small app. This is possible because it is a portal whose content is **from react view** in the same component tree as the app itself, but not **from HTML view**.
 

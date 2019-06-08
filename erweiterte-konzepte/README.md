@@ -1,2 +1,2 @@
-# III – Erweiterte Konzepte
+# III – Advanced Concepts
 

@@ -1,12 +1,12 @@
-# Eigene Hooks implementieren
+# Implement your own hooks
 
-Neben den **internen Hooks** wie `useState` oder `useEffect` ist es auch möglich, **eigene Hooks** zu erstellen, die selbst wiederum Gebrauch von den **internen Hooks** oder auch von anderen **eigenen Hooks** machen und eigene Logik jeglicher Art in wiederverwendbarer Form kapseln. Sogenannte **Custom Hooks**. Die Entwicklung von solchen **Custom Hooks** ist immer dann besonders sinnvoll, wenn die immer gleiche Logik in mehreren Komponenten verwendet werden soll. Auch wenn die Logik in einer Komponente zunehmend komplexer wird, kann es sinnvoll sein diese aufzuteilen und in **eigene Hooks** mit leicht verständlichen Namen zu verlagern, um die eigentliche **Function Component** übersichtlicher zu halten.
+Besides the **internal hooks** like `useState` or `useEffect` it is also possible to create **own hooks**, which in turn make use of the **internal hooks** or of other **own hooks** and encapsulate own logic of any kind in reusable form. So-called custom hooks. The development of such **Custom Hooks** is particularly useful if the same logic is to be used in several components. Even if the logic in a component becomes more and more complex, it can be useful to split it into **own hooks** with easy to understand names in order to keep the actual **Function Component** clearer.
 
-### Der erste eigene Custom Hook
+### The first custom hook of your own
 
-Fangen wir zum Einstieg mit einem sehr simplen Beispiel an und gehen davon aus, dass wir einen **Custom Hook** implementieren wollen, mit dem wir einen Side Effect auslösen und die Hintergrundfarbe ändern, wann immer eine Komponente gemounted wird. Ein typischer Name für einen solchen **Custom Hook** – wir erinnern uns daran, dass Hooks immer mit `use` beginnen müssen – wäre bspw. `useBackgroundColor()`. Der Hook erwartet eine gültige CSS-Farbe und setzt diese als Hintergrundfarbe, sobald eine Komponente, die Gebrauch von diesem Hook macht, gemounted wird oder einen neuen Wert an den **Custom Hook** übergibt.
+Let's start with a very simple example and assume that we want to implement a **custom hook** to trigger a side effect and change the background color whenever a component is mounted. A typical name for such a **custom hook** - we remember that hooks always have to start with `use` - would be `useBackgroundColor()`. The hook expects a valid CSS color and sets it as the background color when a component that makes use of this hook is mounted or passes a new value to the **custom hook**.
 
-Da wir diese Logik möglicherweise in mehreren Komponenten verwenden möchten und dort nicht jedes mal die selbe Funktionalität der immer gleichen `useEffect`-Funktion implementieren wollen, erstellen wir also den folgenden **Custom Hook** als erste Fingerübung:
+Since we might want to use this logic in several components and don't want to implement the same functionality of the same `useEffect` function every time, we create the following **Custom Hook** as a first finger exercise:
 
 ```javascript
 // useBackgroundColor.js
@@ -27,9 +27,9 @@ const useBackgroundColor = (color) => {
 export default useBackgroundColor;
 ```
 
-Als Beispiel für die Verwendung erstellen wir eine kleine `Tabs`-Komponente, die drei Buttons anzeigt, welche wiederum beim Klick jeweils anderen Content anzeigen. Je nachdem, welche Komponente angezeigt wird, wollen wir den Hintergrund unserer Anwendung ändern. Dazu nutzen wir unseren eben erstellten `useBackgroundColor()` Hook. 
+As an example for the usage we create a small `Tabs` component, which shows three buttons, which in turn show other content when clicking. Depending on which component is displayed, we want to change the background of our application. We use our newly created `useBackgroundColor()` Hook. 
 
-Das Ganze gestaltet sich dann wie folgt:
+The whole thing then turns out as follows:
 
 ```jsx
 // Tabs.js
@@ -73,19 +73,19 @@ const Tabs = () => {
 ReactDOM.render(<Tabs/>, document.getElementById("root"));
 ```
 
-Wir haben in diesem Beispiel drei simple Kompontenten implementiert, die unseren Content darstellen: `DefaultContent`, `SpecialContent`, `OtherSpecialContent`. Zwei dieser Komponenten nutzen dabei unseren im ersten Schritt erstellten **Custom Hook** `useBackgroundColor()`  um die globale Hintergrundfarbe in einem `useEffect()`-Hook zu ändern, sobald die Komponente gemounted wird.
+In this example we have implemented three simple components that represent our content: `DefaultContent`, `SpecialContent`, `OtherSpecialContent`. Two of these components use our **Custom Hook** `useBackgroundColor()` created in the first step to change the global background color in a `useEffect()` hook when the component is mounted.
 
-Alternativ könnten wir an dieser Stelle auch den `useEffect()`-Hook, den wir im `useBackgroundColor()`-Hook benutzen, auch händisch überall dort implementieren, wo wir die Hintergrundfarbe ändern müssen. Dies würde aber eben zu sehr viel Duplikation im Code führen. Stattdessen lagern wir die entsprechende Logik in eine eigene Hook-Funktion aus, machen diese durch das Übergeben der gewünschten Farbe bedingt konfigurierbar und können sie dann in beliebig vielen **Function Components** verwenden.
+Alternatively, we could manually implement the `useEffect()`-Hook, which we use in the `useBackgroundColor()`-Hook, wherever we need to change the background color. But this would lead to a lot of duplication in the code. Instead, we store the corresponding logic in a separate hook function, make it conditionally configurable by passing the desired color and can then use it in any number of **Function Components**.
 
-Während die einfache Erstellung wiederverwendbarer Komponenten auf Darstellungsebene \(also im User Interface Layer\) also die große Stärke von React und JSX ist, so bieten uns Hooks auf Logik-Ebene erstmals eine Möglichkeit, mit React-Bordmitteln Wiederverwendbarkeit gewährleisten zu können ohne Kompromisse eingehen zu müssen.
+While the simple creation of reusable components at the display level \(i.e. in the user interface layer\) is the great strength of React and JSX, hooks at the logic level offer us for the first time a way to ensure reusability with React on-board resources without having to make compromises.
 
-### Mit Daten aus Hooks arbeiten
+### Working with data from hooks
 
-Datenübergabe in **Custom Hooks** ist keine Einbahnstraße. In unserem ersten eigenen Hook haben wir gesehen, wie wir Daten \(in diesem Fall eine Farbe\) an den **Custom Hook** übergeben. Nämlich als einfachen Funktionsparameter. Der Hook kann aber ebenso Daten zurückgeben, mit denen dann in der Komponente gearbeitet werden kann. In welcher Form Daten aus dem **Hook** zurückgegeben werden, ist dabei völlig dem Entwickler überlassen. Vom einfachen String über einen Tupel wie beim internen `useState()`-**Hook** bis hin zu ganzen React-Komponenten oder Elementen oder auch einem Mix aus allem sind der eigenen Fantasie hier keine Grenzen gesetzt.
+Data transfer in **Custom Hooks** is not a one-way street. In our first own hook we have seen how we pass data \(in this case a color\) to the **custom hook**. Namely as simple function parameters. However, the hook can also return data that can then be used in the component. The form in which data is returned from the **Hook** is entirely up to the developer. From a simple string over a tuple like the internal `useState()`-**Hook** up to whole React components or elements or even a mix of everything there are no limits to your own fantasy.
 
-Nehmen wir an, wir wollen auf die Daten einer API zugreifen. Auf welche genauen Daten zugegriffen wird, wollen wir parametrisierbar machen. Der Hook soll dafür sorgen, uns die Daten zu besorgen – egal in welcher Komponente wir ihn verwenden – und dann an die Komponente zurückgeben, die die Daten benötigt. In einem realen Beispiel könnten das z.B. Benutzerdaten von GitHub sein. Dies soll unser nächster eigener Hook werden: `useGitHubUserData`. 
+Suppose we want to access the data of an API. We want to make it parameterizable which exact data is accessed. The hook is designed to get us the data - whatever component we use it in - and then return it to the component that needs the data. In a real example this could be user data from GitHub. This will be our next own hook: `useGitHubUserData`. 
 
-Wir übergeben dem Hook einen GitHub-Benutzernamen und bekommen ein Objekt mit allen relevanten Informationen zu dem Benutzer zurück. Der Hook kümmert sich darum, die Daten über die GitHub API zu besorgen und anschließend an die Komponente zurück zu übergeben:
+We pass a GitHub user name to the hook and get an object with all relevant information back to the user. The hook takes care of getting the data via the GitHub API and then passing it back to the component:
 
 ```jsx
 // useGitHubAccountData.js
@@ -114,9 +114,9 @@ const useGitHubAccountData = (account) => {
 export default useGitHubAccountData;
 ```
 
-Auch hier nutzen wir wieder die bereits bekannten Hooks `useEffect()` und `useState()`. Den State \(konkret `accountData`\) nutzen wir, um darin die GitHub-Benutzerdaten zu verwalten. Den Effekt führen wir immer dann \(und nur dann\) aus, wenn sich der übergebene Benutzername ändert. Zum übergebenen Benutzernamen holen wir uns dann über die GitHub API die Benutzerdaten ab, warten den Response ab und schreiben die Daten aus dem Response per `setAccountData()` in den State. Am Ende des Hooks wird dann der `accountData` State an die Komponente zurückgegeben, die den Hook aufgerufen hat.
+Again we use the already known hooks `useEffect()` and `useState()`. We use the state \(specifically `accountData`\) to manage the GitHub user data. We always execute the effect \(and only then\) if the user name passed changes. For the given username we get the user data via the GitHub API, wait for the response and write the data from the response via `setAccountData()` into the state. At the end of the hook, the `accountData` state is returned to the component that called the hook.
 
-Die Daten stehen nun in der Komponente zur Verfügung und können in dieser beliebig verwendet werden:
+The data is now available in the component and can be used in any way:
 
 ```jsx
 // RepoInfo.js
@@ -125,12 +125,12 @@ import ReactDOM from "react-dom";
 import useGitHubAccountData from "./useGitHubAccountData";
 
 const RepoInfo = () => {
-  const accountData = useGitHubAccountData("manuelbieh");
+  const accountData = useGitHubAccountData("manual");
 
   return (
     <p>
-      Der GitHub-Benutzer {accountData.name} besitzt {accountData.public_repos}{" "}
-      öffentliche Repositories.
+      The GitHub user {accountData.name} owns {accountData.public_repos}{" "}
+      public repositories.
     </p>
   );
 };
@@ -138,9 +138,9 @@ const RepoInfo = () => {
 ReactDOM.render(<RepoInfo />, document.getElementById("root"));
 ```
 
-An dieser Stelle können wir nun basierend auf der `RepoInfo`-Komponente hergehen und weitere Funktionalität implementieren. Statt eines festen GitHub-Accounts wollen wir den Benutzer vielleicht einen Account suchen lassen. Dazu legen wir uns mit dem `useState()`-Hook einen neuen **State** an, in den wir den vom Benutzer eingegebenen Account schreiben und geben diesen State an unseren **Custom Hook** weiter.
+At this point we can now proceed based on the `RepoInfo` component and implement further functionality. Instead of a fixed GitHub account we might want to let the user search for an account. To do this, we create a new **State** with the `useState()` hook, in which we write the account entered by the user and pass this state to our **Custom Hook**.
 
-Da der `useEffect()`-Hook als **Dependency** den Account-Namen hat, wird dieser immer dann ausgeführt, wenn ein neuer Account-Name übergeben wird. Das bedeutet, dass mit jeder Änderung im Suchfeld ein neuer API-Request initiiert wird, der uns die Daten zum eingegebenen Account besorgt:
+Since the `useEffect()` hook has the account name as **Dependency**, this is always executed when a new account name is passed. This means that with every change in the search field, a new API request is initiated, which provides us with the data for the account entered:
 
 ```jsx
 // RepoLookup.js
@@ -149,18 +149,18 @@ import ReactDOM from "react-dom";
 import useGitHubAccountData from "./useGitHubAccountData";
 
 const RepoLookup = () => {
-  const [account, setAccount] = useState("");
+  const [account, setAccount] = useState(""");
   const accountData = useGitHubAccountData(account);
 
   return (
     <div>
       <input value={account} onChange={(e) => setAccount(e.target.value)} />
       {!account ? (
-        <p>Bitte einen GitHub-Benutzernamen eingeben</p>
+        <p>Please enter a GitHub user name</p>
       ) : (
         <p>
-          Der GitHub-Benutzer {accountData.name} ({accountData.login}) besitzt{" "}
-          {accountData.public_repos} öffentliche Repositories.
+          The GitHub user {accountData.name} ({accountData.login}) owns{" "}
+          {accountData.public_repos} public repositories.
         </p>
       )}
     </div>
@@ -170,5 +170,5 @@ const RepoLookup = () => {
 ReactDOM.render(<RepoLookup />, document.getElementById("root"));
 ```
 
-Kurze Info am Rande: Die Public API von GitHub erlaubt nur max. 60 API Requests pro Stunde. Wer hier also ernsthaft rumprobieren will kann sich einen API Token erstellen und diesen per `access_token=xyz` an die URL dranhängen. Der Token kann hier erstellt werden: [https://github.com/settings/tokens](https://github.com/settings/tokens).
+Brief info: The Public API of GitHub only allows a maximum of 60 API requests per hour. So if you want to try it out seriously you can create an API token and attach it to the URL via `access_token=xyz`. The token can be created here: [https://github.com/settings/tokens](https://github.com/settings/tokens).
 

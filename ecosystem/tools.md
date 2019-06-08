@@ -1,14 +1,14 @@
-# Tools und Frameworks
+# Tools and frameworks
 
-Um React herum hat sich mittlerweile ein ganzes Ökosystem an Tools gebildet. Vom Static Site Generator, um simple bis medium-komplexe statische Websites auf Basis von React-Komponenten zu erzeugen, über Prototyping-Tools bis hin zu Tools um die Komponenten der eigenen Anwendung in einer Art Styleguide übersichtlich darzustellen, ist hier vieles vertreten. In diesem Unterkapitel möchte ich eine _kurze_ Übersicht über die bekanntesten Tools und Frameworks aus der React-Welt geben. 
+A whole ecosystem of tools has now formed around React. From the Static Site Generator to create simple to medium-complex static websites based on React components, from prototyping tools to tools to clearly present the components of your own application in a kind of style guide, a lot is represented here. In this subchapter I would like to give a _short_ overview of the most popular tools and frameworks from the React world. 
 
 ### Storybook
 
 > Storybook is a development environment for UI components. It allows you to browse a component library, view the different states of each component, and interactively develop and test components.
 
-**Storybook** ist ein Tool zur Erstellung von Isolierten UI-Komponenten für React, Vue.js und Angular. **Storybook** dient dabei als eine Art Sandbox-Umgebung, in der Komponenten für sich alleine in sog. **Stories** entwickelt werden können und stellt diese in einem übersichtlichen und einfach zu bedienendem Interface dar. Durch die Isolation wird ein sehr hoher Grad an Abstraktion ermöglicht, der es auch erlaubt Edge-cases darzustellen und zu testen.
+**Storybook** is a tool for creating isolated UI components for React, Vue.js and Angular. **Storybook** serves as a kind of sandbox environment in which components can be developed for themselves in so-called **Stories** and presents them in a clear and easy to use interface. The isolation enables a very high degree of abstraction, which also allows edge cases to be displayed and tested.
 
-**Lizenz:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **URL:** [https://storybook.js.org/](https://storybook.js.org/)  
 **GitHub:** [https://github.com/storybooks/storybook](https://github.com/storybooks/storybook)
 
@@ -16,9 +16,9 @@ Um React herum hat sich mittlerweile ein ganzes Ökosystem an Tools gebildet. Vo
 
 > React Styleguidist is a component development environment with hot reloaded dev server and a living style guide that you can share with your team.
 
-**Styleguidist** geht in die selbe Richtung wie Storybook. Auch mit Styleguidist ist es möglich, einen Styleguide aus den UI-Komponenten der eigenen Anwendung zu erstellen. Allerdings ist **Styleguidist** hier etwas impliziter als **Storybook** und so wird der Styleguide schon zu einem recht hohen Maß aus den **PropTypes** von Komponenten sowie aus **JSDoc**-Kommentaren angereichert. Für alles Weitere dienen dann Markdown-Dateien im Ordner der jeweiligen Komponente.
+**Styleguidist is going in the same direction as Storybook. It is also possible with Styleguidist to create a styleguide from the UI components of your own application. However, **Styleguidist** is somewhat more implicit than **Storybook** here and so the styleguide is already enriched to a quite high degree from the **PropTypes** of components as well as from **JSDoc** comments. Markdown files in the folder of the respective component are then used for everything else.
 
-**Lizenz:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **URL:** [https://react-styleguidist.js.org/](https://react-styleguidist.js.org/)  
 **GitHub:** [https://github.com/styleguidist/react-styleguidist](https://github.com/styleguidist/react-styleguidist)
 
@@ -26,9 +26,9 @@ Um React herum hat sich mittlerweile ein ganzes Ökosystem an Tools gebildet. Vo
 
 > It has never been so easy to document your things!
 
-**Docz** ist ein Tool, das, wie der Name es bereits erahnen lässt, der Dokumentation von Komponenten dient. Auch **Docz** ist letztlich eine Art Styleguide, wie bereits die ersten beiden Tools. Dennoch sticht es irgendwo heraus, denn es ist komplett **MDX**-basiert. MDX ist eine um React-Komponenten erweiterte Version des Markdown-Formats. Komponenten werden in `.mdx`-Dateien beschrieben und können wie in JavaScript selbst importiert und verwendet werden.
+**Docz** is a tool which, as its name suggests, is used to document components. Also **Docz** is a kind of style guide, like the first two tools. Nevertheless, it stands out somewhere, because it is completely **MDX**-based. MDX is a version of the Markdown format extended by React components. Components are described in `.mdx` files and can be imported and used just like in JavaScript itself.
 
-**Lizenz:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **URL:** [https://docz.site/](https://docz.site/)  
 **GitHub:** [https://github.com/pedronauck/docz](https://github.com/pedronauck/docz)
 
@@ -36,35 +36,35 @@ Um React herum hat sich mittlerweile ein ganzes Ökosystem an Tools gebildet. Vo
 
 > Dev tool for creating reusable React components
 
-Noch ein Stück weiter geht **React Cosmos**. Während die ersten drei genannten Tools ihren Fokus auf die Kapselung und die Darstellung reiner UI-Komponenten legen, bricht **React Cosmos** diese Kapselung bewusst auf und erlaubt es auch externe Abhängigkeiten wie React Router oder Redux durch das Konzept von _Fixtures_ und _Proxies_ darzustellen und zu testen.
+A little further is React Cosmos. While the first three tools focus on encapsulation and the representation of pure UI components, **React Cosmos** deliberately breaks down this encapsulation and also allows external dependencies such as React Router or Redux to be represented and tested through the concept of _Fixtures_ and _Proxies_.
 
-**Lizenz:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/react-cosmos/react-cosmos](https://github.com/react-cosmos/react-cosmos)
 
 ### Gatsby
 
 > Gatsby is a free and open source framework based on React that helps developers build blazing fast websites and apps
 
-**Gatsby** gehört in die Kategorie der sog. Static Site Generators, also einem Generator für statische Websites. Diese werden in **Gatsby** aus React-Komponenten und GraphQL erzeugt und bestehen letztendlich aus statischen HTML-Dateien. Dabei erzeugt **Gatsby** auch ein JavaScript-Bundle, das beim Aufruf deiner Seite geladen wird. Ist das Bundle erst einmal geladen, macht **Gatsby** Gebrauch von clientseitigem Rendering, was zur Folge hat, dass die erzeugten Seiten unglaublich schnell \(„blazing fast“\) angezeigt werden, da ab diesem Zeitpunkt der HTTP-Overhead entfällt. **Gatsby** wurde als Open Source Projekt gestartet \(und ist dies auch bis heute\) und erhielt als solches im Mai 2018 eine beeindruckende Finanzierung von 3,8 Mio USD.
+**Gatsby** belongs to the category of static site generators, i.e. a generator for static websites. These are created in **Gatsby** from React components and GraphQL and consist of static HTML files. In the process **Gatsby** also creates a JavaScript bundle, which is loaded when your page is opened. Once the bundle is loaded, **Gatsby** makes use of client-side rendering, which has the consequence that the generated pages are displayed incredibly fast \("blazing fast"\), because from this point on the HTTP overhead is eliminated. **Gatsby** was launched as an open source project \(and still is today\) and as such received impressive funding of USD 3.8 million in May 2018.
 
-**Lizenz:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **URL:** [https://www.gatsbyjs.org/](https://www.gatsbyjs.org/)  
 **GitHub:** [https://github.com/gatsbyjs/gatsby](https://github.com/gatsbyjs/gatsby)
 
-### React-Static
+### React static
 
 > React-Static is a fast, lightweight, and powerful progressive static site generator based on React and its ecosystem.
 
-**React-Static** ist eine Alternative zu **Gatsby**. Auch **React-Static** ist ein **Static Site Generator,** mit dem statische Websites basierend auf React generiert werden können. Durch seine hohe Finanzierungsrunde ist **Gatsby** sicherlich das bekanntere der beiden Tools, jedoch ist auch **React-Static** eine durchaus ernste Alternative in diesem Bereich mit einer großen und sehr aktiven Community.
+**React static is an alternative toatsby. Also **React-Static** is a **Static Site Generator,** with which static websites based on React can be generated. Due to its high financing round, **Gatsby** is certainly the better known of the two tools, but **React-Static** is also a serious alternative in this area with a large and very active community.
 
-**Lizenz:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/nozzle/react-static](https://github.com/nozzle/react-static)
 
 ### Next.js
 
-Next.js bezeichnet sich selbstbewusst als „The React Framework" für diverse Anwendungsfälle wie statische und dynamische Websites, große wie kleine Unternehmen, mobile oder klassische Websites und vieles mehr. Und in der Tat ist dieses Framework in der React-Community mit über 36.000 Stars auf GitHub ein anerkanntes Tool zur Entwicklung von Anwendungen mit React und eine echte Alternative zu Create React App. Anders als CRA kommt Next.js gleich mit Unterstützung von serverseitig gerenderten Seiten, was es insbesondere für SEO-relevante Themen interessant werden lässt.
+Next.js confidently refers to itself as "The React Framework" for various applications such as static and dynamic websites, large and small businesses, mobile or classic websites and much more. In fact, with over 36,000 stars on GitHub in the React community, this framework is a recognized tool for developing applications with React and a real alternative to Create React App. Unlike CRA, Next.js comes with support for server-side rendered pages, which makes it especially interesting for SEO-relevant topics.
 
-**Lizenz:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **URL:** [https://nextjs.org/](https://nextjs.org/)  
 **GitHub:** [https://github.com/zeit/next.js](https://github.com/zeit/next.js)
 

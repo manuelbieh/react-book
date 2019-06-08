@@ -1,20 +1,20 @@
-# Grundsätze und Regeln von Hooks
+# Principles and rules of Hooks
 
-Die Verwendung von **Hooks** ist an einige Grundsätze und Regeln geknüpft, die es zu beachten gilt, damit es nicht zu unangenehmen Überraschungen und unerwarteten Bugs kommt, von denen es mit **Hooks** ja gerade weniger geben soll. Bei der Einhaltung dieser Regeln hilft uns **ESLint** und das vom React-Team höchstpersönlich entwickelte ESLint-Plugin `eslint-plugin-react-hooks`. Die Verwendung von ESLint hatte ich im Kapitel über **Tools und Setup** bereits empfohlen und an dieser Empfehlung hat sich seitdem auch nichts geändert.
+The use of **Hooks** is linked to some principles and rules, which have to be observed, so that there are no unpleasant surprises and unexpected bugs, of which **Hooks** are supposed to have less. We are assisted by **ESLint** and the ESLint plugin `eslint-plugin-react-hooks` developed by the React team itself to comply with these rules. I had already recommended the use of ESLint in the chapter about **Tools and Setup** and this recommendation has not changed since then.
 
-Um das Plugin im Projekt zu installieren, hilft folgender Aufruf auf der Kommandozeile:
+To install the plugin in the project, the following command line call helps:
 
 ```bash
 npm install --save-dev eslint-plugin-react-hooks
 ```
 
-bzw. mit Yarn:
+or with yarn:
 
 ```bash
 yarn add --dev eslint-plugin-react-hooks
 ```
 
-Anschließend muss die `.eslintrc` Konfiguration wie folgt angepasst werden:
+Then the `.eslintrc` configuration must be modified as follows:
 
 ```javascript
 {
@@ -30,18 +30,18 @@ Anschließend muss die `.eslintrc` Konfiguration wie folgt angepasst werden:
 }
 ```
 
-Für diejenigen unter euch, die **Create React App** nutzen, habe eine gute Nachricht: Ihr braucht nichts weiter tun, die beiden Regeln kommen standardmäßig in den aktuellen Versionen von **Create React App** automatisch mit in euer Setup!
+For those of you who are using **Create React App**, have good news: You don't need to do anything else, the two rules come standard in the current versions of **Create React App** automatically into your setup!
 
-### Die Regeln von Hooks
+### The rules of hooks
 
-Die Formalitäten hätten wir nun geklärt, doch nun erst mal der Reihe nach. Was sind also diese sagenumwobenen Regeln, die ich eingangs erwähnt habe und für die die es sogar eigens entwickelte ESLint-Regeln gibt?
+We would have clarified the formalities now, however, now first of all one after the other. So what are these legendary rules that I mentioned at the beginning and for which there are even specially developed ESLint rules?
 
-#### Hooks können nur in React Function Components verwendet werden!
+#### Hooks can only be used in React Function Components!
 
-Nicht in **Klassen-Komponenten** und auch nirgendwo sonst: **Hooks** können ausschließlich innerhalb von React **Function Components** verwendet werden! Dies bedeutet, dass eine Hooks verwendende Funktion eine React-Komponente sein muss, also unweigerlich auch einen Rückgabewert haben muss, der ein valides React-Element ist. Also JSX, Arrays, Strings oder `null`.
+Not in **class components** and nowhere else: **Hooks** can only be used within React **Function Components**! This means that a function using hooks must be a react component, i.e. it must inevitably also have a return value that is a valid react element. So JSX, arrays, strings or zero.
 
 {% hint style="danger" %}
-**Nicht erlaubt, da eine Klassen-Komponente verwendet wird:**
+**Not allowed because a class component is used: **
 {% endhint %}
 
 ```jsx
@@ -56,7 +56,7 @@ class MyComponent extends React.Component {
 ```
 
 {% hint style="success" %}
-**Erlaubt, da eine Function Component verwendet wird:**
+**Allowed, because a Function Component is used:**
 {% endhint %}
 
 ```jsx
@@ -68,12 +68,12 @@ const MyComponent = () => {
 }
 ```
 
-#### Hooks dürfen nur auf oberster Ebene innerhalb ihrer Function Component verwendet werden!
+#### Hooks may only be used on top level within their Function Component!
 
-Konkret bedeutet das, dass es **nicht möglich** ist, Hooks innerhalb von **Schleifen, Bedingungen oder verschachtelten Funktionen** zu benutzen. Dies hängt damit zusammen, wie React **Hooks** intern verarbeitet. Hier ist es wichtig, dass die Reihenfolge, in der **Hooks** ausgeführt werden, bei jedem Re-Rendering einer Komponente identisch sein muss. Aus diesem Grund ist es bspw. nicht möglich, einen **Hook** nur dann aufzurufen, wenn eine bestimmte Bedingung erfüllt ist. Dies würde, je nachdem ob die Bedingung erfüllt ist, eben zu einer anderen Reihenfolge beim Abarbeiten der **Hooks** führen. Möglich ist es jedoch, Bedingungen _innerhalb_ von **Hooks** zu verwenden.
+In concrete terms, this means that it is **not possible** to use hooks within **loops, conditions, or nested functions**. This is related to how React processes **Hooks** internally. Here it is important that the order in which **Hooks** are executed must be identical for each rendering of a component. For this reason, for example, it is not possible to call a **Hook** only if a certain condition is fulfilled. Depending on whether the condition is fulfilled, this would lead to a different order when processing the **Hooks**. However, it is possible to use conditions _within_ **Hooks**.
 
 {% hint style="danger" %}
-**Nicht erlaubt, da der Hook sich innerhalb einer Bedingung befindet:**
+**Not allowed, because the hook is within a condition:**
 {% endhint %}
 
 ```javascript
@@ -85,7 +85,7 @@ if (title) {
 ```
 
 {% hint style="success" %}
-**Erlaubt, da sich die Bedingung innerhalb des Hooks befindet:**
+**Allowed, because the condition is inside the hook:**
 {% endhint %}
 
 ```javascript
@@ -96,5 +96,5 @@ useEffect(() => {
 }, [title])
 ```
 
-Wer das ESLint-Plugin installiert und die Regeln aktiviert, hat hier nichts zu befürchten. ESLint zeigt im Fall einer Missachtung dieser Regeln dann eine Warnung an und weist den Entwickler auf seinen Fehler hin.
+If you install the ESLint plugin and activate the rules, you have nothing to worry about. ESLint then displays a warning if these rules are violated and alerts the developer to his error.
 

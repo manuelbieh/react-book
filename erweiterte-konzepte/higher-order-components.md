@@ -1,8 +1,8 @@
 # Higher Order Components
 
-**Higher Order Components** \(meist abgekürzt: **HOC** oder **HOCs**\) waren und sind ein sehr zentrales Konzept bei der Arbeit mit React. Sie erlauben es, Komponenten mit wiederverwendbarer Logik zu implementieren und sind angelehnt an **Higher Order Functions** aus der funktionalen Programmierung. Das Prinzip hinter derartigen Funktionen ist, dass sie eine Funktion als Parameter entgegennehmen und eine neue Funktion zurückgeben. Im Fall von React wird das Prinzip auf Komponenten angewandt. Daher der von den **Higher Order** _**Functions**_ abgeleitete Name **Higher Order** _**Component**_.
+**Higher Order Components** \(usually abbreviated: **HOC** or **HOCs**\) were and are a very central concept when working with React. They allow components with reusable logic to be implemented and are based on **Higher Order Functions** from functional programming. The principle behind such functions is that they accept a function as a parameter and return a new function. In the case of React, the principle is applied to components. Hence the name derived from the **Higher Order** _**Functions**_ **Higher Order** _**Component**_.
 
-Zum leichteren Verständnis gleich ein erstes einfaches Beispiel:
+For easier understanding a first simple example:
 
 ```jsx
 const withFormatting = (WrappedComponent) => {
@@ -20,23 +20,23 @@ const withFormatting = (WrappedComponent) => {
 };
 ```
 
-Hier haben wir eine Funktion `withFormatting` definiert, die eine React-Komponente entgegen nimmt. Die Funktion gibt dabei eine neue React-Komponente zurück, welche die _in die Funktion herein gegebene Komponente_ rendert und ihr dabei die Props `bold` und `italic` übergibt. Die hereingegebene Komponente kann nun auf diese Props zugreifen:
+Here we have defined a function `withFormatting` that accepts a React component. The function returns a new React component, which renders the _component_put into the function and passes the props `bold` and `italic` to it. The entered component can now access these props:
 
 ```jsx
 const FormattedComponent = withFormatting(({ bold, italic }) => (
   <div>
-    Dieser Text ist {bold('fett')} und {italic('kursiv')}.
+    This text is {bold('bold')} and {italic('italic')}.
   </div>
 ));
 ```
 
-Typischerweise werden **Higher Order Components** benutzt um Logik darin zu kapseln. In diesem Zusammenhang ist auch oft die Rede von **Smart** und **Dumb Components** also: **schlaue** und **dumme** Komponenten. Die Smart Components \(zu denen Higher Order Components zählen\) sind dann dazu da, Business Logik abzubilden, mit APIs zu kommunizieren oder Verhaltenslogik zu verarbeiten. _Dumme_ Komponenten hingegen bekommen weitestgehend statische Props übergeben und beschränken den Logik-Teil auf reine Darstellungslogik. Also bspw. ob ein Benutzerbild, oder falls dieses nicht vorhanden ist, stattdessen ein Platzhalterbild angezeigt wird. In diesem Zusammenhang fällt auch oft der Begriff **Container Component** \(für _Smart_ Components\) und **Layout Components** \(für _Dumb_ Components\).
+Typically **Higher Order Components** are used to encapsulate logic. In this context we often talk about **Smart** and **Dumb Components**: **Sly and stupid components. The Smart Components \(which include Higher Order Components\) are then used to map business logic, communicate with APIs, or process behavioral logic. Stupid components, on the other hand, get static props as far as possible and limit the logic part to pure representation logic. For example, if a user image is displayed, or if it does not exist, a placeholder image is displayed instead. In this context the term **Container Component** \(for _Smart_ Components\) and **Layout Components** \(for _Dumb_ Components\) is often used.
 
-Doch wozu das überhaupt? Eine solche strikte Unterteilung in Business Logik und Darstellungslogik macht echte komponentenbasierte Entwicklung erst einmal möglich. Sie erlaubt es, Layout-Komponenten zu erstellen die keinerlei Kenntnis von etwaigen APIs haben und nur stumpf die Daten darstellen, die ihnen übergeben werden, völlig egal woher diese kommen. Gleichzeitig erlaubt sie es auch den Business Logik Komponenten, sich um die reine Business Logik zu kümmern, völlig gleichgültig wie die Daten letzten Endes dargestellt werden.
+What's the point? Such a strict subdivision into business logic and presentation logic makes real component-based development possible for the time being. It allows you to create layout components that have no knowledge of any APIs and only bluntly represent the data that is passed to them, no matter where it comes from. At the same time, it also allows the business logic components to take care of the pure business logic, regardless of how the data is ultimately presented.
 
-Stellen wir uns ein gängiges Beispiel aus der Interface Entwicklung einmal vor: die Umschaltung zwischen einer **Listen-** und einer **Karten-Ansicht**. Hier würde sich eine **Container-Komponente** darum kümmern, die Daten zu beschaffen die relevant für den Benutzer sind. Sie würde die beschafften Daten dann an die frei konfigurierbare **Layout-Komponente** übergeben. Solange beide Komponenten sich an das vom Entwickler vorgebene Interface \(Stichwort **PropTypes**\) halten, sind beide Komponenten beliebig austauschbar und können vollkommen unabhängig voneinander entwickelt und **getestet** werden!
+Let's imagine a common example from the interface development: switching between a **list-** and a **card view**. Here, a **Container component** would take care of getting the data that is relevant for the user. It would then transfer the retrieved data to the freely configurable **Layout component**. As long as both components adhere to the interface \(keyword **PropTypes**\) specified by the developer, both components are interchangeable and can be developed and **tested** completely independently of each other!
 
-Genug Theorie. Zeit für ein weiteres Beispiel. Wir wollen uns eine Liste mit den 10 größten Kryptowährungen laden und ihren momentanen Preis anzeigen. Dazu erstellen wir eine **Higher Order Component,** die sich diese Daten über die frei zugängliche Coinmarketcap API beschafft und an eine Layout-Komponente übergibt.
+Enough theory. Time for another example. We want to download a list with the 10 largest crypto currencies and display their current price. For this purpose we create a **Higher Order Component,** which obtains this data via the freely accessible Coinmarketcap API and transfers it to a layout component.
 
 ```jsx
 const withCryptoPrices = (WrappedComponent) => {
@@ -57,7 +57,7 @@ const withCryptoPrices = (WrappedComponent) => {
 
       try {
         const cryptoTicker = await fetch(
-          'https://api.coinmarketcap.com/v2/ticker/?limit=10&convert=EUR'
+          &lt;font color=#38B0DE&gt;-=https://api.coinmarketcap.com/v2/ticker/?limit=- Proudly Presents
         );
         const cryptoTickerResponse = await cryptoTicker.json();
 
@@ -90,20 +90,20 @@ const withCryptoPrices = (WrappedComponent) => {
 };
 ```
 
-Voilà, fertig ist die **HOC** für die Abfrage der Crypto-Preise auf coinmarketcap.com. Doch die **Higher Order Component** allein reicht noch nicht. Wir benötigen nun auch noch eine Layout-Komponente, an die wir die Verantwortung delegieren, die Daten entsprechend anzuzeigen.
+Voilà, the **HOC** is ready to query the crypto prices on coinmarketcap.com. But the **Higher Order Component** alone is not enough. We now also need a layout component to which we delegate the responsibility of displaying the data accordingly.
 
-Hierzu erstellen wir eine möglichst generische `PriceTable`-Komponente, die selbst keinerlei Kenntnis davon hat, ob sie nun die aktuellen Joghurtpreise aus dem örtlichen Supermarkt darstellt oder Preise von Kryptowährungen auf irgendeiner beliebigen Börse. Entsprechend nennen wir sie auch sehr generisch `PriceTable`:
+For this we create a generic `PriceTable` component, which has no knowledge whether it represents the current yoghurt prices from the local supermarket or prices of crypto currencies on any stock exchange. Accordingly, we also call them very generic `PriceTable`:
 
 ```jsx
 const PriceTable = ({ isLoading, items, loadData }) => {
   if (isLoading) {
-    return <p>Preise werden geladen. Bitte warten.</p>;
+    return <p>Prices are loaded. Please wait.</p>;
   }
 
-  if (!items || items.length === 0) {
+  if (!items ||| items.length === 0) {
     return (
       <p>
-        Keine Daten vorhanden. <button onClick={loadData}>Erneut versuchen</button>
+        No data available. <button onClick={loadData}>Try again</button>
       </p>
     );
   }
@@ -120,7 +120,7 @@ const PriceTable = ({ isLoading, items, loadData }) => {
       ))}
       <tr>
         <td colSpan="2">
-          <button onClick={loadData}>Neu laden</button>
+          <button onClick={loadData}>Load again</button>
         </td>
       </tr>
     </table>
@@ -128,17 +128,17 @@ const PriceTable = ({ isLoading, items, loadData }) => {
 };
 ```
 
-Die Komponente kennt drei Props: `isLoading`, um ihr mitzuteilen, dass die Daten, die sie einmal darstellen soll, aktuell noch geladen werden; `items`, was ein Array aus „Artikeln“ mit Preisen repräsentiert und `loadData`, eine Funktion, die erneut einen API-Request startet um die neuen Daten zu beziehen.
+The component has three props: `isLoading` to tell it that the data it is supposed to load is still being loaded; `items`, which represents an array of "articles" with prices; and `loadData`, a function that starts an API request again to retrieve the new data.
 
-Beide Komponenten funktionieren vollkommen unabhängig voneinander. Die `PriceTable` kann nicht nur Crypto-Preise anzeigen, die `withCryptoPrices`-Komponente muss ihre Daten nicht zwangsweise in einer `PriceTable` darstellen. Wir haben hier also zwei vollständig gekapselte und wiederverwendbare Komponenten erstellt!
+Both components function completely independently of each other. The `PriceTable` can not only display Crypto prices, the `withCryptoPrices` component does not have to display its data in a `PriceTable`. So we have created two fully encapsulated and reusable components!
 
-Doch wie bringen wir die beiden nun zusammen? Ganz einfach indem wir die `PriceTable`-Komponente als Parameter an die `withCryptoPrices`-Komponente übergeben. Aha! Und das sieht wie folgt aus:
+But how do we bring the two together now? Simply by passing the `PriceTable` component as a parameter to the `withCryptoPrices` component. I see. And that looks like this:
 
 ```jsx
 const CryptoPriceTable = withCryptoPrices(PriceTable);
 ```
 
-Rendern wir nun eine Instanz der `CryptoPriceTable`, stößt die **Higher Order Component** beim `componentDidMount()` einen API-Request an und übergibt das Ergebnis dieses Requests an die ihr übergebene `PriceTable`-Komponente. Diese kümmert sich anschließend nur noch um die entsprechende Darstellung.
+If we now render an instance of the `CryptoPriceTable`, the **Higher Order Component** triggers an API request at the `componentDidMount()` and passes the result of this request to the `PriceTable` component passed to it. This then only takes care of the corresponding display.
 
 ```jsx
 ReactDOM.render(
@@ -147,20 +147,20 @@ ReactDOM.render(
 );
 ```
 
-Dadurch ergeben sich großartige Möglichkeiten für uns. Erst einmal sind beide Komponenten unabhängig voneinander testbar. Mehr dazu gibt es im entsprechenden Kapitel, wo wir uns nochmal gezielt anschauen, wie einfach man insbesondere Layout-Komponenten mittels Snapshot-Tests testen kann.
+This creates great opportunities for us. First of all, both components can be tested independently of each other. More about this can be found in the corresponding chapter, where we take another look at how easy it is to test layout components using snapshot tests.
 
-Weiter haben wir nun eben die Möglichkeit, auch andere Layout-Komponenten mit der `withCryptoPrices`-HOC zu „verbinden“. Um dieses mächtige Konzept einmal anhand eines Beispiels zu verdeutlichen, geben wir die Preise nun im CSV-Format aus. Unsere HOC bleibt dabei völlig unverändert. Unsere Layout-Komponente könnte wie folgt implementiert werden:
+Now we also have the possibility to "connect" other layout components with the `withCryptoPrices`-HOC. To illustrate this powerful concept with an example, we now display the prices in CSV format. Our HOC remains completely unchanged. Our layout component could be implemented as follows:
 
 ```jsx
 const PriceCSV = ({ isLoading, items, loadData, separator=";" }) => {
   if (isLoading) {
-    return <p>Preise werden geladen. Bitte warten.</p>;
+    return <p>Prices are loaded. Please wait.</p>;
   }
 
-  if (!items || items.length === 0) {
+  if (!items ||| items.length === 0) {
     return (
       <p>
-        Keine Daten vorhanden. <button onClick={loadData}>Erneut versuchen</button>
+        No data available. <button onClick={loadData}>Try again</button>
       </p>
     );
   }
@@ -176,11 +176,11 @@ const PriceCSV = ({ isLoading, items, loadData, separator=";" }) => {
 }
 ```
 
-Und damit haben wir auch schon unsere CSV-Layout-Komponente implementiert. Wieder schauen wir zuerst ob noch Daten geladen werden; anschließend schauen wir erneut, ob `items` vorhanden sind. Hier könnte man anfangen darüber nachzudenken, auch dies in einer weiteren HOC zu bündeln, denn HOCs lassen sich beliebig ineinander schachteln, sind es doch am Ende lediglich Funktionen, die als Parameter an andere Funktionen weitergegeben werden.
+And we have already implemented our CSV layout component. Again, we first check whether data is still being loaded; then we check again whether `items` are present. Here you could start to think about bundling this into another HOC, because HOCs can be nested into each other as you like, because in the end they are only functions that are passed on as parameters to other functions.
 
-Zuletzt rendern wir den tatsächlichen Output: wir iterieren durch die Liste der `items`, picken uns über die **Object Destructuring** Syntax die für uns relevanten Eigenschaften `name`, `symbol` und `quotes` heraus und umschließen die einzelnen Zeilen mit einem `pre`-Element um den Zeilenumbruch am Ende der Zeile korrekt darzustellen.
+Finally we render the actual output: we iterate through the list of `items`, pick out the relevant properties `name`, `symbol` and `quotes` via the **Object Destructuring** syntax and enclose the lines with a `pre` element to display the line break correctly at the end of the line.
 
-Anders als bei der `PriceTable` haben wir hier allerdings noch eine weitere \(optionale\) Prop eingeführt: `separator` - um der Render-Komponente mitzuteilen welches Trennzeichen sie bei der Darstellung der Daten verwenden soll. Die Prop kann wie in JSX üblich bei der Verwendung der Komponente als simple Prop angegeben werden:
+Unlike the `PriceTable` we have introduced another \(optional\) Prop here: `separator` - to tell the render component which separator to use when rendering the data. As usual in JSX, the prop can be specified as a simple prop when using the component:
 
 ```jsx
 const CryptoCSV = withCryptoPrices(PriceCSV);
@@ -191,7 +191,7 @@ ReactDOM.render(
 );
 ```
 
-Allerdings wird dafür eine Änderung an unserer ursprünglichen `withCryptoPrices`-HOC notwendig. Momentan werden lediglich die fest definierten Props `isLoading`, `items` und `loadData` an die Kind-Komponente \(`WrappedComponent`\) übergeben:
+However, this will require a change to our original `withCryptoPrices`-HOC. Currently, only the fixed props `isLoading`, `items` and `loadData` are passed to the child component \(`WrappedComponent`\):
 
 ```jsx
 return (
@@ -203,7 +203,7 @@ return (
 );
 ```
 
-Damit die in `<CryptoCSV separator="," />` angegebene `separator`-Prop auch korrekt an die `PriceCSV`-Komponente übergeben wird, müssen wir unserer **HOC** mitteilen, dass sie auch alle weiteren Props an die `WrappedComponent` übergibt. Je nach Einsatzzweck können weitere erlaubte Props entweder explizit übergeben werden, oder aber es werden einfach **sämtliche** weiteren Props übergeben:
+So that the `separator` prop specified in `<CryptoCSV separator="," />` is also correctly passed to the `PriceCSV` component, we must inform our **HOC** that it will also pass all further props to the `WrappedComponent`. Depending on the purpose, further permitted props can either be passed explicitly, or simply **all** further props are passed:
 
 ```jsx
 return (
@@ -216,11 +216,11 @@ return (
 );
 ```
 
-Entscheidend ist hier Zeile 3: mittels `{...this.props}` ,die Spread-Syntax aus ES2015+, leiten wir hier sämtliche Props an die Kind-Komponente weiter.
+Decisive here is line 3: using `{...this.props}` the spread syntax from ES2015+, we forward all props to the child component.
 
 {% hint style="info" %}
-**Higher Order Components** sind ein schönes Mittel, um Logik zu „zentralisieren“ und seine Anwendung somit übersichtlicher zu strukturieren. Logik kann dabei sehr unkompliziert aus den Komponenten entfernt werden, die nur für das Rendering, also die Darstellungslogik sorgen sollten. Obwohl sie ein sehr zentrales Konzept in React waren und noch immer sind, sind sie gleichzeitig ein sehr altes Konzept.
+**Higher Order Components** are a nice way to centralize logic and structure its application more clearly. Logic can be easily removed from the components that should only provide the rendering, i.e. the display logic. Although they were and still are a very central concept in React, they are also a very old concept.
 
-Zwar werden **Higher Order Components** noch immer häufig verwendet und gegen ihre Verwendung ist nichts einzuwenden. Allerdings gibt es mittlerweile neuere Konzepte und seit den neuesten Updates vor allem neue Wege um eine ähnliche Funktionalität in vielen Fällen in noch übersichtlicher Form zu erreichen. Zwei davon sind **Functions as a Child** und die neue **Context API**, die in Version 16.3.0 ihren Weg in React gefunden hat. Diese werden in den folgenden Kapiteln beschrieben.
+Although **Higher Order Components** are still frequently used and there is nothing wrong with their use, there is no reason why they should not be used. However, there are now newer concepts and since the latest updates especially new ways to achieve a similar functionality in many cases in a clearer form. Two of them are **Functions as a Child** and the new **Context API**, which found its way into React in version 16.3.0. These are described in the following chapters.
 {% endhint %}
 

@@ -1,22 +1,22 @@
-# State und Lifecycle-Methods
+# State and Lifecycle Methods
 
-Kommen wir zu dem, was die Arbeit mit React erstmal wirklich effizient macht: **State** und die sogenannten **Lifecycle-Methods**.
+Let's get to what makes working with React really efficient: **State** and the so-called **Lifecycle-Methods**.
 
-Wie im vorangegangenen Kapitel bereits angesprochen, können Komponenten einen eigenen Zustand, den **State**, halten, verwalten und verändern. Dabei gilt der Grundsatz: **Ändert sich der State einer Komponente, löst dies immer auch ein Rerendering der Komponente aus!** Dieses Verhalten kann durch die Verwendung von `PureComponent` auch explizit unterbunden werden, was in einigen Fällen sinnvoll ist. Aber der Grundsatz bleibt unverändert: Eine State-Änderung löst ein Rerendering einer Komponente und ihrer Kind-Komponenten aus, außer diese sind selbst wiederum als `PureComponent` implementiert oder von einem `React.memo()`-Aufruf umschlossen.
+As already mentioned in the previous chapter, components can hold, manage and change their own state, the **State**. The principle applies here: **If the state of a component changes, this always triggers a rendering of the component!** This behavior can also be explicitly prevented by using `PureComponent`, which makes sense in some cases. But the principle remains unchanged: A state change triggers rendering of a component and its child components unless they are themselves implemented as `PureComponents` or enclosed by a `React.memo()` call.
 
-Das ist insofern hilfreich, als wir nicht mehr manuell `ReactDOM.render()` aufrufen müssen, wann immer wir meinen, dass sich etwas an unserem Interface geändert hat, sondern die Komponenten dies stattdessen selbst entscheiden können.
+This is helpful in that we no longer have to manually call `ReactDOM.render()` whenever we think something has changed on our interface, but the components can decide for themselves instead.
 
-Neben dem State an sich gibt es auch eine Handvoll sogenannter **Lifecycle-Methoden**. Dies sind Methoden, die **optional** in einer **Klassen-Komponente** definiert werden können und von React bei bestimmten Anlässen aufgerufen werden. Beispielsweise wenn eine Komponente erstmals gemountet wird, die Komponente neue Props empfangen oder sich der State innerhalb der Komponente geändert hat.
+In addition to the state itself, there are also a handful of so-called **Lifecycle methods**. These are methods that can be **optionally** defined in a **class component** and called by React on certain occasions. For example, when a component is mounted for the first time, the component receives new props, or the state within the component has changed.
 
-Erstmals seit **React 16.8.0** können mit der Einführung von **Hooks** auch **Function Components** einen eigenen **State** verwalten und auf bestimmte **Lifecycle**-Events reagieren. Dieses Kapitel handelt primär von Klassen-Komponenten, in denen State und Lifecycle-Events als Methoden der Klassen-Komponenten implementiert werden. Da **Hooks** ein sehr umfassendes und neues Konzept ist, habe ich ihnen ein eigenes Kapitel gewidmet, in dem uns die meisten Themen, die in diesem Kapitel behandelt werden noch einmal speziell für **Function Components** beschrieben erneut begegnen werden.
+For the first time since **React 16.8.0**, with the introduction of **Hooks** also **Function Components** can manage their own **State** and react to certain **Lifecycle** events. This chapter deals primarily with class components in which state and lifecycle events are implemented as methods of the class components. Since **Hooks** is a very comprehensive and new concept, I have dedicated a separate chapter to them, in which most of the topics covered in this chapter will once again be described specifically for **Function Components**.
 
-## Eine erste stateful Component
+## A first stateful component
 
-Der **State** innerhalb einer Klassen-Komponente ist verfügbar über die Instanz-Eigenschaft `this.state` und ist somit innerhalb einer **Komponente** gekapselt. Weder Eltern- noch Kind-Komponenten können ohne Weiteres auf den State einer anderen Komponente zugreifen.
+The **State** within a class component is available via the instance property `this.state` and is thus encapsulated within a **component**. Neither parent nor child components can easily access the state of another component.
 
-Um in einer Komponente einen initialen Zustand zu definieren gibt es zwei einfache Wege; einen dritten, von der Funktionalität her etwas erweiterten Weg, lernen wir später noch mit der **Lifecycle-Methode** `getDerivedStateFromProps()` kennen.
+To define an initial state in a component there are two simple ways; a third way, which is a little bit extended in functionality, we will get to know later with the **Lifecycle method** `getDerivedStateFromProps()`.
 
-**Initialer State** kann definiert werden, indem die Instanz-Eigenschaft `this.state` gesetzt wird. Dies ist entweder im Constructor einer **Klassen-Komponente** möglich:
+**Initial State** can be defined by setting the instance property `this.state`. This is possible either in the constructor of a **class component**:
 
 ```javascript
 class MyComponent extends React.Component {
@@ -31,7 +31,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-… oder indem der State als **ES2017** **Class Property** definiert wird, was deutlich kürzer ist, jedoch momentan noch das **Babel-Plugin** `@babel/plugin-proposal-class-properties` \(vor Babel 7: `babel-plugin-transform-class-properties`\) benötigt:
+... or by defining the state as **ES2017** **Class Property**, which is much shorter, but currently still requires the **Babel plugin** `@babel/plugin-proposal-class-properties` \(before Babel 7: `babel-plugin-transform-class-properties`\):
 
 ```javascript
 class MyComponent extends React.Component {
@@ -44,25 +44,25 @@ class MyComponent extends React.Component {
 }
 ```
 
-**Create React App** unterstützt die **Class Property Syntax** standardmäßig und da viele React-Projekte heute vollständig oder zumindest zu gewissen Teilen auf dem CRA-Setup oder Varianten davon basieren, kommt diese Syntax heute in den meisten Projekten zum Einsatz und kann genutzt werden. Sollte dies einmal in einem Projekt nicht der Fall sein, empfehle ich dringend die Installation und Nutzung des Babel-Plugins, da es wirklich viele unnötige Zeilen Code bei der täglichen Arbeit mit React einspart, während es gleichzeitig in nur wenigen Minuten eingerichtet ist.
+**Create React App** supports the **Class Property Syntax** by default and since many React projects today are completely or at least partially based on the CRA setup or variants of it, this syntax is used and can be used in most projects today. Should this not be the case in a project, I strongly recommend the installation and use of the Babel plugin, as it really saves many unnecessary lines of code in the daily work with React, while at the same time it is set up in just a few minutes.
 
-Ist der **State** erst einmal definiert, können wir innerhalb der **Klassen-Komponente** mittels `this.state` **lesend** auf ihn zugreifen. **Lesend** ist hier ein entscheidendes Stichwort. Denn auch wenn es prinzipiell möglich, ist den State direkt über `this.state` zu verändern, sollte dies aus verschiedenen Gründen vermieden werden.
+Once the **State** has been defined, we can access it within the **class component** using `this.state` **reading**. **Reading is a key word here. Because even if it is possible in principle to change the state directly via `this.state`, this should be avoided for various reasons.
 
-## Den State verändern mit this.setState\(\)
+## Change the state with this.setState\(\)
 
-Um State zu verändern, stellt React eine eigene Methode innerhalb einer **Klassen-Komponente** bereit: 
+To change state, React provides its own method within a **class component**: 
 
 ```javascript
  this.setState(updatedState)
 ```
 
-Wann immer der State innerhalb einer Komponente verändert werden soll, sollte dafür `this.setState()` verwendet werden. Der Aufruf von `this.setState()` führt dann dazu, dass React entsprechende **Lifecycle-Methoden** \(wie bspw. `componentDidUpdate()`\) ausführt und eine Komponente **neu rendert!** Würden wir den State stattdessen direkt verändern, also bspw. `this.state.counter = 1;` schreiben, hätte dies vorerst keinerlei Auswirkungen auf unsere Komponente und alles würde aussehen wie bisher, da der Render-Prozess **nicht** ausgelöst werden würde. React hat dann keine Kenntnis von der Änderung am State!
+Whenever the state within a component is to be changed, `this.setState()` should be used. Calling `this.setState()` will cause React to execute corresponding **Lifecycle methods** \(like e.g. `componentDidUpdate()`\) and render a component **new!** If we would change the state directly instead, e.g. write `this.state.counter = 1;`, this would have no effect on our component for the time being and everything would look like before, because the rendering process **wouldn't be triggered** **. React then has no knowledge of the change to the State!
 
-Die Methode ist von der Funktionsweise her allerdings etwas komplexer, als es auf den ersten Moment aussehen mag. Und so wird nicht einfach nur der alte State durch den neuen State ersetzt und ein Rerendering ausgelöst; es passieren auch noch allerhand andere Dinge. Der Reihe nach.
+The method, however, is somewhat more complex than it might seem at first glance. And so not only is the old state replaced by the new state and a rendering triggered; a lot of other things happen as well. One at a time.
 
-Zuerst einmal kann die Funktion **zwei verschiedene Arten von Argumenten** entgegennehmen. Das ist einerseits ein **Objekt** mit neuen oder aktualisierten State-Eigenschaften, sowie andererseits eine **Updater-Funktion,** die wiederum ein Objekt zurückgibt oder `null`, falls nichts geändert werden soll. Bestehende gleichnamige Eigenschaften innerhalb des State-Objekts werden dabei **überschrieben**, alle anderen bleiben **unangetastet!** Möchten wir eine Eigenschaft im State zurücksetzen, müssen wir diese dazu also explizit auf `null` oder `undefined` setzen. Der übergebene State wird also immer mit dem bestehenden State **zusammengefügt**, niemals **ersetzt!**
+First of all, the function **can accept two different types of arguments**. This is a **object** with new or updated state properties, as well as a **Updater function,** which returns an object or `null` if nothing is to be changed. Existing properties of the same name within the state object are **overwritten**, all others remain ** untouched!** If we want to reset a property in the state, we have to set it explicitly to `null` or `undefined`. The transferred state is therefore always merged with the existing state ****, never **replaced!**
 
-Nehmen wir nochmal unseren oben definierten State mit einer `counter` Eigenschaft, deren initialer Wert für dieses Beispiel erst einmal `0` ist. Nun verändern wir den State und möchten diesem zusätzlich eine `date`-Eigenschaft mit dem aktuellen Datum hinzufügen. Übergeben als Objekt wäre unser Aufruf:
+Let's take again our state defined above with a `counter` property, whose initial value for this example is first of all `0`. Now we change the state and want to add a `date` property with the current date. Deliver as object would be our call:
 
 ```javascript
 this.setState({
@@ -70,7 +70,7 @@ this.setState({
 });
 ```
 
-Nutzen wir stattdessen eine **Updater-Funktion**, wäre unser Aufruf:
+If we use a **Updater function** instead, it would be our call:
 
 ```javascript
 this.setState(() => {
@@ -80,7 +80,7 @@ this.setState(() => {
 });
 ```
 
-Oder kurz:
+Or short:
 
 ```javascript
 this.setState(() => ({
@@ -88,7 +88,7 @@ this.setState(() => ({
 });
 ```
 
-Unsere Komponente besitzt anschließend den neuen State:
+Our component then owns the new state:
 
 ```javascript
 {
@@ -97,13 +97,13 @@ Unsere Komponente besitzt anschließend den neuen State:
 }
 ```
 
-Um sicherzustellen, dass stets auf den aktuellen State zugegriffen wird, sollte eine **Updater-Funktion** verwendet werden, die den jeweils aktuellen State als ersten Parameter übergeben bekommt. Ein beliebter Fehler, der vielen Entwicklern bei der Arbeit mit React schon passiert ist, ist es direkt nach einem `setState()`-Aufruf auf `this.state` zuzugreifen und sich zu wundern, dass der State noch immer der alte ist.
+In order to ensure that the current state is always accessed, a **Updater function** should be used that passes the current state as the first parameter. A popular bug that has happened to many developers while working with React is to access `this.state` right after a `setState()` call and wonder that the state is still the old one.
 
 {% hint style="danger" %}
-React „sammelt“ aufeinanderfolgende `setState()`-Aufrufe und **führt diese nicht unmittelbar aus**, um unnötig häufiges und überflüssiges Rerendering von Komponenten zu vermeiden. Schnell aufeinanderfolgende `setState()`-Aufrufe werden später in gesammelter Form als **Batch-Prozess** ausgeführt. Das ist wichtig zu wissen, da wir nicht unmittelbar nach einem `setState()`-Aufruf mittels `this.state` auf den neu gesetzten State zugreifen können.
+React "collects" successive `setState()` calls and **does not execute them immediately** to avoid unnecessarily frequent and unnecessary component rendering. Fast successive `setState()` calls are executed later in collected form as a **batch process**. This is important to know because we cannot access the newly set state immediately after a `setState()` call using `this.state`.
 {% endhint %}
 
-Stellen wir uns eine Situation vor, in der unser `counter`-State dreimal in schneller Abfolge erhöht werden soll. Intuitiv würde man nun vermutlich folgenden Code schreiben:
+Imagine a situation where our `counter` state is to be increased three times in rapid succession. Intuitively you would probably write the following code:
 
 ```javascript
 this.setState({ counter: this.state.counter + 1 });
@@ -111,7 +111,7 @@ this.setState({ counter: this.state.counter + 1 });
 this.setState({ counter: this.state.counter + 1 });
 ```
 
-Was denkst du, wie ist der neue State wenn der initiale State `0` war? `3`? Falsch. Er ist `1`! Hier kommt der angesprochene **Batching-Mechanismus** von React zum Zug. Um ein sich zu schnell aktualisierendes User Interface zu vermeiden, wartet React hier erst einmal ab. Am Ende kann man den obigen Code simpel ausgedrückt **vom Funktionsprinzip her** in etwa gleichsetzen mit:
+What do you think the new state is like when the initial state was `0`? `3`? Wrong. He's "1"! This is where React's **batching mechanism** comes in. To avoid a user interface that updates too quickly, React waits here for the time being. At the end you can roughly equate the above code **expressed in simple terms **from the functional principle** with:
 
 ```javascript
 this.state = Object.assign(
@@ -122,9 +122,9 @@ this.state = Object.assign(
 );
 ```
 
-Die `counter`-Property überschreibt sich hier während eines Batch-Updates also immer wieder selbst, nimmt aber stets `this.state.counter` als Basiswert für die Erhöhung um 1. Nachdem alle State-Updates ausgeführt wurden, ruft React dann erneut die `render()`-Methode der Komponente auf. 
+The `counter` property overwrites itself again and again during a batch update, but always takes `this.state.counter` as the base value for the increase by 1. After all state updates have been executed, React then calls the `render()` method of the component again. 
 
-Bei der Verwendung einer **Updater-Funktion** wird dieser Funktion dabei der jeweils aktuellste State als Parameter übergeben und wir haben Zugriff auf den zum Zeitpunkt des Funktionsaufrufs gültigen State: 
+If a **Updater function** is used, the most current state is passed to this function as a parameter and we have access to the state valid at the time of the function call: 
 
 ```javascript
 this.setState((state) => ({ counter: state.counter + 1 });
@@ -132,9 +132,9 @@ this.setState((state) => ({ counter: state.counter + 1 });
 this.setState((state) => ({ counter: state.counter + 1 });
 ```
 
-In diesem Fall nutzen wir eine solche **Updater-Funktion** und aktualisieren jeweils den aktuellsten Wert. Der Wert von `this.state.counter` wäre hier also wie erwartet `3`, da wir über den übergebenen `state`-Parameter mit jedem Aufruf auf den aktuellen State zugreifen. Grundsätzlich ist es allerdings zu empfehlen, sich die benötigten Werte erst einmal zu erzeugen und anschließend gesammelt in einem einzigen `setState()`-Aufruf zu übergeben. So ist sichergestellt, dass es keine unnötigen zwischenzeitlichen `render()`-Aufrufe mit im nächsten Moment direkt wieder veraltetem State gibt.
+In this case we use such an **Updater function** and update the most current value. The value of `this.state.counter` would be `3` as expected, because we access the current state with every call via the `state` parameter. Basically, however, it is recommended that you first generate the required values and then pass them collectively in a single `setState()` call. This ensures that there are no unnecessary `render()` calls in the meantime with the state immediately obsolete again in the next moment.
 
-Sollte es doch einmal nötig werden, unmittelbar nach einem `setState()`-Aufruf auf den eben neu gesetzten State zuzugreifen, bietet React die Möglichkeit, als optionalen zweiten Parameter eine Callback-Funktion zu übergeben. Diese wird aufgerufen **nachdem** der State aktualisiert wurde, so dass in dieser mittels `this.state` sicher auf den dann neu gesetzten State zugegriffen werden kann.
+Should it become necessary to access the newly set state immediately after a `setState()` call, React offers the option of passing a callback function as an optional second parameter. This is called **after** the state has been updated, so that the new state can be safely accessed via `this.state`.
 
 ```javascript
 this.setState(
@@ -142,60 +142,60 @@ this.setState(
     time: new Date().toLocaleTimeString() 
   }, 
   () => {
-    console.log('Neue Zeit:', this.state.time);
+    console.log('New Time:', this.state.time);
   }
 );
 ```
 
-## Lifecycle-Methoden
+## Lifecycle methods
 
-**Lifecycle-Methoden** können als Methoden einer **Klassen-Komponente** implementiert werden und werden durch React zu unterschiedlichen Zeitpunkten während eines **Komponenten-Lebenszyklus** \(daher der Name\) ausgeführt. 
+**Lifecycle methods** can be implemented as methods of a **class component** and are executed by React at different times during a **component lifecycle** \(hence the name\). 
 
-Der **Lifecycle** einer Komponente beginnt in dem Moment, in der diese **instanziiert** bzw. **gemounted** wird, also sich innerhalb der `render()`-Methode einer Eltern-Komponente befindet und tatsächlich auch Teil des zurückgegebenen Komponenten-Baumes ist. Der Lifecycle endet, wenn die Komponente aus dem Baum der zu rendernden Elemente entfernt wird. Währenddessen gibt es noch **Lifecycle-Methoden** die auf **Updates** und auf Fehler reagieren. Oder eben darauf, dass sie nun entfernt \(_„unmounted“_\) werden.
+The **Lifecycle** of a component starts at the moment it is **instantiated** or **mounted**, i.e. it is within the `render()` method of a parent component and is actually part of the returned component tree. The lifecycle ends when the component is removed from the tree of elements to be rendered. Meanwhile, there are still **lifecycle methods** that react to **updates** and errors. Or just to the fact that they are now removed \(unmounted"_\).
 
-### Überblick über die Lifecycle-Methoden
+### Overview of lifecycle methods
 
-Im Folgenden die Liste der **Lifecycle-Methoden** in der Reihenfolge, wann und in welcher Phase diese durch React aufgerufen werden, sofern diese in einer Komponente definiert wurden:
+In the following the list of **Lifecycle methods** in the order, when and in which phase they are called by React, if they were defined in a component:
 
-#### Mount-Phase
+#### Mount phase
 
-Die folgenden Methoden werden **einmalig** aufgerufen, wenn eine Komponenten erstmals gerendert wird, also, vereinfacht gesagt, erstmals zum DOM hinzugefügt wird:
+The following methods are called **once** when a component is rendered for the first time, that is, when it is added to the DOM for the first time:
 
-* `constructor(props)`
+* ¶¶constructor(props)¶¶
 * `static getDerivedStateFromProps(nextProps, prevState)`
 * `componentWillMount(nextProps, nextState)` \(deprecated in React 17\)
-* `render()`
-* `componentDidMount()`
+* ``render()``
+* ¶ `componentDidMount()``
 
-#### Update-Phase
+#### Update phase
 
-Die folgenden Methoden werden aufgerufen, wenn Komponenten entweder durch die Hereingabe neuer Props von außen oder durch die Veränderung des eigenen States ein Update erhalten oder oder explizit die von React bereitgestellte `forceUpdate()`-Methode aufgerufen wird:
+The following methods are called when components receive an update either by entering new props from outside, by changing their own state, or by explicitly calling the `forceUpdate()` method provided by React:
 
 * `componentWillReceiveProps(nextProps)` \(deprecated in React 17\)
 * `static getDerivedStateFromProps(nextProps, prevState)`
-* `shouldComponentUpdate(nextProps, nextState)`
+* `shouldComponentUpdate(nextProps, nextState)``
 * `componentWillUpdate(nextProps, nextState)` \(deprecated in React 17\)
-* `render()`
+* ``render()``
 * `getSnapshotBeforeUpdate(prevProps, prevState)`
 * `componentDidUpdate(prevProps, prevState, snapshot)`
 
-#### Unmount-Phase
+#### Unmount phase
 
-Hier gibt es nur eine Methode. Diese wird aufgerufen sobald die Komponente aus dem DOM entfernt wird. Dies ist nützlich, um bspw. Event-Listener oder `setTimeout()`/`setInterval()`-Aufrufe, die beim Mounting der Komponente hinzugefügt wurden, wieder zu entfernen:
+There's only one method here. This is called as soon as the component is removed from the DOM. This is useful to remove event listeners or `setTimeout()`/`setInterval()` calls added when mounting the component:
 
-* `componentWillUnmount()`
+* ¶ `componentWillUnmount()``
 
-#### Fehlerbehandlung
+#### Error handling
 
-Zuletzt gibt es noch eine Methode, die in React 16 neu hinzukam und immer dann aufgerufen wird, wenn während des Renderings, in einer der Lifecycle-Methoden oder im Constructor einer **Kind-Komponente** ein Fehler geworfen wird:
+Finally, there is a new method added to React 16 that is called whenever an error occurs during rendering, in one of the lifecycle methods, or in the constructor of a **child component**:
 
-* `componentDidCatch()`
+* ¶ `componentDidCatch()``
 
-Komponenten, die eine `componentDidCatch()`-Methode implementieren werden auch als **Error Boundary** bezeichnet und dienen dazu, eine Alternative zum fehlerhaften Elementen-Baum darzustellen. Dies kann eine High-Level-Komponente sein \(bezogen auf ihre Position innerhalb der Komponenten-Hierarchie\), die grundsätzliche eine Fehler-Seite anzeigt und den Nutzer auffordert, die Anwendung neu zu laden, sollte ein Fehler auftreten. Es kann aber auch eine Low-Level-Komponente sein, die nur einen kurzen Fehlertext neben einem Button ausgibt, sollte die Aktion, die der Button ausgelöst hat, einen Fehler geworfen haben.
+Components that implement a `componentDidCatch()` method are also called **Error Boundary** and are used to represent an alternative to the erroneous element tree. This can be a high-level component \(related to its position within the component hierarchy\) that basically displays an error page and prompts the user to reload the application should an error occur. However, it can also be a low-level component that only outputs a short error text next to a button if the action triggered by the button has thrown an error.
 
-### Lifecycle-Methoden in der Praxis
+### Lifecycle methods in practice
 
-Werfen wir einmal einen Blick darauf, wie sich die **Lifecycle-Methoden** in einer einfachen Komponente verhalten. Zu diesem Zweck implementieren wir beispielhalber eine Komponente, die sekündlich ihren eigenen State verändert und jeweils die aktuelle Zeit ausgibt. Dazu wird beim **Mounting** der Komponente, also in der `componentDidMount()`-Methode, ein Interval gestartet, welches den State der Komponente aktualisiert, wodurch ein Rerendering ausgelöst und wieder die aktuelle Zeit angezeigt wird:
+Let's take a look at how the **Lifecycle methods** behave in a simple component. For this purpose, we implement a component that changes its own state every second and displays the current time. To do this, when **mounting** the component, i.e. in the `componentDidMount()` method, an interval is started which updates the state of the component, triggering a rendering and displaying the current time again:
 
 ```jsx
 import React from 'react';
@@ -228,36 +228,36 @@ class Clock extends React.Component {
 ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
-Hier sehen wir die Lifecycle-Methoden `componentDidMount()` und `componentWillUnmount()` im Einsatz. Wir definieren einen **Default-State** mit einer Eigenschaft `date`, die eine Instanz des Date-Objekts hält. Beim **Mounting** der Komponente \(`componentDidMount()`\) wird dann via `setInterval()` das Intervall gestartet und dessen Intervall-ID in der Instanz-Eigenschaft `this.intervalId` gespeichert. Da das Intervall sekündlich die `setState()`-Methode aufruft, verursacht die Komponente auch regelmäßig ein Rerendering, d.h. die `render()`-Methode wird erneut aufgerufen und zeigt wieder die aktuelle Zeit an.
+Here we see the lifecycle methods `componentDidMount()` and `componentWillUnmount()` in use. We define a **Default-State** with a property `date` that holds an instance of the Date object. When **Mounting** the component \(`componentDidMount()`\) is started, the interval is started via `setInterval()` and its interval ID is stored in the instance property `this.intervalId`. Since the interval calls the `setState()` method every second, the component also regularly causes a rendering, i.e. the `render()` method is called again and displays the current time again.
 
-Da die Intervall-Funktion grundsätzlich unabhängig von der React-Komponente ist und abgesehen davon, dass sie die `setState()`-Methode der Komponente aufruft, keinerlei Verbindung zu ihr hat, kümmert sich React auch nicht automatisch darum, dass der Intervall-Aufruf der Funktion gestoppt wird, wenn wir die Komponente nicht mehr weiter benötigen. Dafür müssen wir selber sorgen und genau zu diesem Zweck hält React für uns die nächste **Lifecycle-Methode** bereit: `componentWillUnmount()`.
+Since the interval function is basically independent of the React component, and apart from calling the component's `setState()` method, has no connection to it, React does not automatically stop the function's interval call when we no longer need the component. We have to take care of this ourselves and React has the next **Lifecycle method** for us: `componentWillUnmount()`.
 
-Diese Methode wird, unmittelbar bevor React die Komponente aus dem DOM entfernt, aufgerufen und kann dazu benutzt werden um bspw. noch laufende XHRs abzubrechen, Event Listener zu entfernen oder eben ein laufendes Funktionsintervall zu beenden. Genau das tun wir hier: bevor die Komponente entfernt wird, rufen wir `clearTimeout()` auf und übergeben der Funktion die Intervall ID, die wir zuvor in der entsprechenden Instanz-Eigenschaft gespeichert haben.
+This method is called immediately before React removes the component from the DOM and can be used to abort running XHRs, remove event listeners or just end a running function interval. This is exactly what we do here: before removing the component, we call `clearTimeout()` and pass the interval ID we previously stored in the corresponding instance property to the function.
 
-Sollten wir dies einmal vergessen, werden wir im Development-Modus von React aber spätestens beim Aufruf von `this.setState()` in einer bereits entfernten Komponente mit einer Warnung erinnert:
+If we should forget this, React's development mode will remind us with a warning at the latest when calling `this.setState()` in an already removed component:
 
 {% hint style="danger" %}
-**Warning:** Can't call setState \(or forceUpdate\) on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.  
-    in Clock
+**{*Warning:** Can't call setState \(or forceUpdate\) on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.  
+    in clock
 {% endhint %}
 
-Anders als in einigen vorherigen Beispielen rufen wir hier die `ReactDOM.render()`-Methode nur ein einziges Mal auf. Die Komponente kümmert sich ab dann „um sich selbst“ und löst einen Render-Vorgang aus, sobald sich ihr **State** aktualisiert hat. Dies ist die übliche Vorgehensweise bei der Entwicklung von Anwendungen, die auf React basieren. Ein einziger `ReactDOM.render()`-Aufruf und ab dort verwaltet sich die App sozusagen von alleine, erlaubt Interaktion mit dem Benutzer, reagiert auf Zustandsänderungen und rendert regelmäßig das Interface neu.
+Unlike in some previous examples, here we call the `ReactDOM.render()` method only once. The component then "takes care of itself" and triggers a render process as soon as its **State** has been updated. This is the usual procedure for developing applications based on React. A single `ReactDOM.render()` call and from there the app manages itself, allows interaction with the user, reacts to state changes and regularly renders the interface anew.
 
-### Das Zusammenspiel von State und Props
+### The interplay of state and props
 
-Wir haben jetzt Beispiele gesehen für Komponenten, die Props verarbeiten und für Komponenten, die **stateful** sind, also ihren eigenen lokalen State verwalten. Doch es gibt noch eine ganze Menge mehr zu entdecken. Erst die Kombination mehrerer verschiedener Komponenten macht React zu dem mächtigen Werkzeug in der User Interface Entwicklung, das es ist. Eine Komponente kann dabei einen eigenen **State** haben und diesen gleichzeitig an Kind-Komponenten über deren **Props** weitergeben. So ist nicht nur die strikte Trennung von Business-Logik und Darstellung/Layout möglich, sondern es erlaubt uns auch, wunderbar aufgabenbasierte Komponenten zu entwickeln, die jeweils nur einen kleinen Teil der Applikation abbilden.
+We have now seen examples of components that process props and components that are **stateful**, i.e. manage their own local state. But there is a lot more to discover. Only the combination of several different components makes React the powerful tool in user interface development that it is. A component can have its own **State** and at the same time pass it on to child components via their **Props**. Not only is it possible to strictly separate business logic from presentation/layout, but it also allows us to develop wonderfully task-based components that each represent only a small part of the application.
 
-Bei der Trennung von Business- und Layout-Komponenten ist im React Jargon meist die Rede von **Smart** \(Business-Logik\) und **Dumb** \(Layout\) Components. **Smart Components** sollten dabei möglichst wenig bis gar nicht mit der Darstellung des User Interfaces betraut werden, während **Dumb Components** frei von jeglicher Business-Logik oder Seiteneffekten sein sollten, sich also tatsächlich auf die reine Darstellung von statischen Werten konzentrieren.
+When separating business and layout components, react jargon usually refers to **Smart** \(business logic\) and **Dumb** \(layout\) components. **Smart Components** should be entrusted as little as possible or not at all with the representation of the user interface, while **Dumb Components** should be free of any business logic or side effects, i.e. they should concentrate on the pure representation of static values.
 
-Schauen wir uns also das Zusammenspiel mehrerer Komponenten in einem weiteren Beispiel an:
+Let's look at the interaction of several components in another example:
 
 ```jsx
 const ShowDate = ({ date }) => (
-  <div>Heute ist {date}</div>
+  <div>Today is {date}</div>
 );
 
 const ShowTime = ({ time }) => (
-  <div>Es ist {time} Uhr</div>
+  <div>It's {time} clock</div>
 );
 
 class DateTime extends React.Component {
@@ -290,13 +290,13 @@ class DateTime extends React.Component {
 ReactDOM.render(<DateTime />, document.getElementById('root'));
 ```
 
-Zugegeben: Das Beispiel ist sehr konstruiert, demonstriert aber leicht verständlich das Zusammenspiel mehrerer Komponenten. Die `DateTime`-Komponente ist in diesem Sinne unsere **Logik-Komponente**: Sie kümmert sich darum die Zeit zu "besorgen" und zu aktualisieren, überlässt dann aber den **Darstellungs-Komponenten** deren Ausgabe, indem sie das Datum \(`ShowDate`\) bzw. die Zeit \(`ShowTime`\) über die Props übergeben bekommt. Die Darstellungs-Komponenten selbst sind dabei als simple **Function Components** implementiert, da eine **Klassen-Komponente** hier einfach nicht notwendig ist und nur unnötigen Overhead erzeugen würde.
+Granted: The example is very constructed, but demonstrates easily understandable the interaction of several components. In this sense, the `DateTime` component is our **logic component**: She takes care of the time to "get" and update, but then leaves the **display components** to output by passing the date \(`ShowDate`\) or the time \(`ShowTime`\) through the props. The display components themselves are implemented as simple **Function Components**, since a **Class component** is simply not necessary here and would only generate unnecessary overhead.
 
-### Die Rolle der Lifecycle-Methoden im Zusammenspiel der Komponenten
+### The role of lifecycle methods in the interaction of components
 
-Eingangs habe ich neben den bisher in den Beispielen verwendeten `componentDidMount()` und `componentWillMount()` noch einige weitere **Lifecycle-Methoden** erwähnt. Auch diese werden, sofern in einer **Klassen-Komponente** implementiert, zu den verschiedenen Anlässen von React berücksichtigt.
+At the beginning I have mentioned some more **Lifecycle methods** besides the `componentDidMount()` and `componentWillMount()` and `componentWillMount()` used so far in the examples. These are also taken into account, if implemented in a **class component**, for the various events of React.
 
-Zu diesem Zweck wollen wir eine Übungskomponente erstellen, welche die verschiedenen **Lifecycle-Methoden** als Debug-Nachricht in der Browser-Konsole ausgibt. Genau genommen sind es zwei Komponenten, von denen eine als Eltern-Komponente, die andere als Kind-Komponente dient, die von ihrer Eltern-Komponente Props hineingereicht bekommt \(und in diesem Fall einfach ignoriert\).
+For this purpose we want to create an exercise component which outputs the different **Lifecycle methods** as a debug message in the browser console. Strictly speaking, there are two components, one of which serves as a parent component, the other as a child component, which gets props handed in by its parent component \(and in this case simply ignored\).
 
 ```jsx
 import React from 'react';
@@ -316,7 +316,7 @@ class ParentComponent extends React.Component {
 
   static getDerivedStateFromProps() {
     log('getDerivedStateFromProps', 'parent');
-    return null;
+    return zero;
   }
 
   componentDidMount() {
@@ -336,7 +336,7 @@ class ParentComponent extends React.Component {
 
   getSnapshotBeforeUpdate() {
     log('getSnapshotBeforeUpdate', 'parent');
-    return null;
+    return zero;
   }
 
   componentDidUpdate() {
@@ -364,7 +364,7 @@ class ChildComponent extends React.Component {
 
   static getDerivedStateFromProps() {
     log('getDerivedStateFromProps', 'child');
-    return null;
+    return zero;
   }
 
   componentDidMount() {
@@ -378,7 +378,7 @@ class ChildComponent extends React.Component {
 
   getSnapshotBeforeUpdate() {
     log('getSnapshotBeforeUpdate', 'child');
-    return null;
+    return zero;
   }
 
   componentDidUpdate() {
@@ -398,7 +398,7 @@ class ChildComponent extends React.Component {
 ReactDOM.render(<ParentComponent />, document.getElementById('root'));
 ```
 
-Diese beiden Komponenten führen zuverlässig \(d.h. reproduzierbar\) zur folgenden Ausgabe:
+These two components lead reliably \(i.e. reproducibly\) to the following output:
 
 ```text
 [parent] constructor
@@ -423,83 +423,83 @@ Diese beiden Komponenten führen zuverlässig \(d.h. reproduzierbar\) zur folgen
 [child] componentWillUnmount
 ```
 
-Oh wow. Hier passiert also eine ganze Menge. Gehen wir also Zeile für Zeile durch und starten mit der Mount-Phase.
+Oh, wow. So there's a lot going on here. So let's go line by line and start with the mount phase.
 
 #### `constructor(props)`
 
-Als Erstes wird stets der `constructor` der `ParentComponent`-Komponente aufgerufen. React geht hier von „außen nach innen“ vor. Also Komponenten, die weiter oben in der Komponenten-Hierarchie stehen, werden zuerst instanziiert, anschließend wird deren `render()`-Methode aufgerufen. Dies ist notwendig, da React ansonsten nicht wüsste, welche Kind-Komponenten überhaupt verarbeitet und berücksichtigt werden sollen, da React nur solche Kind-Komponenten berücksichtigt und für diese die **Lifecycle-Methoden** ausführt, die auch tatsächlich von der `render()`-Methode ihrer jeweiligen Eltern-Komponente zurückgegeben werden.
+First, the `constructor` of the `ParentComponent` component is always called. React goes from "outside to inside" here. So components higher up in the component hierarchy are instantiated first, then their `render()` method is called. This is necessary because otherwise React wouldn't know which child components to process and consider, since React only considers child components that are actually returned by the `render()` method of their parent component and executes the **Lifecycle methods** for them.
 
-Der Constructor bekommt als Parameter die **Props** der Komponente übergeben und sollte diese über `super(props)` an seine Elternklasse \(in der Regel ist das die `React.Component` oder `React.PureComponent` Klasse\) weitergeben, da `this.props` ansonsten im Constuctor `undefined` ist, was zu unerwünschtem Verhalten und Bugs führen kann.
+The constructor gets as parameter the **Props** of the component and should pass them via `super(props)` to its parent class \(usually this is the `React.Component` or `React.PureComponent` class\), because `this.props` is otherwise `undefined` in the constructor, which can lead to unwanted behavior and bugs.
 
-In vielen Fällen ist der Constructor heute gar nicht mehr notwendig, wenn mit dem Babel-Plugin **„Class Properties“** gearbeitet wird und sowohl State als auch Instanz-Methoden als Klassen-Eigenschaft implementiert werden. Ist dies nicht der Fall, ist der Constructor der Ort, um einen initialen State zu setzen \(bspw. `this.state = { }`\) und Instanz-Methoden mittels `.bind()` an die jeweilige Klassen-Instanz zu binden \(bspw. `this.handleClick = this.handleClick.bind(this)`\). Letzteres ist notwendig, da Instanz-Methoden bei der Verwendung als Event-Listener innerhalb von JSX sonst ihren Bezug zur Komponente verlieren würden und `this` nicht auf die Instanz der Komponente verweisen würde.
+In many cases, the constructor is no longer necessary if the Babel plugin **"Class Properties "** is used and both state and instance methods are implemented as class properties. If this is not the case, the constructor is the place to set an initial state \(e.g. `this.state = { }`\) and to bind instance methods to the respective class instance using `.bind()` \(e.g. `this.handleClick = this.handleClick.bind(this)`\). The latter is necessary, since instance methods would otherwise lose their reference to the component when used as event listeners within JSX, and `this` would not refer to the instance of the component.
 
 #### `static getDerivedStateFromProps(nextProps, prevState)`
 
-Auf den Constructor folgt die statische `getDerivedStateFromProps()`-Methode. Da dies eine **statische** Methode ist \(und als solche wie auch in unserem Beispiel oben mit dem Keyword `static` ausgezeichnet werden muss\), hat sie keinerlei Zugriff auf die Instanz der Komponente mittels `this`. Die Methode dient dazu, basierend auf den in die Komponente hineingereichten Props und ggf. dem letzten State, den **nächsten State** der Komponente zu berechnen. Dieser wird als Objekt aus der Methode zurückgegeben. Sind keine Änderungen am State notwendig, soll `null` zurückgegeben werden. Dabei ist das Verhalten identisch zu `this.setState()`, und es wird nur der Teil des States aktualisiert, der sich auch im zurückgegebenen Objekt befindet. Diese Eigenschaften werden mit dem **letzten State** zu einem **neuen State** zusammengeführt.
+The constructor is followed by the static `getDerivedStateFromProps()` method. Since this is a **static** method \(and as such must be marked with the keyword `static` like in our example above\), it has no access to the instance of the component using `this`. The method is used to calculate the **next state** of the component based on the props submitted to the component and, if applicable, the last state. This is returned as an object from the method. If no changes to the state are necessary, `null` should be returned. The behavior is identical to `this.setState()`, and only the part of the state that is in the returned object is updated. These properties are merged with the **last state** to form a **new state**.
 
-Die Methode ist innerhalb der Community kontrovers diskutiert worden, da sie die nun als **deprecated** gekennzeichnete **Lifecycle-Methode** `componentWillReceiveProps()` ablöst, jedoch anders als diese keinen Zugriff auf die Instanz der Komponente erlaubt. Die React-Entwickler haben diesen Schritt damit begründet dass diese beim überarbeiteten asynchronen Rendering von Komponenten zu unerwünschtem Verhalten führen kann und haben die Methode \(ebenso wie `componentWillMount()` und `componentWillUpdate()`\) als „unsicher“ erkärt. Mit dem Begriff ist dabei explizit nicht die Sicherheit \(im Sinne von Sicherheitslücken\) gemeint sondern lediglich die Tatsache, dass Komponenten, die diese Lifecycle-Methoden verwenden, in React 17 Bugs und anderen unerwünschten Effekte hervorrufen können.
+The method has been controversially discussed within the community because it replaces the **Lifecycle method** `componentWillReceiveProps()` now marked as **deprecated**, but does not allow access to the instance of the component. The React developers have justified this step with the fact that it can lead to unwanted behavior during the revised asynchronous rendering of components and have declared the method \(as well as `componentWillMount()` and `componentWillUpdate()`\) as "unsafe". The term explicitly does not mean security \(in the sense of security gaps\) but only the fact that components that use these lifecycle methods can cause 17 bugs and other undesirable effects in React.
 
-Die `getDerivedStateFromProps()`-Methode sollte außerdem frei von Side Effects bleiben \(also bspw. keine XHRequests veranlassen\) sondern lediglich den neuen State der Komponenten-Instanz auf Basis der jeweiligen aktuellen Props berechnen bzw. **ableiten** \(= derive\). Anders als der Constructor wird die Methode nicht nur beim Mounting \(also dem „Einhängen“ in den DOM\) der Komponente aufgerufen, sondern auch wenn die Komponente erneut Props empfängt. Diese müssen sich dabei nicht zwangsweise inhaltlich geändert haben.
+The `getDerivedStateFromProps()` method should also remain free of side effects \(e.g. do not initiate XHRequests\) but only calculate the new state of the component instance based on the current props or **derive** \(= derive\). Unlike the constructor, the method is called not only when the component is mounted \(that is, when it is "mounted" in the DOM\), but also when the component receives props again. These must not necessarily have changed in content.
 
 #### `render()`
 
-Ist die Instanz einer Komponente erstellt und ihr State abgeleitet, ruft React bereits die `render()`-Methode auf. Die `render()`-Methode beschreibt unser User Interface und somit auch, welche Kind-Komponenten gerendert werden sollen. In unserem obigen Beispiel haben wir nur eine Kind-Komponente: die `ChildComponent`-Komponente.
+Once the instance of a component has been created and its state derived, React already calls the `render()` method. The `render()` method describes our user interface and thus also which child components should be rendered. In our example above, we have only one child component: the `ChildComponent` component.
 
-Und so geht hier das Spiel erneut los: `constructor()`, `getDerivedStateFromProps()` und anschließend wird auch die `render()`-Methode der Kind-Komponente aufgerufen. Also das exakt selbe Verhalten wie auch schon bei der `ParentComponent` Komponente. Die Kind-Komponente aus dem Beispiel hat hier keine weiteren eigenen Kind-Komponenten. Hätte sie diese, würden auch hier die obigen Lifecycle-Methoden ausgeführt werden, bis React bei diesem Ast irgendwann auf eine Komponente trifft, die keinerlei eigenen React-Komponenten mehr zurückgibt, sondern DOM-Elemente wie `div`, `p`, `section`, `span`, etc. \(natürlich auch Kombinationen dieser\) oder `null` oder eben ein Array, der wiederum ebenfalls keine Komponenten enthält.
+And so the game starts again: `constructor()`, `getDerivedStateFromProps()` and then the `render()` method of the child component is called. So the exact same behavior as with the `ParentComponent` component. The child component in the example has no other child components of its own. If it had these, the lifecycle methods above would be executed here as well, until React meets a component at this branch, which doesn't return any React components anymore, but DOM elements like `div`, `p`, `section`, `span`, etc.. \(of course also combinations of these\) or `null` or even an array, which again also contains no components.
 
 #### `componentDidMount()`
 
-Ist eine solche Komponente erreicht, ist die `componentDidMount()`-Methode an der Reihe. Diese Methode wird aufgerufen, sobald eine Komponente und all ihre Kind-Komponenten gerendert wurden. Ab diesem Moment kann auf die DOM-Node der Komponente zugegriffen werden falls notwendig. Die Methode ist außerdem der richtige Ort um bspw. Timeouts oder Intervalle zu starten oder Netzwerk-Requests bspw. via XHR/Fetch zu veranlassen. 
+If such a component is reached, it is the `componentDidMount()` method's turn. This method is called once a component and all its child components have been rendered. From this moment on, the DOM node of the component can be accessed if necessary. The method is also the right place to start e.g. timeouts or intervals or to initiate network requests e.g. via XHR/Fetch. 
 
-Die Methode wird „von innen nach außen“ aufgerufen. Also erst sind die Kind-Komponenten an der Reihe sobald diese gerendert wurden, dann kommen die Eltern-Komponenten dran. So können wir in der obigen Log-Ausgabe auch gut sehen, dass dort erst einmal die `componentDidMount()`-Methode der `ChildComponent` aufgerufen wird, erst danach die der `ParentComponent`.
+The method is called "from inside to outside". So it is the child components' turn as soon as they have been rendered, then the parent components' turn. So we can see in the log output above that the `componentDidMount()` method of the `ChildComponent` is called first, only after that the `ParentComponent` is called.
 
-In unserem Beispiel starten wir in der `ParentComponent` einmalig einen `setTimeout()` Aufruf, der nach 2000 Millisekunden den State der Komponente ändert, um diejenigen Lifecycle-Methods zu demonstrieren, die beim Update einer Komponente aufgerufen werden. Die Mount-Phase ist damit abgeschlossen und alle weiteren Änderungen am State der gemounteten Komponenten führen dazu, dass React die Lifecycle-Methods aus der Update-Phase aufruft. Dies ist hier eben nach 2000 Millisekunden der Fall, wenn die ParentComponent ihren eigenen State mittels `this.setState()` modifiziert.
+In our example we start a `setTimeout()` call once in the `ParentComponent` which changes the state of the component after 2000 milliseconds to demonstrate the lifecycle methods which are called when updating a component. The mount phase is now complete and any further changes to the state of the mounted components will cause React to call the lifecycle methods from the update phase. This is the case here after 2000 milliseconds when the ParentComponent modifies its own state using `this.setState()`.
 
 #### `shouldComponentUpdate(nextProps, nextState)`
 
-Findet ein Update einer Komponente statt, das ist immer der Fall wenn die Komponente ihren State verändert oder von außen Props hereingereicht bekommt, wird `shouldComponentUpdate()` aufgerufen. Doch Vorsicht, hier gibt es einen Unterschied je nachdem ob sich die Props geändert haben oder der State: bekommt eine Komponente neue Props von außen, wird zuvor `getDerivedStateFromProps()` aufgerufen.
+If a component is updated, this is always the case if the component changes its state or receives props from outside, `shouldComponentUpdate()` is called. But be careful, here there is a difference depending on whether the props have changed or the state: if a component gets new props from outside, `getDerivedStateFromProps()` is called first.
 
-Die `shouldComponentUpdate()`-Methode dient als „Hilfe“, mit der React mitgeteilt werden kann, ob ein kostspieliges Re-Rendering überhaupt nötig ist. Die Methode bekommt die **nächsten Props** und den **nächsten State** als Parameter übergeben und kann auf deren Basis die Entscheidung treffen, ob ein Rendering ausgeführt werden soll. Die Methode muss dabei entweder `true` zurückgeben, damit wird ein Re-Rendering ausgelöst wird oder `false`, wodurch der Aufruf von sowohl `componentDidUpdate()` , `getSnapshotBeforeUpdate()` als auch `render()` in dieser Komponente unterbunden wird. 
+The `shouldComponentUpdate()` method serves as a "help" to tell React if expensive rendering is necessary at all. The method gets the **next props** and the **next state** as parameters and can decide on their basis whether a rendering should be executed. The method must either return `true`, which will trigger a rendering, or `false`, which will prevent both `componentDidUpdate()` , `getSnapshotBeforeUpdate()` and `render()` from being called in this component. 
 
-In komplexen Anwendungen ist es oftmals der Fall, dass der Update-Zyklus nur ausgelöst wird, weil sich in einem anderen Teil der Anwendung, in einer Eltern-Komponente etwas geändert hat, diese Änderung aber für Kind-Komponenten irrelevant ist. Die `shouldComponentUpdate()`-Methode ist dann sehr hilfreich, wenn es um die Optimierung der Rendering-Performance geht, da so unnötige Re-Renderings verhindert werden.
+In complex applications it is often the case that the update cycle is only triggered because something has changed in another part of the application, in a parent component, but this change is irrelevant for child components. The `shouldComponentUpdate()` method is very helpful when it comes to optimizing rendering performance, as it prevents unnecessary renderings.
 
-Würden wir in unserer obigen `ParentComponent` aus der `shouldComponentUpdate()`-Methode prinzipiell `false` zurückgeben, wäre unsere Log-Ausgabe um einiges kürzer: die Zeilen 14-18 würden fehlen. Die Komponente würde nicht neu gerendert werden, ein Aufruf der `render()`-Methode fände nicht statt, damit würde auch die `ChildComponent` nicht neu gerendert werden und folglich auch deren Update-Methoden nicht aufgerufen werden.
+If we would return `false` from the `shouldComponentUpdate()` method in our `ParentComponent` above, our log output would be much shorter: lines 14-18 would be missing. The component would not be re-rendered, a call to the `render()` method would not take place, so the `ChildComponent` would not be re-rendered and consequently its update methods would not be called.
 
-Im Code-Beispiel geben wir aber `true` zurück. Dadurch wird folglich auch die `render()`-Methode der `ParentComponent` aufgerufen. Diese rendert wiederum erneut die `ChildComponent`, die den aktualisierten **State** der `ParentComponent` in ihren **Props** übergeben bekommt und schon befinden wir uns im Update-Zyklus der `ChildComponent`.
+In the code example, however, we return `true`. This also calls the `render()` method of the `ParentComponent`. This renders again the `ChildComponent`, which gets the updated **State** of the `ParentComponent` in its **Props** and already we are in the update cycle of the `ChildComponent`.
 
-Hier wird wie schon beim Mount-Zyklus `getDerivedStateFromProps()` aufgerufen um einen neuen State basierend auf den neuen Props abzuleiten. Anschließend wird auch hier `shouldComponentUpdate()` aufgerufen. Hier könnten wir bspw. prüfen, ob sich die für diese Komponente relevanten Props überhaupt geändert haben und könnten dann, falls sie das nicht getan haben, ein Rerendering der Komponente sparen, indem wir ganz einfach `false` zurückgeben. Tun wir nicht, also folgt als nächstes der obligatorische Aufruf der `render()`-Funktion. Direkt darauf folgend wird nun die nächste **Lifecycle-Methode** aufgerufen.
+As with the mount cycle, `getDerivedStateFromProps()` is called to derive a new state based on the new props. Then `shouldComponentUpdate()` is called here as well. For example, we could check whether the props relevant to this component have changed at all, and if they haven't, we could save rendering the component by simply returning `false`. We don't, so the next step is the mandatory call to the `render()` function. The next **Lifecycle method** is called directly after this.
 
 #### `getSnapshotBeforeUpdate(prevProps, prevState)`
 
-Diese Methode ist noch recht neu und wurde in React 16.3.0 zusammen mit `getDerivedStateFromProps()` neu eingeführt, um den Anforderungen an das neue asynchrone Rendering in React gerecht zu werden. Sie bekommt die **letzten Props** und den **letzten State** übergeben und hat letztmals Zugriff auf den aktuellen Zustand des HTML Dokuments, genauer gesagt dem DOM, bevor React die möglichen Änderungen aus dem letzten `render()`-Aufruf anwendet.
+This method is quite new and was introduced in React 16.3.0 along with `getDerivedStateFromProps()` to meet the requirements of the new asynchronous rendering in React. It gets the **last props** and the **last state** passed and has last access to the current state of the HTML document, more precisely the DOM, before React applies the possible changes from the last `render()` call.
 
-Dies kann nützlich sein, wenn man sich bspw. die aktuelle Scrollposition in einer langen Tabelle oder Liste merken möchte um bei einem Update der Liste wieder zur entsprechenden Zeile springen zu können. Die Methode kann hier einen beliebigen Wert oder `null` zurückgeben. Das, was `getSnapshotBeforeUpdate()` zurückgibt, wird dann als dritter Parameter an die nächste Lifecycle-Methode, `componentDidUpdate()` übergeben.
+This can be useful, for example, if you want to remember the current scroll position in a long table or list to be able to jump back to the corresponding line when updating the list. The method can return any value or `null` here. What `getSnapshotBeforeUpdate()` returns is then passed as a third parameter to the next lifecycle method, `componentDidUpdate()`.
 
-Aus meiner Erfahrung wird diese Methode nur sehr selten verwendet, wahrscheinlich am seltensten von allen **Lifecycle-Methoden**, da bei der Arbeit mit React auch nur sehr selten direkt auf DOM-Elemente zugegriffen werden muss. Viele Dinge, bei denen man bei einer imperativen Vorgehensweise auf die DOM API zurückgegriffen hätte, lassen sich hier direkt im abstrakten Komponenten-Baum, also über JSX lösen.
+From my experience, this method is very rarely used, probably the rarest of all **Lifecycle methods**, because when working with React you rarely have to access DOM elements directly. Many things that would have been done with the DOM API in an imperative approach can be solved here directly in the abstract component tree, i.e. via JSX.
 
 #### `componentDidUpdate(prevProps, prevState, snapshot)`
 
-Als letzte Methode aus dem Update-Zyklus ist dann `componentDidUpdate()` an der Reihe. Diese wird aufgerufen, nachdem `getDerivedStateFromProps()` den neuen State abgeleitet hat, nachdem `shouldComponentUpdate()`, sofern implementiert, `true` zurückgegeben hat und nachdem `getSnapshotBeforeUpdate()` einen Snapshot des letzten Stands des DOM erstellt hat.
+The last method from the update cycle is `componentDidUpdate()`. This is called after `getDerivedStateFromProps()` has derived the new state, after `shouldComponentUpdate()` has returned `true` if implemented, and after `getSnapshotBeforeUpdate()` has taken a snapshot of the last state of the DOM.
 
-Die Methode bekommt als Parameter die **letzten Props** und den **letzten State** übergeben, d.h. die jeweiligen Props und den jeweiligen State bevor die Komponente aktualisiert wurde, und, sollte die Komponente eine `getSnapshotBeforeUpdate()`-Methode besitzen, deren Rückgabewert als dritten Parameter.
+The method gets the **last props** and the **last state** as parameters, i.e. the respective props and the respective state before the component was updated, and, if the component has a `getSnapshotBeforeUpdate()` method, its return value as third parameter.
 
-Ähnlich wie bereits `componentDidMount()` wird auch `componentDidUpdate()` „von innen nach außen“ aufgelöst, es werden also erst die `componentDidMount()`-Methoden der Kind-Komponente\(n\) aufgerufen, danach die der Eltern-Komponente\(n\). Diese Methode ist der ideale Ort um Side Effects auszulösen, also bspw. XHRs zu starten, wenn sich gewisse Eigenschaften der Komponente geändert haben. Dies lässt sich durch einen simplem Vergleich der aktuellen Props mit den als Parameter übergebenen letzten Props bzw. dem aktuellen State mit den letzten State festgestellt werden.
+Similar to `componentDidMount()` also `componentDidUpdate()` is resolved "from inside to outside", so the `componentDidMount()`-methods of the child component\(n\) are called first, then those of the parent component\(n\). This method is the ideal place to trigger side effects, e.g. start XHRs if certain properties of the component have changed. This can be determined by a simple comparison of the current props with the last props passed as parameters or the current state with the last state.
 
-Auch ist es in dieser Komponente sicher auf den **aktuellen DOM** zuzugreifen, sollte dies doch einmal notwendig sein. Zu dem Zeitpunkt, zu dem diese Methode aufgerufen wird, hat React die notwendigen Änderungen, die sich aus dem möglicherweise geänderten JSX aus der `render()`-Methode ergeben, bereits durchgeführt und in den DOM übertragen.
+It is also safe to access the **current DOM** in this component, should this ever be necessary. By the time this method is called, React has already made the necessary changes resulting from the possibly changed JSX from the `render()` method and transferred them to the DOM.
 
-Und damit ist neben dem **Mount-Zyklus** auch der **Update-Zyklus** abgeschlossen. Während der Mount-Zyklus **immer nur einmal** durchlaufen wird, nämlich dann wenn eine Komponente **erstmals** gerendert wird, kann der Update-Zyklus, solange die Komponente gemountet ist, beliebig häufig angestoßen werden und wird immer durchlaufen, sobald eine Komponente ihren State ändert oder neue Props bezieht.
+And that concludes the **Update cycle** as well as the **Mount cycle**. While the mount cycle **is always run only once**, i.e. when a component is **rendered for the first time**, the update cycle can be triggered as often as you like as long as the component is mounted and will always run as soon as a component changes its state or moves to new props.
 
 #### `componentWillUnmount()`
 
-Zugegeben, im obigen Log habe ich etwas geschummelt, denn die `componentWillUnmount()`-Methode wird immer dann \(und nur dann\) ausgeführt, wenn eine Komponente komplett aus dem DOM entfernt wird. Das wird sie im dazugehörigen Code-Beispiel allerdings nie. Eine Komponente gilt dann als unmounted, wenn sie über den Aufruf von `ReactDOM.unmountComponentAtNode()` explizit entfernt wird \(das gilt insbesondere für Mount-Nodes\) oder wenn sie implizit nicht mehr aus der render\(\)-Methode einer Eltern-Komponente zurückgegeben wird.
+Admittedly, I cheated a bit in the log above, because the `componentWillUnmount()` method is always executed \(and only then\) when a component is completely removed from the DOM. It never will in the corresponding code example. A component is considered unmounted if it is explicitly removed by calling `ReactDOM.unmountComponentAtNode()` (this applies especially to mount nodes\) or if it is implicitly no longer returned from the render\(\) method of a parent component.
 
-Immer dann wird die `componentWillUnmount()`-Methode einer Komponente aufgerufen; natürlich wie bei allen Methoden, abgesehen von `render()`, nur dann wenn sie auch implementiert wurde. Diese **Lifecycle-Methode** ist essentiell, wenn es um das „Aufräumen“ geht. Hier können und **sollten** all die Funktionen aufgerufen werden, die benötigt sind damit die Komponente keine „Spuren hinterlässt“. Das können noch ausstehende Timeouts \(`setTimeout`\) oder fortlaufende Intervalle \(`setInterval`\) sein aber auch DOM-Modifikationen, die außerhalb des eigenen Komponenten-JSX vorgenommen wurden, noch laufende Netzwerkverbindungen bzw. XHR/Fetch-Aufrufe oder auch eigene Event Listener, die mittels der DOM API Methode `Element.addEventListener()` hinzugefügt wurden.
+Whenever this happens, the `componentWillUnmount()` method of a component is called; of course, as with all methods except `render()`, only if it has been implemented. This **Lifecycle method** is essential when it comes to "cleaning up". Here you can and **should** call up all the functions that are required so that the component does not "leave tracks". These can be outstanding timeouts \(`setTimeout`\) or continuous intervals \(`setInterval`\) but also DOM modifications, which were made outside the own component JSX, still running network connections or XHR/Fetch calls or also own event listeners, which were added by means of the DOM API method `Element.addEventListener()`.
 
-Event Listener. Gutes Stichwort. Darum kümmern wir uns im nächsten Kapitel, denn in den meisten Fällen ist der Einsatz von `addEventListener()` in React nicht mehr nötig, da React ein eigenes Event-System mitbringt, um für bessere Übersicht zu sorgen.
+Event Listener. Good cue. We'll take care of that in the next chapter, because in most cases the use of `addEventListener()` in React is no longer necessary, since React comes with its own event system for a better overview.
 
-### Diagramm der Lifecycle-Methoden
+### Diagram of lifecycle methods
 
-![Diagram der verschiedenen Lifecycle-Methods in ihren jeweiligen Phasen \(CC0 Dan Abramov\)](../.gitbook/assets/lifecycle-methods-2.jpg)
+![diagram of the different lifecycle methods in their respective phases \(CC0 Dan Abramov\)](../.gitbook/assets/lifecycle-methods-2.jpg)
 
 
 

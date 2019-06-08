@@ -1,12 +1,12 @@
-# Verwendung von Hooks
+# Use of hooks
 
-Insgesamt bringt React aktuell **10** eigene Hooks mit, von denen die offizielle Dokumentation **3** als **Basic**, also als _grundlegende_, die restlichen **7** als **Additional**, also als _zusätzliche_ Hooks betitelt. Und in der Tat ist diese Unterteilung sinnvoll, denn in den meisten Fällen, in denen mit Hooks gearbeitet wird, wird man die 3 Basic Hooks `useState()`, `useEffect()` und `useContext()` verwenden. 
+React currently has **10** hooks of its own, of which the official documentary **3** is called **Basic**, which means _basic_, and the remaining **7** is called **Additional**, which means _additional_. And in fact, this subdivision makes sense, because in most cases when working with hooks, you will use the 3 basic hooks `useState()`, `useEffect()` and `useContext()`. 
 
-Die als **Additional Hooks** bezeichneten Ausprägungen sind insbesondere für spätere Optimierungen oder zum Abdecken von Edge-Cases vorgesehen. In diesem Kapitel soll es daher erst einmal um die „simplen“ Hooks gehen und ich möchte demonstrieren, wie man Funktionalität mit **Function Components** realisieren kann, für die bisher **Klassen-Komponenten** notwendig waren.
+The characteristics referred to as **Additional Hooks** are intended in particular for subsequent optimisation or to cover edge cases. So this chapter will first discuss the "simple" hooks and I would like to demonstrate how you can realize functionality with **Function Components**, for which **class components** were necessary up to now.
 
-### State mit useState\(\)
+### State with useState\(\)
 
-Werfen wir zunächst einen Blick darauf, wie wir bisher auf State in Komponenten zugegriffen haben und wie wir ihn modifiziert haben. 
+Let's first take a look at how we've accessed State in Components so far and how we've modified it. 
 
 ```jsx
 import React from 'react';
@@ -19,7 +19,7 @@ class Counter extends React.Component {
   render() {
     return (
       <div>
-        <p>Zählerwert: {this.state.value}</p>
+        <p>Counter value: {this.state.value}</p>
         <button onClick={() => this.setState((state) => ({ value: state.value + 1 }))}>
           +1
         </button>
@@ -31,9 +31,9 @@ class Counter extends React.Component {
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
 
-Hier implementieren wir beispielhaft einen Zähler, der mitzählt, wie oft wir den **+1**-Button gedrückt haben. Zugegeben, nicht gerade kreativ, demonstriert aber sehr gut, wie uns Hooks das Leben an dieser Stelle einfacher machen. Wir zeigen den aktuellen Wert an, indem wir `this.state.value` auslesen und haben darunter einen Button, mit dem wir den Wert erhöhen können. Dazu rufen wir `this.setState()` auf und setzen den neuen `value` auf den vorherigen Wert, den wir um 1 erhöhen.
+Here we implement a counter that counts how often we pressed the **+1** button. Admittedly, not very creative, but demonstrates very well how hooks make life easier for us at this point. We display the current value by reading `this.state.value` and have a button underneath which we can increase the value. We call `this.setState()` and set the new `value` to the previous value, which we increase by 1.
 
-Schauen wir uns die identische Funktionalität noch einmal an, diesmal in einer **Function Component** mit dem neuen `useState()`-Hook:
+Let's look at the identical functionality again, this time in a **Function Component** with the new `useState()` hook:
 
 ```jsx
 import React from 'react';
@@ -43,7 +43,7 @@ const Counter = () => {
   const [ value, setValue ] = React.useState(0);
   return (
     <div>
-      <p>Zählerwert: {value}</p>
+      <p>Counter value: {value}</p>
       <button onClick={() => setValue(value + 1)}>
         +1
       </button>
@@ -54,9 +54,9 @@ const Counter = () => {
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
 
-Hier haben wir kein `state`-Objekt mehr und auch kein `this`, über das wir auf den State zugreifen. Stattdessen sehen wir hier den Aufruf des internen `useState()`-Hooks. Dieser funktioniert so, dass er einen **Initialwert** übergeben bekommt \(hier: `0`\) und einen Tupel zurückgibt, also ein Array mit der gleichen Anzahl von Werten. Im Falle des `useState()`-Hooks sind das zum einen der aktuelle State, zum anderen eine Setter-Funktion, mit der wir den Wert modifizieren können.
+Here we have no `state` object anymore and also no `this` via which we access the state. Instead we see here the call to the internal `useState()` hook. This works by passing a **initial value** \(here: `0`\) and returning a tuple, i.e. an array with the same number of values. In the case of the `useState()` hook, these are the current state and a setter function with which we can modify the value.
 
-Um direkt auf den Wert und die Setter-Funktion zuzugreifen, machen wir uns die **ES2015 Array Destructuring**-Methode zu nutze. Diese sorgt dafür, dass der erste Wert des Arrays in die Variable `value`, der zweite Wert in die Variable `setValue` geschrieben wird. Beide Namen sind dabei frei wählbar, es hat sich jedoch schnell eingebürgert, dem State einen kurzen, prägnanten Namen zu geben und der Setter-Funktion den gleichen Namen zu geben mit einem Verb wie etwa `set`, `change` oder `update` davor. Die Syntax ist also eine Abkürzung für das folgende ES5 Äquivalent:
+To directly access the value and setter function, we use the **ES2015 Array Destructuring** method. This ensures that the first value of the array is written to the variable `value`, the second value to the variable `setValue`. Both names are freely selectable, but it has quickly become common practice to give the state a short, concise name and to give the setter function the same name with a verb like `set`, `change` or `update` before it. So the syntax is an abbreviation for the following ES5 equivalent:
 
 ```javascript
 var state = React.useState(0);
@@ -64,23 +64,23 @@ var value = state[0];
 var setValue = state[1];
 ```
 
-Im JSX, das wir aus der `Counter`-Komponente zurückgeben, greifen wir nun direkt auf `value` statt auf `this.state.value` zu und setzen den neuen Wert mittels eines sehr kurzen `setValue(value + 1)` statt wie zuvor in der Klassen-Komponente mittels `this.setState((state) => ({ value: state + 1 }))`. 
+In JSX, which we return from the `Counter` component, we now directly access `value` instead of `this.state.value` and set the new value with a very short `setValue(value + 1)` instead of the class component with `this.setState((state) => ({ value: state + 1 }))`. 
 
-Wir haben so eben unsere erste **Function Component** erstellt, die **stateful** ist!
+We have just created our first **Function Component** which is **stateful**!
 
 {% hint style="info" %}
-Wir haben an dieser Stelle unseren ersten **Hook** verwendet: `useState()`. Dazu haben wir die Methode `React.useState()` aufgerufen. **Hooks** können auch direkt aus dem `react`-Package importiert werden. 
+At this point we have used our first **Hook**: `useState()`. We have called the method `React.useState()`. **Hooks** can also be imported directly from the `react` package. 
 
-Dies ist insbesondere sinnvoll wenn ein Hook mehrmals verwendet wird. So spart man sich dann in der Komponente einiges an Schreibarbeit:
+This is especially useful if a hook is used several times. This saves a lot of paperwork in the component:
 
 ```jsx
 import React, { useEffect, useState } from 'react';
 ```
 
-So können wir in der Komponente bequem direkt `useState()` nutzen, statt jedesmal `React.useState()` schreiben zu müssen.
+So we can comfortably use `useState()` directly in the component instead of having to write `React.useState()` every time.
 {% endhint %}
 
-Komponenten sind dabei nicht auf nur einen Hook je Typ beschränkt und so kann es jede Art von Hook auch mehrmals in einer Komponente geben. Möchten wir bspw. zwei Counter hochzählen, müssen wir die Zählerwerte nicht in einem Zähler-Objekt verwalten, sondern können auch mehrere States erzeugen:
+Components are not limited to only one hook per type and so there can be any kind of hook also several times in a component. If, for example, we want to count up two counters, we do not have to manage the counter values in one counter object, but can also create several states:
 
 ```jsx
 import React from 'react';
@@ -91,8 +91,8 @@ const Counter = () => {
   const [ secondValue, setSecondValue ] = React.useState(0);
   return (
     <div>
-      <p>Zählerwert 1: {firstValue}</p>
-      <p>Zählerwert 2: {secondValue}</p>
+      <p>Counter value 1: {firstValue}</p>
+      <p>Counter value 2: {secondValue}</p>
       <button onClick={() => setFirstValue(firstValue + 1)}>+1</button>
       <button onClick={() => setSecondValue(secondValue + 1)}>+1</button>
     </div>
@@ -102,55 +102,55 @@ const Counter = () => {
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
 
-Für die Arbeit mit komplexen States erfahren wir im weiteren Verlauf dieses Buchs noch mehr über die Verwendung des `useReducer()`-Hooks. Dieser wurde eingeführt um die Verwaltung komplexer States zu vereinfachen.
+For working with complex states, we'll learn more about using the `useReducer()` hook later in this book. This was introduced to simplify the management of complex states.
 
-### Seiteneffekte mit useEffect\(\)
+### Side effects with useEffect\(\)
 
-Der `useEffect()`-**Hook** erhält seinen Namen daher, dass dieser dazu vorgesehen ist, ihn für **Side Effects** zu benutzen. Also Seiteneffekte wie das Laden von Daten via API, das Registrieren von globalen Events oder die Manipulation von DOM-Elementen. Der Hook bildet die Funktionalität der `componentDidMount()`, `componentDidUpdate()` und `componentWillUnmount()`-Lifecycle Methoden ab.
+The `useEffect()`-**Hook** gets its name because it is intended to be used for **Side Effects**. So side effects like loading data via API, registering global events or manipulating DOM elements. The hook maps the functionality of the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()`-Lifecycle methods.
 
-Ja, richtig gelesen: Statt der genannten _drei_ Methoden gibt es nun nur noch _einen einzigen_ **Hook**, der an die vergleichbare Stelle der Methoden aus Klassen-Komponenten tritt. Der Trick dabei ist die genaue Verwendung ganz bestimmter Funktionsparameter und Rückgabewerte, wie sie für den `useEffect()`-Hook vorgesehen sind.
+Yes, I read that right: Instead of the _three_ methods mentioned above, there is now only _a single_ **Hook** that replaces the comparable methods from class components. The trick is to use certain function parameters and return values exactly as they are intended for the `useEffect()` hook.
 
-Zur Benutzung des Hooks wird der `useEffect()`-Funktion selbst eine Funktion als erster Parameter übergeben. Diese Funktion, nennen wir sie der Einfachheit halber **„Effekt-Funktion“**, wird von React grundsätzlich erst einmal **nach** jedem Rendering der Komponente ausgeführt und tritt damit an die Stelle von `componentDidUpdate()` in Klassen-Komponenten.
+To use the hook, the `useEffect()` function itself passes a function as the first parameter. This function, we call it for simplicity's sake **"effect function "**, is basically executed by React **after** each rendering of the component and thus replaces `componentDidUpdate()` in class components.
 
-Da diese **Effekt-Funktion** nach **jedem** Rendering der Komponente aufgerufen wird, wird sie eben auch nach dem **ersten** Rendering aufgerufen, was an dieser Stelle gleichgesetzt werden kann mit der `componentDidMount()` Lifecycle-Methode aus den Klassen-Komponenten. 
+Since this **effect function** is called after **every** rendering of the component, it is also called after the **first** rendering, which at this point can be equated with the `componentDidMount()` lifecycle method from the class components. 
 
-Darüber hinaus kann die _Effekt_-Funktion optional selbst wiederum eine Funktion zurückgeben. Nennen wir  sie **„Aufräum-Funktion“**. Diese _Aufräum_-Funktion wird beim **Unmounting** der Komponente aufgerufen, womit wir bei der nächsten Lifecycle-Methode wären, nämlich `componentWillUnmount()`. 
+In addition, the _Effect_ function can optionally return a function itself. Let's call it the Clean-Up Function. This _clean up_ function is called when **unmounting** the component, which brings us to the next lifecycle method, namely `componentWillUnmount()`. 
 
-Doch Vorsicht: Hier haben wir gleichzeitig auch die erste Abweichung in der Funktionsweise verglichen mit Klassen-Komponenten. Und so wird unsere _Aufräum_-Funktion nicht nur beim **Unmounting** der Komponente aufgerufen, sondern auch **vor jeder erneuten Ausführung** der _Effekt_-Funktion. 
+But be careful: here we also have the first deviation in functionality compared to class components. And so our _clean up_ function is called not only when **unmounting** the component, but also **before each new execution** of the _effect_ function. 
 
-Dieses Verhalten kann aktiv gesteuert werden, indem dem `useEffect()`-Hook als zweiter Parameter ein Array mit sog. **Dependencies** übergeben wird. Dabei handelt es sich um Werte, von denen die Ausführung der **Effekt-Funktion** abhängt. Wird ein **Dependency-Array** übergeben, wird der Hook nur einmal initial ausgeführt und dann erst wieder, wenn sich mind. einer der Werte im **Dependency-Array** geändert hat.
+This behavior can be actively controlled by passing an array of **Dependencies** to the `useEffect()` hook as the second parameter. These are values on which the execution of the **effect** function depends. If a **Dependency array** is passed, the hook is executed only once initially and then only again if at least one of the values in the **Dependency array** has changed.
 
-Möchte man hingegen gezielt ein Verhalten ähnlich dem von `componentDidMount()` simulieren, kann ein leeres Array als zweiter Parameter übergeben werden. React führt die Effekt-Funktion dann nur beim ersten Rendern aus und ruft erst beim **Unmounting** wieder eine eventuell definierte Aufräum-Funktion auf.
+If you want to simulate a behaviour similar to that of `componentDidMount()`, you can pass an empty array as second parameter. React then executes the effect function only when rendering for the first time and does not call a possibly defined cleanup function again until **unmounting**.
 
-Das klingt jetzt alles sicher wieder fürchterlich kompliziert, wenn man mit der Funktionsweise des Hooks nicht vertraut ist, lässt sich aber mit einem kurzen Code-Beispiel relativ einfach demonstrieren:
+This all sounds terribly complicated now, if you are not familiar with the functionality of the hook, but can be demonstrated relatively easily with a short code example:
 
 ```jsx
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-const defaultTitle = 'React mit Hooks';
+const defaultTitle = 'React with Hooks';
 
 const Counter = () => {
   const [ value, setValue ] = useState(0);
   
   useEffect(() => {
-    // `document.title` wird bei jeder Änderung (didMount/didUpdate) gesetzt.
-    // Vorausgesetzt der `value` hat sich gendert
-    document.title = `Der Button wurde ${value} mal geklickt`;
+    // `document.title` is set at every change (didMount/didUpdate).
+    // Provided the `value` has changed
+    document.title = `The button was clicked ${value} times`;
 
-    // Hier geben wir unsere „Aufräum-Funktion“ zurück die vor jedem Update
-    // den Titel auf den Standardwert zurücksetzt
+    // Here we give back our "clean up function" which was used before every update.
+    // resets the title to the default value
     return () => {
       document.title = defaultTitle;
     }
   
-  // Zuletzt unsere Dependency. Durch sie wird die Effekt-Funktion nur aufgerufen
-  // wenn sich auch der `value` geändert hat.
+  // Last but not least, our Dependency. It only calls the effect function
+  // even though the `value` has changed.
   }, [value]);
   
   return (
     <div>
-      <p>Zählerwert: {value}</p>
+      <p>Counter value: {value}</p>
       <button onClick={() => setValue(value + 1)}>
         +1
       </button>
@@ -161,17 +161,17 @@ const Counter = () => {
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
 
-Da der **Hook** sich stets _innerhalb_ der Funktion befindet, hat er \(ähnlich wie die Lifecycle-Methoden in Klassen-Komponenten\) den vollen Zugriff auf die **Props** und den **State** der Komponente. Dabei ist der State in der **Function Component** selbst natürlich wiederum nur ein Hook, nämlich der `useState()`-Hook.
+Since the **Hook** is always _within_ the function, it has \(similar to the lifecycle methods in class components\) full access to the **Props** and the **State** of the component. Of course, the state in the **Function Component** itself is only a hook, namely the `useState()`-Hook.
 
-Durch die Verwendung des `useEffect()`-**Hooks** können wir hier die Komplexität verringern, da die Komponente nicht viele, zum Teil sehr ähnliche Dinge an mehreren Stellen innerhalb der Komponente ausführen muss, sondern sich alle für die Komponente relevanten Lifecycle-Events in nur einer einzigen Funktion, eben dem **Hook**, abspielen.
+By using the `useEffect()`-**Hooks** we can reduce the complexity here, since the component does not have to do many, sometimes very similar things at several places within the component, but all lifecycle events relevant for the component play in only one single function, the **Hook**.
 
-Zum Vergleich dazu möchte ich hier einmal zeigen, wie der oben gezeigte `useEffect()`-**Hook** mit einer Klassen-Komponente implementiert werden würde:
+For comparison, I would like to show here how the `useEffect()`-**Hook** shown above would be implemented with a class component:
 
 ```jsx
 import React from "react";
 import ReactDOM from "react-dom";
 
-const defaultTitle = "React mit Hooks";
+const defaultTitle = "React with Hooks";
 
 class Counter extends React.Component {
   state = {
@@ -179,12 +179,12 @@ class Counter extends React.Component {
   };
 
   componentDidMount() {
-    document.title = `Der Button wurde ${this.state.value} mal geklickt`;
+    document.title = `The button was clicked ${this.state.value} times`;
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.value !== this.state.value) {
-      document.title = `Der Button wurde ${this.state.value} mal geklickt`;
+      document.title = `The button was clicked ${this.state.value} times`;
     }
   }
 
@@ -195,7 +195,7 @@ class Counter extends React.Component {
   render() {
     return (
       <div>
-        <p>Zählerwert: {this.state.value}</p>
+        <p>Counter value: {this.state.value}</p>
         <button
           onClick={() => {
             this.setState(state => ({ value: state.value + 1 }));
@@ -211,17 +211,17 @@ class Counter extends React.Component {
 ReactDOM.render(<Counter />, document.getElementById("root"));
 ```
 
-Hier kann natürlich darüber diskutiert werden, dass man den Aufruf zum Ändern des `document.title` in eine eigene Klassen-Methode wie etwa `setDocumentTitle()` auslagert, das sind allerdings Details, die an der höheren Komplexität der Klassen-Komponente im direkten Vergleich mit **Hooks** nicht wirklich etwas ändern. 
+Of course it can be discussed here that the call to change the `document.title` can be outsourced to a separate class method such as `setDocumentTitle()`, but these are details that do not really change the higher complexity of the class component in direct comparison with **Hooks**. 
 
-Auch dann müsste noch immer zweimal die gleiche \(nun abstrahierte\) Funktion an zwei verschiedenen Stellen \(nämlich `componentDidMount()` und `componentDidUpdate()`\) aufgerufen werden. Zusätzlich hätten wir eine weitere Klassen-Methode, die die Klasse nur noch weiter aufbläht und so die Duplikation nur zu Lasten einer Abstraktion auflöst.
+Even then, the same \(now abstracted\) function would still have to be called twice in two different places \(namely `componentDidMount()` and `componentDidUpdate()`\). In addition, we would have another class method, which only inflates the class further and thus resolves the duplication only at the expense of an abstraction.
 
-### Zugriff auf Context mit useContext\(\)
+### Access to context with useContext\(\)
 
-Der dritte Basic Hook im Bunde ist `useContext()`. Mit ihm wird es ein Kinderspiel, Daten aus einem Context-Provider zu konsumieren, ohne dass dazu umständlich eine Provider-Komponente mit einer Function as a Child verwendet werden muss. 
+The third basic hook in the bundle is `useContext()`. It makes it child's play to consume data from a context provider without having to use a provider component with a Function as a Child. 
 
-Dazu bekommt der `useContext()`-Hook einen mittels `React.createContext()` erzeugten Context übergeben und gibt dann den Wert des in der Komponenten-Hierarchie nächsthöheren Providers zurück. Wird der Wert des Contexts im Provider geändert, löst der `useContext()`-Hook ein Rerendering mit den aktualisierten Daten aus dem Provider aus. Damit ist über die Funktionsweise auch schon alles gesagt. 
+The `useContext()` hook gets a context created with `React.createContext()` and then returns the value of the next higher provider in the component hierarchy. If the value of the context is changed in the provider, the `useContext()` hook triggers a rendering with the updated data from the provider. This means that everything has already been said about how it works. 
 
-Der Hook ist tatsächlich eher simpler Natur:
+The Hook is actually rather simple in nature:
 
 ```jsx
 import React, { useContext } from "react";
@@ -235,7 +235,7 @@ const ContextExample = () => {
   return (
     <div>
       <p>Name: {accountData.name}</p>
-      <p>Rolle: {accountData.role}</p>
+      <p>Role: {accountData.role}</p>
     </div>
   );
 };
@@ -249,7 +249,6 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-Hier sehen wir, wie die `ContextExample`-Komponente Daten \(in diesem Beispiel Pseudo-Account-Daten\) aus dem `AccountContext`-Provider verwendet, ohne dass dafür alles von einer `AccountContext.Consumer`-Komponente umschlossen sein muss. Dies spart nicht nur einige Zeilen Code in der Komponente selbst, sondern führt auch in der Debug-Ansicht zu einem deutlich übersichtlicheren Baum, da die Verschachtelungstiefe flacher ist.
+Here we see how the `ContextExample` component uses data \(in this example pseudo account data\) from the `AccountContext` provider without everything having to be enclosed by an `AccountContext.Consumer` component. This not only saves a few lines of code in the component itself, but also results in a much clearer tree in the debug view, since the nesting depth is flatter.
 
-Diese Vereinfachung ist aber völlig optional und wer mag, kann auch weiterhin die bekannte Consumer-Komponente für den Zugriff auf Daten aus einem Context-Provider verwenden.
-
+However, this simplification is completely optional and anyone who likes can continue to use the familiar consumer component to access data from a context provider.

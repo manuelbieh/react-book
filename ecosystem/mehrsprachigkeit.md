@@ -1,61 +1,61 @@
-# Mehrsprachigkeit
+# Multilingualism
 
-Eins der Themen, das neben **Routing** und **State Management** immer wieder aufkommt, ist **Mehrsprachigkeit**. Wie bekomme ich meine Anwendung übersetzt, so dass ein deutscher Benutzer ein deutsches Interface sieht, während andere Benutzer bspw. ein englisches Interface sehen.
+One of the topics that comes up again and again besides **routing** and **state management** is **multilingualism**. How do I get my application translated so that a German user sees a German interface while other users see an English interface?
 
-Ich möchte in diesem Kapitel nicht generell in die Tiefen der **Internationalisierung** \(meist abgekürzt: **i18n**\) einsteigen, denn hier soll es um **React** gehen. Ich setze daher ein gewisses \(geringes\) Grundverständnis voraus, was die Internationalisierung von User Interfaces angeht und konzentriere mich daher insbesondere darauf, wie man diese in React umsetzen kann.
+In this chapter I don't want to go into the depths of **Internationalization** \(mostly abbreviated: **i18n**\), because this is about **React**. I therefore assume a certain \(low\) basic understanding of the internationalization of user interfaces and concentrate on how to implement it in React.
 
-Wie Mehrsprachigkeit in sehr simpler Form für einfache Apps mittels **Context API** umgesetzt werden kann, wurde bereits im Kapitel über die **Context API** demonstriert, wo wir eine sehr rudimentäre Form der Mehrsprachigkeit beispielhaft mit eben dieser API umgesetzt haben. Mit zunehmender Komplexität einer Anwendung steigt aber auch die Komplexität an die Mehrsprachigkeit. Plötzlich werden Dinge wichtig wie die Verwendung von Platzhaltern oder die Verwendung des Plurals. Hier ist es dann irgendwann sinnvoll, auf Pakete zurückzugreifen, die genau zu diesem Zweck entwickelt worden sind.
+How multilingualism can be implemented in a very simple form for simple apps using the **Context API** has already been demonstrated in the chapter about the **Context API**, where we have implemented a very rudimentary form of multilingualism using this API as an example. As the complexity of an application increases, so does the complexity of multilingualism. Suddenly things become important like the use of wildcards or the use of plural. At some point, it will make sense to fall back on packages that have been developed precisely for this purpose.
 
-Hier gibt es einige bewährte Optionen im **React-Ecosystem,** auf die wir zurückgreifen können. Zu den bekannteren gehören hier **Lingui**, **Polyglot**, **i18next** oder **react-intl** und auch Facebook hat mit **FBT** ein eigenes Framework für die Internationalisierung von React-Anwendungen im Angebot. In diesem Kapitel geht es vorrangig um `i18next` und dessen React-Bindings `react-i18next`. 
+Here are some proven options in the **React ecosystem,** which we can fall back on. Among the better known are **Lingui**, **Polyglot**, **i18next** or **react-intl** and Facebook also has its own framework for the internationalization of React applications, **FBT**. This chapter is mainly about `i18next` and its react bindings `react-i18next`. 
 
-Warum? Nun, ich habe in verschiedenen Projekten mit `react-intl` und `react-i18next` gearbeitet, habe die anderen Alternativen ausführlich evaluiert und bin der festen Überzeugung, dass **i18next** in vielerlei Hinsicht die beste der genannten Alternativen darstellt. Es existiert eine sehr große und aktive Community rund um **i18next**, es werden neben **React** auch noch viele andere Frameworks, Libraries und Plattformen unterstützt, es läuft ohne großen Aufwand sowohl clientseitig im Browser als auch serverseitig in Node.js und das Übersetzungsformat von **i18next** wird von so ziemlich allen großen online Übersetzungs-Services als Exportformat angeboten. 
+What's the matter with you? Well, I have worked in different projects with `react-intl` and `react-i18next`, evaluated the other alternatives in detail and am convinced that **i18next** is in many ways the best of the mentioned alternatives. There is a very large and active community around **i18next**, besides **React** many other frameworks, libraries and platforms are supported, it runs without much effort both on the client side in the browser and on the server side in Node.js and the translation format of **i18next** is offered by pretty much all large online translation services as an export format. 
 
-Darüber hinaus bot es als erstes Paket bereits wenige Tage nach deren Erscheinen Unterstützung für Hooks und wurde sogar gezielt auf dessen Verwendung optimiert, ohne dabei an Abwärtskompatibilität einzubüßen. Dabei bleibt die API überwiegend simpel und einfach zu benutzen und bietet maximale Flexibilität. Um es mit anderen Worten zu sagen: Das ganze Paket ist sehr komplett und lässt wenig bis gar keine Wünsche offen.
+In addition, it was the first package to offer support for hooks a few days after their release, and was even optimized for use without sacrificing backward compatibility. The API remains mostly simple and easy to use and offers maximum flexibility. In other words, the whole package is very complete and leaves little to no wish unfulfilled.
 
-### Setup von i18next
+### Setup of i18next
 
-Um es zu installieren, rufen wir wieder unser Terminal auf und geben ein:
+To install it, we call up our terminal again and type:
 
 ```bash
 npm install i18next react-i18next
 ```
 
-bzw. mit Yarn:
+or with yarn:
 
 ```bash
 yarn add i18next react-i18next
 ```
 
-Wir installieren hier mit `i18next` das **Internationalisierungs-Framework** selbst, sowie mit `react-i18next` dessen **React Bindings**, also sozusagen eine Reihe an Komponenten und Funktionen, die uns die Arbeit mit i18next in React deutlich erleichtern. Nach dem Prinzip, das wir schon im Kapitel zu State Management mit `redux` und `react-redux` kennengelernt haben.
+We install here with `i18next` the **Internationalization-Framework** itself, as well as with `react-i18next` its **React Bindings**, so to speak a set of components and functions, which make our work with i18next in React much easier. According to the principle we already got to know in the chapter on State Management with `redux` and `react-redux`.
 
-Starten wir, indem wir uns zunächst zwei Objekte anlegen, die unsere Übersetzungen beinhalten. Eins mit Texten in Deutsch, eins mit Texten in Englisch:
+Let's start by first creating two objects that contain our translations. One with texts in German, one with texts in English:
 
 ```javascript
 const de = {
-  greeting: 'Hallo Welt!',
-  headline: 'Heute lernen wir Internationalisierung mit React',
-  messageCount: '{{count}} neue Nachricht',
-  messageCount_plural: '{{count}} neue Nachrichten',
+  greeting: 'Hello world!',
+  headline: 'Today we learn internationalisation with React',
+  messageCount: '{{count}} New message',
+  messageCount_plural: '{{count}} new messages',
 };
 
 const en = {
   greeting: 'Hello world!',
   headline: 'Today we learn Internationalization with React',
-  messageCount: '{{count}} new message',
-  messageCount_plural: '{{count}} new messages',
+  messageCount: '{count}} new message',
+  messageCount_plural: '{count}} new messages',
 };
 ```
 
-Um **i18next** nun in unserer Anwendung zu verwenden, müssen wir es importieren, initialisieren und das React Plugin übergeben. Dies sollte idealerweise am Anfang unserer Anwendung passieren. Möglichst, bevor wir unsere App-Komponente an den `ReactDOM.render()`-Aufruf übergeben. 
+To use **i18next** in our application now, we have to import it, initialize it and pass the React plugin. This should ideally happen at the beginning of our application. If possible, before we pass our app component to the `ReactDOM.render()` call. 
 
-Dazu importieren wir das `i18next`-Paket selbst, sowie den benannten Export `initReactI18next` aus dem `react-i18next`-Paket:
+We import the `i18next` package itself and the named export `initReactI18next` from the `react-i18next` package:
 
 ```javascript
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 ```
 
-Anschließend nutzen wir die `.use()`-Methode, um das React Plugin an **i18next** zu übergeben, sowie die `.init()`-Methode, um **i18next** zu initialisieren:
+Then we use the `.use()` method to pass the React plugin to **i18next**, and the `.init()` method to initialize **i18next**:
 
 ```javascript
 i18next
@@ -63,7 +63,7 @@ i18next
   .init({ ... });
 ```
 
-Die `init()`-Methode erwartet dabei ein Config-Objekt, das mindestens die beiden Eigenschaften `lng` \(für die ausgewählte Sprache\) sowie `resources` \(für die Übersetzungen selbst\) beinhalten sollte. Darüber hinaus ist es oft sinnvoll, eine `fallbackLng` zu erstellen, also eine Fallback-Sprache, die dann benutzt wird, wenn eine Übersetzung in der ausgewählten Sprache nicht vorhanden ist. Insgesamt bietet **i18next** hier über 30 verschiedene Konfigurationsoptionen an, doch die genannten drei sind die, die uns für den Moment interessieren:
+The `init()` method expects a config object that should contain at least the two properties `lng` \(for the selected language\) and `resources` \(for the translations themselves\). Furthermore, it is often useful to create a `fallbackLng`, i.e. a fallback language that is used when a translation is not available in the selected language. Altogether **i18next** offers more than 30 different configuration options, but the three mentioned are the ones that interest us for the moment:
 
 ```javascript
 i18next
@@ -75,76 +75,76 @@ i18next
       en: {
         translation: en,
       },
-      de: {
+      {
         translation: de,
       }
     },
   });
 ```
 
-Wir setzen also die Sprache erst einmal auf Englisch, ebenso die Fallback-Sprache. Dann folgt ein `resources`-Objekt, das etwas Erläuterung bedarf. Das Objekt hat die Form:
+So we first set the language to English, as well as the fallback language. Then follows a `resources` object, which needs some explanation. The object has the form:
 
 ```text
-[Sprache].[Namespace].[Translation Key] = Übersetzung
+[Language].[Namespace].[Translation Key] = Translation
 ```
 
-Die Sprache dürfte klar sein. Das kann `de` für Deutsch sein, `en` für Englisch oder auch `de-AT` für deutsch mit österreichischer Regionalisierung. Die Eigenschaft besitzt als Wert ein Objekt, bestehend aus mindestens einem bis zu theoretisch unbegrenzt vielen **Namespaces**.
+The language should be clear. This can be `de` for German, `en` for English or `de-AT` for German with Austrian regionalization. The property has as value an object consisting of at least one up to theoretically unlimited **Namespaces**.
 
-Der **Namespace** ist ein zentrales Feature in **i18next,** das benutzt werden kann, aber nicht muss. Es erlaubt dem Entwickler, größere Übersetzungsdateien in mehrere Teile zu splitten, die bei Bedarf dynamisch nachgeladen werden können. Während dieses Feature bei kleineren Anwendungen nicht unbedingt sinnvoll ist, kann es in größeren und komplexeren Anwendungen dazu benutzt werden, Übersetzungen klein und übersichtlich zu halten, etwa indem jeder größere Seitenbereich einen eigenen **Namespace** erhält. Übersetzungsdateien für diesen Seitenbereich könnten dann separat gepflegt und nur dann geladen werden, wenn diese auch benötigt werden.
+The **Namespace** is a central feature in **i18next,** that can be used, but does not have to be. It allows the developer to split larger translation files into multiple parts that can be dynamically reloaded as needed. While this feature is not necessarily useful for smaller applications, it can be used in larger and more complex applications to keep translations small and clear, for example by giving each larger page area its own **namespace**. Translation files for this page area can then be maintained separately and loaded only when they are needed.
 
-In **i18next** muss zwingend immer mindestens _ein_ **Namespace** benutzt werden. Standardmäßig heißt dieser `translation`, dies kann aber durch die `defaultNS`-Option im Konfigurationsobjekt der `.init()`-Methode geändert werden. Der **Namespace** ist dabei selbst wiederum ein Objekt, das letztendlich die eigentlichen Übersetzungen enthält in der Form `translationKey: value`, also etwa `greeting: 'Hallo Welt!'`. 
+In **i18next** you must always use at least _one_ **Namespace**. By default this is called `translation`, but this can be changed by the `defaultNS` option in the configuration object of the `.init()` method. The **Namespace** itself is an object which contains the actual translations in the form `translationKey: value`, i.e. `greeting: 'Hallo Welt!'`. 
 
-Der Wert selbst _kann_ wiederum ein Objekt sein: 
+The value itself _can_ again be an object: 
 
 ```javascript
 {
   greeting: {
-    morning: 'Guten Morgen!',
-    evening: 'Guten Abend!',
+    morning: 'Good morning!',
+    evening: 'Good evening!',
   }
 }
 ```
 
-Oder in verkürzter Form:
+Or in abbreviated form:
 
 ```javascript
 {
-  'greeting.morning': 'Guten Morgen!',
-  'greeting.evening': 'Guten Abend!',
+  Greeting.morning. Good morning,
+  Greeting.evening. Good evening,
 }
 ```
 
-Auch das liegt aber im Ermessen des Entwicklers.
+However, this is also at the discretion of the developer.
 
-### Verwendung von Übersetzungen in React-Komponenten
+### Using translations in React components
 
-Ist **i18next** erst einmal korrekt eingerichtet und die Übersetzungen angelegt, können wir auch schon damit weitermachen, unsere Komponenten zu übersetzen. Auch hier bietet uns **i18next** volle Flexbilität: Wir bekommen eine `withTranslation`-HOC für die Verwendung mit **Klassen-Komponenten**, einen `useTranslation`-Hook zur Verwendung in **Function Components** und für Fälle, in denen wir Komponenten innerhalb von Übersetzungen nutzen, wollen gibt uns `react-i18next` auch eine entsprechende `Trans`-Komponente an die Hand. 
+Once **i18next** has been set up correctly and the translations have been created, we can continue translating our components. Again, **i18next** gives us full flexibility: We get a `withTranslation` HOC for use with **class components**, a `useTranslation` hook for use in **Function Components**, and for cases where we want to use components within translations, `react-i18next` also gives us a corresponding `Trans` component. 
 
-#### Verwendung mit Klassen-Komponenten und withTranslation\(\)-HOC
+#### Use with class components and withTranslation\(\)-HOC
 
-Wir gehen sie der Reihe nach durch und fangen mit der `withTranslation()`-Funktion an. Diese erzeugt uns eine **HOC** an die wir die zu übersetzende Komponente übergeben und bekommen daraufhin die Props `t` und `i18n` in diese hereingereicht. Dazu importieren wir die Funktion zuerst als benannten Export aus dem `react-i18next`-Paket:
+We go through them one by one and start with the `withTranslation()` function. This creates a **HOC** to which we pass the component to be translated and get the props `t` and `i18n` into it. First we import the function as a named export from the `react-i18next` package:
 
 ```javascript
 import { withTranslation } from 'react-i18next';
 ```
 
-Anschließend rufen wir die Funktion auf, erhalten eine HOC und übergeben dieser die Komponente, in der wir auf die übersetzten Werte zugreifen möchten. Nutzen wir **Namespaces,** können wir außerdem den oder die gewünschten **Namespaces** an die `withTranslation()`-Funktion übergeben:
+Then we call the function, get an HOC and pass the component in which we want to access the translated values to it. If we use **Namespaces,** we can also pass the desired **Namespaces** to the `withTranslation()` function:
 
 ```javascript
-// Ohne Namespaces (hier wird der Default-Wert benutzt):
+// Without namespaces (here the default value is used):
 const TranslatedComponent = withTranslation()(TranslatedComponent);
 
-// Mit nur einem Namespace:
+// With only one namespace:
 const TranslatedComponent = withTranslation('namespace')(Component);
 
-// Mit mehreren Namespaces:
+// With several namespaces:
 const TranslatedComponent = withTranslation([
-  'namespace1', 
-  'namespace2'
-])(TranslatedComponent);
+  namespace1, 
+  namespace2
+)(TranslatedComponent);
 ```
 
-In der Praxis hat es sich für mich bewährt, einzelne Komponenten in eigene Dateien auszulagern und die `withTranslation()`-HOC beim Export um die Komponente zu legen:
+In practice, it has proven to be a good idea for me to outsource individual components into my own files and to place the `withTranslation()`-HOC around the component during export:
 
 ```jsx
 // Greeting.js
@@ -160,44 +160,44 @@ class Greeting extends React.Component {
 export default withTranslation()(Greeting);
 ```
 
-So können wir dann beim Import gleich die übersetzte Komponente importieren:
+This allows us to import the translated component immediately during the import:
 
 ```javascript
 import Greeting from './Greeting.js';
 ```
 
-Hier importieren wir dann entsprechend die Komponente mit den durch i18next erweiterten Props `t`, `i18n` und `tReady`.
+Here we import the component with the props `t`, `i18n` and `tReady` extended by i18next.
 
-Die `t`-Funktion ist dabei die zentrale Funktion für alles was mit Übersetzungen zu tun hat. Sie bekommt einen **Translation Key** übergeben und gibt uns den übersetzten Wert zurück, basierend auf unserer aktuell eingestellten Sprache:
+The `t` function is the central function for everything that has to do with translations. She gets a **Translation Key** and returns the translated value based on our current language:
 
 ```jsx
 <h1>{t('greeting')</h1> 
 // -> <h1>Hello world!</h1>
 ```
 
-Nutzen wir Platzhalter oder Plurale in unseren Übersetzungen, können diese als zweiter Parameter übergeben werden:
+If we use placeholders or plurals in our translations, these can be passed as a second parameter:
 
 ```javascript
 <p>{t('messageCount', { count: 3 })}</p>
 // -> <p>3 new messages</p>
 ```
 
-Die `i18n` Prop enthält die zuvor initialisierte **i18next**-Instanz. Sie bietet uns einige Eigenschaften und Methoden, die für unsere Übersetzungen relevant sein können. Die beiden wichtigsten sind dabei sicherlich:
+The `i18n` prop contains the previously initialized **i18next** instance. It provides us with some features and methods that may be relevant to our translations. The two most important of these are certainly:
 
-*  `i18n.language`, um die aktuell ausgewählte Sprache auszulesen
-* `i18n.changeLanguage()`, um die ausgewählte Sprache zu ändern
+* `i18n.language` to read the currently selected language
+* `i18n.changeLanguage()` to change the selected language
 
-Um bspw. in einer Komponente die Sprache von `en` in `de` zu ändern, kann hier der Aufruf von `i18n.changeLanguage('de')` benutzt werden.
+For example, to change the language of a component from `en` to `de`, the call to `i18n.changeLanguage('de')` can be used here.
 
-#### Verwendung mit Function Components und useTranslation\(\)-Hook
+#### Use with Function Components and useTranslation\(\)-Hook
 
-Natürlich können nicht nur **Klassen-Komponenten** mit der `withTranslation()`-HOC benutzt werden sondern auch **Function Components**. Allerdings können wir in letzteren auch den `useTranslation()`-Hook verwenden, der die Komponente meist noch etwas übersichtlicher werden lässt. Dazu importieren wir den Hook wie auch die HOC ebenfalls aus dem `react-i18next`-Paket:
+Of course, not only **class components** can be used with the `withTranslation()`-HOC, but also **Function Components**. However, we can also use the `useTranslation()` hook in the latter, which usually makes the component a bit more manageable. Therefore we import the hook as well as the HOC from the `react-i18next` package:
 
 ```javascript
 import { useTranslation } from 'react-i18next';
 ```
 
-Der **Hook** lässt uns dann per **Destructuring Assignment Syntax** aus ES2015+ die beiden Eigenschaften `t` und `i18n` aus ihm extrahieren:
+The **Hook** then lets us extract the two properties `t` and `i18n` from ES2015+ via **Destructuring Assignment Syntax**:
 
 ```jsx
 const Greeting = () => {
@@ -205,47 +205,47 @@ const Greeting = () => {
   return (
     <div>
       <h1>{t('greeting')}</h1>
-      <button onClick={() => i18n.changeLanguage('de')}>de</button>
+      <button onClick={() => i18n.changeLanguage('de')}>en</button>
       <button onClick={() => i18n.changeLanguage('en')}>en</button>
     </div>
   );
 };
 ```
 
-Wie auch bereits in der `withTranslation()`-HOC ist `t` hier die Funktion, um Übersetzungen über ihren **Translation Key** auszugeben und `i18n` die **i18next**-Instanz. Der Hook stellt also exakt die gleiche Funktionalität bereit wie auch die HOC, ist in **Function Components** aber deutlich übersichtlicher, weil expliziter. Um bestimmte **Namespaces** zu verwenden, können dem Hook wie schon der `withTranslation()`-Funktion ein String oder ein Array mit Strings übergeben werden:
+As in the `withTranslation()`-HOC, `t` is the function to output translations via your **Translation Key** and `i18n` is the **i18next** instance. The hook provides exactly the same functionality as the HOC, but in **Function Components** it is much clearer because it is more explicit. To use certain **Namespaces**, you can pass a string or an array of strings to the hook like you did with the `withTranslation()` function:
 
 ```javascript
 const { t } = useTranslation('namespace');
 const { t } = useTranslation(['namespace1', 'namespace2']);
 ```
 
-Wird kein Namespace übergeben, greift auch hier die Default-Einstellung.
+If no namespace is passed, the default setting also applies here.
 
-### Komplexe Übersetzungen mit der Trans-Komponente
+### Complex translations with the Trans component
 
-In einigen Fällen kann es notwendig sein, React-Komponenten in Übersetzungen zu verwenden. Das ist bspw. der Fall, möchte man die `Link`-Komponente vom **React Router** nutzen, um innerhalb einer Übersetzung auf eine andere URL zu verlinken. Das ist nur durch die Verwendung der `t()`-Funktion nicht ohne weiteres möglich. Hierzu stellt uns `react-i18next` die `Trans`-Komponente bereit. Die Verwendung ist nicht immer ganz einfach zu verstehen, aber sie ist ein sehr mächtiges Werkzeug.
+In some cases it may be necessary to use React components in translations. This is the case, for example, if you want to use the `Link` component of the **React Router** to link to another URL within a translation. This is only not possible by using the `t()` function. For this purpose `react-i18next` provides us with the `Trans` component. Its use is not always easy to understand, but it is a very powerful tool.
 
-Nehmen wir also an, wir wollen innerhalb unserer Übersetzung die `Link`-Komponente verwenden. Der Code sieht vor der Übersetzung also in etwa so aus:
+So let's say we want to use the `Link` component within our translation. The code looks like this before translation:
 
 ```jsx
 <p>
   <label>
     <input type="checkbox" name="terms" />
-    Ich akzeptiere die <Link to="/terms">AGB</Link>
+    I accept the <Link to="/terms">AGB</Link>
   </label>
 </p>
 ```
 
-Die Verwendung der Link-Komponente in einer Übersetzung würde hier nicht funktionieren, da Übersetzungen grundsätzlich Strings sind und wir keine Möglichkeit hätten, festzulegen, dass es sich bei `<Link>` um die Link-Komponente aus dem React-Router Paket handelt.
+Using the link component in a translation would not work here because translations are strings and we would have no way of specifying that `<Link>` is the link component from the React router package.
 
-Die Lösung ist hier nun die Verwendung der `Trans`-Komponente. Übersetzungen, die mit dieser Komponente verwendet werden, können nummerierte Platzhalter besitzen. An ihrer Stelle werden Komponenten eingesetzt, die an gleicher Position in der `Trans`-Komponente verwendet werden. 
+The solution here is to use the `Trans` component. Translations used with this component may have numbered placeholders. Instead, components are used that are used at the same position in the `Trans` component. 
 
-Schauen wir uns das obige Beispiel also einmal unter Verwendung von `Trans` an:
+Let's have a look at the example above using `Trans`:
 
 ```jsx
-// Übersetzungen:
+// Translations:
 const de = {
-  terms: 'Ich akzeptiere die <1>AGB</1>.',
+  terms: 'I accept the <1>AGB</1>.',
 };
 
 const en = {
@@ -263,9 +263,9 @@ const en = {
 </p>
 ```
 
-Hier umschließen wir unseren Text mit einem `Trans`-Element. Der Text dient dabei lediglich als Platzhalter, der verwendet wird, wenn es zu dem in der `i18nKey`-Prop angegebenen Wert keine entsprechende Übersetzung gibt. Nun geht es ans Zählen. Wo welcher Text wie ersetzt wird und an welche Stelle eine Komponente tritt, ergibt sich aus dem Index-Wert der Kind-Elemente. Analog dazu, wie auch `React.createElement()` funktioniert.
+Here we enclose our text with a `Trans` element. The text serves only as a placeholder, which is used if there is no corresponding translation for the value specified in the `i18nKey` prop. Now it's time to count. The index value of the child elements determines where which text is replaced and how, and where a component occurs. Similarly, how `React.createElement()` works.
 
-Im obigen Beispiel ergibt sich also folgendes Zähl-Ergebnis:
+In the above example, the following counting result is obtained:
 
 ```text
 0: I accept the
@@ -273,11 +273,11 @@ Im obigen Beispiel ergibt sich also folgendes Zähl-Ergebnis:
 2: .
 ```
 
-An die Stelle `<1>Terms and Conditions</1>` tritt also hier das `<Link>`-Element, da es im Children-Array den Index-Wert 1 besitzt.
+So `<1>Terms and Conditions</1>` is replaced by the `<Link>` element, since it has the index value 1 in the children array.
 
-Nun kann das gerade in komplexeren Strukturen, in denen es vielleicht sogar mehrere Links gibt, ziemlich umständlich werden, das zu zählen. Hier bietet `react-i18next` zwei Möglichkeiten, um die Platzhalter automatisch zu generieren. Beide werden als Option beim Initialisieren von **i18next** gesetzt.
+Now, especially in more complex structures, where there may even be several links, it can be quite cumbersome to count that. Here `react-i18next` offers two possibilities to generate the placeholders automatically. Both are set as options when initializing **i18next**.
 
-Die erste Option ist das Setzen von `saveMissing` auf `true` und die Verwendung einer `missingKeyHandler`-Funktion. Im folgenden Beispiel nutzen wir ein simples `console.log()`, um fehlende Übersetzungen in die Browser-Konsole zu loggen:
+The first option is to set `saveMissing` to `true` and use a `missingKeyHandler` function. In the following example we use a simple `console.log()` to log missing translations into the browser console:
 
 ```javascript
 i18next
@@ -285,40 +285,40 @@ i18next
   .init({
     saveMissing: true,
     missingKeyHandler: (language, namespace, key, fallbackValue) => {
-      console.log('Fehlende Übersetzung:', fallbackValue);
+      console.log('Missing translation:', fallbackValue);
     },
-    // weitere Optionen
+    // further options
   });
 ```
 
-Wird nun ein `i18nKey` benutzt, der nicht existiert, wird stattdessen der Fallback-Wert, also der Wert aus dem Trans-Element in die Browser Konsole geschrieben:
+If a `i18nKey` is used that does not exist, the fallback value, i.e. the value from the trans element, is written to the browser console instead:
 
 {% hint style="info" %}
-Fehlende Übersetzung: I accept the &lt;1&gt;Terms and Conditions&lt;/1&gt;.
+Missing translation: I accept the &lt;1&gt;Terms and Conditions&lt;/1&gt;.
 {% endhint %}
 
-Für diese kann nun eine entsprechende Übersetzung angelegt werden. Der **React Router** `Link` wurde in der Ausgabe bereits durch den passenden Platzhalter-Index ersetzt, in diesem Fall also **1**.
+A corresponding translation can now be created for these. The **React Router** `Link` has already been replaced in the output by the appropriate placeholder index, in this case **1**.
 
-Als zweite Option können wir statt des `missingKeyHandler` die `debug`-Option auf `true` setzen. 
+As a second option we can set the `debug` option to `true` instead of the `missingKeyHandler`. 
 
 ```javascript
 i18next
   .use(initReactI18next)
   .init({
     debug: true,
-    // weitere Optionen
+    // further options
   });
 ```
 
-Wir erhalten dann eine Reihe an Debugging-Informationen, wie eben auch einen Hinweis auf fehlende Übersetzungen. Die Ausgabe ist dann etwa:
+We will then receive a set of debugging information, as well as an indication of missing translations. The output is then approximately:
 
 {% hint style="info" %}
-i18next::translator: missingKey de translation terms I accept the &lt;1&gt;Terms and Conditions&lt;/1&gt;.
+i18next::translator: missingKey de translation terms I accept the &lt;1&gt;Terms and Conditions&lt;/ i&gt;1&gt;.
 {% endhint %}
 
-Die Ausgabe ist hier etwas unfänglicher als bei der eigenen `missingKeyHandler`-Variante, dafür reicht es hier aber auch aus, lediglich eine Option auf `true` zu setzen.
+The output here is a bit more insignificant than with the own `missingKeyHandler` variant, but here it is sufficient to set only one option to `true`.
 
-Innerhalb von `<Trans>`-Elementen kann übrigens auch die `t`-Funktion wie gewohnt verwendet werden. So wäre etwa auch Folgendes möglich:
+Within `<Trans>` elements, the `t` function can also be used as usual. For example, the following would also be possible:
 
 ```jsx
 <Trans i18nKey="terms">
@@ -326,9 +326,9 @@ Innerhalb von `<Trans>`-Elementen kann übrigens auch die `t`-Funktion wie gewoh
 </Trans>
 ```
 
-### Fazit
+### Conclusion
 
-Mit den in diesem Kapitel gezeigten Beispielen ist es relativ einfach, seine Anwendung gleich mehrsprachig zu entwickeln. In der Praxis hat sich i18next dabei für mich persönlich als sehr universelles und vollständiges Tool erwiesen. Die Integration in verscheidene Libraries und Frameworks funktioniert einwandfrei, es bietet alle Funktionen, die ein solches i18n-Framework benötigt und mit nur wenigen Funktionen und Komponenten \(`i18n.changeLanguage()`, `t`, `<Trans>`\) ist es darüber hinaus relativ leicht zu erlernen.
+With the examples shown in this chapter, it is relatively easy to develop your application in multiple languages. In practice, i18next has proven to be a very universal and complete tool for me personally. The integration into different libraries and frameworks works flawlessly, it offers all functions required by such an i18n framework and with only a few functions and components \(`i18n.changeLanguage()`, `t`, `<Trans>`\) it is relatively easy to learn.
 
-Einmal korrekt aufgesetzt und eingerichtet, hier empfehle ich einen Blick auf die [vollständigen Optionen von i18next](https://www.i18next.com/overview/configuration-options), realisiert man dabei Mehrsprachigkeit in seiner React-Anwendung, ohne dass es sich wie ein Mehraufwand anfühlt. Dafür sorgen auch Online-Services wie [Locize.com](https://locize.com/) oder [Lokalise.co](https://www.lokalise.co), um nur einige Beispiele zu nennen, mit denen die Erstellung von Übersetzungen verwaltet und zum Teil sogar automatisiert outgesourced werden kann.
+Once correctly set up and configured, here I recommend a look at the [full options of i18next](https://www.i18next.com/overview/configuration-options), realizing multilingualism in your React application without it feeling like extra work. Online services such as [Locize.com](https://locize.com/) or [Lokalise.co](https://www.lokalise.co), to name but a few examples, also make sure of this, with which the creation of translations can be managed and in some cases even outsourced automatically.
 

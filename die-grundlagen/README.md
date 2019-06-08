@@ -1,2 +1,2 @@
-# II – Grundlagen
+# II – Basics
 

@@ -1,145 +1,145 @@
-# Tools und Setup
+# Tools and Setup
 
 ## Tools
 
-Um störungsfrei und komfortabel mit React arbeiten zu können, sollten einige Bedingungen erfüllt sein. Nicht alles davon ist **zwingend** notwendig, es erleichtert das Entwicklerleben jedoch ungemein, weswegen ich dennoch **dringend** dazu rate und auch bei allen folgenden Beispielen davon ausgehen werde, dass ihr diese Tools installiert habt:
+In order to be able to work with React smoothly and comfortably, some conditions should be fulfilled. Not all of it is **compulsively** necessary, but it makes the developer's life much easier, which is why I still **strongly** recommend it and will assume that you have installed these tools in all of the following examples:
 
-### Node.js und npm
+### Node.js and npm
 
-**Node.js** werden die meisten möglicherweise als **serverseitiges JavaScript** kennen, das ist allerdings nicht die ganze Wahrheit. In erster Linie ist **Node.js** einmal eine **JavaScript-Laufzeitumgebung**, die sich eben hervorragend für Netzwerkanwendungen eignet, also klassische Webserver. Darüber hinaus bringt **Node.js** auch ein Tool zur Paketverwaltung mit, nämlich **npm**, mit dem sich spielend einfach neue JavaScript-Libraries auf dem eigenen Rechner installieren lassen. Außerdem lassen sich auch eigene Kommandozeilen-Scripts damit schreiben und ausführen.
+Most people will probably know **Node.js** as **server-side JavaScript**, but that's not the whole truth. First and foremost, **Node.js** is a **JavaScript runtime environment**, which is excellent for network applications, i.e. classic web servers. In addition, **Node.js** also comes with a package management tool, namely **npm**, with which you can easily install new JavaScript libraries on your own computer. You can also write and execute your own command line scripts.
 
-Statt **Node** direkt zu installieren, empfehle ich [**nvm**](https://github.com/creationix/nvm) \(_„Node Version Manager“_\) für Mac und Linux bzw. [**nvm-windows**](https://github.com/coreybutler/nvm-windows) für Windows. **Nvm** hat den Vorteil, dass es einerseits keine Admin-Rechte benötigt, um Packages global zu installieren und man andererseits mit einem simplen Befehl auf der Kommandozeile \(`nvm install [version]`\) die auf dem System installierte Version aktualisieren kann. Für einer Liste aller verfügbaren Version kannst du ganz einfach `nvm ls-remote` \(Mac/Linux\) bzw. `nvm list available` \(Windows\) benutzen. Ich empfehle im weiteren Verlaufe dieses Buches, die aktuelle LTS \(Long Term Support\) Version zu benutzen. LTS Versionen sind stabile Versionen, die auch längere Zeit Updates erhalten.
+Instead of installing **Node** directly, I recommend [**nvm**](https://github.com/creationix/nvm) \(_"Node Version Manager"_\) for Mac and Linux or [**nvm-windows**](https://github.com/coreybutler/nvm-windows) for Windows. **Nvm** has the advantage that on the one hand it does not need admin rights to install packages globally and on the other hand you can update the version installed on the system with a simple command on the command line \(`nvm install [version]`\). For a list of all available versions you can easily use `nvm ls-remote` \(Mac/Linux\) or `nvm list available` \(Windows\). I recommend in the further course of this book to use the current LTS \(Long Term Support\) version. LTS versions are stable versions, which also receive longer time updates.
 
 ### Yarn
 
-Während **Node** mit **npm** bereits einen guten und soliden Package-Manager mitbringt, geht **yarn** noch ein Stück weiter. Es bietet besseres Caching, dadurch auch bessere Performance, einfachere Kommandos und kommt darüber hinaus, wie React, ebenfalls aus dem Hause Facebook und wurde dort entwickelt, u.a. um die Arbeit mit React noch etwas angenehmer zu gestalten. Während alles, was hier im weiteren Verlauf des Buches beschrieben wird, auch mit **npm** ausgeführt werden kann, würde ich dennoch empfehlen, **Yarn** zu installieren. Dies gewinnt gerade im React-Umfeld mehr und mehr an Gewicht, insbesondere wegen seiner Einfachheit und seiner verbesserten Performance ggü. **npm**.   
-Sind **Node** und **npm** erst einmal installiert, lässt sich **yarn** als globales Package über **npm** installieren:
+While **Node** already has a good and solid package manager with **npm**, **yarn** goes one step further. It offers better caching, therefore also better performance, simpler commands and comes beyond that, like React, also from Facebook and was developed there, among other things, to make working with React even more pleasant. While everything described here in the rest of the book can be done with **npm**, I would still recommend installing **Yarn**. This is gaining more and more weight in the React environment, especially because of its simplicity and improved performance compared to **npm**.   
+Once **Node** and **npm** are installed, **yarn** can be installed as a global package via **npm**:
 
 ```bash
 npm install --global yarn
 ```
 
-oder einfach kurz:
+or just short:
 
 ```bash
 npm i -g yarn
 ```
 
-Wir haben gerade außerdem unser erstes Package installiert. Easy! Das Commandline-Flag `--global` \(bzw. `-g`\) sorgt dabei dafür, dass die `yarn`-Executable global installiert wird und von überall auf eurem Gerät auf der Kommandozeile ausgeführt werden kann, indem ihr `yarn` auf der Kommandozeile eingebt.
+We also just installed our first package. Easy! The command line flag `--global` \(or `-g`\) ensures that the `yarn` executable is installed globally and can be executed from anywhere on your device on the command line by typing `yarn` on the command line.
 
 ### Babel
 
-Babel ist ein Tool, das für gewöhnlich lediglich als Dependency \(Abhängigkeit\), genauer, als npm-Paket in React-basierten Projekten, zum Einsatz kommt und an dieser Stelle erst einmal nicht explizit installiert werden muss. Babel erlaubt es, nicht oder _noch_-nicht standardkonformen oder noch nicht von allen gängigen Browsern unterstützten, JavaScript-Code in interpretierbaren und ausführbaren Code zu _transpilieren_.
+Babel is a tool that is usually only used as Dependency \, more precisely, as an npm package in React-based projects, and does not need to be explicitly installed at this point. Babel allows you to _transpil_ JavaScript code into interpretable and executable code that is not or not yet _standard-compliant or not yet supported by all common browsers.
 
 {% hint style="info" %}
-**Transpilieren** \(engl. _transpiling_\) nennt man einen Prozess, bei dem der Sourcecode von einer Sprache in ein entsprechendes funktional identisches Gegenstück einer anderen Sprache umgewandelt wird. In unserem Fall eben von JSX oder ES2015+ in valides, ausführbares und vom Browser unterstütztes JavaScript.
+**Transpiling** \(engl. _transpiling_\) is a process in which the source code of one language is converted into a corresponding functionally identical counterpart of another language. In our case, JSX or ES2015+ in valid, executable JavaScript supported by the browser.
 {% endhint %}
 
-Babel besteht aus einem Core-Modul \(`@babel/core`\), das lediglich einige APIs bereitstellt, die dann von **Plugins** für das entsprechende **Transpiling** verwendet werden. Diese Plugins werden oft zu sog. **Presets** zusammengefasst, die dann wiederum mehrere **Plugins** gleichzeitig installieren. Die in React-basierten Projekten üblichsten Presets sind `@babel/preset-react` \(um **JSX** zu lesen und zu übersetzen\) und `@babel/preset-env`, welches abhängig von einer Ziel-Umgebung modernes JavaScript so umschreibt, dass es eben auch ältere Browser verstehen.
+Babel consists of a core module \(`@babel/core`\) that merely provides some APIs that are then used by **Plugins** for the corresponding **Transpiling**. These plugins are often combined to so-called **Presets**, which in turn install several **Plugins** at the same time. The most common presets in React-based projects are `@babel/preset-react` \(for reading and translating **JSX**\) and `@babel/preset-env`, which, depending on the target environment, paraphrases modern JavaScript so that older browsers also understand it.
 
-Das `@`-Zeichen vor dem Namen bedeutet dabei, dass es sich um eine Organisation innerhalb der npm Registry \(dem npm-Paketverzeichnis\) handelt und kann als eine Art Namespace betrachtet werden. Im Fall von Babel findet man dort die offiziellen Pakete, die von den Babel-Maintainern dort veröffentlicht werden. Bevor Babel in der Version 7 erschien gab es diese Organisation noch nicht und die Pakete wurden mit einem Bindestrich im Namen getrennt. So hieß `@babel/preset-react` eben `babel-preset-react`, `@babel/core` war `babel-core` usw. 
+The `@` sign in front of the name means that it is an organization within the npm registry \(the npm package directory\) and can be considered a kind of namespace. In the case of Babel, you will find the official packages published there by the Babel maintainers. Before Babel 7 was released, this organization did not exist and the packages were separated by a hyphen in the name. So `@babel/preset-react` was `babel-preset-react`, `@babel/core` was `babel-core` and so on. 
 
-Also nicht verwirren lassen, sollte euch in einem Projekt mal `babel-core` statt `@babel/core` begegnen. In diesem Fall handelt es sich also einfach um Babel 6 \(oder eine ältere Version\). Allerdings kommt es gelegentlich vor, dass Entwickler deren Plugins oder Presets nicht offizieller Teil von Babel sind, diese ebenfalls mit `babel-` prefixen, während die Pakete dennoch mit Babel 7 arbeiten. Hier hilft in der Regel nur ein Blick in die Readme des jeweiligen Pakets.
+So don't get confused, you should encounter `babel-core` instead of `@babel/core` in a project. So in this case it is simply Babel 6 \(or an older version\). However, it occasionally happens that developers whose plugins or presets are not an official part of Babel prefix them with `babel-` as well, while the packages still work with Babel 7. Usually, only a look at the readme of the respective package will help here.
 
-Die **Presets**, die ich bei der Arbeit mit React verwende \(und gleichzeitig auch empfehle\) sind:
+The **presets** I use when working with React are \(and at the same time recommend\):
 
 * `@babel/preset-env`
 * `@babel/preset-react`
-* `@babel/plugin-proposal-object-rest-spread` 
-* `@babel/plugin-proposal-class-properties` 
-* `@babel/plugin-syntax-dynamic-import` 
+* ¶ `@babel/plugin-proposal-object-rest-spread` 
+* ¶ ¶@babel/plugin-proposal-class-properties ¶ 
+* ¶ ¶ @babel/plugin-syntax-dynamic-import ¶ 
 
-Wer mit Flow oder TypeScript als statischen Type Checkern arbeiten möchte benötigt darüber hinaus noch `@babel/preset-flow` für Flow bzw. `@babel/preset-typescript` für TypeScript. 
+Who wants to work with Flow or TypeScript as static Type Checkers needs `@babel/preset-flow` for Flow or `@babel/preset-typescript` for TypeScript. 
 
-Installiert werden alle erwähnten Pakete via:
-
-```bash
-npm install --save-dev [paket]
-```
-
-bzw.
+All mentioned packages will be installed via:
 
 ```bash
-yarn add --dev [paket]
+npm install --save-dev [package]
 ```
 
-Die `--dev`-Flag gibt hier an, dass es sich um eine `devDependency` handelt, also nur für die Entwicklung relevant ist und nicht Teil des Produktionscodes sein soll.
+or
+
+```bash
+yarn add --dev [package]
+```
+
+The `--dev` flag indicates that this is a `devDependency`, i.e. it is only relevant for development and should not be part of the production code.
 
 ### Webpack
 
-**Webpack** ist ebenfalls eins der zentralen Tools im React-Ecosystem, ohne das ein effizientes Arbeiten mit React kaum möglich oder zumindest deutlich umständlicher wäre. Hier handelt es sich um einen sog. **Module-Bundler**, der modulbasierte Entwicklung, wie sie manch einer vielleicht bereits aus NodeJS kennen mag, in den Browser bringt. Dadurch wird es ermöglicht, Anwendungscode übersichtlich in einzelnen Files zu verteilen, die jeweils ihre Abhängigkeiten über `import` oder `require()` in ihren eigenen **Module-Scope** laden und damit innerhalb des Moduls verfügbar machen. Am Ende fällt dann nur noch eine einzelne JavaScript-Datei heraus \(auf Wunsch auch mehrere\), so dass nicht mehr jede einzelne unserer Komponenten, und das können schnell mal über 100 werden, einzeln über `<script src="..."></script>` im HTML eingebunden werden muss.
+**Webpack** is also one of the central tools in the React ecosystem, without which efficient working with React would hardly be possible or at least much more complicated. This is a so-called **Module-Bundler**, which brings module-based development into the browser, as some may already know it from NodeJS. This makes it possible to distribute application code clearly in individual files, which load their dependencies via `import` or `require()` into their own **Module-Scope** and thus make them available within the module. At the end only a single JavaScript file will fall out \(if desired also several\\), so that not every single one of our components, and this can quickly become over 100, has to be integrated into the HTML individually via `<script src="..."></script>`.
 
-Wow. Klingt unfassbar kompliziert, passiert aber nach einigen wenigen Beispielen nahezu intuitiv von ganz allein und hat man sich erst einmal daran gewöhnt, wird man sich fragen, wie man jemals ohne Module-Bundler arbeiten konnte.
+Wow. Wow. It sounds incredibly complicated, but after a few examples it happens almost intuitively by itself and once you get used to it, you will wonder how you could ever work without Module-Bundler.
 
-Neben dem Module-Bundling selbst kann **Webpack** auch beigebracht werden, Dateien mit JSX durch Babel in JavaScript zu transpilieren, Bilder, Stylesheets oder andere Assets in einen `build`-Ordner zu kopieren, der später auf einen Server deployed wird und viele andere Dinge. Wie eine solche Konfiguration aussehen kann, beleuchten wir später noch einmal genau, weshalb das Webpack-Kommandozeilen-Tool auch an dieser Stelle noch nicht installiert werden muss.
+Besides the module bundling itself **Webpack** can also be taught to transpose files with JSX through Babel into JavaScript, to copy images, stylesheets or other assets into a `build` folder that will later be deployed to a server and many other things. How such a configuration can look like will be explained later, why the Webpack command line tool does not have to be installed at this point.
 
 ### ESLint
 
-**ESLint** ist ein sehr praktisches Tool zur statischen Code-Analyse. Es soll in erster Linie dazu dienen, Fehler im Programmcode zu erkennen, kann aber auch dazu genutzt werden um bspw. konsistente Regeln beim Codestil durchzusetzen oder dem Entwickler Hinweise für Optimierungsmöglichkeiten während des Entwickelns zu geben. ESLint bezeichnet sich selbst als „pluggable linting utility“, verspricht also besonderen Wert auf Erweiterbarkeit zu legen. Und so gibt es in der Tat allerhand nützliche Plugins für diverse Tools, Laufzeitumgebungen und Frameworks.
+**ESLint** is a very practical tool for static code analysis. It should primarily be used to detect errors in the program code, but can also be used to enforce consistent rules in the code style, for example, or to give the developer hints for optimization options during development. ESLint describes itself as a "pluggable linting utility", so it promises to attach particular importance to extensibility. And so there are indeed all kinds of useful plugins for various tools, runtime environments and frameworks.
 
-Im professionellen Umfeld, aber auch in den meisten Open-Source-Projekten ist eine ESLint-Konfiguration mittlerweile üblich und nicht mehr wegzudenken. In React-Projekten haben sich insbesondere die ESLint-Plugins `eslint-plugin-react`, `eslint-plugin-babel` und `eslint-plugin-react-hooks` als solide Basis erwiesen.
+In the professional environment, but also in most open source projects, an ESLint configuration is now common and indispensable. In React projects, the ESLint plugins `eslint-plugin-react`, `eslint-plugin-babel` and `eslint-plugin-react-hooks` in particular have proven to be a solid basis.
 
-Bei der Einrichtung entsprechender IDE-Plugins erscheinen dann deutlich sichtbare Warnungen an den Stellen, wo mit dem Code augenscheinlich etwas nicht gemäß den definierten Regeln abläuft:
+When setting up appropriate IDE plugins, clearly visible warnings appear at those points where the code apparently does not run according to the defined rules:
 
-![Eine Warnung &#xFC;ber eine nicht verwendete Variable und ein fehlendes Semikolon in VSCode](../.gitbook/assets/eslint-example.png)
+![A warning &#xFC;about an unused variable and a missing semicolon in VSCode](../.gitbook/assets/eslint-example.png)
 
 ### Prettier
 
-Die einen lieben es, die anderen hassen es. Letztere meist nur für einen kurzen Moment, denn sobald erstmal der wahre Wert dieses Tools erkannt wurde, möchte man es nie wieder missen und fragt sich wie man jemals ohne arbeiten konnte. So ging es mir persönlich auch und vielen anderen Kollegen, mit denen ich in der Vergangenheit zusammengearbeitet habe.
+Some love it, others hate it. The latter usually only for a short moment, because once the true value of this tool has been recognized, you never want to miss it again and wonder how you could ever work without it. This is how I personally felt and how many other colleagues I have worked with in the past.
 
-**Prettier** ist ein Tool, um Code automatisch nach bestimmten Regeln sauber und vor allem konsistent zu formatieren. Es kann auf der Kommandozeile ausgeführt werden und in allen gängigen Editoren und IDEs als Plugin installiert werden. Das Tool bietet bewusst möglichst wenige Optionen um die zahlreichen nicht zielführenden Diskussionen darüber, wie Code formatiert werden sollte, nicht in die Richtung zu lenken, dass fortan darüber diskutiert wird, welche **Prettier**-Optionen genutzt werden sollten.
+**Prettier** is a tool to automatically format code cleanly and consistently according to certain rules. It can be executed on the command line and installed as a plugin in all common editors and IDEs. The tool deliberately offers as few options as possible in order not to steer the numerous unwanted discussions about how code should be formatted in the direction of discussing which **Prettier** options should be used.
 
-Es mag anfangs etwas gewöhnungsbedürftig sein und auch wer länger mit **Prettier** arbeitet wird nicht unbedingt immer 100% einverstanden sein mit der Art wie **Prettier** gewisse Stellen im Code formatiert, es setzt aber so viel kognitive Energie frei \(da keine Gedanken mehr darüber verschwendet werden müssen, wo nun ein Umbruch erfolgen und welche Zeile wie weit eingerückt werden sollte um den Code lesbarer zu machen\), dass es die Sache in meinen Augen absolut wert macht und die Verwendung rechtfertigt.
+It may take some getting used to in the beginning and even if you work with **Prettier** for a longer time you won't always agree 100% with the way **Prettier** formats certain parts of the code, but it releases so much cognitive energy \(because you don't have to worry about where to make a break and which line should be indented how far to make the code more readable\) that it makes it absolutely worth it in my eyes and justifies its use.
 
-### IDE-/Editor-Plugins
+### IDE/Editor plugins
 
-Alle bekannten Editoren und IDEs wie bspw. Webstorm, Atom, Visual Studio Code oder Sublime \(aber auch so ziemlich jeder andere moderne Editor oder IDE\) bietet Plugins oder inzwischen sogar bereits nativ integrierte Funktionen für die bessere Unterstützung von **React** und **JSX**. Hier rate ich dringend zur Installation dieser Plugins, da diese in der Regel für deutlich besseres Syntax-Highlighting sorgen und teilweise Code-Vervollständigung sowie andere Nettigkeiten bieten. 
+All known editors and IDEs such as Webstorm, Atom, Visual Studio Code or Sublime \(but also pretty much any other modern editor or IDE\) offer plugins or even already natively integrated functions for better support of **React** and **JSX**. Here I strongly recommend the installation of these plugins, as they usually provide a much better syntax highlighting and partly offer code completion and other nice features. 
 
-In **Atom** ist das etwa [language-babel](https://atom.io/packages/language-babel), in **VS Code** gibt es hier u.a. [Babel ES6/ES7](https://marketplace.visualstudio.com/items?itemName=dzannotti.vscode-babel-coloring) und in **Sublime** lohnt sich in Blick auf [babel-sublime](https://github.com/babel/babel-sublime). Nutzt ihr **Webstorm**, habt ihr seit Version 10 native Unterstützung für React Syntax-Highlighting. Auch Plugins für die eben erwähnten **ESLint** oder **Prettier** sind überaus sinnvoll. Dazu am Besten im Plugin-Manager eurer IDE oder eures Editors einfach nach ESLint oder Prettier suchen und das Plugin mit den meisten Installationen auswählen. Dies ist für gewöhnlich jeweils das offizielle ESLint- oder Prettier-Plugin.
+In **Atom** this is about [language-babel](https://atom.io/packages/language-babel), in **VS Code** there is [Babel ES6/ES7](https://marketplace.visualstudio.com/items?itemName=dzannotti.vscode-babel-coloring) and in **Sublime** it's worth looking at [babel-sublime](https://github.com/babel/babel-sublime). If you use **Webstorm**, you have native support for React syntax highlighting since version 10. Also plugins for the **ESLint** or **Prettier** mentioned above are very useful. To do this, simply search for ESLint or Prettier in the plugin manager of your IDE or editor and select the plugin with the most installations. This is usually the official ESLint or Prettier plugin.
 
-### Browser-Plugins
+### Browser plugins
 
-Für den Browser empfehle ich dringend, jeweils die **React-Devtools** für [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) und [Firefox](https://addons.mozilla.org/de/firefox/addon/react-devtools/) zu installieren, für den späteren Verlauf außerdem die **Redux-Devtools** für beide Browser \([Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), [Firefox](https://addons.mozilla.org/de/firefox/addon/remotedev/?)\). Die Devtools fügen sich nahtlos als neuer Tab in die bestehenden Browser-Devtools ein und bieten einen enormen Mehrwert beim Debugging von React-Komponenten.
+For the browser I strongly recommend to install the **React-Devtools** for [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) and [Firefox](https://addons.mozilla.org/de/firefox/addon/react-devtools/) respectively, for the later course also the **Redux-Devtools** for both browsers \([Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), [Firefox](https://addons.mozilla.org/de/firefox/addon/remotedev/?)\). The Devtools fit seamlessly into existing browser devtools as a new tab and provide tremendous value when debugging React components.
 
-![Chrome mit installierten Devtools-Plugins f&#xFC;r React und Redux](../.gitbook/assets/image.png)
+![Chrome with installed Devtools plugins for React and Redux](../.gitbook/assets/image.png)
 
-So lässt sich bspw. der State direkt im Browser manipulieren und die Auswirkungen live beobachten. Ich würde so weit gehen zu behaupten, dass ein effizientes Debugging ohne die Devtools-Erweiterungen kaum oder sogar gar nicht möglich ist.
+For example, the state can be manipulated directly in the browser and the effects can be observed live. I would go so far as to say that without the Devtools extensions, efficient debugging is hardly possible, if at all.
 
 ## Zero Config Setup
 
-Manch einer hat in der Vergangenheit darüber gescherzt, dass man gut und gerne Tage damit verbringen kann, ein Setup aufzusetzen, bevor man die erste Zeile Code schreibt. Und in der Tat: ein ordentliches Setup ist wichtig, bestimmt es doch ein Stück weit auch die Qualität und Wartbarkeit der Anwendung, die man auf Basis seines Setups entwickelt.
+Some people have joked in the past that you can spend days setting up a setup before writing the first line of code. And indeed: a proper setup is important, as it also determines to a certain extent the quality and maintainability of the application, which you develop on the basis of your setup.
 
-Hier hat die große React-Community aber bereits sehr gute Vorarbeit geleistet. Und so listet die Seite JavaScriptStuff aktuell **198 Projekte** in der Rubrik [**React Starter Projects**](https://www.javascriptstuff.com/react-starter-projects/). Auch Facebook selbst, bzw. konkret **Dan Abramov**, Core-Entwickler bei Facebook und Autor von **Redux**, ist dort mit **Create React App** \(_„CRA“_\) vertreten. Das Projekt ist mit über 45.000 Stars auf GitHub mittlerweile so etwas wie der de-facto Standard wenn es um React Starter Projekte geht und beschreibt sich auf GitHub selbst mit:
+Here, however, the large React community has already done very good preparatory work. And so the page JavaScriptStuff aktuell lists **198 projects** in the category [**React Starter Projects**](https://www.javascriptstuff.com/react-starter-projects/). Facebook itself, or specifically **Dan Abramov**, core developer on Facebook and author of **Redux**, is also represented there with **Create React App** \(_"CRA"_\). With over 45,000 stars on GitHub, the project has become the de facto standard when it comes to React Starter projects and describes itself on GitHub itself:
 
 > Create React apps with no build configuration
 
-Und in der Tat, **Create React App** macht es gerade Einsteigern \(aber nicht nur diesen\) sehr einfach, ein sehr robustes und gutes Setup mit nur einem Befehl auf der Kommandozeile zu erzeugen:
+And indeed, **Create React App** makes it very easy for beginners \(but not just this\) to create a very robust and good setup with just one command on the command line:
 
 ```bash
-yarn create react-app projektname
+yarn create react-app project name
 ```
 
-Wer stattdessen npm bevorzugt, muss momentan noch zwei Befehle ausführen:
+If you prefer npm instead, you have to execute two commands at the moment:
 
 ```bash
 npm install -g create-react-app
 ```
 
-… um die **Create React App** Executable global zu installieren und anschließend
+... to install the **Create React App** Executable globally and then
 
 ```bash
-create-react-app projektname
+create-react-app project name
 ```
 
-Und schon wird im Ordner „_projektname_“ ein vollständiges React-Setup mit einigen kleinen Beispiel-Komponenten erzeugt. Ich würde empfehlen, dies jetzt direkt mal zu tun, denn die ersten Code-Beispiele werden zu Beginn allesamt auf einem gewöhnlichen CRA-Setup basieren und können so recht einfach ausprobiert werden.
+And already in the folder "_projectname_" a complete React-Setup with some small example components is created. I would recommend to do this directly now, because the first code examples will all be based on an ordinary CRA setup at the beginning and can be tried out quite easily.
 
 {% hint style="warning" %}
-Der Projektname muss den [Kriterien für die `name`-Eigenschaft](https://docs.npmjs.com/files/package.json#name) des `package.json`-Formats von **npm** haben. Dies bedeutet, neben einigen anderen Kriterien, er darf **nur Kleinbuchstaben** beinhalten, **keine Leerzeichen** und darf aus **maximal 214 Zeichen** bestehen. Die vollständigen Kriterien finden sich in der **npm-**Dokumentation
+The project name must have the [Criteria for the `name` property](https://docs.npmjs.com/files/package.json#name) of the `package.json` format of **npm**. This means, among some other criteria, that it may contain **only lower case letters**, **no spaces**, and **a maximum of 214 characters**. The complete criteria can be found in the **npm-**documentation
 {% endhint %}
 
-Dieses Setup ist bereits sehr umfangreich und deckt viele Themen ab, so dass wir uns weniger mit dem Setup beschäftigen müssen und direkt in den Code eintauchen können.
+This setup is already very extensive and covers many topics, so we don't have to deal with the setup as much and can dive directly into the code.
 
-Nachdem CRA das Basis-Setup erstellt und seine Paket-Abhängigkeiten \(_Dependencies_\) installiert hat, gibt es uns noch eine kurze Anleitung, wie wir mit CRA an unserem ersten React-Projekt arbeiten können.
+After CRA has created the basic setup and installed its package dependencies \(_Dependencies_\), it gives us a short guide on how to work with CRA on our first React project.
 
 ```bash
 $ create-react-app foobar
@@ -163,7 +163,7 @@ Inside that directory, you can run several commands:
 
   yarn eject
     Removes this tool and copies build dependencies, configuration files
-    and scripts into the app directory. If you do this, you can’t go back!
+    and scripts into the app directory. If you do this, you can't go back!
 
 We suggest that you begin by typing:
 
@@ -175,23 +175,23 @@ Happy hacking!
 
 ### yarn start
 
-Hiermit starten wir einen Entwicklungs-Server, über den wir unsere neu erstellte App im Browser aufrufen können. Dieser kümmert sich auch darum, alle Dateien im Ordner zu beobachten und unsere App mit all seinen Abhängigkeiten neu zu „kompilieren“ sobald wir eine Änderung an einem der Files vornehmen.
+With this we start a development server, which we can use to call our newly created app in the browser. He also takes care of monitoring all files in the folder and recompiling our app with all its dependencies as soon as we make a change to one of the files.
 
 ### yarn build
 
-Erstellt einen Build unserer App, die wir dann bspw. auf einen öffentlichen Server deployen können. Dieser Build ist gegenüber dem Development-Build \(`yarn start`\) auf Performance optimiert, weswegen das Ausführen von `yarn build` für gewöhnlich deutlich länger dauert als `yarn start`.
+Creates a build of our app, which we can deploy to a public server. This build is optimized for performance compared to the \(`yarn start`\) development build, so running `yarn build` usually takes much longer than running `yarn start`.
 
 ### yarn test
 
-Führt Tests aus. Als Test-Framework bringt CRA das ebenfalls von Facebook entwickelte **Jest** mit. Jest bringt hier aus meiner Sicht einen sehr entschiedenen Vorteil mit gegenüber anderen Testing-Frameworks, nämlich das sog. **Snapshot-Testing,** bei dem sozusagen eine Art _Abbild_ des aktuellen Zustands einer Komponente erstellt wird, der den Status Quo darstellt und mit dem zukünftige Test-Zustände verglichen werden. So fallen Änderungen, gewünschte wie ungewünschte, sofort ins Auge.
+Runs tests. As a test framework, CRA brings along the **Jest**, also developed by Facebook. From my point of view, Jest has a very decisive advantage over other testing frameworks, namely the so-called **Snapshot-Testing,** where a kind of _image_ of the current state of a component is created, which represents the status quo and is compared with future test states. So changes, both desired and unwanted, immediately catch the eye.
 
 ### yarn eject
 
-Mit `yarn eject` können wir uns von Create React App „verabschieden“. Dabei werden alle Build-Scripts, Dependencies und Config-Files in das aktuelle Projektverzeichnis kopiert und wir sind fortan selbst dafür verantwortlich, dass alles korrekt läuft. Dadurch haben wir mehr Verantwortung, aber eben auch deutlich mehr Freiheiten, da wir von nun an eigene Änderungen an der Standard-Konfiguration von CRA vornehmen können. Wann und ob dieser Schritt überhaupt jemals nötig wird, ist völlig abhängig vom Projekt. Ich selbst habe bereits in Projekten über Monate mit dem CRA Standard-Setup gearbeitet, in anderen Projekten hat es sich bereits nach wenigen Tagen oder Wochen ergeben, dass Änderungen am Setup vorgenommen werden müssen, so dass ein Eject recht frühzeitig vorgenommen wurde.
+With `yarn eject` we can say goodbye to Create React App. All build scripts, dependencies and config files are copied into the current project directory and we are responsible for ensuring that everything runs correctly. This gives us more responsibility, but also significantly more freedom, as we can now make our own changes to the standard configuration of CRA. When and whether this step will ever be necessary depends entirely on the project. I myself have been working with the CRA standard setup in projects for months, in other projects it has already occurred after a few days or weeks that changes have to be made to the setup, so that an eject was made quite early.
 
 {% hint style="info" %}
-Um die Code-Beispiele in diesem Buch nachzuvollziehen, empfehle ich an dieser Stelle, **Create React App** zu installieren. Die große Mehrzahl der Beispiele können dann per Copy and Paste in die `App.js`-Datei aus Create React App übertragen und ausgeführt werden. Um den Lern-Effekt zu erhöhen, würde ich sogar empfehlen, die Beispiele nicht zu kopieren, sondern tatsächlich abzutippen.
+To follow the code examples in this book, I recommend to install **Create React App**. The vast majority of examples can then be copied and pasted into the `App.js` file from Create React App and executed. In order to increase the learning effect, I would even recommend not copying the examples, but actually typing them in.
 
-Wer CRA nicht installieren möchte oder es eilig hat, dem sei [CodeSandbox](https://codesandbox.io/) ans Herz gelegt. Hier kann in einer per Knopfdruck ein neues Setup mit Create React App als Basis erstellt und dann in einer Browser-Entwicklungsumgebung herumprobiert werden.
+If you don't want to install CRA or are in a hurry, [CodeSandbox](https://codesandbox.io/) is recommended. Here you can create a new setup with Create React App as base and then try it out in a browser development environment.
 {% endhint %}
 

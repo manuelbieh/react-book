@@ -1,20 +1,20 @@
-# Formulare
+# Forms
 
-Formulare besitzen in React eine kleine Sonderstellung und funktionieren etwas anders als andere DOM-Elemente, da Formulare eine Art **eigenen State** besitzen, der erst einmal nichts mit dem React-State gemein hat. 
+Forms have a small special place in React and work somewhat differently than other DOM elements, because forms have a kind of **own state** that has nothing in common with the React state. 
 
-Der State von Textfeldern besteht bspw. aus dem eingegebenen Wert, der State von Checkboxen oder Radio-Buttons resultiert aus der Tatsache ob diese ausgewählt sind oder nicht, Auswahllisten \(`<select></select>`\) halten als State den ausgewählten Wert bzw. bei Mehrfachauswahl die ausgewählten Werte. React ändert an diesem Verhalten grundsätzlich erstmal nichts. Wer möchte, kann das so beibehalten und muss sich um nichts weiter kümmern. 
+The state of text fields, for example, consists of the entered value, the state of checkboxes or radio buttons results from the fact whether these are selected or not, selection lists \(`<select></select>`\) hold the selected value as the state or, in the case of multiple selection, the selected values. React does not change this behaviour for the time being. If you want to, you can keep it that way and don't have to worry about anything else. 
 
-Im React-Jargon ist dann die Rede von **Uncontrolled Components**, also **unkontrollierten Komponenten**. Unkontrolliert deshalb, weil React sich nicht um das State-Management dieser Komponenten kümmert. Das State-Handling ist entweder vollständig unabhängig von React oder funktioniert nur aus Richtung der DOM Formular-Elemente hin zum React State, jedoch **nicht in die entgegengesetzte Richtung**. Von einem Update am React-State bekommt ein Formular-Element also nichts mit und zeigt weiter den gleichen Wert \(oder Status bei Checkboxen, Selects und Radiobuttons\) wie zuvor.
+In React jargon, we are then talking about **Uncontrolled Components****. Uncontrolled because React does not take care of the state management of these components. The state handling is either completely independent of React or only works from the direction of the DOM form elements towards React State, but **not in the opposite direction**. A form element gets nothing from an update at the react state and shows the same value \(or status for checkboxes, selects and radio buttons\) as before.
 
-Demgegenüber stehen die **Controlled Components**, also **kontrollierte Komponenten**. Hier aktualisiert ein Update am React-State den Wert \(oder Status\) des Formular-Elements und ebenso aktualisiert ein Update am jeweiligen Formular-Element den React-State. **Controlled Components** sind etwas aufwändiger in der Implementierung, sind zugleich jedoch auch die „sicherere“ Variante, da wir nicht Gefahr laufen, dass beide States voneinander abweichen.
+On the other hand there are the **Controlled Components****. Here an update at the react state updates the value \(or status\) of the form element and likewise an update at the respective form element updates the react state. **Controlled Components** are somewhat more complex to implement, but are also the "safer" variant, since we do not run the risk of both states differing from each other.
 
-## Uncontrolled Components / unkontrollierte Komponenten
+## Uncontrolled Components / Uncontrolled Components
 
-**Unkontrollierte Komponenten** können dabei im Wesentlichen in zwei verschiedenen Formen auftreten. Bei der ersten Variante werden einfach nur Formular-Elemente gerendert, die beim Abschicken bspw. rein serverseitig verarbeitet werden und in keiner Weise mit React interagieren. Ein komplett statisches Formular wenn man so will. React kümmert sich dabei **nicht von alleine** um die Anbindung an den React-State sondern **lässt dem Entwickler hier sämtliche Freiheiten**!
+**Uncontrolled components** can essentially occur in two different forms. The first variant simply renders form elements that are processed on the server side and do not interact with React in any way. A completely static form, if you will. React **doesn't take care of the connection to the React-State by itself** but **leaves the developer all freedom**!
 
-Bei der zweiten Variante werden Änderungen an einem Formular-Element **in den React-State** geschrieben, um bspw. im Hintergrund eine Validierung der Daten vorzunehmen oder die eingegebenen Daten an anderer Stelle auszugeben. Eine Änderung am React-State an anderer Stelle der Anwendung hat dabei keinerlei direkten Einfluss auf die Formularfelder. 
+In the second variant, changes to a form element **are written to the react state**, e.g. to validate the data in the background or to output the entered data elsewhere. A change to the react state elsewhere in the application has no direct effect on the form fields. 
 
-Ein Beispiel für eine solche unkontrollierte Komponente: 
+An example of such an uncontrolled component: 
 
 ```jsx
 class Uncontrolled extends React.Component {
@@ -33,13 +33,13 @@ class Uncontrolled extends React.Component {
 
   submitForm = e => {
     e.preventDefault();
-    alert(`Hallo ${this.state.username}`);
+    alert(`Hello ${this.state.username}`);
   };
 
   render() {
     return (
       <form method="post" onSubmit={this.submitForm}>
-        <p>Dein Benutzername: {this.state.username}</p>
+        <p>Your username: {this.state.username}</p>
         <p>
           <input 
             type="text" 
@@ -53,19 +53,19 @@ class Uncontrolled extends React.Component {
 }
 ```
 
-Hier sehen wir ein einfaches Textfeld, in das der Benutzer einen gewünschten Benutzernamen eintragen kann. Die `Uncontrolled` Komponente wird mittels `onChange`-Event von jeder Änderung in Kenntnis gesetzt und kann den Benutzernamen weiterverarbeiten. Da React hier nur **passiv** agiert, also bei einer Änderung am Textfeld über den neuen Wert in Kenntnis gesetzt wird, bewegen wir uns immer noch im Bereich der **Uncontrolled Components**.
+Here we see a simple text field in which the user can enter a desired user name. The `Uncontrolled` component is notified of every change via `onChange` event and can further process the user name. Since React only acts **passively** here, i.e. it is informed about the new value when the text field is changed, we are still in the range of **Uncontrolled Components**.
 
-Dies ist in einigen Fällen  ausreichend, insbesondere wenn die Formulare noch nicht all zu komplex sind. Allerdings ist der React-State hier vom DOM State **entkoppelt** bzw. funktioniert nur **in eine Richtung**. Der React-State wird aktualisiert, sobald das `onChange`-Event des Textfelds ausgelöst wird. Allerdings bedeutet dies, dass nicht gleichzeitig auch unser Textfeld aktualisiert wird, wenn der Wert im React-State an anderer Stelle verändert wurde, bspw. weil der Response eines asynchronen Requests nach einiger Zeit eintrifft.
+This is sufficient in some cases, especially if the forms are not yet too complex. However, the react state here is **decoupled** from the DOM state or only **works in one direction**. The react state is updated as soon as the `onChange` event of the text field is triggered. However, this means that our text field is not updated at the same time if the value in the react state has been changed elsewhere, e.g. because the response of an asynchronous request arrives after some time.
 
-Ein Formularfeld gilt als **kontrolliert**, sobald ein `value`-Attribut gesetzt wird. Ab diesem Moment erwartet React, dass wir uns als Entwickler selbst darum kümmern, den React-State mit dem Formularfeld zu synchronisieren. Möchten wir allerdings nur einmalig einen initialen Wert setzen ohne gleich die ganze Komponente zu einer **Controlled Component** zu machen, haben wir die Möglichkeit, statt des `value`-Attributs das React eigene `defaultValue`-Attribut zu setzen \(`defaultChecked` bei Checkboxen und Radiobuttons\). Das Element bleibt dann weiterhin **unkontrolliert**, zeigt aber dennoch einen vorausgefüllten Wert \(bzw. Status\) an.
+A form field is considered **controlled** when a `value` attribute is set. From this moment on, React expects us as developers to take care of synchronizing the React state with the form field ourselves. But if we want to set an initial value only once without making the whole component a **Controlled Component**, we have the possibility to set the React own `defaultValue` attribute instead of the `value` attribute \(`defaultChecked` for checkboxes and radio buttons\). The element then remains **uncontrolled**, but still displays a prefilled value \(or status\).
 
-## Controlled Components / kontrollierte Komponenten
+## Controlled Components
 
-Um sowohl State-Updates in Formularfeldern abzubilden als auch auf der anderen Seite benutzerseitige Änderungen an Formularfeldern in den React-State zu übertragen, benötigen wir eine **Controlled Component**. Hier überlassen wir das State-Handling eines Formular-Elements vollständig React. Dies bedeutet, dass wir das `value`-Attribut mit einem Wert befüllen, den wir aus dem React-State beziehen und gleichzeitig auch einen geänderten Wert wieder zurück in den React-State überführen.
+To map state updates to form fields as well as to transfer user-side changes to form fields to the react state on the other side, we need a **Controlled Component**. Here we leave the state handling of a form element completely to React. This means that we fill the `value` attribute with a value that we get from the react state and at the same time transfer a changed value back into the react state.
 
-Das Ziel bei diesem Ansatz ist es, den React-State \(oder einen anderen State-Container wie z.B. Redux\) als **Single Source of Truth** zu betrachten, also als die _einzige Quelle der Wahrheit_. Relevant ist der Wert, der im von React verwalteten State steht, das jeweilige Eingabefeld reflektiert dann zu jedem Zeitpunkt den Wert aus diesem State.
+The goal of this approach is to consider the React-State \(or another state container like Redux\) as **Single Source of Truth**, the _only source of truth_. Relevant is the value in the state managed by React, the respective input field then reflects the value from this state at any time.
 
-Schauen wir uns auch hierzu mal ein Beispiel an:
+Let's have a look at an example here:
 
 ```jsx
 class Controlled extends React.Component {
@@ -84,7 +84,7 @@ class Controlled extends React.Component {
 
   submitForm = (e) => {
     e.preventDefault();
-    alert(`Hallo ${this.state.username}`);
+    alert(`Hello ${this.state.username}`);
   };
 
   render() {
@@ -105,21 +105,21 @@ class Controlled extends React.Component {
 }
 ```
 
-Auf den ersten Blick unterscheidet sich die `Controlled` Komponente gar nicht sonderlich von der `Uncontrolled` Komponente im Absatz oben. Und tatsächlich ist der entscheidende Faktor, der die unkontrollierte Komponente zu einer kontrollierten werden lässt, einzig und allein das `value`-Attribut des `<input />`-Elements. Ist ein solches vorhanden, **kontrolliert** React das Formular-Element und erwartet, dass sich Änderungen am Eingabefeld entsprechend im State widerspiegeln. Wichtig ist außerdem der `onChange`-Handler, um den Wert bei einer Änderung jeweils in den React-State zu übertragen. Ein gern gemachter Fehler wenn das erste Mal mit Formularen in React gearbeitet wird ist, entsprechende Eingabefelder nicht mit dem React-State zu synchronisieren, indem der neue Wert in den State geschrieben wird. Das Eingabefeld verändert sich dann nicht und zeigt weiterhin den alten Wert aus `this.state` an.
+At first glance, the `Controlled` component does not differ much from the `Uncontrolled` component in the paragraph above. And indeed, the decisive factor that turns the uncontrolled component into a controlled one is solely the `value` attribute of the `<input />` element. If one exists, **React** controls the form element and expects changes to the input field to be reflected in the state accordingly. The `onChange` handler is also important to transfer the value to the react state when there is a change. A common mistake when working with forms in React for the first time is not to synchronize corresponding input fields with the React state by writing the new value to the state. The input field then does not change and continues to display the old value from `this.state`.
 
-Hier gibt es noch einige weitere Dinge zu beachten. So darf der Wert des `value`-Attributes immer nur ein **String** sein, niemals `undefined` oder `null`.
+Here are some more things to keep in mind. So the value of the `value` attribute may always only be a **string**, never `undefined` or `null`.
 
-![Warnung bei einem kontrollierten Textfeld mit dem value &quot;null&quot;](../.gitbook/assets/react-uncontrolled-null.png)
+![Warning for a controlled textfield with the value &quot;null&quot;](../.gitbook/assets/react-uncontrolled-null.png)
 
-Eine Ausnahme sind hier `select`-Elemente, die ein `multiple`-Attribut besitzen. Hier **muss** das `value`-Attribut ein **Array** sein. 
+An exception are `select` elements that have a `multiple` attribute. Here, the `value` attribute must be an **array**. 
 
-Moment mal, denkt ihr euch jetzt vielleicht. Welches `value`-Attribut beim `<select>`? Optionen selektiere ich doch, indem ich das `selected`-Attribut bei der jeweiligen `<option>` setze! Und ja, das ist korrekt in HTML, in React funktioniert das ein klein wenig anders. Hier wird der kontrollierte Wert ebenfalls über das `value`-Attribut gesetzt. Dasselbe gilt übrigens auch für das `<textarea>`-Element, dessen Initialwert für gewöhnlich durch seinen `textContent` bestimmt wird. Nicht so in React. 
+Wait a minute, are you thinking. Which `value` attribute for `<select>`? I select options by setting the `selected` attribute at the respective `<option>`! And yes, that's correct in HTML, in React it works a little different. Here the controlled value is also set via the `value` attribute. The same is true for the `<textarea>` element, whose initial value is usually determined by its `textContent`. Not so in React. 
 
-React vereinheitlicht hier den Mechanismus zum Ändern von Werten etwas und erfordert für die drei Elemente `input` \(alle Typen mit Ausnahme `checkbox` und `radio`\), `textarea` und `select` ein `value`-Attribut! Bei einfachen Werten muss dies **immer ein String** sein, bei einer Auswahlliste mit dem `multiple`-Attribut wie eben erwähnt ein **Array bestehend aus Strings**!
+React unifies the mechanism for changing values a bit and requires for the three elements `input` \(all types except `checkbox` and `radio`\), `textarea` and `select` a `value` attribute! For simple values this must **always be a string**, for a selection list with the `multiple` attribute as just mentioned an **array consisting of strings**!
 
-Darüber hinaus muss eine Änderung eines Formular-Elements **immer auch zurück in den React-State übertragen werden**. Dies kann mitunter etwas mühsam werden, insbesondere bei Checkboxen und Radiobuttons, bei denen nicht lediglich ein Wert geändert wird, sondern der Status \(`checked`\) zu einem Wert.
+In addition, a change to a form element must **always be transferred back to the react state**. This can sometimes be a bit tedious, especially with checkboxes and radio buttons where not only a value is changed, but the status \(`checked`\) to a value.
 
-Im Folgenden möchte ich eine vollständig kontrollierte Komponente zeigen, die alle Grundtypen von Formular-Elementen die HTML beinhaltet \(andere `input`-Elemente vom vom Typ `email`, `date`, `range`, etc. funktionieren identisch wie Eingabefelder vom Typ `text`\).
+In the following I would like to show a fully controlled component that contains all basic types of form elements that include HTML \(other `input` elements of type `email`, `date`, `range`, etc. work identically to input fields of type `text`\).
 
 ```jsx
 class FullyControlledComponent extends React.Component {
@@ -180,14 +180,14 @@ class FullyControlledComponent extends React.Component {
           type="radio"
           name="radio"
           value="1"
-          checked={this.state.radio === "1"}
+          &lt;font color="#ffff00"&gt;-==- proudly presents
           onChange={this.changeValue}
         />
         <input
           type="radio"
           name="radio"
           value="2"
-          checked={this.state.radio === "2"}
+          &lt;font color="#ffff00"&gt;-==- proudly presents
           onChange={this.changeValue}
         />
 
@@ -196,7 +196,7 @@ class FullyControlledComponent extends React.Component {
           value={this.state.singleSelect}
           onChange={this.changeValue}
         >
-          <option value="">Bitte auswählen</option>
+          <option value="">Please select</option>
           <option value="1">One</option>
           <option value="2">Two</option>
         </select>
@@ -218,58 +218,58 @@ class FullyControlledComponent extends React.Component {
 }
 ```
 
-Kern des Formulars sind erst einmal die drei Event-Handler Methoden für die verschiedenen Typen von Formular-Elementen: `changeValue`, `changeCheckbox` und `changeSelect`.
+At the core of the form are the three event handler methods for the different types of form elements: `changeValue`, `changeCheckbox` and `changeSelect`.
 
-Sie werden jeweils beim `onChange`-Event der jeweiligen Formular-Elemente aufgerufen und bekommen ein Objekt vom Typ `SyntheticEvent` übergeben. Aus dessen `target`-Eigenschaft picken wir uns mittels **ES2015 Object Destructuring** wiederum einzelne Eigenschaften heraus, um damit anschließend den State entsprechend zu aktualisieren.
+They are called at the `onChange` event of the respective form elements and receive an object of the type `SyntheticEvent`. From its `target` property, we use **ES2015 Object Destructuring** to pick individual properties and then update the state accordingly.
 
-Bei Elementen vom Typ `<input type="text" />`, `<input type="radio" />` und `<textarea />` sind das `name`und `value`, bei `<input type="checkbox" />` interessiert uns der `name` und die `checked`-Eigenschaft, bei `select`-Elementen interessiert uns in jedem Fall auch der `name` und dann, abhängig davon, ob es eine einfache Auswahlliste ist oder eine Auswahlliste mit Mehrfachauswahl, wieder der `value`oder die `selectedOptions`. Ob wir es mit einer einfachen oder mehrfachen Auswahlliste zu tun haben, finden wir mittels der `multiple`-Eigenschaft heraus, die wir uns ebenfalls aus der `e.target`-Eigenschaft herauspicken.
+For elements of type `<input type="text" />`, `<input type="radio" />` and `<textarea />` these are `name` and `value`, for `<input type="checkbox" />` we are interested in the `name` and `checked` property, for `select` elements we are also interested in the `name` and then, depending on whether it is a simple selection list or a multiple selection list, again the `value` or the `selectedOptions`. Whether we are dealing with a single or multiple pick list, we find out by means of the `multiple` property, which we also pick out of the `e.target` property.
 
-### Veränderung von Werten
+### Change of values
 
-Wird ein Wert verändert, wie es bei Text-Eingabe oder Radiobuttons der Fall ist, setzen wir eine gleichnamige State-Eigenschaft auf den jeweiligen Wert, den der Benutzer eingegeben hat und mit dem er den `onChange`-Event getriggert hat. Da wir uns in einer kontrollierten Komponente befinden, funktioniert nun folgendes:
+If a value is changed, as is the case with text input or radio buttons, we set a state property of the same name to the respective value that the user entered and used to trigger the `onChange` event. Since we are in a controlled component, the following now works:
 
-1. Der Benutzer ändert mittels Texteingabe den Wert
-2. Ein `onChange`-Event wird ausgelöst und im Event-Handler verarbeitet
-3. Der Event-Handler setzt die State-Eigenschaft auf den neuen Wert
-4. React re-rendert das User Interface und setzt die `value`-Eigenschaft des Eingabefelds auf den neuen Wert aus `this.state`.
-5. Der Benutzer sieht seinen neu eingegebenen Wert. 
+1. the user changes the value by means of text input
+2. a `onChange` event is triggered and processed in the event handler
+3. the event handler sets the state property to the new value
+React re-renders the user interface and sets the `value` property of the input field to the new value from `this.state`.
+5 The user sees his newly entered value. 
 
-Für den Benutzer ist dies erstmal **Business as Usual**. Er bemerkt nicht, dass das Formular anders funktioniert, als er das aus dem Browser kennt. Und doch hat sich hier React um die Logik im Hintergrund gekümmert und einen neuen „Frame“ im User Interface gezeichnet.
+For the user this is **Business as Usual**. He doesn't notice that the form works differently than he knows from the browser. And yet React took care of the logic in the background and drew a new "frame" in the user interface.
 
-### Veränderung von Zuständen bei Checkboxen und Radiobuttons
+### Change of states of checkboxes and radio buttons
 
-Checkboxen \(`<input type="checkbox" />`\) funktionieren hier vom Ablauf im Hintergrund genauso, allerdings mit dem Unterschied, dass ihr Wert grundsätzlich gleich bleibt. Bei Checkboxen ändert sich statt des Werts der Zustand ihrer `checked`-Eigenschaft von `true` auf `false` oder andersherum. Sie gelten daher dann als kontrolliert, wenn ihre `checked`-Eigenschaft durch React gesteuert wird. Der `onChange`-Event bei Checkboxen teilt uns mittels `e.target.checked`  mit, ob die eben geänderte Checkbox nun aktiviert \(`true`\) oder nicht aktiviert \(`false`\) ist. Diesen Status geben wir unverändert an den React-State weiter, React kümmert sich dann im Re-Rendering darum, dass der neue Status der Checkbox angezeigt wird.
+Checkboxes \(`<input type="checkbox" />`\) work in the same way in the background, but with the difference that their value remains the same. For checkboxes, instead of the value, the state of their `checked` property changes from `true` to `false` or vice versa. They are therefore considered to be controlled when their `checked` property is controlled by React. The `onChange` event for checkboxes informs us by means of `e.target.checked` whether the checkbox just changed is now activated \(`true`\) or not activated \(`false`\). We pass this status unchanged to the React state, React then takes care in the rendering that the new status of the checkbox is displayed.
 
-Radiobuttons sind eine Art Hybrid-Element. Sie gelten wie Checkboxen ebenfalls als kontrolliert, wenn ihr `checked`-Attribut durch React verwaltet wird. Allerdings gibt es für gewöhnlich mehrere Radiobuttons mit demselben Namen, allerdings mit unterschiedlichen Werten in einem Dokument. Hier würde es also keinen Sinn machen, den Wert zu einem Namen auf `true` oder `false` zu setzen, da uns der tatsächliche Wert des ausgewählten Radiobuttons interessiert. Hier schreiben wir also wie bei Text-Elementen den Wert des Radiobuttons in den State und prüfen dann beim Rendering des jeweiligen Radiobuttons selbst, ob der ausgewählte Wert aus dem State dem eigenen Wert entspricht: `checked={this.state.radio === "1"}`. Also in diesem Beispiel: setze `checked` auf `true`, wenn der Wert eines Radiobuttons mit dem Namen `radio` gleich `1` ist.
+Radio buttons are a kind of hybrid element. Like checkboxes, they are also controlled if their `checked` attribute is managed by React. However, there are usually several radio buttons with the same name, but with different values in one document. So it wouldn't make sense to set the value of a name to `true` or `false`, because we are interested in the actual value of the selected radio button. So here we write the value of the radio button into the state like with text elements and then check during the rendering of the respective radio button whether the selected value from the state corresponds to the own value: `checked={this.state.radio === "1"}`. So in this example: set `checked` to `true` if the value of a radio button with the name `radio` equals `1`.
 
-### Veränderung des Status bei einfachen oder mehrfachen Auswahllisten
+### Changing the status of single or multiple selection lists
 
-Fangen wir mit dem einfachen Fall an: einfache `<select>`-Auswahllisten ändern ebenfalls wie Textfelder ihren Wert, lösen damit ein Re-Rendering aus und zeigen den ausgewählten Wert im neu gezeichneten User Interface an. Eine Ausnahme stellen hier mehrfache Auswahllisten dar.
+Let's start with the simple case: simple `<select>` selection lists also change their value like text fields, trigger a rendering and display the selected value in the newly drawn user interface. Multiple selection lists are an exception here.
 
-Mehrfache Auswahllisten erwarten anders als Textfelder oder einfache Auswahllisten keinen String als Wert, sondern ein **Array aus Strings**. Diesen müssen wir uns allerdings selbst zusammenbasteln, da `e.target.value` bei Mehrfach-Auswahllisten nur einen einzigen Wert enthält, selbst bei der Auswahl mehrerer Optionen. Hier hilft uns `e.target.selectedOptions` weiter. Diese Eigenschaft ist ein Objekt vom Typ `HTMLCollection`, mit den `<option>`-Elementen, die momentan ausgewählt sind. Dieses Objekt können wir mit der statischen Array-Methode `Array.from()` aus ES2015 ziemlich einfach in ein Array umwandeln. Indem wir mittels `Array.map()` über dieses iterieren, können wir außerdem ein neues Array erzeugen, das alle für uns relevanten Werte enthält: 
+Unlike text fields or simple selection lists, multiple selection lists do not expect a string as a value, but an **array of strings**. However, we have to build this ourselves, because `e.target.value` contains only one value for multiple selection lists, even when multiple options are selected. This is where `e.target.selectedOptions` helps us. This property is an object of type `HTMLCollection`, with the `<option>` elements currently selected. We can easily convert this object into an array with the static array method `Array.from()` from ES2015. By iterating over this using `Array.map()`, we can also create a new array containing all the values relevant to us: 
 
 ```jsx
 Array.from(selectedOptions).map((option) => option.value);
 ```
 
-Das so erzeugte neue Array schreiben wir dann als neuen Wert in unseren State. Zuvor schauen wir jedoch erst einmal mittels `e.target.multiple`, ob es sich überhaupt um ein `<select>` mit Mehrfachauswahl handelt, da nur dieses ein Array als `value` erwartet.
+We then write the new array created in this way as a new value in our state. Before we do this we first use `e.target.multiple` to see if it is a `<select>` with multiple selection, because only this one expects an array as `value`.
 
-Alternativ wäre es natürlich auch möglich, einfachen Auswahllisten die `changeValue`-Methode als Event-Handler zu übergeben und nur Mehrfach-Auswahllisten die `changeSelect`-Methode. Dann könnten wir uns in selbiger den Check sparen, ob es sich um ein `multiple` Select handelt. Es auf die obige Weise zu lösen hat aber den Vorteil, dass später der Typ von mehrfach auf einfach geändert werden könnte, ohne dass man zusätzlich noch den Event-Handler ändern muss. Aber das bleibt am Ende natürlich euch selbst überlassen.
+Alternatively it would also be possible to pass the `changeValue` method as event handler to simple selection lists and the `changeSelect` method to multiple selection lists only. Then we could save ourselves the check whether it is a `multiple` select. To solve it in the above way has the advantage that later the type could be changed from multiple to simple without having to change the event handler. But in the end, of course, that's up to you.
 
-### Besonderheiten bei kontrollierten Komponenten
+### Special features of controlled components
 
-Ich habe in den obigen Beispielen jeweils das `name`-Attribut der jeweiligen Elemente als Schlüssel benutzt, um deren Wert im State zu speichern. Das ist insbesondere dann praktisch, wenn man mit serverseitigem React arbeitet und bspw. Formulare auf Basis eines Datenbankschemas automatisch generiert und wieder verarbeitet. Voraussetzung für eine funktionierende kontrollierte Komponente ist das aber nicht. Es wird theoretisch weder ein `name`-Attribut benötigt noch muss schlussendlich der Name der State-Eigenschaft mit dem `name`-Attribut übereinstimmen. 
+In the above examples I used the `name` attribute of each element as a key to store its value in the state. This is particularly useful when working with server-side React and, for example, automatically generating and processing forms on the basis of a database schema. However, this is not a prerequisite for a functioning controlled component. Theoretically, neither a `name` attribute is required, nor does the name of the state property have to match the `name` attribute. 
 
-Ihr könnt die gespeicherten Werte auch verschachteln, was sich anbietet wenn ihr in einer Komponente mehrere Formulare haben solltet \(**Achtung:** React Antipattern!\). Darüber hinaus muss nicht einmal zwingend der React-State verwendet werden um **Controlled Components** abzubilden. Im Gegenteil, in der Praxis wird stattdessen oftmals auch auf einen externen State-Container wie **Redux**, **Unstated** oder **MobX** zurückgegriffen. 
+You can also nest the stored values, which is useful if you have multiple forms in one component \(**Note:** React Antipattern!\). In addition, it is not even necessary to use the react state to map **Controlled Components**. On the contrary, in practice an external state container such as **Redux**, **Unstated** or **MobX** is often used instead. 
 
-## Fazit
+## Conclusion
 
 {% hint style="info" %}
-Formulare in React können in \(von React\) kontrollierter oder unkontrollierter Form auftreten.
+Forms in React may occur in \(by React\) controlled or uncontrolled form.
 
-**Unkontrollierte Komponenten** reichen für simple Formulare oftmals aus, allerdings empfiehlt es sich, Formular-Komponenten von React kontrollieren zu lassen um eine **Single Source of Truth** zu haben. Dazu muss das `value` bzw. `checked`-Attribut von React verwaltet werden. Auf Entwicklerseite muss dann manuell auf Änderungen reagiert werden.
+**Uncontrolled components** are often sufficient for simple forms, but it is recommended to let React control form components to have a **Single Source of Truth**. The `value` or `checked` attribute of React must be managed. The developer then has to react manually to changes.
 
-Anders als in herkömmlichem HTML erwartet React den Wert von Textareas, Selects und Inputfeldern mit Texteingabe im `value`-Attribut.
+Unlike traditional HTML, React expects the value of texttareas, selects, and input fields with text input in the `value` attribute.
 {% endhint %}
 
 

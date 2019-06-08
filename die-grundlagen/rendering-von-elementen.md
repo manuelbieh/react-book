@@ -1,20 +1,20 @@
-# Rendering von Elementen
+# Rendering of elements
 
-In den vorherigen Kapiteln habe ich sie wie selbstverständlich bereits einige Male erwähnt, doch was genau sind **React-Elemente** eigentlich?
+In the previous chapters I mentioned them several times as a matter of course, but what exactly are **React elements**?
 
-**React-Elemente** sind der kleinstmögliche Baustein in einer **React-Anwendung**. Anhand der **Elemente** beschreibt ihr, was der Benutzer später auf dem Bildschirm zu sehen bekommt. Trotz ihres gleichen Namens unterscheiden sie sich von DOM-Elementen in einem wesentlichen Punkt: Sie sind lediglich ein einfaches Objekt und damit auch günstig \(im Sinne der Performance\) zu erstellen. Die bloße Erstellung eines **React-Elements** mittels `React.createElement()` löst dabei noch keine DOM-Operation aus!
+**React elements** are the smallest possible component in a **React application**. Using the **elements** you describe what the user will see on the screen later. Despite having the same name, they differ from DOM elements in one essential point: they are only a simple object and therefore cheap to create \(in the sense of performance\). The mere creation of a **React element** using `React.createElement()` does not trigger a DOM operation!
 
 {% hint style="info" %}
-React-**Elemente** werden oftmals mit React-**Komponenten** durcheinander geworfen oder im Sprachgebrauch analog verwendet. Das ist aber nicht korrekt! **Elemente** sind das, aus dem **Komponenten** letztendlich bestehen. **Komponenten** werden im nächsten Kapitel noch ausführlich behandelt, bevor es damit weitergeht, solltest du jedoch zuerst dieses Kapitel über **Elemente** gelesen haben.
+React-**elements** are often mixed up with React-**components** or used in analogue language. But that's not correct! **Elements** are the elements of which **components** ultimately consist. **Components** are covered in detail in the next chapter, but if you have read this chapter about **elements** before continuing, you should read it first.
 {% endhint %}
 
-Wir wissen bereits wie wir mittels **JSX** ein **React-Element** erstellen und das **JSX** nur eine Vereinfachung ist, um uns viel Schreibarbeit und ständige `React.createElement()`-Aufrufe zu ersparen. Doch wie rendern wir ein erstelltes Element nun, also mit anderen Worten, zeigen es im Browser an?
+We already know how to create a **React element** using **JSX** and that **JSX** is just a simplification to save us a lot of paperwork and constant `React.createElement()` calls. But how do we render a created element, in other words, display it in the browser?
 
-Hier bedienen wir uns an `ReactDOM`, genauer gesagt dessen eigener `render()`-Methode. Um ein **React-Element** zu rendern, benötigen wir grundsätzlich eine **Root-** oder **Mount-Node**. Dies ist eine DOM-Node, die sozusagen als Platzhalter dient und React mitteilt, wohin ein Element gerendert werden soll. Theoretisch kannst du problemlos mehrere Root-Nodes in deinem HTML-Dokument haben. React kontrolliert diese alle unabhängig voneinander. Statt also nur einer großen **React-Anwendung** kannst du also auch viele kleine \(oder auch große\) Anwendungen in einem einzigen HTML-Dokument unterbringen. Üblich ist es aber nur **eine Root-Node** für deine **React-Anwendung** zu haben.
+Here we use `ReactDOM`, more precisely its own `render()` method. To render a **React element**, we always need a **Root-** or **Mount node**. This is a DOM node that serves as a placeholder and tells React where to render an element. Theoretically, you can have multiple root nodes in your HTML document without any problems. React controls them all independently of each other. So instead of just one big **React application**, you can also place many small \(or even big\) applications in a single HTML document. However, it is only common to have **a root node** for your **react application**.
 
-Kommen wir also zum Wesentlichen: um ein **React-Element** zu rendern, übergibst du dieses als erstes Argument der `ReactDOM.render()`-Methode zusammen mit der **Root-Node** als zweitem Argument, also der DOM-Node, in das dein **Element** gerendert werden soll.
+Let's get to the essential: to render a **React element**, you pass it as the first argument of the `ReactDOM.render()` method together with the **Root node** as the second argument, i.e. the DOM node into which your **Element** is to be rendered.
 
-Stellen wir uns einmal vor du hast ein `div` mit der ID `root`in deinem HTML-Dokument, das als **Root-Node** dienen soll:
+Imagine you have a `div` with the ID `root` in your HTML document, which should serve as **Root-Node**:
 
 ```markup
 <!DOCTYPE html>
@@ -28,27 +28,27 @@ Stellen wir uns einmal vor du hast ein `div` mit der ID `root`in deinem HTML-Dok
 </html>
 ```
 
- Der entsprechende Aufruf ist dann der folgende:
+ The corresponding call is then the following:
 
 ```jsx
-const myFirstElement = <div>Mein erstes React Element</div>;
+const myFirstElement = <div>My first react element</div>;
 ReactDOM.render(myFirstElement, document.getElementById('root'));
 ```
 
-Führst du diesen Code nun im Browser aus, siehst du **innerhalb** des `root`-divs nun dein `<div>Mein erstes React Element</div>`.
+If you now execute this code in the browser, you will see **within** the `root`-div your `<div>My first react element</div>`.
 
-**React-Elemente** sind dabei **immutable**, also unveränderlich. Dies bedeutet: Ist ein Element einmal erstellt, repräsentiert es immer einen bestimmten Zustand \(„State“\) im User Interface. Die offizielle React-Dokumentation spricht hier metaphorisch von einem Einzelbild \(„Frame“\) in einem Film. Möchten wir unser User Interface aktualisieren, müssen wir dazu ein neues **React-Element** mit den veränderten Daten erstellen. Keine Angst, das klingt umständlicher als es ist und passiert später einmal ganz intuitiv.
+**React elements** are **immutable**, i.e. immutable. This means: Once an element has been created, it always represents a certain state \("State"\) in the user interface. The official React documentary metaphorically speaks of a single frame \("Frame"\) in a film. If we want to update our user interface, we have to create a new **React element** with the changed data. Don't worry, it sounds more complicated than it is and happens intuitively later.
 
-React selbst ist dabei so klug, dass es durch einen Vergleichsalgorithmus nur die Teile einer Anwendung aktualisiert, die sich auch tatsächlich verändert haben. Dabei werden **React Elemente** und ihre Kind-Elemente mit ihren Vorgängerversionen vergleichen und lösen nur eine DOM-Operation aus wenn eine Änderung vorliegt. Dies führt dazu, dass React Anwendungen, richtig gemacht, sehr gute Rendering-Performance aufweisen, da DOM-Operationen in der Regel sehr kostspielig \(also performancelastig\) sind, durch React und seinen **Reconciliation** genannten Prozess aber auf ein Minimum verringert werden. Dabei werden nicht immer grundsätzlich ganze DOM-Elemente anhand der Beschreibung eines **React-Elements** neu erzeugt, sondern es werden auch nur einzelne Attribute aktualisiert, sollte sich nur ein solches geändert haben.
+React itself is so smart that it uses a comparison algorithm to update only those parts of an application that have actually changed. In this case **React elements** and their child elements are compared with their predecessor versions and only trigger a DOM operation if there is a change. As a result, React applications, properly done, have very good rendering performance, since DOM operations are usually very costly \(i.e. performancelastig\), but React and its **Reconciliation** process are reduced to a minimum. In doing so, whole DOM elements are not always recreated according to the description of a **React element**, but only individual attributes are updated if only one has changed.
 
-Schauen wir uns das mal in der Praxis an:
+Let's take a look at this at the practice:
 
 ```javascript
 function showTime() {
   var time = new Date().toLocaleTimeString();
   var timeElement = (
     <div>
-      <p>Es ist jetzt {time} Uhr</p>
+      <p>It's time now {time} Clock</p>
     </div>
   );
   ReactDOM.render(timeElement, document.getElementById('root'));
@@ -56,30 +56,30 @@ function showTime() {
 setInterval(showTime, 1000);
 ```
 
-Wieder erstellen wir ein **React-Element**, diesmal soll es uns beim Aufruf von `ReactDOM.render()` die aktuelle Zeit ausgeben. Da wir stets die genaue Uhrzeit wissen wollen, stecken wir das Element und den `ReactDOM.render()` Aufruf in eine Funktion, die per `setInterval` alle 1000 ms aufgerufen wird.
+Again we create a **React element**, this time it should give us the current time when calling `ReactDOM.render()`. Since we always want to know the exact time, we put the element and the `ReactDOM.render()` call into a function that is called by `setInterval` every 1000 ms.
 
-Ein Blick in die **Chrome Devtools** offenbart: Bei jedem `ReactDOM.render()`-Aufruf wird stets nur die Uhrzeit selbst aktualisiert, die restlichen Elemente, wie die DOM-Nodes oder auch nicht betroffene Teil des angezeigten Textes bleiben unangetastet:
+A look into the **Chrome Devtools** reveals: With each `ReactDOM.render()` call only the time itself is updated, the remaining elements, like the DOM nodes or also not affected part of the displayed text remain untouched:
 
-![React aktualisiert nur die Zeit selbst, nichts anderes.](../.gitbook/assets/react-update.png)
+![React only updates the time itself, nothing else](../.gitbook/assets/react-update.png)
 
-Und hier lernen wir zugleich auch eins der grundlegenden Prinzipien von React in der Praxis kennen: das **deklarative** Vorgehen zur Erstellung von User Interfaces. Statt unserer Mini-App **imperativ** zu sagen, dass sie bitte sekündlich die Uhrzeit aktualisieren soll, definieren wir stattdessen **deklarativ** im **React-Element**, dass wir an einer gewissen Stelle jeweils stets bei jedem Rerendering die aktuelle Uhrzeit sehen möchten.
+And here we also get to know one of the basic principles of React in practice: the **declarative** procedure for creating user interfaces. Instead of telling our Mini-App **imperativ** to update the time every second, we define **deklarativ** in the **React-Element** that we always want to see the current time at each rendering.
 
-Eine ähnliche Funktionalität, ohne React implementiert, hätte stattdessen wohl in etwa so ausgesehen:
+A similar functionality, implemented without React, would have looked something like this instead:
 
 ```javascript
 function changeTime() {
   var time = new Date().toLocaleTimeString();
   var target = document.getElementById('root');
-  target.textContent = 'Es ist jetzt ' + time  ' Uhr';
+  target.textContent = 'It is now ' + time ' clock';
 }
 setInterval(changeTime, 1000);
 ```
 
-Der Vorteil beim **deklarativen** Vorgehen ist, dass wir nur noch **Zustände beschreiben** und sagen, wie etwas angezeigt werden soll und nicht selber jeden Schritt festlegen, wie wir diesen Zielzustand erreichen wollen. Das macht insbesondere bei komplexeren Anwendungen viele Dinge einfacher, übersichtlicher und ist dadurch zugleich deutlich weniger fehleranfälliger.
+The advantage of the **declarative** approach is that we only describe **states** and say how something should be displayed, not how we want to achieve this target state every step of the way. This makes many things simpler, clearer and at the same time much less prone to errors, especially with more complex applications.
 
 {% hint style="info" %}
-In der Praxis ist es eher üblich, dass `ReactDOM.render()` nur ein einziges Mal, meist beim Öffnen einer Seite aufgerufen wird. Der wiederholte Aufruf der `render()`-Methode dient hier nur zur Veranschaulichung wie **ReactDOM** und **React-Elemente** zusammenspielen. 
+In practice, it is more common to call `ReactDOM.render()` only once, usually when opening a page. The repeated call of the `render()` method here only serves to illustrate how **ReactDOM** and **React elements** interact. 
 
-Das Rerendering lösen dann meist **Komponenten** aus, indem sich ihr State ändert oder ihnen von außen neue Props hereingereicht werden. Mit Komponenten geht es im nächsten Kapitel weiter!
+Rendering is then usually triggered by **components** by changing their state or by new props being submitted to them from outside. The next chapter continues with components!
 {% endhint %}
 
