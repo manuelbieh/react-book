@@ -1,8 +1,8 @@
-# Tools and frameworks
+# Tools and Frameworks
 
-A whole ecosystem of tools has now formed around React. From the Static Site Generator to create simple to medium-complex static websites based on React components, from prototyping tools to tools to clearly present the components of your own application in a kind of style guide, a lot is represented here. In this subchapter I would like to give a _short_ overview of the most popular tools and frameworks from the React world. 
+A whole ecosystem of tools has now formed around React. From the Static Site Generator to create simple to medium-complex static websites based on React components, from prototyping tools to tools to clearly present the components of your own application in a kind of style guide, a lot is represented here. In this subchapter I would like to give a _short_ overview of the most popular tools and frameworks from the React world.
 
-### Storybook
+## Storybook
 
 > Storybook is a development environment for UI components. It allows you to browse a component library, view the different states of each component, and interactively develop and test components.
 
@@ -12,17 +12,17 @@ A whole ecosystem of tools has now formed around React. From the Static Site Gen
 **URL:** [https://storybook.js.org/](https://storybook.js.org/)  
 **GitHub:** [https://github.com/storybooks/storybook](https://github.com/storybooks/storybook)
 
-### React Styleguidist
+## React Styleguidist
 
 > React Styleguidist is a component development environment with hot reloaded dev server and a living style guide that you can share with your team.
 
-**Styleguidist is going in the same direction as Storybook. It is also possible with Styleguidist to create a styleguide from the UI components of your own application. However, **Styleguidist** is somewhat more implicit than **Storybook** here and so the styleguide is already enriched to a quite high degree from the **PropTypes** of components as well as from **JSDoc** comments. Markdown files in the folder of the respective component are then used for everything else.
+**Styleguidist is going in the same direction as Storybook. It is also possible with Styleguidist to create a styleguide from the UI components of your own application. However,** Styleguidist **is somewhat more implicit than** Storybook **here and so the styleguide is already enriched to a quite high degree from the** PropTypes **of components as well as from** JSDoc\*\* comments. Markdown files in the folder of the respective component are then used for everything else.
 
 **License:** MIT \(Open Source\)  
 **URL:** [https://react-styleguidist.js.org/](https://react-styleguidist.js.org/)  
 **GitHub:** [https://github.com/styleguidist/react-styleguidist](https://github.com/styleguidist/react-styleguidist)
 
-### Docz
+## Docz
 
 > It has never been so easy to document your things!
 
@@ -32,7 +32,7 @@ A whole ecosystem of tools has now formed around React. From the Static Site Gen
 **URL:** [https://docz.site/](https://docz.site/)  
 **GitHub:** [https://github.com/pedronauck/docz](https://github.com/pedronauck/docz)
 
-### React Cosmos
+## React Cosmos
 
 > Dev tool for creating reusable React components
 
@@ -41,7 +41,7 @@ A little further is React Cosmos. While the first three tools focus on encapsula
 **License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/react-cosmos/react-cosmos](https://github.com/react-cosmos/react-cosmos)
 
-### Gatsby
+## Gatsby
 
 > Gatsby is a free and open source framework based on React that helps developers build blazing fast websites and apps
 
@@ -51,16 +51,16 @@ A little further is React Cosmos. While the first three tools focus on encapsula
 **URL:** [https://www.gatsbyjs.org/](https://www.gatsbyjs.org/)  
 **GitHub:** [https://github.com/gatsbyjs/gatsby](https://github.com/gatsbyjs/gatsby)
 
-### React static
+## React static
 
 > React-Static is a fast, lightweight, and powerful progressive static site generator based on React and its ecosystem.
 
-**React static is an alternative toatsby. Also **React-Static** is a **Static Site Generator,** with which static websites based on React can be generated. Due to its high financing round, **Gatsby** is certainly the better known of the two tools, but **React-Static** is also a serious alternative in this area with a large and very active community.
+**React static is an alternative toatsby. Also** React-Static **is a** Static Site Generator, **with which static websites based on React can be generated. Due to its high financing round,** Gatsby **is certainly the better known of the two tools, but** React-Static\*\* is also a serious alternative in this area with a large and very active community.
 
 **License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/nozzle/react-static](https://github.com/nozzle/react-static)
 
-### Next.js
+## Next.js
 
 Next.js confidently refers to itself as "The React Framework" for various applications such as static and dynamic websites, large and small businesses, mobile or classic websites and much more. In fact, with over 36,000 stars on GitHub in the React community, this framework is a recognized tool for developing applications with React and a real alternative to Create React App. Unlike CRA, Next.js comes with support for server-side rendered pages, which makes it especially interesting for SEO-relevant topics.
 

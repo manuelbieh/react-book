@@ -2,10 +2,10 @@
 
 ## The "new" JavaScript
 
-**ES2015** is in short a modernized, current version of JavaScript with many new functions and syntax simplifications. **ES2015**** is the successor of **ECMAScript** in version 5 \(**ES5**\), so it was originally called **ES6**** and is still called so in some blogs and articles. If you come across the term **ES6,** when reading articles about React, this means **ES2015**. I write here mostly from **ES2015+** and my changes that have been included in JavaScript since 2015. These include ES2016 \(ES7\), ES2017 \(ES8\) and ES2018 \(ES9\).
+**ES2015** is in short a modernized, current version of JavaScript with many new functions and syntax simplifications. **ES2015\*\*** is the successor of **ECMAScript** in version 5 \(**ES5**\), so it was originally called **ES6\*\*** and is still called so in some blogs and articles. If you come across the term **ES6,** when reading articles about React, this means **ES2015**. I write here mostly from **ES2015+** and my changes that have been included in JavaScript since 2015. These include ES2016 \(ES7\), ES2017 \(ES8\) and ES2018 \(ES9\).
 
 {% hint style="info" %}
-The **ES**** in **ES2015** and **ES6**** stands for **ECMAScript**. ECMA International is the organization behind the standardization of the **ECMA-262-** specification on which JavaScript is based. Since 2015, new versions of the specification have been published annually, which for historical reasons had a sequential version number starting with version 1, but then adopted the year of their publication for greater clarity. Today, **ES6** is officially referred to as **ES2015**, **ES7** as **ES2016**, and so on.
+The **ES\*\*** in **ES2015** and **ES6\*\*** stands for **ECMAScript**. ECMA International is the organization behind the standardization of the **ECMA-262-** specification on which JavaScript is based. Since 2015, new versions of the specification have been published annually, which for historical reasons had a sequential version number starting with version 1, but then adopted the year of their publication for greater clarity. Today, **ES6** is officially referred to as **ES2015**, **ES7** as **ES2016**, and so on.
 {% endhint %}
 
 Who works with React, uses in probably 99% of the cases also **Babel** as **Transpiler,** to transpose his **JSX** accordingly into `createElement()` calls. But **Babel** doesn't just transpose **JSX** into executable JavaScript, it was originally called **6to5** and did exactly that: transposing JavaScript written with **ES6** syntax into **ES5**, so that newer, future features and syntax enhancements could be used in older browsers without support for "the new" JavaScript.
@@ -347,7 +347,7 @@ Object.values(Object)
 Object.freeze(Object)
 ```
 
-One by one again. The most useful one from my point of view is `Object.assign()`. This makes it possible to add the properties of one or more objects to an existing object \(a merge\, so to speak). The method returns the result as an object. However, there is also a mutation of the **target object**, so this method should be used with caution. Examples say more than words, please:
+One by one again. The most useful one from my point of view is `Object.assign()`. This makes it possible to add the properties of one or more objects to an existing object \(a merge\, so to speak\). The method returns the result as an object. However, there is also a mutation of the **target object**, so this method should be used with caution. Examples say more than words, please:
 
 ```javascript
 const user = { id: 1, name: 'Manuel' };
@@ -421,7 +421,7 @@ An object created with `Object.freeze()` also provides good protection against a
 
 The latest changes to the way objects work are not methods, but syntax enhancements.
 
-The first are the **Computed Properties**** \(i.e. _calculated properties_\). Behind this lies the possibility to use expressions \(or their values\) as object properties. If, for example, you wanted to set a property in an object in the past, you would usually create the object \(e.g. as **ObjectLiteral** `{}` or via `Object.create()`\), assign it to a variable and then add the new property to the object:
+The first are the **Computed Properties\*\*** \(i.e. _calculated properties_\). Behind this lies the possibility to use expressions \(or their values\) as object properties. If, for example, you wanted to set a property in an object in the past, you would usually create the object \(e.g. as **ObjectLiteral** `{}` or via `Object.create()`\), assign it to a variable and then add the new property to the object:
 
 ```javascript
 const nationality = 'german';
@@ -433,7 +433,7 @@ console.log(user);
 // -> { name: 'Manuel', german: true };
 ```
 
-**ES2015**** now allows us to use expressions directly as object properties by putting them in square brackets `[]`. This saves us the detour of having to add properties to the already created object afterwards:
+**ES2015\*\*** now allows us to use expressions directly as object properties by putting them in square brackets `[]`. This saves us the detour of having to add properties to the already created object afterwards:
 
 ```javascript
 const nationality = 'german';
@@ -472,7 +472,7 @@ const user = {
 };
 ```
 
-Yep. since **ES2015**** both spellings actually lead to the identical object! Shorthand syntax can also be combined with conventional syntax without any problems:
+Yep. since **ES2015\*\*** both spellings actually lead to the identical object! Shorthand syntax can also be combined with conventional syntax without any problems:
 
 ```javascript
 const name = 'Manuel';
@@ -671,7 +671,7 @@ console.log(Object.assign(a, b, c));
 {a: 1, b: 2, c: 3}
 ```
 
-So the function returns a new object in which all 3 passed objects have been combined to one single object. But is this really a new object? **Let's output `a`, `b` and `c` in the console afterwards:
+So the function returns a new object in which all 3 passed objects have been combined to one single object. But is this really a new object? \*\*Let's output `a`, `b` and `c` in the console afterwards:
 
 ```javascript
 console.log(a);
@@ -966,7 +966,7 @@ Example(1, 2, 3, 4, 5);
 **output:**
 
 {% hint style="info" %}
-`Arguments(5) [1, 2, 3, 4, 5, callee: ƒ]``
+\`Arguments\(5\) \[1, 2, 3, 4, 5, callee: ƒ\]\`\`
 {% endhint %}
 
 **Arrow Functions** no longer offer this possibility and instead throw an error:
@@ -1127,7 +1127,7 @@ console.log(`${firstName.toUpperCase()} ${lastName.toUpperCase()}`);
 
 ## Promises and async/await
 
-Promises \ are not a fundamentally new concept in JavaScript, but in ES2015 they have been introduced into the standard for the first time and can be used natively without another library \(e.g. q, Bluebird, rsvp.js, ...\). Promises roughly allow to _linearize_ the asynchronous development by callbacks. A Promise gets a **Executor function** passed, which in turn get the two arguments `resolve` and `reject` passed, and can assume one of a total of three different states: as initial value this state is `pending` and depending on whether an operation was successful or erroneous, i.e. the Executor function has executed the first \(`resolve`\) or the second \(`reject`\) argument, this state changes to `fulfilled` or `rejected`. You can then react to both final states using the methods `.then()` and `.catch()`. If `resolve` is called, the `then()` part is executed; if `reject` is called, **all** `then()` calls are skipped and the `catch()`\` part is executed instead.
+Promises  are not a fundamentally new concept in JavaScript, but in ES2015 they have been introduced into the standard for the first time and can be used natively without another library \(e.g. q, Bluebird, rsvp.js, ...\). Promises roughly allow to _linearize_ the asynchronous development by callbacks. A Promise gets a **Executor function** passed, which in turn get the two arguments `resolve` and `reject` passed, and can assume one of a total of three different states: as initial value this state is `pending` and depending on whether an operation was successful or erroneous, i.e. the Executor function has executed the first \(`resolve`\) or the second \(`reject`\) argument, this state changes to `fulfilled` or `rejected`. You can then react to both final states using the methods `.then()` and `.catch()`. If `resolve` is called, the `then()` part is executed; if `reject` is called, **all** `then()` calls are skipped and the `catch()`\` part is executed instead.
 
 An executor function **must** execute one of the two passed methods, otherwise the promise remains permanently _unfulfilled_, which can lead to incorrect behavior and in certain cases even to memory leaks within an application.
 
@@ -1258,7 +1258,7 @@ So much for history. So how do imports work now and what are modules anyway?
 
 The goal of modules is to encapsulate scopes in JavaScript on a **per module level**. A module in this sense is actually a single **File**. Unless you explicitly limit it by creating a new scope, e.g. by including it in a **IIFE** \(_Immediately Invoked Function Expression_\), every function or variable defined in JavaScript is globally available. Modules counteract this by making all code available only **within the module**. This avoids complications, e.g. when two libraries use the same variable, and also creates reusable code in a simple way, without having to worry about it overwriting existing variables or functions elsewhere.
 
-Modules can **export** the functions, classes or variables defined in them, other modules can then import these exports as needed. For the export of functions and variables there is an `export` keyword, to import these exports later elsewhere there is, you think, the corresponding `import` keyword. Exports can take two forms, one being that of a **Named Export** \ and the other being that of a **Default Export** \.
+Modules can **export** the functions, classes or variables defined in them, other modules can then import these exports as needed. For the export of functions and variables there is an `export` keyword, to import these exports later elsewhere there is, you think, the corresponding `import` keyword. Exports can take two forms, one being that of a **Named Export**  and the other being that of a **Default Export** .
 
 #### Named Exports
 
@@ -1289,7 +1289,7 @@ console.log(square(value)); // 25
 console.log(divideBy5(value)); // 1
 ```
 
-A file can theoretically **have an unlimited number of named exports**, but they must differ in name and an already exported name **must not be exported again.
+A file can theoretically **have an unlimited number of named exports**, but they must differ in name and an already exported name \*\*must not be exported again.
 
 #### Default Export
 
@@ -1328,7 +1328,7 @@ export default class MyComponent extends React.Component {
 
 If you were attentive and paid attention, you might have noticed that we import from a file named `calc.mjs` above, not `calc.js` \(`.mjs` instead of `.js`\). This is the convention agreed upon when using JavaScript modules in Node.js during the lengthy standardization process described above.
 
-If you want to write universal JavaScript, i.e. JavaScript that can be executed server-side with Node.js as well as client-side in the browser, and if you want to do this without inserting a compiler intermediate step through e.g. Babel, Webpack or TypeScript, **you have to** use the `.mjs' extension for your files.
+If you want to write universal JavaScript, i.e. JavaScript that can be executed server-side with Node.js as well as client-side in the browser, and if you want to do this without inserting a compiler intermediate step through e.g. Babel, Webpack or TypeScript, **you have to** use the \`.mjs' extension for your files.
 
 The loading of modules works in Node.js a bit different than in the browser. While the browser doesn't care which file extension a module has \(as long as the server sends the content-Type `text/javascript` with it\), Node.js needs the `.mjs` file extension to identify JavaScript modules as such.
 
@@ -1376,3 +1376,4 @@ ES2015 and later versions offer a lot of useful new features that were not avail
 * **Template Strings** to make working with JavaScript expressions in strings easier
 * **Promises** and **Asynchronous functions** using `async`/`await` to make working with asynchronous data much easier
 * **Import** and **Export** for encapsulating reusable JavaScript at module level
+

@@ -157,11 +157,11 @@ Or to make it short using spread syntax:
 </CryptoPrices>
 ```
 
-In this way, we have ensured a very high degree of flexibility, but do not have to rigidly connect components with the logic via a HOC, which saves us a lot of "organizational effort". 
+In this way, we have ensured a very high degree of flexibility, but do not have to rigidly connect components with the logic via a HOC, which saves us a lot of "organizational effort".
 
 But be careful: **Functions as a Child components also have a restriction that Higher Order Components** do not have. Namely, the data we get from a **FaaC** component **can only be used within JSX**! So if we want to provide relatively abstract methods via a logic component that is higher in the component hierarchy, this is not possible with a **FaaC** component at first, or only inconveniently possible!
 
-### Render props
+## Render props
 
 But wait a minute, how was that now actually with the **Render Props** and what is that now exactly and how do these differ from **Function as Children** components?
 
@@ -192,11 +192,11 @@ render() {
 }
 ```
 
-So it's also a matter of taste to a certain extent. Of course you are not limited to the name `render`, but can simply pass a function to any prop and make it a _"Render Prop"_. 
+So it's also a matter of taste to a certain extent. Of course you are not limited to the name `render`, but can simply pass a function to any prop and make it a _"Render Prop"_.
 
 It is also possible to have any number of such props in one component. If, for example, you want to implement a component that outputs a table to you that has both a table header and a body that both get data from the component, this is no problem either!
 
-### Render props and FaaCs in conjunction with Higher Order Components
+## Render props and FaaCs in conjunction with Higher Order Components
 
 Finally, a little trick. If you actually need a **Higher Order Component** and you already have a **FaaC-** or **Render Prop** component, you can also make it a HOC:
 
@@ -219,7 +219,8 @@ function withCryptoPrices(WrappedComponent) {
 In practice, experience has shown that this case will be rather rare.
 
 {% hint style="info" %}
-The **Function as a Child** pattern and the nearly identical **Render-Props** pattern are used to separate business logic from presentation components. They are a very lightweight alternative to **Higher Order Components**, which serve pretty much the same application. 
+The **Function as a Child** pattern and the nearly identical **Render-Props** pattern are used to separate business logic from presentation components. They are a very lightweight alternative to **Higher Order Components**, which serve pretty much the same application.
 
 However, unlike HOCs, they can also be used within a `render()` method of components and do not have to be "linked" rigidly to a component. This makes them even more flexible in their applications than **Higher Order Components,** without sacrificing clarity.
 {% endhint %}
+

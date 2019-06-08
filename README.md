@@ -2,7 +2,7 @@
 description: Readme
 ---
 
-# React learn and understand
+# React lernen und verstehen
 
 This book is also available as ePub, PDF and Mobi version:
 

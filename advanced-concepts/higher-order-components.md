@@ -20,7 +20,7 @@ const withFormatting = (WrappedComponent) => {
 };
 ```
 
-Here we have defined a function `withFormatting` that accepts a React component. The function returns a new React component, which renders the _component_put into the function and passes the props `bold` and `italic` to it. The entered component can now access these props:
+Here we have defined a function `withFormatting` that accepts a React component. The function returns a new React component, which renders the \_component\_put into the function and passes the props `bold` and `italic` to it. The entered component can now access these props:
 
 ```jsx
 const FormattedComponent = withFormatting(({ bold, italic }) => (
@@ -30,7 +30,7 @@ const FormattedComponent = withFormatting(({ bold, italic }) => (
 ));
 ```
 
-Typically **Higher Order Components** are used to encapsulate logic. In this context we often talk about **Smart** and **Dumb Components**: **Sly and stupid components. The Smart Components \(which include Higher Order Components\) are then used to map business logic, communicate with APIs, or process behavioral logic. Stupid components, on the other hand, get static props as far as possible and limit the logic part to pure representation logic. For example, if a user image is displayed, or if it does not exist, a placeholder image is displayed instead. In this context the term **Container Component** \(for _Smart_ Components\) and **Layout Components** \(for _Dumb_ Components\) is often used.
+Typically **Higher Order Components** are used to encapsulate logic. In this context we often talk about **Smart** and **Dumb Components**: **Sly and stupid components. The Smart Components \(which include Higher Order Components\) are then used to map business logic, communicate with APIs, or process behavioral logic. Stupid components, on the other hand, get static props as far as possible and limit the logic part to pure representation logic. For example, if a user image is displayed, or if it does not exist, a placeholder image is displayed instead. In this context the term** Container Component **\(for** _**Smart**_ **Components\) and** Layout Components\*\* \(for _Dumb_ Components\) is often used.
 
 What's the point? Such a strict subdivision into business logic and presentation logic makes real component-based development possible for the time being. It allows you to create layout components that have no knowledge of any APIs and only bluntly represent the data that is passed to them, no matter where it comes from. At the same time, it also allows the business logic components to take care of the pure business logic, regardless of how the data is ultimately presented.
 

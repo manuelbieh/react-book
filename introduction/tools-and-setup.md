@@ -12,7 +12,7 @@ Instead of installing **Node** directly, I recommend [**nvm**](https://github.co
 
 ### Yarn
 
-While **Node** already has a good and solid package manager with **npm**, **yarn** goes one step further. It offers better caching, therefore also better performance, simpler commands and comes beyond that, like React, also from Facebook and was developed there, among other things, to make working with React even more pleasant. While everything described here in the rest of the book can be done with **npm**, I would still recommend installing **Yarn**. This is gaining more and more weight in the React environment, especially because of its simplicity and improved performance compared to **npm**.   
+While **Node** already has a good and solid package manager with **npm**, **yarn** goes one step further. It offers better caching, therefore also better performance, simpler commands and comes beyond that, like React, also from Facebook and was developed there, among other things, to make working with React even more pleasant. While everything described here in the rest of the book can be done with **npm**, I would still recommend installing **Yarn**. This is gaining more and more weight in the React environment, especially because of its simplicity and improved performance compared to **npm**.  
 Once **Node** and **npm** are installed, **yarn** can be installed as a global package via **npm**:
 
 ```bash
@@ -29,7 +29,7 @@ We also just installed our first package. Easy! The command line flag `--global`
 
 ### Babel
 
-Babel is a tool that is usually only used as Dependency \, more precisely, as an npm package in React-based projects, and does not need to be explicitly installed at this point. Babel allows you to _transpil_ JavaScript code into interpretable and executable code that is not or not yet _standard-compliant or not yet supported by all common browsers.
+Babel is a tool that is usually only used as Dependency \, more precisely, as an npm package in React-based projects, and does not need to be explicitly installed at this point. Babel allows you to _transpil_ JavaScript code into interpretable and executable code that is not or not yet \_standard-compliant or not yet supported by all common browsers.
 
 {% hint style="info" %}
 **Transpiling** \(engl. _transpiling_\) is a process in which the source code of one language is converted into a corresponding functionally identical counterpart of another language. In our case, JSX or ES2015+ in valid, executable JavaScript supported by the browser.
@@ -37,7 +37,7 @@ Babel is a tool that is usually only used as Dependency \, more precisely, as an
 
 Babel consists of a core module \(`@babel/core`\) that merely provides some APIs that are then used by **Plugins** for the corresponding **Transpiling**. These plugins are often combined to so-called **Presets**, which in turn install several **Plugins** at the same time. The most common presets in React-based projects are `@babel/preset-react` \(for reading and translating **JSX**\) and `@babel/preset-env`, which, depending on the target environment, paraphrases modern JavaScript so that older browsers also understand it.
 
-The `@` sign in front of the name means that it is an organization within the npm registry \(the npm package directory\) and can be considered a kind of namespace. In the case of Babel, you will find the official packages published there by the Babel maintainers. Before Babel 7 was released, this organization did not exist and the packages were separated by a hyphen in the name. So `@babel/preset-react` was `babel-preset-react`, `@babel/core` was `babel-core` and so on. 
+The `@` sign in front of the name means that it is an organization within the npm registry \(the npm package directory\) and can be considered a kind of namespace. In the case of Babel, you will find the official packages published there by the Babel maintainers. Before Babel 7 was released, this organization did not exist and the packages were separated by a hyphen in the name. So `@babel/preset-react` was `babel-preset-react`, `@babel/core` was `babel-core` and so on.
 
 So don't get confused, you should encounter `babel-core` instead of `@babel/core` in a project. So in this case it is simply Babel 6 \(or an older version\). However, it occasionally happens that developers whose plugins or presets are not an official part of Babel prefix them with `babel-` as well, while the packages still work with Babel 7. Usually, only a look at the readme of the respective package will help here.
 
@@ -49,7 +49,7 @@ The **presets** I use when working with React are \(and at the same time recomme
 * ¶ ¶@babel/plugin-proposal-class-properties ¶ 
 * ¶ ¶ @babel/plugin-syntax-dynamic-import ¶ 
 
-Who wants to work with Flow or TypeScript as static Type Checkers needs `@babel/preset-flow` for Flow or `@babel/preset-typescript` for TypeScript. 
+Who wants to work with Flow or TypeScript as static Type Checkers needs `@babel/preset-flow` for Flow or `@babel/preset-typescript` for TypeScript.
 
 All mentioned packages will be installed via:
 
@@ -93,7 +93,7 @@ It may take some getting used to in the beginning and even if you work with **Pr
 
 ### IDE/Editor plugins
 
-All known editors and IDEs such as Webstorm, Atom, Visual Studio Code or Sublime \(but also pretty much any other modern editor or IDE\) offer plugins or even already natively integrated functions for better support of **React** and **JSX**. Here I strongly recommend the installation of these plugins, as they usually provide a much better syntax highlighting and partly offer code completion and other nice features. 
+All known editors and IDEs such as Webstorm, Atom, Visual Studio Code or Sublime \(but also pretty much any other modern editor or IDE\) offer plugins or even already natively integrated functions for better support of **React** and **JSX**. Here I strongly recommend the installation of these plugins, as they usually provide a much better syntax highlighting and partly offer code completion and other nice features.
 
 In **Atom** this is about [language-babel](https://atom.io/packages/language-babel), in **VS Code** there is [Babel ES6/ES7](https://marketplace.visualstudio.com/items?itemName=dzannotti.vscode-babel-coloring) and in **Sublime** it's worth looking at [babel-sublime](https://github.com/babel/babel-sublime). If you use **Webstorm**, you have native support for React syntax highlighting since version 10. Also plugins for the **ESLint** or **Prettier** mentioned above are very useful. To do this, simply search for ESLint or Prettier in the plugin manager of your IDE or editor and select the plugin with the most installations. This is usually the official ESLint or Prettier plugin.
 

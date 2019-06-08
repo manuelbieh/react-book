@@ -586,7 +586,7 @@ ReactDOM.render(<Form />, document.getElementById("root"));
 
 Here we see the two components `Form` and `FancyInput`. The `Form` component renders a `FancyInput` component and gives it a `onChange` function in addition to the `name` attribute. This changes the state of the `Form` component with every change in the input field and thus triggers a rendering.
 
-The `changeHandler` function itself is **created in the form component**, with each new rendering. I.e. ** the reference to the function changes**, because we create a new function with each new rendering. In plain English: we pass the **same**, but not **the same** function.
+The `changeHandler` function itself is **created in the form component**, with each new rendering. I.e.  **the reference to the function changes**, because we create a new function with each new rendering. In plain English: we pass the **same**, but not **the same** function.
 
 Thus the optimization of `React.memo()`, which we placed around the `FancyInput` component, **does not** apply. Briefly for refreshing: `React.memo()` checks **before** rendering a component whether its **props** have changed compared to the last rendering and triggers a rendering if this condition is met. Since we rebuild the `changeHandler` function with every rendering of the `Form` component, this condition **always** is true and the `FancyInput` component is also re-rendered accordingly with every rendering of the `Form` component.
 
@@ -633,7 +633,7 @@ corresponds to:
 useMemo(() => fn, deps);
 ```
 
-While `useCallback()` returns us the **input function** in a _memoized_ \ version, `useMemo()` returns the **return value** of the input function as _memoized_ version. `useMemo()` can be used for functions that perform very computation-intensive tasks and should not be executed every time a rendering is performed.
+While `useCallback()` returns us the **input function** in a _memoized_  version, `useMemo()` returns the **return value** of the input function as _memoized_ version. `useMemo()` can be used for functions that perform very computation-intensive tasks and should not be executed every time a rendering is performed.
 
 Let's take a look at a non-optimized component:
 
@@ -679,9 +679,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-Our small app consists first of all of an input field for numbers. If a number is entered and the **Enter** key is pressed, this number is written to the `values` state. In this case, this is an array that holds all our entered numbers. The component then iterates through all entered numbers and renders a `FibonacciNumber` component, which gets the value \ (the respective number\) passed.
+Our small app consists first of all of an input field for numbers. If a number is entered and the **Enter** key is pressed, this number is written to the `values` state. In this case, this is an array that holds all our entered numbers. The component then iterates through all entered numbers and renders a `FibonacciNumber` component, which gets the value  \(the respective number\) passed.
 
-The `FibonacciNumber` component calculates the corresponding Fibonacci number for this number and displays it. Depending on the number and the calculating power the calculation of the given number can take some time \(on my computer this is 2-3 seconds\ for the 40th Fibonacci number).
+The `FibonacciNumber` component calculates the corresponding Fibonacci number for this number and displays it. Depending on the number and the calculating power the calculation of the given number can take some time \(on my computer this is 2-3 seconds for the 40th Fibonacci number\).
 
 This calculation is now carried out again when **every** number is entered for **every** existing Fibonacci number. So if I enter 40, wait about 3 seconds until my computer has finished calculating and enter 40 again, I wait already twice 3 seconds because the value in both components is calculated again.
 
@@ -699,7 +699,7 @@ const result = useMemo(() => fibonacci(value), [value]);
 
 ... we generate a _memoized_ value.
 
-This means that React calculates the value at **first rendering**, remembers the value **and recalculates it only when the value of the `value` prop for exactly this component has changed. If the value or more precisely the **Dependencies** between two renderings does not change, React uses the value of the last calculation, but without performing the calculation again.
+This means that React calculates the value at **first rendering**, remembers the value **and recalculates it only when the value of the `value` prop for exactly this component has changed. If the value or more precisely the** Dependencies\*\* between two renderings does not change, React uses the value of the last calculation, but without performing the calculation again.
 
 **But beware:** All this happens on the basis of **a** call to the `useMemo()` hook. If I call the same function twice in two different `useMemo()` hooks, the calculation is performed separately for each of the two hooks, even if both use the same function with the same parameters. The second hook **does not** use the result of the first calculation!
 
@@ -741,7 +741,7 @@ I had already teased the `useLayoutEffect()`-Hook briefly during the explanation
 
 While `useEffect()` delays **after** the **Layout** and **Paint-**phase of the browser, layout effects are executed synchronously **after** the **Layout** and **before** the **Paint** phase. This in turn means that they have the chance to read and change the current layout from the DOM **before** the browser displays the changes.
 
-This behavior is the same as `componentDidMount()` and `componentDidUpdate()` in **class components**, but for performance reasons it is recommended to use the `useEffect()` hook and only use `useLayoutEffect()` if you either know exactly what you are doing \(and why!).\) or if you have problems when migrating a **class component** to a **function component**, which are due to the different time of execution of the effects.
+This behavior is the same as `componentDidMount()` and `componentDidUpdate()` in **class components**, but for performance reasons it is recommended to use the `useEffect()` hook and only use `useLayoutEffect()` if you either know exactly what you are doing \(and why!\).\) or if you have problems when migrating a **class component** to a **function component**, which are due to the different time of execution of the effects.
 
 If the `useLayoutEffect()` hook is used in conjunction with **Server Side Rendering**, be careful: Neither `useEffect()` nor `useLayoutEffect()` are executed on the server side. While the `useEffect()`-hook is not a problem due to the delayed execution after the layout and paint phases, the `useLayoutEffect()`-hook may deviate from the server-side rendered markup to initial client-side rendering. React will then display a console warning. In this case the `useEffect()` hook should be used, or the component with the `useLayoutEffect()` hook should be mounted after the first paint phase:
 
@@ -898,3 +898,4 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
+
