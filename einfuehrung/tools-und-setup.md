@@ -1,4 +1,4 @@
-# Tools und Setup
+# Tools and Setup
 
 ## Tools
 

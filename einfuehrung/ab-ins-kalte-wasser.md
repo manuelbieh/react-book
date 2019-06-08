@@ -1,4 +1,4 @@
-# Ab ins kalte Wasser
+# Off to the deep end
 
 Now we already had the "what," the "when," and the "where." So let's get to the "How" and write our first small **React component**. In addition to **React** itself we also need the package **ReactDOM,** to be able to _mount_ our application, i.e. to make it usable in the browser, for the output of our app in the browser.
 

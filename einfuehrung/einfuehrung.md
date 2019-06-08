@@ -1,4 +1,4 @@
-# Allgemeines
+# General
 
 Even if the explanation is very short, you can derive from it all the essential things that are important for working with React and to understand what it is all about. React is first of all just a _Library_, not a complete framework with countless functions, with which you can develop complex web applications without further dependencies. And here we come to the second part of the sentence: _for building user interfaces_.
 
