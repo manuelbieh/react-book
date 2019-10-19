@@ -5,7 +5,7 @@
 * [About the Author](about-the-autor.md)
 * [I – Introduction](introduction/README.md)
   * [General](introduction/general.md)
-  * [Off to the deep end](introduction/off-to-the-deep-end.md)
+  * [Into to the deep end](introduction/off-to-the-deep-end.md)
   * [Tools and Setup](introduction/tools-and-setup.md)
 * [II – Basics](basics/README.md)
   * [Introduction to ES2015+](basics/excursus-es2015+.md)
