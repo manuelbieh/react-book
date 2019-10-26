@@ -85,7 +85,7 @@ Even if it is entirely up to you how to structure your JavaScript classes, a com
 React.createElement()
 ```
 
-As mentioned previously, the `render()` method of a React component returns a **React element**  in most cases. React **elements** are the smallest but also most significant building blocks in a React application and describe what a user will see on their screen in the end. Apart from `React.cloneElement()`and `React.isValidElement()` , `React.createElement()` has been one of of the only 3 top level API methods for a long time. Since then though, a few other methods have been added but they are mainly for performance optimizations. 
+As mentioned previously, the `render()` method of a React component returns a **React element**  in most cases. React **elements** are the smallest but also most significant building blocks in a React application and describe what a user will see on their screen. Apart from `React.cloneElement()`and `React.isValidElement()` , `React.createElement()` has been one of of the only 3 top level API methods for a long time. Since then though, a few other methods have been added but they are mainly for performance optimizations. 
 
 The `createElement()` method expects 1-n parameters:
 
@@ -93,7 +93,7 @@ The `createElement()` method expects 1-n parameters:
 2. So-called "Props" - these are read-only "property objects" of a component.  The name is derived from - you guessed it - properties. 
 3. As many child elements as you wish to put in. These can be React elements themselves, or arrays, functions or simply plain text. However, a component does not necessarily need to contain other child elements.
 
-At the end of the day, **React elements** are not anything other than a never changing \(immutable\) JavaScript object that describes properties to tell React how and what exactly needs displayed. This description of properties is used by React to construct a virtual blueprint of the component hierarchy. It resembles the representation of the HTML tree in the form of a JavaScript object. You often hear it referred to as the VirtualDOM however the term is losing popularity with the React team and they have distanced themselves from the use of it. This tree is used by React in  turn to only refresh those parts of the tree that have actually changed, when a user interacts with an app and changes data or fires an event. To do this, the previous tree is compared to the current tree.
+At the end of the day, **React elements** are nothing more than a never changing \(immutable\) JavaScript object that describes properties to tell React how and what exactly needs displayed. This description of properties is used by React to construct a virtual blueprint of the component hierarchy. It resembles the representation of the HTML tree in the form of a JavaScript object. You often hear it referred to as the VirtualDOM however the term is losing popularity with the React team and they have distanced themselves from the use of it. This tree is used by React in turn to only refresh those parts of the tree that have actually changed, e.g. when a user interacts with an app and changes data or fires an event. To do this, the previous tree is compared to the current tree.
 
 As React does not refresh the entire application at once and writes it to the DOM in its entirety once any state changes, it is a lot more performant than other frameworks or libraries. Other libraries or frameworks can often lead to unnecessarily many DOM mutations at the cost of performance. Using a special **reconciliation** algorithm that compares previous state with current state, React processes what exactly has changed, and can reduce the number of writes to a minimum.
 
@@ -123,7 +123,7 @@ We have talked about most of the parts in our example but we have not yet looked
 
 Although the naming might suggest otherwise, **ReactDOM**'s internal `render()` method does not directly relate to its counterpart used in React components. Using it in this case, enables us to render a **React element**  onto a **"root node"**, meaning to display it on the screen. In our example, we render our `HelloWorld` component onto the `<div id="root"></div>`. It is important to understand that the root node is **not replaced**, but that the content is inserted **into the container**.
 
-**ReactDOM** enables us to actually see our component in the browser. The actual content that we can see is described in the `render()` method which contains a React element after the `return`. Callling `ReactDOM.render()` with the two parameters as shown above, will insert the **React** element into the given **container**. 
+**ReactDOM** enables us to actually see our component in the browser. The actual content that we can see is described in the `render()` method which contains a React element after the `return`. Calling `ReactDOM.render()` with the two parameters as shown above, will insert the **React** element into the given **container**. 
 
 {% hint style="info" %}
 Calling the `ReactDOM.render()` function for the first time, any possibly existing content in the destination container is being replaced. With every subsequent call, React uses an internal comparison algorithm for best performance and to avoid re-rendering the entire application.
