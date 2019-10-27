@@ -8,7 +8,7 @@ In order to work with React comfortably and without interruptions, a few conditi
 
 Most of you will now **Node.js** as server-side JavaScript, however this is only partly true. First of all, **Node.js** is a **JavaScript Runtime Environemt** that is very well suited to write network applications, such as server. **Node.js** also comes with a package management tool though, commonly known as **npm**. It enables us to easily install new JavaScript libraries on our own machines and also lets us write and and run our own command line scripts. 
 
-Instead of installing **Node** directly, I suggest to use nvm \(_"Node Version Manager"_\) for Mac or Linux and nvm-windows for Windows. One of **nvm**'s advantages is that it does not require root privileges to install packages globally. Moreover, you can update your installed node version with a simple command line expression \(`nvm install [version]`\). If you want to see the list of all available versions, you can run `nvm ls-remote` \(Max/Linux\) or `nvm list available` \(Windows\). I will suggest in the rest of the book, to use the LTS \(Long Term Support\) version as its stable and will receive updates over a longer time frame.
+Instead of installing **Node** directly, I suggest to use [**nvm**](https://github.com/creationix/nvm) \(_"Node Version Manager"_\) for Mac or Linux and [**nvm-windows**](https://github.com/coreybutler/nvm-windows) for Windows. One of **nvm**'s advantages is that it does not require root privileges to install packages globally. Moreover, you can update your installed node version with a simple command line expression \(`nvm install [version]`\). If you want to see the list of all available versions, you can run `nvm ls-remote` \(Max/Linux\) or `nvm list available` \(Windows\). I will suggest in the rest of the book, to use the LTS \(Long Term Support\) version as its stable and will receive updates over a longer time frame.
 
 ### Yarn
 
@@ -132,5 +132,65 @@ create-react-app projectname
 
 And just like that you have created a complete React setup with only a few little example components in your _"projectname"_ folder. I would advise you to go ahead and execute the last few steps right now because the following code examples will all assume that you have setup **Create React App** to interact with the code.
 
+{% hint style="warning" %}
+The project name has to fit the[ critiria for the `name`property](https://docs.npmjs.com/files/package.json#name) for the `package.json` format of **npm**.  This means that it is **not allowed to contain capital letters**, it can have **no spaces** and can only amount **up to 214 characters max**. The other criteria can be found in the **npm** documentation.
+{% endhint %}
 
+This setup is quite extensive and has dealt with many aspects beforehand, so we do not need to spend as much time with the setup and can dive into the code directly.
+
+Once CRA has created the basic setup and has installed all the relevant dependencies, it will give us a prompt on the command line as to how we can work with CRA in our first React project.
+
+```bash
+$ create-react-app foobar
+
+Creating a new React app in /home/manuel/my-react-app.
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts...
+
+Success! Created foobar at /home/manuel/my-react-app
+Inside that directory, you can run several commands:
+
+  yarn start
+    Starts the development server.
+
+  yarn build
+    Bundles the app into static files for production.
+
+  yarn test
+    Starts the test runner.
+
+  yarn eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd my-react-app
+  yarn start
+
+Happy hacking!
+```
+
+### yarn start
+
+This command starts the development server, which lets us see our newly created application in the browser. The dev server is also taking care of files which are changing in the different directories and "compiles" our app and its dependencies again if we have made changes. 
+
+### yarn build
+
+Creates a build folder of our app which we can then deploy to a public server. Compared to the development build \(`yarn start`\), this build is optimized for performance. Due to this, running `yarn build` takes much longer than running `yarn start`. 
+
+### yarn test
+
+Runs tests. CRA comes pre-installed with **Jest**, another tool developed at Facebook. In comparison to other testing frameworks, it also allows for s**napshot testing**, that is creating some form of a copy of the current state of your component and compares it with future test states. This way, changes - wanted or unwanted - are detected easily right from the get go.
+
+### yarn eject
+
+Using `yarn eject`, we can bid our app goodbye. All the build scripts, dependencies and config files are copied to our current project directory. From this point onward, it is _our_ responsibility to ensure that everything is working as intended. While we have more responsibility, we also gain more freedom as we can now make changes to the standard configuration of CRA. When and if this step ever needs taken in the first place depends on the project. I have been working on projects where I have used the CRA standard setups for months but also worked on others where I needed to eject much earlier \(days or weeks\) as I needed to make changes to setup.
+
+{% hint style="info" %}
+In order to understand all the code examples in the book, I strongly suggest to install **Create React App** at this stage. Most of the examples can then be copy and pasted into the `App.js` file and then transferred and run. To maximize your learning though, I would advise you to type out the examples though instead of simply copying them.
+
+If you do not want to install CRA locally or if you are in a hurry, you can try working with [CodeSandbox](https://codesandbox.io/). It allows you to create a new[ setup with **Create React App**](https://codesandbox.io/s/new) ****in seconds and then interact with it in a browser environment.
+{% endhint %}
 
