@@ -86,13 +86,51 @@ Your editor of choice will reveal easy to spot error messages to you in those pl
 
 Some love it, some hate it. The latter often only hate it for a short amount of time. Once you have seen the value this tool can bring, you do not want to miss it anymore and ask yourself how you could ever work without it. I felt the same back in the day as did my colleagues that I have worked with in the past.
 
-**Prettier** is a tool that can automatically format your code according to pre-defined set of rules - neatly and consistently. You can either run it on the command line or you can install the **Prettier** plugin that is available for most editors and IDEs. **Prettier** does not offer many options to format on purpose. This keeps the number of unfrutiful discussions on how best to format your code to a minimum and also avoids the additional discussion which **Prettier** option would be best.
+**Prettier** is a tool that can automatically format your code according to pre-defined set of rules - neatly and consistently. You can either run it on the command line or you can install the **Prettier** plugin that is available for most editors and IDEs. **Prettier** does not offer many options to format on purpose. This keeps the number of unfruitful discussions on how best to format your code to a minimum and also avoids the additional discussion which **Prettier** option would be best.
 
-In the beginning, it might feel alienating to some and you might not always agree with **Prettier** 100%. However, not having to bother about where to place a line break and which line of code should be indented reduces the cognitive overload immensely. In my eyes, this justifies the use of **Prettier** manyfold.
+In the beginning, it might feel alienating to some and you might not always agree with **Prettier** 100%. However, not having to bother about where to place a line break and which line of code should be indented reduces the cognitive overload immensely. In my eyes, this justifies the use of **Prettier** manifold.
 
 ### IDE-/Editor Plugins
 
 All the common editors \(but many smaller ones too\) such as Webstorm, Atom, Visual Studio Code or Sublime offer plugins or natively integrated functionality to support working with **React** and **JSX**. I strongly suggest that you install these plugins as they normally lead to better syntax highlighting, code completion and boast with other nice features on top.
 
 **Atom** offers [language-babel](https://atom.io/packages/language-babel), **VS Code** has [Babel ES6/ES7](https://marketplace.visualstudio.com/items?itemName=dzannotti.vscode-babel-coloring) and for **Sublime** users it is worth to check out ****[babel-sublime](https://github.com/babel/babel-sublime). If you are using **Webstorm**, you get automatiuc support for React syntax highlighting from version 10 onwards. The previously mentioned plugins for **ESLint** and **Prettier** are also very useful. Search the plugin manager of your editor of choice for ESLint or Prettier and select the plugin with the most installations. This plugin is usually the official ESLint or Prettier plugin.  ****
+
+### Browser Plugins
+
+Concerning your browser, I urge you to install the **React Dev Tools** for [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) ****and [Firefox](https://addons.mozilla.org/de/firefox/addon/react-devtools/) as well as the **Redux Dev Tools** for later use \([Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), [Firefox](https://addons.mozilla.org/de/firefox/addon/remotedev/?)\). These dev tools neatly integrate with your already existing dev tools and will appear as a separate tab in the browser. They offer great advantages during your development.
+
+![Chrome and newly installed dev tools plugins for React and Redux](../.gitbook/assets/image.png)
+
+Using these tools, you can manipulate state and watch it change directly in the browser. I would almost argue that efficient debugging is close to impossible without these dev tools plugins.
+
+## Zero Config Setup
+
+Some people have joked in the past that you can easily spend days plugging away at your setup and perfecting it before you actually write any lines of code. A solid setup is important and somewhat decides whether the quality and maintenance of your application will continue to exist in the future.
+
+However, the React community has done a lot of work for us already. The site JavaScriptStuff contains a grand total of **198 projects** for [**React Starter Projects**](https://www.javascriptstuff.com/react-starter-projects/). Facebook itself also offers a starter, or more concretely **Dan Abramov** who is part of the React core team and creator of Redux, named **Create React App** \(or _"CRA"_ for short\). The project has surpassed 45.000 stars on GitHub and has become the standard for React projects. **Create React App** is described on GitHub as:
+
+> Create React apps with no build configuration
+
+And this is true. **Create React App** makes it easy to create a robust and good setup with only a single command on the command line, especially for beginners:
+
+```bash
+yarn create react-app projectname
+```
+
+If you prefer using npm, you still need to enter two commands:
+
+```bash
+npm install -g create-react-app
+```
+
+... which will install the **Create React App** executable globally and then:
+
+```bash
+create-react-app projectname
+```
+
+And just like that you have created a complete React setup with only a few little example components in your _"projectname"_ folder. I would advise you to go ahead and execute the last few steps right now because the following code examples will all assume that you have setup **Create React App** to interact with the code.
+
+
 
