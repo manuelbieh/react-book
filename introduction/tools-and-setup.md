@@ -8,7 +8,7 @@ In order to work with React comfortably and without interruptions, a few conditi
 
 Most of you will now **Node.js** as server-side JavaScript, however this is only partly true. First of all, **Node.js** is a **JavaScript Runtime Environemt** that is very well suited to write network applications, such as server. **Node.js** also comes with a package management tool though, commonly known as **npm**. It enables us to easily install new JavaScript libraries on our own machines and also lets us write and and run our own command line scripts. 
 
-Instead of installing **Node** directly, I suggest to use nvm \(_"Node Version Manager"_\) for Mac or Linux and nvm-windows for Windows. One of **nvm**'s advantages is that it does not require root privileges to install packages globally. Moreover, you can update your installled node version with a simple command line expression \(`nvm install [version]`\). If you want to see the list of all available versions, you can run `nvm ls-remote` \(Max/Linux\) or `nvm list available` \(Windows\). I will suggest in the rest of the book, to use the LTS \(Long Term Support\) version as its stable and will receive updates over a longer time frame.
+Instead of installing **Node** directly, I suggest to use nvm \(_"Node Version Manager"_\) for Mac or Linux and nvm-windows for Windows. One of **nvm**'s advantages is that it does not require root privileges to install packages globally. Moreover, you can update your installed node version with a simple command line expression \(`nvm install [version]`\). If you want to see the list of all available versions, you can run `nvm ls-remote` \(Max/Linux\) or `nvm list available` \(Windows\). I will suggest in the rest of the book, to use the LTS \(Long Term Support\) version as its stable and will receive updates over a longer time frame.
 
 ### Yarn
 
@@ -24,11 +24,11 @@ Or in short:
 npm i -g yarn
 ```
 
-Just like that we have installed our first package. Easy! The so-called command line flages `--global` and `-g` make sure that the `yarn` executable is installed globally and can be called from the command line anywhere on your machine by typing `yarn` .
+Just like that we have installed our first package. Easy! The so-called command line flags `--global` and `-g` make sure that the `yarn` executable is installed globally and can be called from the command line anywhere on your machine by typing `yarn` .
 
 ### Babel
 
-Babel is usally only used as a dependency in React based projects, namely as a npm package. It does not need to be installed explicitly at this stage. Babel allows us to interpret and then _transpile_ JavaScript that is not or not yet conforming to standards or not supported by all modern browsers into code that can be executed without issues..
+Babel is usually only used as a dependency in React based projects, namely as a npm package. It does not need to be installed explicitly at this stage. Babel allows us to interpret and then _transpile_ JavaScript that is not or not yet conforming to standards or not supported by all modern browsers into code that can be executed without issues..
 
 {% hint style="info" %}
 **Transpiling** __is the process of transforming the source code of one language into a functional and identical piece of code in another language. In our case, that's transforming JSX or ES2015+ into valid and executable JavaScript that is understood by all browsers.
@@ -66,7 +66,7 @@ The `--dev` flag indicates that we are only dealing with a `devDependency`, mean
 
 ### Webpack
 
-**Webpack** is one of the most central tools in the React ecosystem. Without it, an efficient workflow with React is almost impossible or at least a lot harder to achieve. **Webpack** is a module-bundler that has brought module based development \(that you might know from Node.js\) to the browser. It enables us to structure our application code neatly in their own files and allows us to use their dependencies via `import` or `require()` . This way, the dependencies are loaded into their own **module scope** and this make it available within the module. In the end, only a single JavaScript file is produced \(if you want, you can tell Webpack to produce more\), avoidoing to singlehandedly import each and every JavaScript file in a `<script src="..."></script>` in the HTML. Without bundling, we would otherwise need to import up to 100 scripts manually.
+**Webpack** is one of the most central tools in the React ecosystem. Without it, an efficient workflow with React is almost impossible or at least a lot harder to achieve. **Webpack** is a module-bundler that has brought module based development \(that you might know from Node.js\) to the browser. It enables us to structure our application code neatly in their own files and allows us to use their dependencies via `import` or `require()` . This way, the dependencies are loaded into their own **module scope** and this make it available within the module. In the end, only a single JavaScript file is produced \(if you want, you can tell Webpack to produce more\), avoiding to single-handedly import each and every JavaScript file in a `<script src="..."></script>` in the HTML. Without bundling, we would otherwise need to import up to 100 scripts manually.
 
 Wow. That sounds complicated, but after a few examples it almost happens intuitively and on its own. Once you get used to it, you ask yourself how you could ever work without a module-bundler.
 
@@ -81,4 +81,18 @@ In most professional contexts as well as many open source projects, an ESLint co
 Your editor of choice will reveal easy to spot error messages to you in those places where the code apparently does not work as intended:
 
 ![Warning for an unused variable and a missing semicolon in VSCode](../.gitbook/assets/eslint-example.png)
+
+### Prettier
+
+Some love it, some hate it. The latter often only hate it for a short amount of time. Once you have seen the value this tool can bring, you do not want to miss it anymore and ask yourself how you could ever work without it. I felt the same back in the day as did my colleagues that I have worked with in the past.
+
+**Prettier** is a tool that can automatically format your code according to pre-defined set of rules - neatly and consistently. You can either run it on the command line or you can install the **Prettier** plugin that is available for most editors and IDEs. **Prettier** does not offer many options to format on purpose. This keeps the number of unfrutiful discussions on how best to format your code to a minimum and also avoids the additional discussion which **Prettier** option would be best.
+
+In the beginning, it might feel alienating to some and you might not always agree with **Prettier** 100%. However, not having to bother about where to place a line break and which line of code should be indented reduces the cognitive overload immensely. In my eyes, this justifies the use of **Prettier** manyfold.
+
+### IDE-/Editor Plugins
+
+All the common editors \(but many smaller ones too\) such as Webstorm, Atom, Visual Studio Code or Sublime offer plugins or natively integrated functionality to support working with **React** and **JSX**. I strongly suggest that you install these plugins as they normally lead to better syntax highlighting, code completion and boast with other nice features on top.
+
+**Atom** offers [language-babel](https://atom.io/packages/language-babel), **VS Code** has [Babel ES6/ES7](https://marketplace.visualstudio.com/items?itemName=dzannotti.vscode-babel-coloring) and for **Sublime** users it is worth to check out ****[babel-sublime](https://github.com/babel/babel-sublime). If you are using **Webstorm**, you get automatiuc support for React syntax highlighting from version 10 onwards. The previously mentioned plugins for **ESLint** and **Prettier** are also very useful. Search the plugin manager of your editor of choice for ESLint or Prettier and select the plugin with the most installations. This plugin is usually the official ESLint or Prettier plugin.  ****
 
