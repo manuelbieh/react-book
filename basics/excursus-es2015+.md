@@ -16,5 +16,19 @@ In this chapter I want to show and explain the most important and useful functio
 
 ## **Variable declarations with let and const**
 
+For a long while, one could only use `var` to declare a variable in JavaScript. Since 2015 however, JavaScript has gained two new keywords which we can use to declare variables: `let` and `const`. Using `var` for variable declarations has become somewhat superfluos and in almost all cases `let` and `const` are the better choices. But what's the difference?
+
+As opposed to `var`, the new variable declarations, `let` and  `const`, only exist **inside of the scope in which they were defined**. These scopes can be a function as it was he case with `var` as well, but it can also be a loop or an `if` statement.
+
+**Tip:** Whenever you find an open curly bracket in your code, you are opeining a new scope. Similarly, a closing curly bracket closes the scope again. Using these new variable declarations, we have encapsulated our variables to a greater degree and limited their usage which is usually considered a good thing.
+
+On the one hand, if you want to override the value of a variable \(e.g. in a loop\), you have to use `let` to achieve this. On the other hand, if the reference of the variable should stay the same, i.e. constant, one should use `const.` 
+
+But be careful: As opposed to other languages, `const` does not disable every mutation on the variable. If you have declared an object or an array with `const`, the actual content of the variable can still be changed. The reference of the variable however is fixed and cannot be changed anymore.
+
+### The difference between `let/const` and `var`
+
+\`\`
+
  
 
