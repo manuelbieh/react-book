@@ -28,7 +28,111 @@ But be careful: As opposed to other languages, `const` does not disable every mu
 
 ### The difference between `let/const` and `var`
 
-\`\`
+Let us look at an example to further demonstrate the differences between `let` and `const` versus `var` and see how the former are only visible in the scope which they are defined in:
 
- 
+```javascript
+for (var i = 0; i < 10; i++) { }
+console.log(i);
+```
+
+**Result:**
+
+{% hint style="info" %}
+10
+{% endhint %}
+
+ An now let us look at the same example with `let`
+
+```javascript
+for (let j = 0; j < 10; j++) { }
+console.log(j);
+```
+
+**Result:**
+
+{% hint style="danger" %}
+Uncaught ReferenceError: `j` is not defined
+{% endhint %}
+
+While the variable `var i` is accessible outside of the `for` loop, the variable defined with `let` is limited to the scope in which it is defined, the `for` loop in this case. Remember, a loop creates a new scope.
+
+This information forms part of one of the building blocks which will help us to write encapsulated components without any side effects.
+
+**The differences between `let` and `const`**
+
+The following code is valid and works for as long as the variable is declared with `let` \(or `var` \):
+
+```javascript
+let myNumber = 1234;
+myNumber = 5678;
+console.log(myNumber);
+```
+
+**Result:**
+
+{% hint style="info" %}
+5678
+{% endhint %}
+
+If we try and run the same code with `const` :
+
+```javascript
+const myNumber = 1234;
+myNumber = 5678;
+console.log(myNumber);
+```
+
+**Result:**
+
+{% hint style="danger" %}
+Uncaught TypeError: Assignment to constant variable.
+{% endhint %}
+
+If we try to directly override a previously declared varible with `const`, the JavaScript interpreter will give us a warning. But what about just changing a property _inside_ of an object declared with `const`?
+
+```javascript
+const myObject = {
+  a: 1
+};
+myObject.b = 2;
+console.log(myObject);
+```
+
+**Result:**
+
+{% hint style="info" %}
+`{a: 1, b: 2}`
+{% endhint %}
+
+In this instance, we do not encounter any problems as we are only changing the object itself but not the reference to `myObject`. Arrarys, similarly, follow the same rules. The elments in the array can be changed, but the value of the variable cannot. 
+
+**Allowed:**
+
+```javascript
+const myArray = [];
+myArray.push(1);
+myArray.push(2);
+console.log(myArray);
+```
+
+**Result:**
+
+{% hint style="info" %}
+`[1, 2]`
+{% endhint %}
+
+**Conversely, the following code would not be allowed as the variable would be directly overridden:**
+
+```text
+const myArray = [];
+myArray = Array.concat(1, 2);
+```
+
+{% hint style="danger" %}
+Uncaught TypeError: Assignment to constant variable.
+{% endhint %}
+
+If we want to ensure that `myArray` can easily be overridden, we have to use `let` instead or we accept that we can only change the elements in the array but not the actual value itself while declaring it with `const`.
+
+## Arrow functions
 
