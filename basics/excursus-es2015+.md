@@ -231,3 +231,61 @@ Gone are the days of `var self = this` and `.bind(this)`. We can pretend we are 
 
 ## New String, Array and Object methods
 
+With the introduction of ES2015, a lot of static and prototype methods were added to JavaScript. Even if many of these are not directly relevant for React they still prove very powerful which is why I will explain these in  bit more detail.
+
+### String methods
+
+In the past, we had to use `indexOf()` or regular expressions for operations such as checking if a value is present in a string or whether the string starts or ends with a specific value. With ES2015, the string data type gets its own methods to achieve these:
+
+```javascript
+string.includes(value);
+string.startsWith(value);
+string.endsWith(value);
+```
+
+In each of these a boolean value is returned by the function, meaning either `true` or `false`. If I want to test whether the string `Example` contains the word `egg`, I can check for it like this:
+
+```javascript
+'Example'.includes('egg')
+```
+
+Similarly, we can test for `startsWith`:
+
+```javascript
+'Example'.startsWith('Ex')
+```
+
+... and for `endsWith`:
+
+```javascript
+'Example'.endsWith('ample')
+```
+
+All of these are case-sensitive, meaning that differences in capitalization are taken into account.
+
+Another two useful methods added in ES2015 are `String.prototype.padStart()` and `String.prototype.padEnd()`. Both of these can be used to extend a string to a specific length by inserting a number of characters at the beginning or end. The first parameter denotes the desired length of the string whereas the optional second parameter describes the character with which you want to fill up the string to the given length. If no second parameter is provided, spaces are used instead.
+
+A common use case is to prepend numbers with leading zeros to give them all the same length:
+
+```javascript
+  '7'.padStart(3, '0'); // 007
+ '72'.padStart(3, '0'); // 072
+'132'.padStart(3, '0'); // 132
+```
+
+The same applies to `String.prototype.padEnd()` although the string is filled up at the end \(not at the start\).
+
+### Arrays
+
+The Array has also gained new static as well as prototype methods. What do I even mean when I talkn about prototype methods? Prototype methods work "with the actual array" - an already existing **array instance**. Static methods on the other hand can be thought of as helper methods which "do things" that are related to arrays.
+
+**Static array methods**
+
+```javascript
+Array.of(3); // [3]
+Array.of(1, 2, 3); // [1, 2 ,3]
+Array.from('Example'); // ['E', 'x', 'a', 'm', 'p', 'l', 'e']
+```
+
+`Array.of()` creates a new array instance from any given number of parameters. It does not matter if their types are different. `Array.from()` also creates an array instance but from an "array-like" iterable object.
+
