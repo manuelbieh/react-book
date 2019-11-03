@@ -287,5 +287,128 @@ Array.of(1, 2, 3); // [1, 2 ,3]
 Array.from('Example'); // ['E', 'x', 'a', 'm', 'p', 'l', 'e']
 ```
 
-`Array.of()` creates a new array instance from any given number of parameters. It does not matter if their types are different. `Array.from()` also creates an array instance but from an "array-like" iterable object.
+`Array.of()` creates a new array instance from any given number of parameters. It does not matter if their types are different. `Array.from()` also creates an array instance but from an "array-like" iterable object. The most common examples are probably an `HTMLCollection` or a `NodeList`. These are created by DOM methods such as `getElementsByClassName()` or the more modern `querySelectorAll()`. `HTMLCollection` and `NodeList` do not own methods such as `.map()` or `.filter()`. If you want to iterate over any of the two, you need to convert them to an array first. It's easily done by using `Array.from()` though. 
+
+```javascript
+const links = Array.from(document.querySelectorAll('a'));
+Array.isArray(links); // true
+```
+
+**Methods on the array prototype**
+
+The methods on the array prototype can be **directly executed on the array instance**. The most applicable methods for React and Redux are:
+
+```javascript
+Array.find(func);
+Array.findIndex(func);
+Array.includes(value);
+```
+
+`Array.find()` finds the **first** element in an array that fulfils the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value. 
+
+```javascript
+const numbers = [1, 2, 5, 9, 13, 24, 27, 39, 50];
+const biggerThan10 = numbers.find((number) => number > 10); // 13
+
+const users = [
+  {id: 1, name: 'Manuel'}, 
+  {id: 2, name: 'Bianca'}, 
+  {id: 3, name: 'Brian'}
+];
+
+const userWithId2 = users.find((user) => user.id === 2);
+// { id: 2, name: 'Bianca'}
+```
+
+The `Array.findIndex()` method follows a similar pattern but returns only the index of element which has been found as opposed of the `Array.find()` method which returned the value. In the above example, the first function would yield `4`, the second `1`. 
+
+`Array.includes()`, added in ES2016, checks whether a value exists within the array it is called upon and returns a boolean. **Finally!** If you tried to reproduce the same functionality in the past, you had to make do with `Array.indexOf()`. `Array.includes()` simplifies this greatly:
+
+```javascript
+[1,2,3,4,5].includes(4); // true
+[1,2,3,4,5].includes(6); // false
+```
+
+But be careful: `.includes()` is case sensitive. If you try to check for `['a', 'b'].includes('A')`, it will return `false`.
+
+### Objects
+
+**Static object methods**
+
+Arrays and strings are not the only data structures which have gained new functionality. Objects have received a lot of new methods and improvements. Let's look at the most important ones briefly and one after the other:
+
+```javascript
+Object.assign(target, source[, source[,...]]);
+Object.entries(Object)
+Object.keys(Object)
+Object.values(Object)
+Object.freeze(Object)
+```
+
+In my opinion the most useful addition has been `Object.assign()`. This method enables the merge of one or more objects into an existing object and returns the result as an object. But beware: the existing object is **mutated**. Hence, you should use this method sparingly. Another example to illustrate the point:
+
+```javascript
+const user = { id: 1, name: 'Manuel' };
+const modifiedUser = Object.assign(user, { role: 'Admin' });
+console.log(user); 
+// -> { id: 1, name: 'Manuel', role: 'Admin' }
+console.log(modifiedUser); 
+// -> { id: 1, name: 'Manuel', role: 'Admin' }
+console.log(user === modifiedUser); 
+// -> true
+```
+
+The property `role` of the object in the second parameter of the `Object.assign()` function is added to the **existing destination object**. 
+
+React embraces the principle of **pure functions** which denote functions which are encapsulated in themselves and do not modify their entry parameters. Taking this into account, it becomes apparent that such mutations should be avoided if at all possible. We can circumvent this problem by providing an empty object literal as the first argument:
+
+```javascript
+const user = { id: 1, name: 'Manuel' };
+const modifiedUser = Object.assign({}, user, { role: 'Admin' });
+console.log(user); 
+// -> { id: 1, name: 'Manuel' }
+console.log(modifiedUser); 
+// -> { id: 1, name: 'Manuel', role: 'Admin' }
+console.log(user === modifiedUser); 
+// -> false
+```
+
+By providing a newly created object as the destination object, the result is also a different object. In few cases, it can be advantageous to mutate the **destination** **object**, in React however this practice is best avoided. 
+
+The method can process any given objects as parameters. If a property name appears more than once in an object, the properties added later take precedence.
+
+```javascript
+const user = { id: 1, name: 'Manuel' };
+const modifiedUser = Object.assign(
+  {},
+  user,
+  { role: 'Admin' },
+  { name: 'Nicht Manuel', job: 'Developer' }
+);
+console.log(modifiedUser); 
+// -> { id: 1, name: 'Nicht Manuel', role: 'Admin', job: 'Developer' }
+```
+
+`Object.entries()`, `Object.keys()` and `Object.values()` offer similar functionality. They return the properties \(`keys`\), the values \(`values`\)  or the entries \(`entries()`\) as an **array**. **Entries** however returns a nested array of the following form:
+
+`[[key, value], [key2, values2], …]`
+
+Applying these methods to our example above, we receive the following results:
+
+```javascript
+Object.keys({ id: 1, name: 'Manuel'}); 
+// -> ['id', 'name']
+Object.values({ id: 1, name: 'Manuel'}); 
+// -> [1, 'Manuel']
+Object.entries({id: 1, name: 'Manuel'}); 
+// -> [['id', 1], ['name', 'Manuel']]
+```
+
+Lastly, let us look at `Object.freeze()` which does just what you would expect. It freezes an object and prohibits any further mutations, be it the adding of new properties, deleting old properties or even just changing values. Following React's principle of immutable objects, this is very useful.
+
+```text
+const user = Object.freeze({ id: 1, name: 'Manuel' });user.id = 2;delete user.name;user.role = 'Admin';console.log(user);// -> { id: 1, name: 'Manuel' }
+```
+
+If an object created with `Object.freeze()` is attempted to be changed, for example using `Object.assign()`, it will throw a `TypeError`, thus preventing unwanted and accidental mutations on the object.
 
