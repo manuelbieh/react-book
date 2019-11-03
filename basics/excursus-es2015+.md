@@ -136,3 +136,98 @@ If we want to ensure that `myArray` can easily be overridden, we have to use `le
 
 ## Arrow functions
 
+**Arrow functions** are yet another great addition in terms of simplicity since the introduction of ES2015. Previously function declarations were written in the following fashion: the keyword `function`, followed by an optional function name, parentheses in which the function arguments were given as well as the **function body**. The function body comprises the actual content of the function:
+
+```javascript
+function(arg1, arg2) {}
+```
+
+**Arrow functions** simplify this greatly by making the `function` keyword redundant:
+
+```javascript
+(arg1, arg2) => {}
+```
+
+If we only pass one parameter into the function, even the parentheses for the arguments is optional. Our pre-ES2015 function: 
+
+```javascript
+function(arg) {}
+```
+
+would be transformed into this **arrow function**:
+
+```javascript
+arg => {}
+```
+
+Yep, this is a valid function in ES2015!
+
+And it's getting wilder. If our function should only return an expression in the `return` value, the parantheses become optional as well. Let's compare a function that takes a number as its single argument, doubles it and `return`s it. This is ES5:
+
+```javascript
+function double(number) {
+  return number * 2;
+}
+```
+
+... and this is the same code as a ES2015 **arrow function**:
+
+```javascript
+const double = number => number * 2;
+```
+
+In both cases, the declared functions yields the same result. For example, if we called the function with `double(5)` , the result would be `10`.
+
+But there is another even greater advantage when it comes to arrow functions. This will be especially useful once we fully start to work with React. Arrow functions do not have their own constructor meaning they cannot be instanciated using the `new MyArrowFunction()` form. On top of this, they do not bind their own `this` but inherit `this` from their **parent scope**. The latter will become useful in the future.
+
+This sounds more complicated than it actually is and can be explained quickly using an example. Let's assume we define a buttion which should write the current time into a `div` once it is being pressed. A typical function in ES5:
+
+```javascript
+function TimeButton() {
+  var button = document.getElementById('btn');
+  var self = this;
+  this.showTime = function() {
+    document.getElementById('time').innerHTML = new Date();
+  }
+  button.addEventListener('click', function() {
+    self.showTime();
+  });
+}
+```
+
+As the function supplied as an **event listener** does not have accesss to its **parent scope**, the **TimeButton** in this case, we have to make amends with saving `this` in the variable `self`. This is not an uncommon pattern for ES5 JavaScript. Alternatively, the scope of the function could be **explicitly** bound to `this` and thus teach the **event listener** which scope to execute the code in:
+
+```javascript
+function TimeButton() {
+  var button = document.getElementById('btn');
+  this.showTime = function() {
+    document.getElementById('time').innerHTML = new Date();
+  }
+  button.addEventListener('click', function() {
+    this.showTime();
+  }.bind(this));
+}
+```
+
+`self` becomes superfluous in this example. This example is entirely valid as well, however also not very elegant.
+
+Let us look at an example using **arrow functions** which inherit `this` from their **parent scope**, in this case from the `TimeButton`. 
+
+```javascript
+function TimeButton() {
+  var button = document.getElementById('btn');
+  this.showTime = function() {
+    document.getElementById('time').innerHTML = new Date();
+  }
+  button.addEventListener('click', () => {
+    this.showTime();
+  });
+}
+```
+
+And just like that we gained access to the outer `this` in the **event listener**. 
+
+Gone are the days of `var self = this` and `.bind(this)`. We can pretend we are still using the scope of the `TimeButton` scope even though the code is being written inside the **event listener**. This is especially useful for working with complex React components that contain many class properties and methods themselves. It avoids confusion as new scopes are not being opened every time.
+
+## New String, Array and Object methods
+
