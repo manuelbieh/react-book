@@ -412,3 +412,128 @@ const user = Object.freeze({ id: 1, name: 'Manuel' });user.id = 2;delete user.na
 
 If an object created with `Object.freeze()` is attempted to be changed, for example using `Object.assign()`, it will throw a `TypeError`, thus preventing unwanted and accidental mutations on the object.
 
+**Syntax extensions and simplifications**
+
+The rest of the changes that were added to objects are not methods but syntax extensions.
+
+First, **computed properties** were introduced to have the possibility of using expressions as object properties. In the past, one had to manually create the object \(for example using an **object literal** `{}` or using `Object.create()`\), assign it to a variable and then add it as a new property to the object:
+
+```javascript
+const nationality = 'german';
+const user = {
+  name: 'Manuel',
+};
+user[nationality] = true;
+console.log(user);
+// -> { name: 'Manuel', german: true };
+```
+
+With the addition of **ES2015**, expressions can now be directly used as object properties by surrounding them with brackets `[]` avoiding the clunky detour of adding properties to the already existing object:
+
+```javascript
+const nationality = 'german';
+const user = {
+  name: 'Manuel',
+  [nationality]: true,
+};
+console.log(user);
+// -> { name: 'Manuel', german: true };
+```
+
+ So far so good. I have tried to keep the example very simple at this point but its implications are evident. In more complex situations, this technique will allow us to write clean and easily readable code especially with regard to **JSX**.
+
+Another noteworthy addition for objects has been introduction of **shorthand property names**. Previously, code had to be written in the following form:
+
+```javascript
+const name = 'Manuel';
+const job = 'Developer';
+const role = 'Author';
+
+const user = {
+  name: name,
+  job: job,
+  role: role,
+};
+```
+
+We are using a lot of repetition here. **Shorthand property name syntax** in **ES2015** prevents this and allow us to only use the variable name if the name of the object property is the same. This reduces our code to:
+
+```javascript
+const name = 'Manuel';
+const job = 'Developer';
+const role = 'Author';
+
+const user = {
+  name, job, role
+};
+```
+
+Yep, since **ES2015** both of these methods of defining an object will lead to the same result. Of course, shorthand property syntax can be mixed with the previous syntax all the same:
+
+```javascript
+const name = 'Manuel';
+const job = 'Developer';
+
+const user = {
+  name,
+  job,
+  role: 'Author'
+};
+```
+
+## Classes
+
+**Classes** are a concept most will know from object oriented languages such as Java. However, with **ES2015** classes have been added to JavaScript. In the past, object orientation could only be mocked by using the prototype property of a function and definig its methods and properties. Compared to many other object oriented languages though, it felt overly complicated and wordy in JavaScript.
+
+Since **ES2015**, classes can be defined by using the keyword `class`. While React equally uses principles of **functional programming**, it also depends heavily on ES2015 classes to instantiate **React Class components**. Before ES2015 it was possible to define React components using `createClass()` but it has since been deprecated and should no longer be used.
+
+A class consists of a name, an optional **constructor** that gets called at creation of a class instance as well as an unlimited number of class methods.
+
+```javascript
+class Customer {
+  constructor(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  getFullName() {
+    return this.firstName + ' ' + this.lastName;
+  }
+}
+
+const firstCustomer = new Customer('Max', 'Mustermann');
+console.log(firstCustomer.getFullName());
+```
+
+**Result:**
+
+{% hint style="info" %}
+Max Mustermann
+{% endhint %}
+
+Additionally, classes can be extended using `extends:`
+
+```javascript
+class Customer extends Person {}
+```
+
+Or:
+
+```javascript
+class MyComponent extends React.Component {}
+```
+
+Using the inbuilt `super()` function the component can call the **constructor** of its parent class. In terms of React, the use of `super()` is only necessary if new and own classes have been added and if a constructor is present. If this is the case, `super()` is called and its `props` are passed to the constructor of the `React.Component`.
+
+```javascript
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+}
+```
+
+If we omit this, `this.props` would be undefined and the props within the component could not be accessed. In most cases we do not need to define our own constructors though, as React provides **Lifecycle methods** which are prefarable over the use of a constructor.
+
+## Rest and spread operators and destructuring
+
