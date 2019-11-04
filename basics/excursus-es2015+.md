@@ -16,7 +16,7 @@ In this chapter I want to show and explain the most important and useful functio
 
 ## **Variable declarations with let and const**
 
-For a long while, one could only use `var` to declare a variable in JavaScript. Since 2015 however, JavaScript has gained two new keywords which we can use to declare variables: `let` and `const`. Using `var` for variable declarations has become somewhat superfluos and in almost all cases `let` and `const` are the better choices. But what's the difference?
+For a long while, one could only use `var` to declare a variable in JavaScript. Since 2015 however, JavaScript has gained two new keywords which we can use to declare variables: `let` and `const`. Using `var` for variable declarations has become somewhat superfluous and in almost all cases `let` and `const` are the better choices. But what's the difference?
 
 As opposed to `var`, the new variable declarations, `let` and  `const`, only exist **inside of the scope in which they were defined**. These scopes can be a function as it was he case with `var` as well, but it can also be a loop or an `if` statement.
 
@@ -88,7 +88,7 @@ console.log(myNumber);
 Uncaught TypeError: Assignment to constant variable.
 {% endhint %}
 
-If we try to directly override a previously declared varible with `const`, the JavaScript interpreter will give us a warning. But what about just changing a property _inside_ of an object declared with `const`?
+If we try to directly override a previously declared variable with `const`, the JavaScript interpreter will give us a warning. But what about just changing a property _inside_ of an object declared with `const`?
 
 ```javascript
 const myObject = {
@@ -104,7 +104,7 @@ console.log(myObject);
 `{a: 1, b: 2}`
 {% endhint %}
 
-In this instance, we do not encounter any problems as we are only changing the object itself but not the reference to `myObject`. Arrarys, similarly, follow the same rules. The elments in the array can be changed, but the value of the variable cannot. 
+In this instance, we do not encounter any problems as we are only changing the object itself but not the reference to `myObject`. Arrays, similarly, follow the same rules. The elements in the array can be changed, but the value of the variable cannot. 
 
 **Allowed:**
 
@@ -162,7 +162,7 @@ arg => {}
 
 Yep, this is a valid function in ES2015!
 
-And it's getting wilder. If our function should only return an expression in the `return` value, the parantheses become optional as well. Let's compare a function that takes a number as its single argument, doubles it and `return`s it. This is ES5:
+And it's getting wilder. If our function should only return an expression in the `return` value, the parentheses become optional as well. Let's compare a function that takes a number as its single argument, doubles it and `return`s it. This is ES5:
 
 ```javascript
 function double(number) {
@@ -178,9 +178,9 @@ const double = number => number * 2;
 
 In both cases, the declared functions yields the same result. For example, if we called the function with `double(5)` , the result would be `10`.
 
-But there is another even greater advantage when it comes to arrow functions. This will be especially useful once we fully start to work with React. Arrow functions do not have their own constructor meaning they cannot be instanciated using the `new MyArrowFunction()` form. On top of this, they do not bind their own `this` but inherit `this` from their **parent scope**. The latter will become useful in the future.
+But there is another even greater advantage when it comes to arrow functions. This will be especially useful once we fully start to work with React. Arrow functions do not have their own constructor meaning they cannot be instantiated using the `new MyArrowFunction()` form. On top of this, they do not bind their own `this` but inherit `this` from their **parent scope**. The latter will become useful in the future.
 
-This sounds more complicated than it actually is and can be explained quickly using an example. Let's assume we define a buttion which should write the current time into a `div` once it is being pressed. A typical function in ES5:
+This sounds more complicated than it actually is and can be explained quickly using an example. Let's assume we define a button which should write the current time into a `div` once it is being pressed. A typical function in ES5:
 
 ```javascript
 function TimeButton() {
@@ -195,7 +195,7 @@ function TimeButton() {
 }
 ```
 
-As the function supplied as an **event listener** does not have accesss to its **parent scope**, the **TimeButton** in this case, we have to make amends with saving `this` in the variable `self`. This is not an uncommon pattern for ES5 JavaScript. Alternatively, the scope of the function could be **explicitly** bound to `this` and thus teach the **event listener** which scope to execute the code in:
+As the function supplied as an **event listener** does not have access to its **parent scope**, the **TimeButton** in this case, we have to make amends with saving `this` in the variable `self`. This is not an uncommon pattern for ES5 JavaScript. Alternatively, the scope of the function could be **explicitly** bound to `this` and thus teach the **event listener** which scope to execute the code in:
 
 ```javascript
 function TimeButton() {
@@ -277,7 +277,7 @@ The same applies to `String.prototype.padEnd()` although the string is filled up
 
 ### Arrays
 
-The Array has also gained new static as well as prototype methods. What do I even mean when I talkn about prototype methods? Prototype methods work "with the actual array" - an already existing **array instance**. Static methods on the other hand can be thought of as helper methods which "do things" that are related to arrays.
+The Array has also gained new static as well as prototype methods. What do I even mean when I talk about prototype methods? Prototype methods work "with the actual array" - an already existing **array instance**. Static methods on the other hand can be thought of as helper methods which "do things" that are related to arrays.
 
 **Static array methods**
 
