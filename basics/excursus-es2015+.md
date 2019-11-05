@@ -539,7 +539,7 @@ If we omit this, `this.props` would be undefined and the props within the compon
 
 Another great simplification has been the introduction of the so-called rest and spread operators for objects and arrays. Strictly speaking, the use of these is not yet supported for objects in ES2015 because the specifics are still under discussion. However, this will change with ES2018 when they get added to the ECMAScript specification. First, the rest and spread operators were added to arrays in ES2015. Using Babel though, we can harness the power of these operators in our work with objects today. As you will see, many React projects will make heavy use of these.
 
-But enough of this. What are they? Let's start with the spread operator.
+But enough of this. What are they exactly? Let's start with the spread operator.
 
 ### Spread operator
 
@@ -582,7 +582,7 @@ const allFruits = [...greenFruits, ...redFruits];
 
 `['kiwi', 'apple', 'pear', 'strawberry', 'cherry', 'raspberry']`
 
-A new array is created which not only contains all values from `greenFruits` as well as all values from `redFruits`. But there's more: a new array is also created for us - not just a reference of the old arrays. Thinking back to the previously mentioned **readonly** mentality in React, this will prove useful for the work with props. The spread operator can also be used to create a simple copy of an array:
+A new array is created which not only contains all values from `greenFruits` but also all values from `redFruits`. But there's more: a new array is also created for us - not just a reference to the old arrays. Thinking back to the previously mentioned **read-only** mentality in React, this will prove useful for the work with props. The spread operator can also be used to create a simple copy of an array:
 
 ```javascript
 const users = ['Manuel', 'Chris', 'Ben'];
@@ -591,7 +591,7 @@ const selectedUsers = [...users];
 
 `selectedUsers` is a copy of `users`and all of its values. If we change the `users`array, no complications for `selectedUsers` occur.
 
-Let's shift our focus to objects. Using the spread operator with objects is very similar to using it with arrays. However, instead of using every single value every property that is enumerable in the object \(roughly those that are used during a ~~`for(...in...)`~~ `loop` \) will be used. 
+Let's shift our focus to objects. Using the spread operator with objects is very similar to using it with arrays. However, instead of using every single value every property that is enumerable in the object \(roughly those that are used during a `for(… in …)` loop\) will be used. 
 
 The spread operator is a great choice to create objects:
 
@@ -621,7 +621,7 @@ const settings = {
 }
 ```
 
-If there are object properties with the same name in any two objects, the object declared last will come into effect.
+If there are object properties with the same name in any two objects, the object declared last will come into effect:
 
 ```javascript
 const globalSettings = { language: 'en-US', timezone: 'Berlin/Germany' };
@@ -641,7 +641,7 @@ console.log(allSettings);
 
 The `userSettings` object which has been declared after the `globalSettings` object overrides the `language` property by providing a key which is identical to that in the `globalSettings`object. The spread operator works in a similar fashion to the newly introduced `Object.assign()` method in ES2015 which is also used in in ES2015+ applications from time to time.
 
-However, it is important to make a distinction here: `Object.assign()` mutates an existing object whereas the spread operator creates a new object. In terms of writing React components and their props, we want to avoid creating mutations. But for sake of completion, let us look at a brief example anyway.
+However, it is important to make a distinction here: `Object.assign()` mutates an existing object whereas the spread operator creates a new object. In terms of writing React components and their props, we want to avoid creating mutations. But for the sake of completion, let us look at a brief example anyway.
 
 **Combining objects with `Object.assign()`**
 
@@ -660,7 +660,7 @@ console.log(Object.assign(a, b, c));
 {a: 1, b: 2, c: 3}
 ```
 
-The function returns a new object in which all three of the objects that have been passed toi `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c`  to the console:
+The function returns a new object in which all three of the objects that have been passed to `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c`  to the console:
 
 ```javascript
 console.log(a);
@@ -676,7 +676,7 @@ console.log(c);
 {c: 3}
 ```
 
-As can be seen from the example above, `Object.assign()` did not create a truly new object for us.  It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should best be avoided.
+As can be seen from the example above, `Object.assign()` did not create a new object for us.  It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should best be avoided.
 
 There's a trick though to ensure that objects can be combined via `Object.assign()` but also be created in a new object. Passing an empty object literal `{}` as the first argument to the function like this:
 
@@ -684,7 +684,7 @@ There's a trick though to ensure that objects can be combined via `Object.assign
 Object.assign({}, a, b, c);
 ```
 
-... will achieve just what we wanted. It passed all the object properties of `a`, `b` and `c` while keeping the previous objects `a`, `b` and `c` intact.
+... will achieve just what we want. It passes all the object properties of `a`, `b` and `c` while keeping the previous objects `a`, `b` and `c` intact.
 
 ### Destructuring assignments
 
