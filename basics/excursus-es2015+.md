@@ -304,7 +304,7 @@ Array.findIndex(func);
 Array.includes(value);
 ```
 
-`Array.find()` finds the **first** element in an array that fulfils the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value. 
+`Array.find()` finds the **first** element in an array that fullfils the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value. 
 
 ```javascript
 const numbers = [1, 2, 5, 9, 13, 24, 27, 39, 50];
@@ -483,7 +483,7 @@ const user = {
 
 ## Classes
 
-**Classes** are a concept most will know from object oriented languages such as Java. However, with **ES2015** classes have been added to JavaScript. In the past, object orientation could only be mocked by using the prototype property of a function and definig its methods and properties. Compared to many other object oriented languages though, it felt overly complicated and wordy in JavaScript.
+**Classes** are a concept most will know from object oriented languages such as Java. However, with **ES2015** classes have been added to JavaScript. In the past, object orientation could only be mocked by using the prototype property of a function and defining its methods and properties. Compared to many other object oriented languages though, it felt overly complicated and wordy in JavaScript.
 
 Since **ES2015**, classes can be defined by using the keyword `class`. While React equally uses principles of **functional programming**, it also depends heavily on ES2015 classes to instantiate **React Class components**. Before ES2015 it was possible to define React components using `createClass()` but it has since been deprecated and should no longer be used.
 
@@ -533,7 +533,160 @@ class MyComponent extends React.Component {
 }
 ```
 
-If we omit this, `this.props` would be undefined and the props within the component could not be accessed. In most cases we do not need to define our own constructors though, as React provides **Lifecycle methods** which are prefarable over the use of a constructor.
+If we omit this, `this.props` would be undefined and the props within the component could not be accessed. In most cases we do not need to define our own constructors though, as React provides **lifecycle methods** which are preferable over the use of a constructor.
 
 ## Rest and spread operators and destructuring
+
+Another great simplification has been the introduction of the so-called rest and spread operators for objects and arrays. Strictly speaking, the use of these is not yet supported for objects in ES2015 because the specifics are still under discussion. However, this will change with ES2018 when they get added to the ECMAScript specification. First, the rest and spread operators were added to arrays in ES2015. Using Babel though, we can harness the power of these operators in our work with objects today. As you will see, many React projects will make heavy use of these.
+
+But enough of this. What are they? Let's start with the spread operator.
+
+### Spread operator
+
+The spread operator allows us to "unpack" values. Pre-ES2015 one had to extract arguments from an array to pass them to a function via `Function.prototype.apply()`:
+
+```javascript
+function sumAll(number1, number2, number3) {
+  return number1 + number2 + number3;
+}
+
+var myArray = [1, 2, 3];
+sumAll.apply(null, myArray);
+```
+
+**Result:**
+
+{% hint style="info" %}
+6
+{% endhint %}
+
+Using the spread operator which consists of three dots \(...\) we can "unpack" these arguments or "spread" them.
+
+```javascript
+function sumAll(number1, number2, number3) {
+  return number1 + number2 + number3;
+}
+var myArray = [1, 2, 3];
+sumAll(...myArray);
+```
+
+As can be seen, `apply()` is not necessary anymore. However, spreading arguments is not only useful and limited to function arguments. It can also be used to easily combine two arrays into one:
+
+```javascript
+const greenFruits = ['kiwi', 'apple', 'pear'];
+const redFruits = ['strawberry', 'cherry', 'raspberry'];
+const allFruits = [...greenFruits, ...redFruits];
+```
+
+**Result:**
+
+`['kiwi', 'apple', 'pear', 'strawberry', 'cherry', 'raspberry']`
+
+A new array is created which not only contains all values from `greenFruits` as well as all values from `redFruits`. But there's more: a new array is also created for us - not just a reference of the old arrays. Thinking back to the previously mentioned **readonly** mentality in React, this will prove useful for the work with props. The spread operator can also be used to create a simple copy of an array:
+
+```javascript
+const users = ['Manuel', 'Chris', 'Ben'];
+const selectedUsers = [...users];
+```
+
+`selectedUsers` is a copy of `users`and all of its values. If we change the `users`array, no complications for `selectedUsers` occur.
+
+Let's shift our focus to objects. Using the spread operator with objects is very similar to using it with arrays. However, instead of using every single value every property that is enumerable in the object \(roughly those that are used during a ~~`for(...in...)`~~ `loop` \) will be used. 
+
+The spread operator is a great choice to create objects:
+
+```javascript
+const globalSettings = { language: 'en-US', timezone: 'Berlin/Germany' };
+const userSettings = { mutedUsers: ['Manuel'] };
+const allSettings = {...globalSettings, ...userSettings};
+console.log(allSettings);
+```
+
+**Result:**
+
+```javascript
+{
+  language: 'en-US',
+  timezone: 'Berlin/Germany',
+  mutedUsers: ['Manuel'],
+}
+```
+
+The properties of each object can be found in the `allSettings` object. However, the spread operator is not limited to two objects. We can combine any number of objects into a new object. Even the combination of single properties is possible:
+
+```javascript
+const settings = {
+  ...userSettings,
+  showWarnings: true,
+}
+```
+
+If there are object properties with the same name in any two objects, the object declared last will come into effect.
+
+```javascript
+const globalSettings = { language: 'en-US', timezone: 'Berlin/Germany' };
+const userSettings = { language: 'de-DE' };
+const allSettings = {...globalSettings, ...userSettings};
+console.log(allSettings);
+```
+
+**Result:**
+
+```javascript
+{
+  language: 'de-DE',
+  timezone: 'Berlin/Germany',
+}
+```
+
+The `userSettings` object which has been declared after the `globalSettings` object overrides the `language` property by providing a key which is identical to that in the `globalSettings`object. The spread operator works in a similar fashion to the newly introduced `Object.assign()` method in ES2015 which is also used in in ES2015+ applications from time to time.
+
+However, it is important to make a distinction here: `Object.assign()` mutates an existing object whereas the spread operator creates a new object. In terms of writing React components and their props, we want to avoid creating mutations. But for sake of completion, let us look at a brief example anyway.
+
+**Combining objects with `Object.assign()`**
+
+`Object.assign()`  takes any number of arguments and combines them into a single object:
+
+```javascript
+const a = { a: 1 };
+const b = { b: 2 };
+const c = { c: 3 };
+console.log(Object.assign(a, b, c));
+```
+
+**Result:**
+
+```javascript
+{a: 1, b: 2, c: 3}
+```
+
+The function returns a new object in which all three of the objects that have been passed toi `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c`  to the console:
+
+```javascript
+console.log(a);
+console.log(b);
+console.log(c);
+```
+
+ **Result:**
+
+```javascript
+{a: 1, b: 2, c: 3}
+{b: 2}
+{c: 3}
+```
+
+As can be seen from the example above, `Object.assign()` did not create a truly new object for us.  It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should best be avoided.
+
+There's a trick though to ensure that objects can be combined via `Object.assign()` but also be created in a new object. Passing an empty object literal `{}` as the first argument to the function like this:
+
+```javascript
+Object.assign({}, a, b, c);
+```
+
+... will achieve just what we wanted. It passed all the object properties of `a`, `b` and `c` while keeping the previous objects `a`, `b` and `c` intact.
+
+### Destructuring assignments
+
+
 
