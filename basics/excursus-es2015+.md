@@ -30,7 +30,7 @@ But be careful: As opposed to other languages, `const` does not disable every mu
 
 Let us look at an example to further demonstrate the differences between `let` and `const` versus `var` and see how the former are only visible in the scope which they are defined in:
 
-```javascript
+```
 for (var i = 0; i < 10; i++) { }
 console.log(i);
 ```
@@ -43,7 +43,7 @@ console.log(i);
 
  An now let us look at the same example with `let`
 
-```javascript
+```
 for (let j = 0; j < 10; j++) { }
 console.log(j);
 ```
@@ -62,7 +62,7 @@ This information forms part of one of the building blocks which will help us to 
 
 The following code is valid and works for as long as the variable is declared with `let` \(or `var` \):
 
-```javascript
+```
 let myNumber = 1234;
 myNumber = 5678;
 console.log(myNumber);
@@ -76,7 +76,7 @@ console.log(myNumber);
 
 If we try and run the same code with `const` :
 
-```javascript
+```
 const myNumber = 1234;
 myNumber = 5678;
 console.log(myNumber);
@@ -90,7 +90,7 @@ Uncaught TypeError: Assignment to constant variable.
 
 If we try to directly override a previously declared variable with `const`, the JavaScript interpreter will give us a warning. But what about just changing a property _inside_ of an object declared with `const`?
 
-```javascript
+```
 const myObject = {
   a: 1
 };
@@ -108,7 +108,7 @@ In this instance, we do not encounter any problems as we are only changing the o
 
 **Allowed:**
 
-```javascript
+```
 const myArray = [];
 myArray.push(1);
 myArray.push(2);
@@ -123,7 +123,7 @@ console.log(myArray);
 
 **Conversely, the following code would not be allowed as the variable would be directly overridden:**
 
-```text
+```
 const myArray = [];
 myArray = Array.concat(1, 2);
 ```
@@ -138,25 +138,25 @@ If we want to ensure that `myArray` can easily be overridden, we have to use `le
 
 **Arrow functions** are yet another great addition in terms of simplicity since the introduction of ES2015. Previously function declarations were written in the following fashion: the keyword `function`, followed by an optional function name, parentheses in which the function arguments were given as well as the **function body**. The function body comprises the actual content of the function:
 
-```javascript
+```
 function(arg1, arg2) {}
 ```
 
 **Arrow functions** simplify this greatly by making the `function` keyword redundant:
 
-```javascript
+```
 (arg1, arg2) => {}
 ```
 
 If we only pass one parameter into the function, even the parentheses for the arguments is optional. Our pre-ES2015 function: 
 
-```javascript
+```
 function(arg) {}
 ```
 
 would be transformed into this **arrow function**:
 
-```javascript
+```
 arg => {}
 ```
 
@@ -164,7 +164,7 @@ Yep, this is a valid function in ES2015!
 
 And it's getting wilder. If our function should only return an expression in the `return` value, the parentheses become optional as well. Let's compare a function that takes a number as its single argument, doubles it and `return`s it. This is ES5:
 
-```javascript
+```
 function double(number) {
   return number * 2;
 }
@@ -172,7 +172,7 @@ function double(number) {
 
 ... and this is the same code as a ES2015 **arrow function**:
 
-```javascript
+```
 const double = number => number * 2;
 ```
 
@@ -182,7 +182,7 @@ But there is another even greater advantage when it comes to arrow functions. Th
 
 This sounds more complicated than it actually is and can be explained quickly using an example. Let's assume we define a button which should write the current time into a `div` once it is being pressed. A typical function in ES5:
 
-```javascript
+```
 function TimeButton() {
   var button = document.getElementById('btn');
   var self = this;
@@ -197,7 +197,7 @@ function TimeButton() {
 
 As the function supplied as an **event listener** does not have access to its **parent scope**, the **TimeButton** in this case, we have to make amends with saving `this` in the variable `self`. This is not an uncommon pattern for ES5 JavaScript. Alternatively, the scope of the function could be **explicitly** bound to `this` and thus teach the **event listener** which scope to execute the code in:
 
-```javascript
+```
 function TimeButton() {
   var button = document.getElementById('btn');
   this.showTime = function() {
@@ -213,7 +213,7 @@ function TimeButton() {
 
 Let us look at an example using **arrow functions** which inherit `this` from their **parent scope**, in this case from the `TimeButton`. 
 
-```javascript
+```
 function TimeButton() {
   var button = document.getElementById('btn');
   this.showTime = function() {
@@ -237,7 +237,7 @@ With the introduction of ES2015, a lot of static and prototype methods were adde
 
 In the past, we had to use `indexOf()` or regular expressions for operations such as checking if a value is present in a string or whether the string starts or ends with a specific value. With ES2015, the string data type gets its own methods to achieve these:
 
-```javascript
+```
 string.includes(value);
 string.startsWith(value);
 string.endsWith(value);
@@ -245,19 +245,19 @@ string.endsWith(value);
 
 In each of these a boolean value is returned by the function, meaning either `true` or `false`. If I want to test whether the string `Example` contains the word `egg`, I can check for it like this:
 
-```javascript
+```
 'Example'.includes('egg')
 ```
 
 Similarly, we can test for `startsWith`:
 
-```javascript
+```
 'Example'.startsWith('Ex')
 ```
 
 ... and for `endsWith`:
 
-```javascript
+```
 'Example'.endsWith('ample')
 ```
 
@@ -267,7 +267,7 @@ Another two useful methods added in ES2015 are `String.prototype.padStart()` and
 
 A common use case is to prepend numbers with leading zeros to give them all the same length:
 
-```javascript
+```
   '7'.padStart(3, '0'); // 007
  '72'.padStart(3, '0'); // 072
 '132'.padStart(3, '0'); // 132
@@ -281,7 +281,7 @@ The Array has also gained new static as well as prototype methods. What do I eve
 
 **Static array methods**
 
-```javascript
+```
 Array.of(3); // [3]
 Array.of(1, 2, 3); // [1, 2 ,3]
 Array.from('Example'); // ['E', 'x', 'a', 'm', 'p', 'l', 'e']
@@ -289,7 +289,7 @@ Array.from('Example'); // ['E', 'x', 'a', 'm', 'p', 'l', 'e']
 
 `Array.of()` creates a new array instance from any given number of parameters. It does not matter if their types are different. `Array.from()` also creates an array instance but from an "array-like" iterable object. The most common examples are probably an `HTMLCollection` or a `NodeList`. These are created by DOM methods such as `getElementsByClassName()` or the more modern `querySelectorAll()`. `HTMLCollection` and `NodeList` do not own methods such as `.map()` or `.filter()`. If you want to iterate over any of the two, you need to convert them to an array first. It's easily done by using `Array.from()` though. 
 
-```javascript
+```
 const links = Array.from(document.querySelectorAll('a'));
 Array.isArray(links); // true
 ```
@@ -298,7 +298,7 @@ Array.isArray(links); // true
 
 The methods on the array prototype can be **directly executed on the array instance**. The most applicable methods for React and Redux are:
 
-```javascript
+```
 Array.find(func);
 Array.findIndex(func);
 Array.includes(value);
@@ -306,7 +306,7 @@ Array.includes(value);
 
 `Array.find()` finds the **first** element in an array that fullfils the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value. 
 
-```javascript
+```
 const numbers = [1, 2, 5, 9, 13, 24, 27, 39, 50];
 const biggerThan10 = numbers.find((number) => number > 10); // 13
 
@@ -324,7 +324,7 @@ The `Array.findIndex()` method follows a similar pattern but returns only the in
 
 `Array.includes()`, added in ES2016, checks whether a value exists within the array it is called upon and returns a boolean. **Finally!** If you tried to reproduce the same functionality in the past, you had to make do with `Array.indexOf()`. `Array.includes()` simplifies this greatly:
 
-```javascript
+```
 [1,2,3,4,5].includes(4); // true
 [1,2,3,4,5].includes(6); // false
 ```
@@ -337,7 +337,7 @@ But be careful: `.includes()` is case sensitive. If you try to check for `['a', 
 
 Arrays and strings are not the only data structures which have gained new functionality. Objects have received a lot of new methods and improvements. Let's look at the most important ones briefly and one after the other:
 
-```javascript
+```
 Object.assign(target, source[, source[,...]]);
 Object.entries(Object)
 Object.keys(Object)
@@ -347,7 +347,7 @@ Object.freeze(Object)
 
 In my opinion the most useful addition has been `Object.assign()`. This method enables the merge of one or more objects into an existing object and returns the result as an object. But beware: the existing object is **mutated**. Hence, you should use this method sparingly. Another example to illustrate the point:
 
-```javascript
+```
 const user = { id: 1, name: 'Manuel' };
 const modifiedUser = Object.assign(user, { role: 'Admin' });
 console.log(user); 
@@ -362,7 +362,7 @@ The property `role` of the object in the second parameter of the `Object.assign(
 
 React embraces the principle of **pure functions** which denote functions which are encapsulated in themselves and do not modify their entry parameters. Taking this into account, it becomes apparent that such mutations should be avoided if at all possible. We can circumvent this problem by providing an empty object literal as the first argument:
 
-```javascript
+```
 const user = { id: 1, name: 'Manuel' };
 const modifiedUser = Object.assign({}, user, { role: 'Admin' });
 console.log(user); 
@@ -377,7 +377,7 @@ By providing a newly created object as the destination object, the result is als
 
 The method can process any given objects as parameters. If a property name appears more than once in an object, the properties added later take precedence.
 
-```javascript
+```
 const user = { id: 1, name: 'Manuel' };
 const modifiedUser = Object.assign(
   {},
@@ -395,7 +395,7 @@ console.log(modifiedUser);
 
 Applying these methods to our example above, we receive the following results:
 
-```javascript
+```
 Object.keys({ id: 1, name: 'Manuel'}); 
 // -> ['id', 'name']
 Object.values({ id: 1, name: 'Manuel'}); 
@@ -406,7 +406,7 @@ Object.entries({id: 1, name: 'Manuel'});
 
 Lastly, let us look at `Object.freeze()` which does just what you would expect. It freezes an object and prohibits any further mutations, be it the adding of new properties, deleting old properties or even just changing values. Following React's principle of immutable objects, this is very useful.
 
-```text
+```
 const user = Object.freeze({ id: 1, name: 'Manuel' });user.id = 2;delete user.name;user.role = 'Admin';console.log(user);// -> { id: 1, name: 'Manuel' }
 ```
 
@@ -418,7 +418,7 @@ The rest of the changes that were added to objects are not methods but syntax ex
 
 First, **computed properties** were introduced to have the possibility of using expressions as object properties. In the past, one had to manually create the object \(for example using an **object literal** `{}` or using `Object.create()`\), assign it to a variable and then add it as a new property to the object:
 
-```javascript
+```
 const nationality = 'german';
 const user = {
   name: 'Manuel',
@@ -430,7 +430,7 @@ console.log(user);
 
 With the addition of **ES2015**, expressions can now be directly used as object properties by surrounding them with brackets `[]` avoiding the clunky detour of adding properties to the already existing object:
 
-```javascript
+```
 const nationality = 'german';
 const user = {
   name: 'Manuel',
@@ -444,7 +444,7 @@ console.log(user);
 
 Another noteworthy addition for objects has been introduction of **shorthand property names**. Previously, code had to be written in the following form:
 
-```javascript
+```
 const name = 'Manuel';
 const job = 'Developer';
 const role = 'Author';
@@ -458,7 +458,7 @@ const user = {
 
 We are using a lot of repetition here. **Shorthand property name syntax** in **ES2015** prevents this and allow us to only use the variable name if the name of the object property is the same. This reduces our code to:
 
-```javascript
+```
 const name = 'Manuel';
 const job = 'Developer';
 const role = 'Author';
@@ -470,7 +470,7 @@ const user = {
 
 Yep, since **ES2015** both of these methods of defining an object will lead to the same result. Of course, shorthand property syntax can be mixed with the previous syntax all the same:
 
-```javascript
+```
 const name = 'Manuel';
 const job = 'Developer';
 
@@ -489,7 +489,7 @@ Since **ES2015**, classes can be defined by using the keyword `class`. While Rea
 
 A class consists of a name, an optional **constructor** that gets called at creation of a class instance as well as an unlimited number of class methods.
 
-```javascript
+```
 class Customer {
   constructor(firstName, lastName) {
     this.firstName = firstName;
@@ -513,19 +513,19 @@ Max Mustermann
 
 Additionally, classes can be extended using `extends:`
 
-```javascript
+```
 class Customer extends Person {}
 ```
 
 Or:
 
-```javascript
+```
 class MyComponent extends React.Component {}
 ```
 
 Using the inbuilt `super()` function the component can call the **constructor** of its parent class. In terms of React, the use of `super()` is only necessary if new and own classes have been added and if a constructor is present. If this is the case, `super()` is called and its `props` are passed to the constructor of the `React.Component`.
 
-```javascript
+```
 class MyComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -545,7 +545,7 @@ But enough of this. What are they exactly? Let's start with the spread operator.
 
 The spread operator allows us to "unpack" values. Pre-ES2015 one had to extract arguments from an array to pass them to a function via `Function.prototype.apply()`:
 
-```javascript
+```
 function sumAll(number1, number2, number3) {
   return number1 + number2 + number3;
 }
@@ -562,7 +562,7 @@ sumAll.apply(null, myArray);
 
 Using the spread operator which consists of three dots \(...\) we can "unpack" these arguments or "spread" them.
 
-```javascript
+```
 function sumAll(number1, number2, number3) {
   return number1 + number2 + number3;
 }
@@ -572,7 +572,7 @@ sumAll(...myArray);
 
 As can be seen, `apply()` is not necessary anymore. However, spreading arguments is not only useful and limited to function arguments. It can also be used to easily combine two arrays into one:
 
-```javascript
+```
 const greenFruits = ['kiwi', 'apple', 'pear'];
 const redFruits = ['strawberry', 'cherry', 'raspberry'];
 const allFruits = [...greenFruits, ...redFruits];
@@ -584,7 +584,7 @@ const allFruits = [...greenFruits, ...redFruits];
 
 A new array is created which not only contains all values from `greenFruits` but also all values from `redFruits`. But there's more: a new array is also created for us - not just a reference to the old arrays. Thinking back to the previously mentioned **read-only** mentality in React, this will prove useful for the work with props. The spread operator can also be used to create a simple copy of an array:
 
-```javascript
+```
 const users = ['Manuel', 'Chris', 'Ben'];
 const selectedUsers = [...users];
 ```
@@ -595,7 +595,7 @@ Let's shift our focus to objects. Using the spread operator with objects is very
 
 The spread operator is a great choice to create objects:
 
-```javascript
+```
 const globalSettings = { language: 'en-US', timezone: 'Berlin/Germany' };
 const userSettings = { mutedUsers: ['Manuel'] };
 const allSettings = {...globalSettings, ...userSettings};
@@ -604,7 +604,7 @@ console.log(allSettings);
 
 **Result:**
 
-```javascript
+```
 {
   language: 'en-US',
   timezone: 'Berlin/Germany',
@@ -614,7 +614,7 @@ console.log(allSettings);
 
 The properties of each object can be found in the `allSettings` object. However, the spread operator is not limited to two objects. We can combine any number of objects into a new object. Even the combination of single properties is possible:
 
-```javascript
+```
 const settings = {
   ...userSettings,
   showWarnings: true,
@@ -623,7 +623,7 @@ const settings = {
 
 If there are object properties with the same name in any two objects, the object declared last will come into effect:
 
-```javascript
+```
 const globalSettings = { language: 'en-US', timezone: 'Berlin/Germany' };
 const userSettings = { language: 'de-DE' };
 const allSettings = {...globalSettings, ...userSettings};
@@ -632,7 +632,7 @@ console.log(allSettings);
 
 **Result:**
 
-```javascript
+```
 {
   language: 'de-DE',
   timezone: 'Berlin/Germany',
@@ -647,7 +647,7 @@ However, it is important to make a distinction here: `Object.assign()` mutates a
 
 `Object.assign()`  takes any number of arguments and combines them into a single object:
 
-```javascript
+```
 const a = { a: 1 };
 const b = { b: 2 };
 const c = { c: 3 };
@@ -656,13 +656,13 @@ console.log(Object.assign(a, b, c));
 
 **Result:**
 
-```javascript
+```
 {a: 1, b: 2, c: 3}
 ```
 
 The function returns a new object in which all three of the objects that have been passed to `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c`  to the console:
 
-```javascript
+```
 console.log(a);
 console.log(b);
 console.log(c);
@@ -670,7 +670,7 @@ console.log(c);
 
  **Result:**
 
-```javascript
+```
 {a: 1, b: 2, c: 3}
 {b: 2}
 {c: 3}
@@ -680,7 +680,7 @@ As can be seen from the example above, `Object.assign()` did not create a new ob
 
 There's a trick though to ensure that objects can be combined via `Object.assign()` but also be created in a new object. Passing an empty object literal `{}` as the first argument to the function like this:
 
-```javascript
+```
 Object.assign({}, a, b, c);
 ```
 
@@ -688,5 +688,100 @@ Object.assign({}, a, b, c);
 
 ### Destructuring assignments
 
+Before introducing the **rest operator** to you which is closely related to the **spread operator**, I want to talk about **destructuring assignments** \(or **destructuring** for short\).
 
+**Destructuring** allows the extraction of a single or more elements from any object or array and to assign it to a new variable. It is another great syntax extension that has been gifted to us with the introduction of ES2015.
+
+**Destructuring Arrays**
+
+Let's imagine that we want to extract the medalists of a 100m run and write them to a new variable. ES5 allows us to express this in the following:
+
+```
+const athletes = [
+  'Usain Bolt',
+  'Andre De Grasse ',
+  'Christophe Lemaitre ',
+  'Adam Gemili',
+  'Churandy Martina',
+  'LaShawn Merritt',
+  'Alonso Edward',
+  'Ramil Guliyev',
+];
+
+const gold = athletes[0];
+const silver = athletes[1];
+const bronze = athletes[2];
+```
+
+Thanks to **destructuring**, we can simplify this greatly and reduce the expression to a single statement:
+
+```
+const [gold, silver, bronze] = athletes;
+```
+
+The array elements at index `0`, `1` and `2` are now all to be found in the variables for `gold`, `silver` and `bronze`. The result is the same as in the previous example, however the second version is much shorter and a lot more succinct.
+
+We can use array destructuring anywhere where the array has been initialised  on the right side, even if it contains a `return` value from the function.
+
+```
+const getAllAthletes = () => {
+  return [
+    'Usain Bolt',
+    'Andre De Grasse ',
+    'Christophe Lemaitre ',
+    'Adam Gemili',
+    'Churandy Martina',
+    'LaShawn Merritt',
+    'Alonso Edward',
+    'Ramil Guliyev',
+  ] 
+}
+
+const [gold, silver, bronze] = getAllAthletes()
+```
+
+As can be seen above, the array function returns an array with all the athletes. We can use destructuring directly once it is called and do not need to save the `return` value in a temporary variable.
+
+If we want to omit elements from the array, their values can literally be omitted.
+
+```
+const [, silber, bronze] = athletes;
+```
+
+In this example, we do not declare a variable gold and only save the silver and bronze medallists to our variables.
+
+But **array destructuring** is not limited to assigning variables with `let` and `const`. There are many other cases that prove useful such as passing function arguments in the form of an array.
+
+```
+const logWinners = (athletes) => {
+  const gold = athletes[0];
+  const silver = athletes[1];
+  const bronze = athletes[2];
+  console.log(
+    'Winners of Gold, Silver and Bronze are', 
+    gold, 
+    silver, 
+    bronze
+  );
+}
+```
+
+But this can be simpler:
+
+```
+const logWinners = ([gold, silver, bronze]) => {
+  console.log(
+    'Winners of Gold, Silver and Bronze are', 
+    gold, 
+    silver, 
+    bronze
+  );
+}
+```
+
+We are passing the array to our `logWinners()` function and instead of defining a variable to each and every medallist winner we can combine our efforts and simply use the destructuring method.
+
+**Destructuring objects**
+
+\*\*\*\*
 

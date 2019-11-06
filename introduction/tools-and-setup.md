@@ -14,13 +14,13 @@ Instead of installing **Node** directly, I suggest to use [**nvm**](https://gith
 
 While **Node** and **npm** already offer a very solid package manager, **yarn** takes it a little bit further and offers better caching, thus better performance and has easier commands. Similarly to React, **yarn** was created at Facebook to make the work with React yet a little nicer. Everything that I am going to describe in the rest of the book will also work seamlessly with **npm** but I would still suggest to install **yarn** instead. Especially in the React ecosystem, it's gaining popularity due to its ease of use and its better performance compared to **npm**. Once **Node** and **npm** have been installed, **yarn** can be added as a global package via **npm**: 
 
-```bash
+```
 npm install --global yarn
 ```
 
 Or in short:
 
-```bash
+```
 npm i -g yarn
 ```
 
@@ -52,13 +52,13 @@ If you want to work with static type checking like Flow or TypeScript, you also 
 
 You can install these via:
 
-```bash
+```
 npm install --save-dev [paket]
 ```
 
 or:
 
-```bash
+```
 yarn add --dev [paket]
 ```
 
@@ -114,19 +114,19 @@ However, the React community has done a lot of work for us already. The site Jav
 
 And this is true. **Create React App** makes it easy to create a robust and good setup with only a single command on the command line, especially for beginners:
 
-```bash
+```
 yarn create react-app projectname
 ```
 
 If you prefer using npm, you still need to enter two commands:
 
-```bash
+```
 npm install -g create-react-app
 ```
 
 ... which will install the **Create React App** executable globally and then:
 
-```bash
+```
 create-react-app projectname
 ```
 
@@ -140,7 +140,7 @@ This setup is quite extensive and has dealt with many aspects beforehand, so we 
 
 Once CRA has created the basic setup and has installed all the relevant dependencies, it will give us a prompt on the command line as to how we can work with CRA in our first React project.
 
-```bash
+```
 $ create-react-app foobar
 
 Creating a new React app in /home/manuel/my-react-app.
