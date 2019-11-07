@@ -785,7 +785,7 @@ We are passing the array to our `logWinners()` function and instead of defining 
 
 The concept of destructuring is not only limited to arrays. Objects can also be assigned to variables if they share the same naming.
 
-The semantics are very similar to those of arrays, with the difference that values are not being assigned based on position but based on their property name. Moreover, curly braces are used instead of eckige parantheses.
+The semantics are very similar to those of arrays, with the difference that values are not being assigned based on position but based on their property name. Moreover, curly braces are used instead of brackets.
 
 ```javascript
 const user = {
@@ -853,7 +853,7 @@ render() {
 }
 ```
 
-Of course it is entirely up to you if you make use of destructuring or whether you ocntinue to use `this.props.firstname` in your function. However, the former has developed into some sort of best practice and can be found in most React projects as it aids readibility and makes it easier to understand it.
+Of course it is entirely up to you if you make use of destructuring or whether you continue to use `this.props.firstname` in your function. However, the former has developed into some sort of best practice and can be found in most React projects as it aids readability and makes it easier to understand it.
 
 **Renaming properties when destructuring**
 
@@ -886,5 +886,56 @@ The value of the `class` property is written into the new variable `ticketClass`
 
 **Defaults in destructuring assignments**
 
-\*\*\*\*
+It is also possible to use defaults with **destructuring**. If you are trying to destructure a property in an object in which it does not exist, you can define a default to use instead. Instead of using a colon as we did for reserved names, we use the equality sign followed by the default value we want to pass:
+
+```javascript
+const { name = 'Unknown passenger' } = passenger;
+```
+
+If no property called `name` was present in the object or its value was `undefined`, `name` would result in `Unknown passenger` in this example. If however an empty string is passed or `null`, the default would **not** be used.
+
+**Combining renames and defaults**
+
+Now it's getting interesting because indeed combining renaming and default naming is possible. It might not be the simplest code to follow first but syntactically it is correct. Let use our previous `passenger` object again to illustrate this point. First, we define that the `name` property to be renamed to `passengerName` and then pass it the default value of `Unknown passenger` if no property `name` is found on the object. We also want to keep using `ticketClass` instead of the reserved `class` and assign the value `Economy` to it should it not exist as a property on the object.
+
+```javascript
+const {
+  name: passengerName = 'Unknown passenger',
+  class: ticketClass = 'economy',
+} = passenger;
+```
+
+If the newly named variables `passengerName` and `ticketClass` are not present in the object to be destructured, the values `Unknown passenger` and `Economy` are assigned. We do however need to ensure that the object itself is not null, otherwise the JavaScript interpreter will throw a hefty error:
+
+```javascript
+const {
+  name: passengerName = 'Unknown passenger',
+  class: ticketClass = 'economy',
+} = null;
+```
+
+{% hint style="danger" %}
+Uncaught TypeError: Cannot destructure property \`name\` of 'undefined' or 'null'.
+{% endhint %}
+
+There is an untidy yet highly practical trick to ensure that the object we're working with is not `null` or `undefined`. The **logical OR operator** can be used to declare a fallback object of our actual object is `null` or `undefined.`
+
+```javascript
+const {
+  name: passengerName = 'Unknown passenger',
+  class: ticketClass = 'economy',
+} = passenger || {};
+```
+
+With the addition of `|| {}` we express that if the `passenger` object is **falsy**, an empty object should be used instead. Arguably, it would be "cleaner" to check if `passenger` is an object first and only then to continue and destructure it. The **Logical OR operator** provides a handy and concise alternative for our tool set though and should be sufficient in most cases.
+
+**Destructuring** and the **spread operator** can be used together too:
+
+```javascript
+const globalSettings = { language: 'en-US' };
+const userSettings = { timezone: 'Berlin/Germany' };
+const { language, timezone } = { ...globalSettings, ...userSettings }
+```
+
+In this example, the **spread operator** is revolved first and a new object with all the properties of `globalSettings` and `userSettings` is created. Then, using **destructuring** variables are being assigned.
 
