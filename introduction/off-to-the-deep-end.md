@@ -4,7 +4,7 @@ We've just talked about the "What", "When" and "Where" but we haven't yet talked
 
 Let's have a look at a very minimalist setup to get started with React:
 
-```
+```markup
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +30,7 @@ If you have a number of React components, you normally refer to an **app**, **we
 
 Let's start with a classic "Hello-World" example and include the script where we've put the placeholder earlier.
 
-```
+```javascript
 class HelloWorld extends React.Component {
   render() {
     return React.createElement(
@@ -53,7 +53,7 @@ And just like that we have just implemented our first React component. If we inc
 
 That does not look that complicated, does it? Let's go through the code one by one. I have highlighted all the relevant parts in the code in bold.
 
-```
+```jsx
 class HelloWorld 
 ```
 
@@ -61,13 +61,13 @@ Here, we are giving a name to a child component. We have named our first compone
 
 Naming your components follow the **UpperCamelCase** convention. It is not unusual either to have long, self-explanatory names for your components. **UserNotificationView** is an entirely normal name.
 
-```
+```jsx
 extends React.Component
 ```
 
 With this snippet, we're extending the internal React class `React.Component`. This transforms our own class into a component that we can use in React. Apart from `React.Component` there is also a `React.PureComponent`.and a so-called _functional component_. This is simply a JavaScript function that follows a particular pattern. We are going to look at both of these at a later stage, for our current understanding we can neglect them for now.   
 
-```
+```jsx
 render()
 ```
 
@@ -81,7 +81,7 @@ Even if it is entirely up to you how to structure your JavaScript classes, a com
 
 ![Error message for missing render\(\) method](../.gitbook/assets/invalid-react-element.png)
 
-```
+```jsx
 React.createElement()
 ```
 
@@ -101,13 +101,13 @@ However, in your day-to-day development you will hardly ever call `React.createE
 
 **JSX** resembles HTML or XML/XHTML in parts, however it is a lot more powerful as you can include JavaScript expressions within it. JSX is an abstraction that makes it a lot **easier** for the developer to create React elements. Our previous example
 
-```
+```jsx
 React.createElement('div', {id: 'hello-world'}, 'Hello World');
 ```
 
 would look like this in JSX:
 
-```
+```jsx
 <div id="hello-world">Hello World</div>
 ```
 
@@ -115,7 +115,7 @@ For many beginners, this can look a little strange in the beginning. I have seen
 
 Let's have a look at our example again. The `return`value of the `render()` method indicates that it will display an element of type `div` which shall contain the id `hello-world` and the child element \(a text node in this case\) containing `Hello World`. 
 
-```
+```jsx
 ReactDOM.render(Element, Container)
 ```
 

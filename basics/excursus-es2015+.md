@@ -779,9 +779,112 @@ const logWinners = ([gold, silver, bronze]) => {
 }
 ```
 
-We are passing the array to our `logWinners()` function and instead of defining a variable to each and every medallist winner we can combine our efforts and simply use the destructuring method.
+We are passing the array to our `logWinners()` function and instead of defining a variable to each and every medalist winner we can combine our efforts and simply use the destructuring method.
 
 **Destructuring objects**
+
+The concept of destructuring is not only limited to arrays. Objects can also be assigned to variables if they share the same naming.
+
+The semantics are very similar to those of arrays, with the difference that values are not being assigned based on position but based on their property name. Moreover, curly braces are used instead of eckige parantheses.
+
+```javascript
+const user = {
+  firstName: 'Manuel',
+  lastName: 'Bieh',
+  job: 'JavaScript Developer',
+  image: 'manuel.jpg',
+};
+const { firstName } = user;
+```
+
+`firstName` now contains the value of `user.firstname`.
+
+Object destructuring is among the most widely used features in React components. It allows for writing single props into new variables and to use them in JSX in an uncomplicated fashion.
+
+Let's look at the following example of a stateless functional component ****\(SFC\):
+
+```javascript
+const UserPersona = (props) => {
+  return (
+    <div>
+      <img src={props.image} alt="User Image" />
+      {props.firstName} {props.lastName}<br />
+      <strong>{props.job}</strong>
+    </div>
+  );
+};
+```
+
+Having to repeat `props` in front of every property hinders readability of the component. Instead, we can use object destructuring and create a variable for each property of the props once.
+
+```javascript
+const UserPersona = (props) => {
+  const { firstName, lastName, image, job } = props;
+  return (
+    <div>
+      <img src={image} alt="User Image" />
+      {firstName} {lastName}<br />
+      <strong>{job}</strong>
+    </div>
+  );
+};
+```
+
+That already looks tidier and improved readability of the code. But we can simplify this further. Remember that it was possible to destructure arrays when they were being passed as a function argument. The same applies for objects. Instead of using the `props` argument, we can directly use **destructuring assignment**:
+
+```javascript
+const UserPersona = ({ firstName, lastName, image, job }) => (
+  <div>
+    <img src={image} alt="User Image" />
+    {firstName} {lastName}<br />
+    <strong>{job}</strong>
+  </div>
+);
+```
+
+As a nice side effect, we can simplify this further as the instant and implicit return from the **arrow function** allows us to omit the curly braces and the explicit `return`. We are left with just 5 lines of **JSX.**
+
+This syntax is very common in SFCs but you can find a similar destructuring assignments in the beginning of the `render()` method of **class components**:
+
+```javascript
+render() {
+  const { firstName, lastName, image, job } = this.props;
+  // more Code
+}
+```
+
+Of course it is entirely up to you if you make use of destructuring or whether you ocntinue to use `this.props.firstname` in your function. However, the former has developed into some sort of best practice and can be found in most React projects as it aids readibility and makes it easier to understand it.
+
+**Renaming properties when destructuring**
+
+Sometimes it is necessary to rename properties. Either because a variable with the same name has already been declared or because a variable with the current property name would be invalid. Both of these are valid concerns and ES2015 offers a solution for these.
+
+```javascript
+const passenger = {
+  name: 'Manuel Bieh',
+  class: 'economy',
+}
+```
+
+The above `passenger` object contains a property named class which is a valid property name. However, it is not valid as a variable name. Direct destructuring is not possible in this case and would lead to an error:
+
+```javascript
+const { name, class } = passenger;
+```
+
+{% hint style="danger" %}
+Uncaught SyntaxError: Unexpected token }
+{% endhint %}
+
+In order to rename the variable, the invalid property name needs to be followed by a colon and the new name. This would pass as a valid **destructuring assignment**:
+
+```javascript
+const { name, class: ticketClass } = passenger;
+```
+
+The value of the `class` property is written into the new variable `ticketClass` which as opposed to `class` is a valid name for a variable. The name of the passenger can easly be destructured into a variable with the name `name`.
+
+**Defaults in destructuring assignments**
 
 \*\*\*\*
 
