@@ -939,3 +939,137 @@ const { language, timezone } = { ...globalSettings, ...userSettings }
 
 In this example, the **spread operator** is revolved first and a new object with all the properties of `globalSettings` and `userSettings` is created. Then, using **destructuring** variables are being assigned.
 
+### Rest operator
+
+The rest operator takes care of the remaining elements in an array or object after **destructuring** or the remaining arguments of **function arguments**. Its name is pretty self-explanatory - it deals with the **"rest"** of the elements. Similarly to the **spread operator**, the **rest** **operator** is preceded by three dots `…`. However, it will not be found on right side of an assignment but on the **left**. Moreover, only **one** rest operator can be used in each expression \(also in stark contrast to the **spread operator**\).
+
+Let's investigate the **rest operator** in function arguments. Assume, that we want to write a function that can take any number of arguments - it doesn't matter whether 2, 5 or 25 arguments are being passed. ES5 offers the keyword `arguments` to us with which we can access an array of all the function arguments within our function:
+
+```javascript
+function Example() {
+  console.log(arguments);
+}
+Example(1, 2, 3, 4, 5);
+```
+
+**Result:**
+
+{% hint style="info" %}
+`Arguments(5) [1, 2, 3, 4, 5, callee: ƒ]`
+{% endhint %}
+
+**Arrow functions** however do not offer this functionality anymore and will throw an error if you attempt to access the **arguments**.
+
+```javascript
+const Example = () => {
+  console.log(arguments);
+}
+Example(1, 2, 3, 4, 5);
+```
+
+**Result:**
+
+{% hint style="danger" %}
+Uncaught ReferenceError: arguments is not defined
+{% endhint %}
+
+The **rest operator** offers a neat solution to this problem: it writes all the remaining function arguments which we have not already extracted into their own variables into one more variable with any given name:
+
+```javascript
+const Example = (...rest) => {
+  console.log(rest);
+}
+Example(1, 2, 3, 4, 5);
+```
+
+**Result:**
+
+{% hint style="info" %}
+`[1, 2, 3, 4, 5]`
+{% endhint %}
+
+But behold - this does not only work for a single function argument but also if you previously defined some other parameters. The **rest operator** will quite literally take care of the **rest**:
+
+```javascript
+const Example = (first, second, third, ...rest) => {
+  console.log('first:', first);
+  console.log('second:', second);
+  console.log('third:', third);
+  console.log('rest:', rest);
+}
+Example(1, 2, 3, 4, 5);
+```
+
+**Result:**
+
+{% hint style="info" %}
+`first: 1    
+second: 2    
+third: 3    
+rest: [4, 5]`
+{% endhint %}
+
+One could say that the **rest operator** "collects" the remaining elements from a **destructuring** operation and saves them to variable which is indicated just after the three dots. Even though, we have named this variable `rest` in our previous examples, you can literally give it any valid name.
+
+The **rest operator** is not limited to functions but can also be used in **array destructuring**:
+
+```javascript
+const athletes = [
+  'Usain Bolt',
+  'Andre De Grasse',
+  'Christophe Lemaitre',
+  'Adam Gemili',
+  'Churandy Martina',
+  'LaShawn Merritt',
+  'Alonso Edward',
+  'Ramil Guliyev',
+];
+const [gold, silver, bronze, ...competitors] = athletes;
+console.log(gold);
+console.log(silver);
+console.log(bronze);
+console.log(competitors);
+```
+
+**Result:**
+
+{% hint style="info" %}
+```javascript
+'Usain Bolt'
+'Andre De Grasse'    
+'Christophe Lemaitre'`  
+[  
+  'Adam Gemili',
+  'Churandy Martina',
+  'LaShawn Merritt',
+  'Alonso Edward',
+  'Ramil Guliyev'  
+]
+```
+{% endhint %}
+
+... as well as in **object destructuring**:
+
+```javascript
+const user = {
+  firstName: 'Manuel',
+  lastName: 'Bieh',
+  job: 'JavaScript Developer',
+  hair: 'Brown',
+}
+const { firstName, lastName, ...other } = user;
+console.log(firstName);
+console.log(lastName);
+console.log(other);
+```
+
+**Result:**
+
+{% hint style="info" %}
+`Manuel`  
+`Bieh`  
+`{ job: 'JavaScript Developer', hair: 'Brown' }`
+{% endhint %}
+
+All the values not being explicitly written into a variable during **destructuring**, can be accessed via the **rest variable** which we have declared above.
+
