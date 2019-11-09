@@ -1073,3 +1073,9 @@ console.log(other);
 
 All the values not being explicitly written into a variable during **destructuring**, can be accessed via the **rest variable** which we have declared above.
 
+## Template Strings
+
+**Template strings** in ES2015 offer yet a third alternative to write a string. Strings can already be declared by using either single exclamation marks \(`'Example'`\) or double exclamation marks \(`"Example"`\). Since ES2015, backticks can also be used to declare a string: ```Example```.
+
+There are two varations of **template strings**. 
+
