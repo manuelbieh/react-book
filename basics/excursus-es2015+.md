@@ -1077,5 +1077,42 @@ All the values not being explicitly written into a variable during **destructuri
 
 **Template strings** in ES2015 offer yet a third alternative to write a string. Strings can already be declared by using either single exclamation marks \(`'Example'`\) or double exclamation marks \(`"Example"`\). Since ES2015, backticks can also be used to declare a string: ```Example```.
 
-There are two varations of **template strings**. 
+There are two variations of **template strings**. There are the usual **template strings** which can contain JavaScript expressions as well as **tagged template literals** in their extended form.
+
+**Tagged template literals** are much more powerful than regular **template strings** as their output can be modified with the help of a special function.However, for our usual work with React this is not our primary concern.
+
+If you wanted to mix them with JavaScript expressions or values, you would normally use plain old **string concatenation** pre-ES6 times.
+
+```javascript
+var age = 7;
+var text = 'My daughter is ' + age + ' years old';
+```
+
+```javascript
+var firstName = 'Manuel';
+var lastName = 'Bieh';
+var fullName = firstName + ' ' + lastName;
+```
+
+**Template strings** allow us to include **JavaScript expressions** in this variation of a string. In order to do this, you wrap the expression you want to include in this form: `${ }`. Let us look at our previous examples but rewrite them using **template literals**:
+
+```javascript
+const age = 7;
+const text = `My daughter is ${age} years old`;
+```
+
+```javascript
+const firstName = 'Manuel';
+const lastName = 'Bieh';
+const fullName = `${firstName} ${lastName}`;
+```
+
+It's important to note that one is not limited to using variables as shown above. Equally, you can use any JavaScript expressions \(i.e. function calls\) - in this case:
+
+```javascript
+console.log(`Das heutige Datum ist ${new Date().toISOString()}`);
+console.log(`${firstName.toUpperCase()} ${lastName.toUpperCase()}`);
+```
+
+## Promises and async/await
 
