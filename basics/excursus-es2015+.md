@@ -1207,5 +1207,113 @@ A few of the newer JavaScript Browser APIs have already followed this new implem
 
 ### Asynchronous functions with `async` / `await`
 
-\`\`
+Asynchronous functions with `async` and `await` can be seen as the next step in the asynchronous evolution in the JavaScript ecosystem and been added to the JavaScript specification in ES2016. While still using promises under the hood, `async/await` make them invisible and allow us to write asynchronous code that resembles synchronous code. No more callbacks and `then()` or `catch()`.
+
+In order to use it, prepend the asynchronous function with the `await` keyword. However, to use `await` the `async` keyword needs to be applied in the function call in which`await` is used. It tells the JavaScript interpreter that we are using an asynchronous function and omitting it would throw an exception.
+
+Bringing it back to our previous example of the user that wants to send an email to his first friend, we can rewrite it using these asynchronous functions:
+
+```javascript
+(async () => {
+  try {
+    const user = await getUser(id);
+    const friends = await user.getFriends();
+    const settings = await friends[0].getSettings();
+    if (settings.notifications === true) {
+      const status = await email.send('You are my first friend!');
+      if (status === 200) {
+          alert('User has been notified via email');
+      }
+    }
+  } catch (err) {
+    console.error('An error occured:', err.message);
+  }
+})();
+```
+
+For me personally asynchronous functions with `async` and `await` have been one of the most notable changes in JavaScript in the past few years. They facilitate working with asynchronous data greatly especially compared to complex and confusing callbacks. Even promises, which were already a massive improvement over callbacks, look almost complex compared to `async` / `await`. 
+
+## Import syntax and JavaScript modules
+
+Modules in JavaScript are a bit of special topic. They did not exist officially but there have been many attempts to introduce JavaScript modules in the past. If you have been part of the development scene for a while, you might remember **AMD** \(Asynchronous Module Definition\) and if you have worked with Node.js before you should have come across CommonJS Modules \(i.e. `module.exports` and `require('./myModule')`\). There has been a lot of debate centering on which module standard should become the de-facto standard, what the syntax is supposed to look like and how the implementation should work on the side of the interpreter. In the end, consensus was reached on using `import` and `export` keywords to let the modules communicate with each other.
+
+Babel was first to implement a solution that was based on the previous standard of the specification. This implementation had to change inbetween though as updates were made to the standard. When webpack entered the scene, it implemented yet another mechanism to manage resolving and loading of JavaScript modules which is based on the now approved final standard. Just like TypeScript.
+
+After **10** years, we have finally reached consensus for the specification and JavaScript engines are busy implementing it. This sounds rather complicated. It surely has been in the past. However, nowadays most agree and developers finally found clarity. But there are a few gotchas still which is why we should still rely on Webpack, Babel or TypeScript to work with modules. But more on that later.
+
+We've talked a lot about the history of modules now. But how do imports work and what even are modules?
+
+### Modules in JavaScript
+
+The primary goal of modules is to encapsulate JavaScript scope for each module. In this case, a module is actually a single **file**. ****As long as you are not explicitly limiting their scope by using an **IIFE** \(_Immediately Invoked Function Expression_\), each function, each variable etc that you declare in JavaScript is available globally. Modules prevent this by only making the code inside it available **in the module itself**. This can avoid complications such as two libraries using the same variable. Moreover, modules encourage reusuable code without being scared of using already existing variables or overriding functions that have already been declared.
+
+Modules can **export** functions, classes or variables that have been declared within them. Other modules can then import these exports if necessary. In order to export these functions and variables, a special `export` keyword is used. To import these, you might recognize a pattern here, there is an `import` keyword. Exporting can take two forms: **named exports** and **default exports**.
+
+**Named Exports**
+
+Assume that we have created a module - `calc.mjs` - that provides a number of functions for us to make more complicated calculations. For example, the module could contain the following:
+
+```javascript
+export const double = (number) => number * 2;
+export const square = (number) => number * number;
+export const divideBy = (number, divisor) => number / divisor;
+export const divideBy5 = (number) => divideBy(number, 5);
+```
+
+We announce an **export** by using the keyword. Then, declaring a variable and assigning it an arrow function with one or more parameters and directly returning the result we could use this function elsewhere in another module. Alternatively, we can achieve the same with two separate steps:
+
+```javascript
+const double = (number) => number * 2;
+export double;
+```
+
+Using the `import` keyword, we can now use these function elsewhere in our application. To do this, we use `import` followed by the exports that we want to import in curly braces as well as `from` and the path to module.
+
+```javascript
+import { double, square, divideBy5 } from './calc.mjs';
+
+const value = 5;
+console.log(double(value));     // 10
+console.log(square(value));     // 25
+console.log(divideBy5(value));  // 1
+```
+
+Theoretically, a file can have **as many exports as you want**. Beware though, they have to have different names and an already exported name **is not allowed to be exported again**.
+
+**Default Export**
+
+In addition to the so-called **named exports** from the example above, there is also the singular `default export`. This is a special form of an export that is only allowed to be used within a module **once** and declared by using `default`. If a variable or function has been marked as `default` it is possible to import it without curly braces. The **default export** can alleviate the need for importing a lot of named exports by bundling them into a single default. 
+
+```javascript
+export const double = (number) => number * 2;
+export const square = (number) => number * number;
+export const divideBy = (number, divisor) => number / divisor;
+export const divideBy5 = (number) => divideBy(number, 5);
+
+export default {
+   double, square, divideBy, divideBy5
+}
+```
+
+To use any of the above functionality, our application would only need to import the module itself - meaning the **default export** - and assign it to a variable:
+
+```javascript
+import Calc from './calc.mjs';
+
+console.log(Calc.double(value));    // 10
+console.log(Calc.square(value));    // 25
+console.log(Calc.divideBy5(value)); // 1
+```
+
+In most cases, it is useful for each module to have a **default export**. Especially in many component based libraries like React or Vue.js it is common to only define one export per module, which should be the **default export**. Even if this is not necessary from a syntactical point of view, it has become the standard for working with React.
+
+```javascript
+export default class MyComponent extends React.Component {
+  // ...
+}
+```
+
+### Inconsistencies: Browser vs Node.js
+
+
 
