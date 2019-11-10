@@ -1116,3 +1116,96 @@ console.log(`${firstName.toUpperCase()} ${lastName.toUpperCase()}`);
 
 ## Promises and async/await
 
+Promises are not an exclusively new concept in JavaScript, however with ES2015 they been standardised and can be used without any other additional libraries for the first time. Promises allow for asynchronous development by linearising with callbacks. A promise takes in an **executor function** which again takes two arguments, namely `resolve` and `reject`, and can take any of three states: `pending`, `fulfilled` or `rejected`. The inital state of a promise is always `pending`. Depending on the operation of the executor function being successful or unsuccessful, meaning `resolve` or `reject`, the status of the of the promise will change to either `fulfilled` or `rejected`. You can react directly to these two states with`.then()` or `.catch()` respectively. If `resolve` is being passed to the executor function, the `then()` part will execute. If `reject` is called, **all** `then()` calls are skipped and the `catch()` block is executed instead.
+
+An executor function **has** to execute one of the two functions it has been passed, otherwise the promise will be stuck in an _unfillfilled_ state. This can lead to unexpected and false behaviour and can even cause memory leaks within an application.
+
+To reiterate the difference between promises and callbacks, let us have a look at the following example:
+
+```javascript
+const errorHandler = (err) => {
+  console.error('An error occured:', err.message);
+};
+
+getUser(id, (user) => {
+  user.getFriends((friends) => {
+    friends[0].getSettings((settings) => {
+      if (settings.notifications === true) {
+        email.send('You are my first friend!', (status) => {
+          if (status === 200) {
+            alert('User has been notified via email!');
+          }
+        }, errorHandler);
+      }
+    }, errorHandler);
+  }, errorHandler)
+}, errorHandler)
+```
+
+The asynchronous `getUser()` function is called to obtain information about a user with their `id`. Using its `getFriends()` method, we can obtain a list of all of their friends. To collect the first friend's \(`friends[0]`\) user settings, the `getSettings()` method is called. If this friend has allowed email notifications, an email is sent to him. We react asynchronously to the response of the mail server.
+
+Albeit this example being relatively simple, the code is nested **6 layers** deep - and we are not even taking care of explicit error handling or edge cases. Working with callbacks can become cumbersome and confusing quickly, especially one callback functions will trigger further callback functions, as in our example. It comes as no surprise that this is often called **Callback Hell** or the **Pyramid of Doom**.
+
+Let us rewrite this and assume that our fictional API methods will each return ****a promise:
+
+```javascript
+const errorHandler = (err) => {
+  console.error('An error occured:', err.message);
+};
+
+getUser(id)
+.then((user) => user.getFriends())
+.then((friends) => friends[0].getSettings())
+.then((settings) => {
+  if (settings.notifications === true) {
+    return email.send('You are my first friend!');
+  }
+})
+.then((status) => {
+  if (status === 200) {
+    alert('User has been notified via email');
+  }
+})
+.catch(errorHandler);
+```
+
+Each step is being followed by `then()` to react to the previous promise.  Although the same end result is reached by this piece of code, we are only nesting 2 layers deep and readbility is improved immensly.
+
+It is relatively simple to refactor code based on callbacks into one that is using promises. In order to demonstrate this, I will show you an example of the Geolocation API and its `getCurrentPosition()` method. For those of you who do not know it: the method exists on the `navigator.geolocation` object and opens a dialog in the browser asking the user for permission to use their current location. The method expects two callbacks as arguments, namely the success callback and the error callback. The first callback, the  success callback, is being passed an object with the user's location if they have previously agreed. The second callback, the error callback, is being passed an error object. This can occur because the user has given permission to use their current location or due to a location not being possible for other reasons.
+
+```javascript
+navigator.geolocation.getCurrentPosition((position) => {
+  console.log(`User position is at ${position.coords.latitude}, ${position.coords.longitude}`);
+}, () => {
+  console.log('Unable to locate user');
+});
+```
+
+The callback can be transformed into a promise:
+
+```javascript
+const getCurrentPositionPromise = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+```
+
+Yep, that's it! Now we can access the user's location like the following instead of using callback syntax:
+
+```javascript
+getCurrentPositionPromise()
+.then((position) => {
+  console.log(`User position is at ${position.coords.latitude}, ${position.coords.longitude}`);
+})
+.catch(() => {
+  console.log('Unable to locate user');
+});
+```
+
+A few of the newer JavaScript Browser APIs have already followed this new implementation. If you want to learn about promises and how they work in detail, I suggest you to read the [the following article on the MDN web docs](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise). The explanation and reasoning for promises should only serve as an introduction to a much more interesting feature though, namely:
+
+### Asynchronous functions with `async` / `await`
+
+\`\`
+
