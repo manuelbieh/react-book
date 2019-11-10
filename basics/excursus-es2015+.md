@@ -1315,5 +1315,54 @@ export default class MyComponent extends React.Component {
 
 ### Inconsistencies: Browser vs Node.js
 
+If you paid attention, you might have noticed that we imported a file named `calc.mjs` \(not `calc.js`\) above. This convention has been agreed upon in a lenghty process to ensure that JavaScript modules can be used in Node.js. 
 
+So if you want to write universal JavaScript that can be run on the server with Node.js but also client-side in the browser, you **have to** use the `.mjs` file ending for all your files. Especially, if you want to achieve this without tools such as Babel, Wepback or TypeScript.
+
+Loading modules works a little different in Node.js compared to the browser. While the browser does not care which file ending a module has \(as long as the server sends it back with the Content-Type `text/javascript`\), Node.js requires the `.mjs` file ending to classify JavaScript modules.
+
+To use JavaScript modules in the browser, the `type` attribute needs to be set to `module` in the corresponding `<script></script>` element:
+
+```markup
+<script src="./myApp.mjs" type="module"></script>
+```
+
+Those browsers that support `type="module"`, also support the `nomodule` attribute to indicate a fallback for browsers that do not support modules and safely ignore it.
+
+```markup
+<script src="./myApp.mjs" type="module"></script>
+<script src="./myApp.bundle.js" nomodule></script>
+```
+
+A browser supporting modules would simply load `myApp.mjs` while all other browsers would just serve a bundled `myApp.bundle.js` \(for example generated with Webpack\).
+
+But that's not all: Node.js has its own, very special mechanism to find and load files. Modules that do not have a relative file path, i.e. not start with `./` or `../`, will be looked for in `node_modules` or `node_libraries` for example. Node.js also loads an `index.js` by default if it finds a directory with the name you specified.
+
+```javascript
+import MyModule from 'myModule';
+```
+
+Node.js would look for an export in a directory such as `./node_modules/myModule` in this case and load an `index.js` that is inside of it. Alternatively, it would look for the file in the `main` field of the `package.json`. The browser on the other hand cannot try a bunch of different file paths to find a file because each and every search would result in an expensive network request and many costly 404 responses.
+
+On top of that the module that you want to import from, also called the **Import Specifier** \(that's the part just after the `from`\), is protected in the browser. It has to consist of either a valid URL or a valid file path.
+
+Imports like this are not possible in browsers to date:
+
+```javascript
+import React from 'react';
+```
+
+If we want to use JavaScript modules server-side as well as client-side, we will have to keep using module bundlers like Webpack for now. The proposal for **Package Name Maps** which is supposed to solve this problem is only in the early stages of discussion and will thus only land in a later version of ECMAScript.
+
+## Summary
+
+ES2015 and the following versions of the ECMAScript standard have given us a lot of new functionality that did not exist in JavaScript before. It's hard to imagine working without these especially in the use with React. The most notable new features are these:
+
+* Variable declarations with `let` and `const`
+* **Arrow functions** - to create functions that do not bind their own `this`
+* **Classes** - they are the basis of **React Class components** and facilitate a multitude of things
+* **Rest and Spread operators** - which increase the readability as well as the writing process of data in arrays and objects immensely
+* **Template strings** - to facilitate working with JavaScript expressions in Strings
+* **Promises** and **Asynchronous functions with `async` / `await`** - which enhance working with asynchronous data and make it much easier
+* **Import** and **Export** for encapsulating reusable JavaScript on a module basis
 
