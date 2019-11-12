@@ -147,3 +147,46 @@ Let's look at a few other examples of JSX that contain valid JavaScript expressi
 
 All of these are great examples of using expressions to ensure JSX is much more than just HTML.
 
+## What else you should know
+
+For those of you who have paid close attention, you may have noticed a few things depdening on the level of your JavaScript knowledge. In some examples, parentheses appear in seemlingly odd places. The parentheses, \(so "`(`" and "`)`" \), need to be wrapped around any JSX which spans more than one line - so not quite so random anymore.
+
+You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi line JSX actually require parentheses.
+
+If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly braces. These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
+
+{% hint style="warning" %}
+For each object, **two** opening and closing curly braces need to be used. The outer braces introduce the expression whereas the inner ones represent the curly braces of the object contained within.
+
+`<User data={{ name: 'Manuel', location: 'Berlin' }} />`
+
+Similarly, array literals also need to be included within a set of curly braces. The outer one representing the expression and the inner brackets denoting the array.
+
+`<List items={[1, 2, 3, 4, 5]} />`
+{% endhint %}
+
+Some of you may have noticed that the prop `className` was used in the example. The DOM Element API of the browser lets us access the `class` attribute of an element by using `Element.className`. React does just the same and borrows from the properties of the DOM `Element` class.
+
+Some attribute names deviate from the regular JavaScript equivalents in JSX as they use reserved words. In the example, `class` is a reserved word which is why we use `className` instead. Same applies to `for`. The `for` is usually the JavaScriot keyword for starting a loop but can also be used to inform a `<label>` which input field they belong to. Instead of using `for`, JSX code can employ the  [HTMLLabelElement Interface](https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor) `htmlFor`.
+
+```jsx
+<fieldset>
+  <input type="text" id="name" />
+  <label htmlFor="name">Name</label>
+</fieldset>
+```
+
+This pattern applies to all major HTML attributes. All HTML attributes that should be set need to adhere to the following rules `tabindex` is `tabIndex`, `readonly` wird zu `readOnly`, `maxlength` becomes `maxLength`.
+
+The development mode of the browser usually reminds everyone that the regular HTML attributes should be renamed though \(to avoid grave circumstances\) 
+
+{% hint style="danger" %}
+Warning: Invalid DOM property `class`. Did you mean `className`?
+{% endhint %}
+
+For those of you who want to really understand which HTML attributes exist, this chart will help:
+
+> `accept acceptCharset accessKey action allowFullScreen alt async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked cite classID className colSpan cols content contentEditable contextMenu controls controlsList coords crossOrigin data dateTime default defer dir disabled download draggable encType form formAction formEncType formMethod formNoValidate formTarget frameBorder headers height hidden high href hrefLang htmlFor httpEquiv icon id inputMode integrity is keyParams keyType kind label lang list loop low manifest marginHeight marginWidth max maxLength media mediaGroup method min minLength multiple muted name noValidate nonce open optimum pattern placeholder poster preload profile radioGroup readOnly rel required reversed role rowSpan rows sandbox scope scoped scrolling seamless selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step style summary tabIndex target title type useMap value width wmode wrap`
+
+The same applies to SVG elements. You can also use these in JSX as SVGs are valid XML. The documentation for SVG attributes and which of these are supported is easily a lot longer than the one for plan HTML modules. Take a look if you want to know more:  [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
+
