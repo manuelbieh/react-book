@@ -149,7 +149,7 @@ All of these are great examples of using expressions to ensure JSX is much more 
 
 ## What else you should know
 
-For those of you who have paid close attention, you may have noticed a few things depdening on the level of your JavaScript knowledge. In some examples, parentheses appear in seemlingly odd places. The parentheses, \(so "`(`" and "`)`" \), need to be wrapped around any JSX which spans more than one line - so not quite so random anymore.
+For those of you who have paid close attention, you may have noticed a few things depedning on the level of your JavaScript knowledge. In some examples, parentheses appear in seemlingly odd places. The parentheses, \(so "`(`" and "`)`" \), need to be wrapped around any JSX which spans more than one line - so not quite so random anymore.
 
 You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi line JSX actually require parentheses.
 
@@ -167,7 +167,7 @@ Similarly, array literals also need to be included within a set of curly braces.
 
 Some of you may have noticed that the prop `className` was used in the example. The DOM Element API of the browser lets us access the `class` attribute of an element by using `Element.className`. React does just the same and borrows from the properties of the DOM `Element` class.
 
-Some attribute names deviate from the regular JavaScript equivalents in JSX as they use reserved words. In the example, `class` is a reserved word which is why we use `className` instead. Same applies to `for`. The `for` is usually the JavaScriot keyword for starting a loop but can also be used to inform a `<label>` which input field it belong to. Instead of using `for`, JSX code can employ the  [HTMLLabelElement Interface](https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor) `htmlFor`.
+Some attribute names deviate from the regular JavaScript equivalents in JSX as they use reserved words. In the example, `class` is a reserved word which is why we use `className` instead. Same applies to `for`. The `for` is usually the JavaScript keyword for starting a loop but can also be used to inform a `<label>` which input field it belongs to. Instead of using `for`, JSX code can employ the  [HTMLLabelElement Interface](https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor) `htmlFor`.
 
 ```jsx
 <fieldset>
@@ -178,15 +178,63 @@ Some attribute names deviate from the regular JavaScript equivalents in JSX as t
 
 This pattern applies to all major HTML attributes. All HTML attributes that should be set need to adhere to the following rules `tabindex` is `tabIndex`, `readonly` to `readOnly`, `maxlength` becomes `maxLength`.
 
-The development mode of the browser usually reminds everyone that the regular HTML attributes should be renamed though \(to avoid grave circumstances\) 
+The development mode of the browser usually reminds everyone that the regular HTML attributes should be renamed though and thus makes it easy to avoid these mistakes before they happen. 
 
 {% hint style="danger" %}
 Warning: Invalid DOM property `class`. Did you mean `className`?
 {% endhint %}
 
-For those of you who want to really understand which HTML attributes exist, this chart will help:
+For those of you who want to really understand which HTML attributes are supported in React, this list will help \(fasten your seat belts - it's going to be long\):
 
 > `accept acceptCharset accessKey action allowFullScreen alt async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked cite classID className colSpan cols content contentEditable contextMenu controls controlsList coords crossOrigin data dateTime default defer dir disabled download draggable encType form formAction formEncType formMethod formNoValidate formTarget frameBorder headers height hidden high href hrefLang htmlFor httpEquiv icon id inputMode integrity is keyParams keyType kind label lang list loop low manifest marginHeight marginWidth max maxLength media mediaGroup method min minLength multiple muted name noValidate nonce open optimum pattern placeholder poster preload profile radioGroup readOnly rel required reversed role rowSpan rows sandbox scope scoped scrolling seamless selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step style summary tabIndex target title type useMap value width wmode wrap`
 
-The same applies to SVG elements. You can also use these in JSX as SVGs are valid XML. The documentation for SVG attributes and which of these are supported is easily a lot longer than the one for plain HTML modules. Take a look if you want to know more:  [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
+The same applies to SVG elements. You can also use these in JSX as SVGs are valid XML. The documentation for SVG attributes and which of these are supported is easily at least three times as long than the one for plain HTML modules. Take a look if you want to know more:  [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
+
+## Inline styles
+
+Of course there are exceptions: the style attribute is one of them. While inline styles in plain HTML are written as strings with their original CSS property names, React uses JavaScript properties and an object instead of a string.
+
+For comparison - this is regular HTML:
+
+```markup
+<div style="margin-left: 12px; border-color: red; padding: 8px"></div>
+```
+
+And this is the equivalent in JSX:
+
+```jsx
+<div style={{ marginLeft: '12px', borderColor: 'red', padding: '8px' }} />
+```
+
+Events form another exception. Events are an extensive topic and thus will be dealt with in an own chapter later.
+
+## Comments in JSX
+
+JSX also allows the use of comments if however they look a bit different from their HTML counterparts:
+
+```markup
+<!-- This is an example for an HTML comment -->
+```
+
+Instead the comments are contained within curly braces and will be opened in the form of a JavaScript multi-line comment:
+
+```jsx
+{
+  /* This is a JSX comment */
+}
+```
+
+Comments can easily span multiple lines of course. In contrast, the usual one-liner JavaScript comments introduced with the double slash \(`//`\) cannot be used in JSX meaning even short one-line comments need to be written with the above \(`/* */`\). 
+
+And this is it! All these examples and explanations should have laid the groundwork for understanding and working with JSX enabling you to follow along in the following chapters.
+
+## Summary
+
+{% hint style="info" %}
+* Multi-line JSX has to be surrounded by parantheses
+* JSX include JavaScript expressions. These have to be contained in curly braces and can then be used in props
+* To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
+* CSS inline styles have to be written as a JavaScript object
+* Comments are put within curly braces and use multi-line comment Syntax: `{/* */}`
+{% endhint %}
 
