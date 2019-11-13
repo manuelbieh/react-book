@@ -149,9 +149,9 @@ All of these are great examples of using expressions to ensure JSX is much more 
 
 ## What else you should know
 
-For those of you who have paid close attention, you may have noticed a few things depedning on the level of your JavaScript knowledge. In some examples, parentheses appear in seemlingly odd places. The parentheses, \(so "`(`" and "`)`" \), need to be wrapped around any JSX which spans more than one line - so not quite so random anymore.
+For those of you who have paid close attention, you may have noticed a few things depending on the level of your JavaScript knowledge. In some examples, parentheses appear in seemingly odd places. The parentheses, \(so "`(`" and "`)`" \), need to be wrapped around any JSX which spans more than one line - so not quite so random anymore.
 
-You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi line JSX actually require parentheses.
+You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi-line JSX actually requires parentheses.
 
 If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly braces. These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
 
@@ -231,7 +231,7 @@ And this is it! All these examples and explanations should have laid the groundw
 ## Summary
 
 {% hint style="info" %}
-* Multi-line JSX has to be surrounded by parantheses
+* Multi-line JSX has to be surrounded by parentheses
 * JSX include JavaScript expressions. These have to be contained in curly braces and can then be used in props
 * To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
 * CSS inline styles have to be written as a JavaScript object
