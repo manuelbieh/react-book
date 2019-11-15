@@ -42,7 +42,7 @@ One thing to keep in mind is to always name your components according to the sta
 If you mistakenly name your React component something along the lines of `section`, React would interpret it as the corresponding DOM element which is of course something we would like to avoid.`Section` on the other hand would be a valid name for a component and would thus be differentiated from the regular DOM element.
 {% endhint %}
 
-I am going to conciously avoid going into detail about `state` in this chapter. State is a very complex topic and is thus getting a chapter of its own. I would advise you to work through this chapter first to understand how components work to then delve deeper into state in the next chapter.
+I am going to consciously avoid going into detail about `state` in this chapter. State is a very complex topic and is thus getting a chapter of its own. I would advise you to work through this chapter first to understand how components work to then delve deeper into state in the next chapter.
 
 ### Special case: PureComponent
 
