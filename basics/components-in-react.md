@@ -159,5 +159,196 @@ The `App` Component triggers a re-render every 0.2 seconds without new **props**
 
 ## Component composition - multiple components in one
 
+We've only really included DOM elements in our example components so far. But **React components** can also include other React components. By defining the component in the same scope or by using CommonJS or ES-Modules imports with`require()` or `import`, other components can be used in the same scope.
 
+**Example:**
+
+```jsx
+function Hello(props) {
+  return <div>Hello {props.name}</div>;
+}
+
+function MyApp() {
+  return (
+    <div>
+      <Hello name="Manuel" />
+      <Hello name="Tom" />
+    </div>
+  );
+}
+
+ReactDOM.render(<MyApp />, document.getElementById('app'));
+```
+
+`<MyApp />` returns a `<div>` which contains the `Hello` component which is used to greet both Manuel and Tom. The result:
+
+```jsx
+<div>
+  <div>Hello Manuel</div>
+  <div>Hello Tom</div>
+</div>
+```
+
+Important: ****A component can only ever return _one_ **root element**. This can either be:
+
+* a single React element:
+
+```jsx
+<Hello name="Manuel />
+```
+
+* in nested form - as long as only a single element is on the outer layer:
+
+```jsx
+<Parent>
+  <Child />
+</Parent>
+```
+
+* a DOM element - which in turn can also be nested and include other elements:
+
+```jsx
+<div>…</div>
+```
+
+* ... or it can be self--closing:
+
+```jsx
+<img src="logo.jpg" alt="Bild: Logo" />
+```
+
+* or simply:
+
+```javascript
+null
+```
+
+... however **never** `undefined`.
+
+Since **React 16.0.0** we are also allowed to return:
+
+* an array which contains valid return values:
+
+```jsx
+[
+  <div key="1">Hello</div>, 
+  <Hello key="2" name="Manuel" />
+]
+```
+
+* a simple string
+
+```javascript
+'Hello Welt'
+```
+
+* or a so-called "Fragment" - a special "component" which does not appear in the rendered output and can act as a container if one otherwise violated the rule of only ever returning one root element:
+
+```jsx
+<React.Fragment>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+</React.Fragment>
+```
+
+Since **Transpiling** with **Babel version 7**, fragments can also be expressed in their short form which contain an empty opening and closing element:
+
+```jsx
+<>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+</>
+```
+
+Components can be composed into anything you like. It makes sense to break up large and complex components into many smaller and easier to read components to improve readability and make them reusuable. This process often happens organically as you program as you will come to a point at which you will notice that breaking up your components would become useful.
+
+## Dividing components - keeping an overview
+
+Let's have a look at an example of a Header component which includes a logo, a navigation and a search bar. This is a common example which we come across plenty in web development:
+
+```jsx
+function Header() {
+  return (
+    <header>
+      <div className="logo">
+        <img src="logo.jpg" alt="Image: Logo" />
+      </div>
+      <ul className="navigation">
+        <li><a href="/">Homepage</a></li>
+        <li><a href="/team">Team</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+      <div className="searchbar">
+          <form method="post" action="/search">
+            <p>
+              <label htmlFor="q">Search:</label>
+              <input type="text" id="q" name="q" />
+            </p>
+            <input type="submit" value="Suchen" />
+          </form>
+      </div>
+    </header>
+  );
+}
+```
+
+We have just learned that React components can easily be composed of smaller other React components. This way of breaking up components is highly encouraged in React. So what could we do with the above code snippet to make it easier for ourselves? That's right: we can break up our relatively big component into multiple smaller ones which all only do one thing and do it well.
+
+First, the logo can easily be used elsewhere on the page which is a totally valid assumption. Second, the navigation might not only appear in the header but might also be included in the sitemap. Last, the search bar might eventually not only be used in the header but also on its own dedicated search results page. 
+
+Transferring this approach to our code, we achieve the following result:
+
+```jsx
+function Logo() {
+  return (
+    <div className="logo">
+      <img src="logo.jpg" alt="Image: Logo" />
+    </div>
+  );
+}
+
+function Navigation() {
+  return (
+    <ul className="navigation">
+      <li><a href="/">Homepage</a></li>
+      <li><a href="/team">Team</a></li>
+      <li><a href="/services">Services</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  );
+}
+
+function Searchbar() {
+  return (
+    <div className="searchbar">
+      <form method="post" action="/search">
+        <p>
+          <label htmlFor="q">Search:</label>
+          <input type="text" id="q" name="q" />
+        </p>
+        <input type="submit" value="Suchen" />
+      </form>
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <header>
+      <Logo />
+      <Navigation />
+      <Searchbar />
+    </header>
+  );
+}
+```
+
+Even if the code has become longer, we have created a number of improvements.
+
+### Simpler collaboration
+
+All components can and should be saved in their own files so other team members or even complete teams can own one or multiple components. This will spread ownership across teams and make responsibilities clearer. Moreover, it reduces the risk of accidentally overwriting a colleague's file or to continually deal with merge conflicts in Git. Teams become _consumers_ ****of other teams' components which offer a simple interface of their component with possible props.
 
