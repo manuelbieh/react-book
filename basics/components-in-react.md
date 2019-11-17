@@ -354,9 +354,71 @@ All components can and should be saved in their own files so other team members 
 
 ### Single responsibility principle
 
-Our components now all have clearly defined responsibilities. Each component only fulfills a single task which can be inferred from its name. For example, the logo will be displayed and look the same whereever I use it in my application. If the search bar ever needs amended, one can simply search for the Searchbar.js code and modify the code according to specifications and it will update everywehre it is used. The header component is used as a overarching component whose responsibility it is to hold all the components of the header and inject them wherever the header is used.
+Our components now all have clearly defined responsibilities. Each component only fulfills a single task which can be inferred from its name. For example, the logo will be displayed and look the same wherever I use it in my application. If the search bar ever needs amended, one can simply search for the Searchbar.js code and modify the code according to specifications and it will update everywhere it is used. The header component is used as a overarching component whose responsibility it is to hold all the components of the header and inject them wherever the header is used.
 
 ### Reusability
 
+Last but not least, we have also increased the reusability of our components. If I wanted to use the logo not only in the header but also in the footer \(as already mentioned\), nothing prevents us from also using it in the footer component. Multiple different pages with different page layouts can all still use the very same header component if we choose to include it. The consumer of a single component does not even need to know which other components it is composed of. It is sufficient to import the component and it will deal with its own dependencies.
 
+## Props - receiving data in a component
+
+I have talked about **props** lot already in the book. I think it is about time to reveal the secret and explain what they are.
+
+**Props** enable components to receive any form of data and access it within the **component**. Let us think back to our **functional component**. We passed the **props** to our function as a regular argument. **Class components** work in a similar fashion with the difference that the **props** are passed to the component via the class **constructor**. They are only available to it via `this.props` as opposed to a plain function argument as was the case with the functional component.  React takes care of this all in the parsing stage of the `createElement()` calls.
+
+But remember: Whenever a component receives new **props** from the outside, it triggers a re-render of the component! We can explicitly prevent this from happening by using the `shouldComponentUpdate()` **lifecycle method**. We are going to look at **lifecycle methods and state** in the following chapter. For now just keep in mind that if a **component** receives **props** from the outside it will cause **component** as well as its children to re-render.
+
+### Props inside a component are read-only
+
+Irrespective of the way in which **props** enter a component, they are **always read-only** inside the component and can and can only be read but not modified. People generally speak of **immutability** or **immutable objects** in this case. In order to work with changing data, React uses **state**. But let's focus on **props** for now.
+
+Functions that do not modify their input and do not have any external dependencies are commonly referred to as **pure functions** in functional programming. The reasoning behind this is relatively simple: if anything changes outside of the function, the function itself should not depend on the changes as its functionality is closed in itself and well encapsulated thus being free of **side effects**. All important parameters are simply passed to the function resulting in the same output with the same input each and every time.
+
+To put in other words: it does not matter which variables change their value outside of the function or how often other functions are called elsewhere. If a **pure function** receives the same parameters as before, it will result in the same output as before. Each and every time.
+
+Why is this important though? React follows this principle of **pure functions** inside its components. If a component is passed the same props from the outside and the state remains the same, the output of the component should always be the same.
+
+### Pure functions in detail
+
+As **pure functions** form a fundamental principle of ****React, I would like to explain it a little more with the help of some examples. Much of this will sound more theoretical and complex than it will actually be once its used in practice. However, I'd still like to explain them to increase your understanding.
+
+**Example for a "pure function"**
+
+```javascript
+function pureDouble(number) {
+  return number * 2; 
+}
+```
+
+Our first function is passed a number, doubles it and returns the result. It does not matter whether the function is being called 1, 10 or 250 times: if I pass the number `5` as a value I will receive back a `10` every time. Same input, same output.
+
+**Example for an "inpure function"**
+
+```javascript
+function impureCalculation(number) {
+  return number + window.outerWidth;
+}
+```
+
+This second function is no longer _pure ****_ ****as it will not realiably return the same output every time, even if its input is identical to the one before. At the moment, my browser's window size is 1920 pixels wide. If am calling this function with the value `10` as the argument, I will get back `1930` \(`10 + 1920`\). If the window size is decreased to 1280 pixels though and the function is called again with the same argument of `10`  I will receive a different result \(`1290`\). Hence, this is not a **pure function**.
+
+It is possible to change this function into a "pure" function by passing the window width as another argument:
+
+```javascript
+function pureCalculation(number, outerWidth) {
+  return number + outerWidth;
+}
+```
+
+The function is still dependent on my window width, however by calling `pureCalculation(10, window.outerWidth)` the result will be "pure" as  if the same input is passed, the same output is generated each and every time. This will become easier to understand once the function is reduced to its fundamental properties:
+
+```javascript
+function pureSum(number1, number2) {
+  return number1 + number2;
+};
+```
+
+**Same Input, same output.**
+
+\*\*\*\*
 
