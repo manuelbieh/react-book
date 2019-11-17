@@ -352,3 +352,11 @@ Even if the code has become longer, we have created a number of improvements.
 
 All components can and should be saved in their own files so other team members or even complete teams can own one or multiple components. This will spread ownership across teams and make responsibilities clearer. Moreover, it reduces the risk of accidentally overwriting a colleague's file or to continually deal with merge conflicts in Git. Teams become _consumers_ ****of other teams' components which offer a simple interface of their component with possible props.
 
+### Single responsibility principle
+
+Our components now all have clearly defined responsibilities. Each component only fulfills a single task which can be inferred from its name. For example, the logo will be displayed and look the same whereever I use it in my application. If the search bar ever needs amended, one can simply search for the Searchbar.js code and modify the code according to specifications and it will update everywehre it is used. The header component is used as a overarching component whose responsibility it is to hold all the components of the header and inject them wherever the header is used.
+
+### Reusability
+
+
+
