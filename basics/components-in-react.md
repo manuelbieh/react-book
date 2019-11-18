@@ -420,5 +420,115 @@ function pureSum(number1, number2) {
 
 **Same Input, same output.**
 
-\*\*\*\*
+**Another example for an impure function**
+
+Assume that we want to implement a function that receives an object with parameters as its input:
+
+```javascript
+var car = {speed: 0, seats: 5};
+function accelerate(car) {
+  car.speed += 1;
+  return car;
+}
+```
+
+This function is also impure as it modifies its entry value. During the second function call, we already work with a totally different value compared to the previous call.
+
+```javascript
+console.log(accelerate(car)) 
+// {speed: 1, seats: 5}
+
+console.log(accelerate(car)) 
+// {speed: 2, seats: 5}
+```
+
+How do we transform our example into a "pure" function? By ensuring that our values are not modified and creating a new object based off the entry value which is returned by the function:
+
+```javascript
+var car = {speed: 0};
+function accelerate(car) {
+  return {
+    speed: car.speed + 1,
+  }
+}
+```
+
+**New result:**
+
+```javascript
+console.log(accelerate(car)) 
+// {speed: 1}
+
+console.log(accelerate(car)) 
+// {speed: 1}
+```
+
+And yes - it's -"pure"! Same input, same output.
+
+You might wonder at this point of time, why I even bother telling you all this. After all, you have come to learn React \(at least I would wonder at this point why I am supposed to understand all of this\).
+
+React is an extremely liberal library. It does not enforce much and leaves a lot of freedom and choice for its developers. However, one thing is really important and React takes this quite seriously: **Components and their relation to props have to behave similar those of "pure functions". If the same props are passed, the same output needs to generated.**
+
+If you do not pay attention and ignore this guideline, React might behave strangely and we might have to deal with unexpected and undesirable side effects. And trust me, you do not want to deal with such bug fixes. I mean, the desire to develop professional interfaces in a short amount is what led you to pick up this book in the first place. You wanted to learn about a tool that can facilitate that. React can do that, as long as you abide by this one rule.
+
+At the same time though, this principle has a nice side effect. By embracing "pure functions"  React components are easier to test.
+
+That's nice and all that, but what exactly means "read-only inside of a component"? After studying "pure functions", this is explained quickly. It does not matter how our `props` are accessed - if it is via the `props` argument in  a **function component**, via the `constructor()` in a **class component** or at any other point in a **class component** via `this.props`. The most important thing to remember is this: I do not want to and also should not under any circumstances change the value of the **props** I pass in.
+
+Outside of the component, it is an entirely different story. We can change values as we please \(provided that we do not use another component to change our current component's props which just had these passed in\).
+
+**This is not possible**
+
+```jsx
+function Example(props) {
+  props.number = props.number + 1;
+  props.fullName = [props.firstName, props.lastName].join(' ');
+  return (
+    <div>({props.number}) {props.fullName} </div>
+  );
+}
+
+ReactDOM.render(
+  <Example number={5} firstName="Manuel" lastName="Bieh" />,
+  document.getElementById('app')
+);
+```
+
+**Result:**
+
+{% hint style="danger" %}
+ TypeError: Cannot add property number, object is not extensible
+{% endhint %}
+
+I try to directly access and change the `number` and `fullName` props inside of my example component. But of course, this does not work as we have just learned that props are always **read-only**.
+
+**However, this is possible**
+
+Sometimes, it might still be beneficial to derive a new value from some props that have been passed in. This is not a problem at all. Since React 16.3.0 we have been given a dedicated function called `getDerivedStateFromProps()` which I want to explain in a bit more detail in another chapter.
+
+If I only want to show the value that can be derived from the props that I have passed in as part of the component I can only change the output based on the props:
+
+```jsx
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+function Example(props) {
+  return (
+    <div>({props.number + 1}) {[props.firstName, props.lastName].join(' ')}</div>
+  );
+}
+
+ReactDOM.render(
+  <Example number={5} firstName="Manuel" lastName="Bieh" />,
+  document.getElementById('app')
+);
+```
+
+**Result**
+
+```jsx
+<div>(6) Manuel Bieh</div>
+```
+
+In this case, only the output based on the `props` was modified but not the props themselves.
 
