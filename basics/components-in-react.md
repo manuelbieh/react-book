@@ -532,3 +532,114 @@ ReactDOM.render(
 
 In this case, only the output based on the `props` was modified but not the props themselves.
 
+**This is also possible**
+
+But how can we actually change props outside of a component? So far, we have only talked about how components should not be changed _within ****_the component.
+
+It is best to explain this with yet another example, even if it is a little abstract in this case:
+
+```jsx
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+var renderCounter = 0;
+setInterval(function () {
+  renderCounter++;
+  renderApp();
+}, 2000);
+
+const App = (props) => {
+  return <div>{props.renderCounter}</div>
+};
+
+function renderApp() {
+  ReactDOM.render(
+    <App renderCounter={renderCounter} />,
+    document.getElementById('app')
+  );
+}
+
+renderApp();
+```
+
+Let us go through this one by one. First of all, we set the variable `renderCounter` to its initial value of `0`. This variable will count for us how often our `App` component renders or to be more precise, how often we call `ReactDOM.render()` which will cause the `App` component to re-render.
+
+Second, we start an interval which invokes the `renderApp()` function every 2000 miliseconds. But the interval not only executes the function every 2 seconds, it also increments our `renderCounter` variable by 1 each time. It is actually quite exciting what's happening here: we're modifying our `renderCounter` prop from **"the outside"**.
+
+The component itself is untouched and stays completely "pure". If it is being called with:
+
+```jsx
+<App renderCounter={5} />
+```
+
+it will give us this result:
+
+```markup
+<div>5</div>
+```
+
+It does not matter how many times the component was actually rendered, the result will be the same. **Same input, same output.**
+
+Inside of the function, we keep embracing "purity". We do not modify the entry value and we do not have any direct external dependencies to the outside which could influence our rendering. The value itself is only changed outside of the component and passed into the component as a new value. We do not actually need to go into much more detail at this point. The only thing that matters is that our component will render the same output given the same inputs. As you can see above, this is true in this case. We do not need to concern ourselves who changes props outside of the component, how often this happens or in which form as long as we do **not** change the props _inside ****_of the component. So far so good.
+
+**Props are an abstracted function argument**
+
+Put simply, props are actually not very different from our regular function arguments. They can appear in different forms just as their counterparts. Similarly to regular JavaScript functions or constructors, they can accept anything as an argument which would also be allowed to be passed in to those functions and constructors. Simple strings, objects, functions or even other React elements \(which also boil down `createElement()` calls\) can be valid props.
+
+```jsx
+<MyComponent
+  counter={3}
+  text="example"
+  showStatus={true}
+  config={{ uppercase: true }}
+  biggerNumber={Math.max(27, 35)}
+  arbitraryNumbers={[1, 4, 28, 347, 1538]}
+  dateObject={Date}
+  dateInstance={new Date()}
+  icon={
+    <svg x="0px" y="0px" width="32px" height="32px">
+      <circle fill="#CC3300" cx="16" cy="16" r="16" />
+    </svg>
+  }
+  callMe={() => {
+    console.log('Somebody called me');
+  }}
+/>
+```
+
+Let's look at this example to illustrate the point I have just made. Most of these props do not make a lot of sense in the grand scheme of things but they all represent valid JSX and props which can be passed to a component. They are extremely powerful and versatile and can take a lot of different forms.
+
+### Props are not limited to one nested layer
+
+Components can easily pass through props to child elements further down the component tree. While it can be helpful to break up bigger components into lots of little ones and pass some of the props to them, it can become cumbersome and complex really quickly. It is hard to tell in this instance where a prop originated from and where it was first used, making it even harder to change the value of a prop.
+
+```jsx
+function User(props) {
+  return (
+    <div>
+      <h1>{props.name}</h1>
+      <UserImage image={props.image} />
+      <ListOfPosts items={props.posts} />
+    </div>
+  )
+}
+
+ReactDOM.render(
+  <User name={user.name} image={user.image} posts={user.posts} />,
+  document.getElementById('app')
+);
+```
+
+### Summary
+
+{% hint style="info" %}
+Components have to act as  **Pure Functions** and return the same result if the same props were passed.
+
+* Props inside a component should be treated as **read-only**
+* Components can receive an **arbitrary number of props**
+* In JSX props are passed similarly to how data is passed in HTML attributes
+* In contrast to HTML, JSX allows for multiple forms of values. If the values are not of type string, they will be surrounded by **curly braces**
+* Props can take in any **JavaScript expressions** as their value
+* Once received, props can be passed down as many levels as required
+{% endhint %}
+
