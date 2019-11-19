@@ -564,7 +564,7 @@ renderApp();
 
 Let us go through this one by one. First of all, we set the variable `renderCounter` to its initial value of `0`. This variable will count for us how often our `App` component renders or to be more precise, how often we call `ReactDOM.render()` which will cause the `App` component to re-render.
 
-Second, we start an interval which invokes the `renderApp()` function every 2000 miliseconds. But the interval not only executes the function every 2 seconds, it also increments our `renderCounter` variable by 1 each time. It is actually quite exciting what's happening here: we're modifying our `renderCounter` prop from **"the outside"**.
+Second, we start an interval which invokes the `renderApp()` function every 2000 milliseconds. But the interval not only executes the function every 2 seconds, it also increments our `renderCounter` variable by 1 each time. It is actually quite exciting what's happening here: we're modifying our `renderCounter` prop from **"the outside"**.
 
 The component itself is untouched and stays completely "pure". If it is being called with:
 
@@ -633,7 +633,7 @@ ReactDOM.render(
 ### Summary
 
 {% hint style="info" %}
-Components have to act as  **Pure Functions** and return the same result if the same props were passed.
+Components have to act as **Pure Functions** and return the same result if the same props were passed.
 
 * Props inside a component should be treated as **read-only**
 * Components can receive an **arbitrary number of props**
