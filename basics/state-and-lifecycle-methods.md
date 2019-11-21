@@ -103,3 +103,32 @@ To guarantee that only the most current state is always accessed, an **updater f
 React "collects" many sequential `setState()`calls und **does not immediately invoke them** to avoid an unnecessary amount of re-renders. Sequential `setState()`calls which are called right after each other are executed as a **batch process**. This is important to keep in mind as we cannot reliably access new state with `this.state` just after a `setState()`call.
 {% endhint %}
 
+Assume that we would like to increment the `state` counter three times in quick succession. Intuitively, we might feel compelled to write the following code:
+
+```javascript
+this.setState({ counter: this.state.counter + 1 });
+this.setState({ counter: this.state.counter + 1 });
+this.setState({ counter: this.state.counter + 1 });
+```
+
+If the first initial state was `0`, what will the new state be? What do you think? `3`? Nope. It's `1`! But why? React uses its **batching mechanism** to cluster these `setState()` calls together in order to avoid a jarring user interface which continually updates. The above code snippet could be translated into the following code if it was written in **functions**.
+
+```javascript
+this.state = Object.assign(
+  this.state, 
+  { counter: this.state.counter + 1 },
+  { counter: this.state.counter + 1 },
+  { counter: this.state.counter + 1 },
+);
+```
+
+The `counter` property overrides itself after each batch update but always uses `this.state.counter` as its base reference for incrementing by 1. After all state calls having executed, React calls the `render()` method again.
+
+If an **updater function** is used instead, the current state is passed as a parameter and access is given to the state when the function is actually called:
+
+```javascript
+this.setState((state) => ({ counter: state.counter + 1 });
+this.setState((state) => ({ counter: state.counter + 1 });
+this.setState((state) => ({ counter: state.counter + 1 });
+```
+
