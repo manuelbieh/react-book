@@ -132,3 +132,64 @@ this.setState((state) => ({ counter: state.counter + 1 });
 this.setState((state) => ({ counter: state.counter + 1 });
 ```
 
+This example uses an **updater function** and always updated the current state value. The value of `this.state.counter` is `3` in this case, as we expected, because the `state` parameter which we provide to the updater function is accessing the current state. While this is possible in theory, it is not exactly recommended. Values should be collected first and then batch processed in a single `setState()` call. This avoids unnecessary re-renders with potentially outdated state.
+
+In some situations it might be necessary to access the value of the modified state. Luckily, React offers the possibility to provide a second parameter in the `setState()` call. This parameter is a callback function which is called **after** the state has updated so that we can safely access the state we have just modified.
+
+```javascript
+this.setState(
+  {
+    time: new Date().toLocaleTimeString() 
+  }, 
+  () => {
+    console.log('Neue Zeit:', this.state.time);
+  }
+);
+```
+
+## Lifecycle Methods
+
+React offers a number of so-called **lifecycle methods** that can be called at different times in the **component's lifecycle**. These can be implemented in React **class components**.
+
+The lifecycle of a component starts as soon as it is **instantiated or mounted**, so when it is found in the `render()` method of a parent component being part of the returned component tree. The component's lifecycle ends if it is removed from the tree of renderable components. Additionally, there are **lifecycle methods** that react to **updates** or ****errors as well as being "unmounted".
+
+### **Overview of lifecycle methods**
+
+The following shall be a comprehensive overview of the **lifecycle methods** that are currently available, clustered by the phases in which they occur in a component's lifecycle.
+
+**Mount phase**
+
+These methods are only called **once** when the component is first rendered \(or put simply added to the DOM\).
+
+* `constructor(props)`
+* `static getDerivedStateFromProps(nextProps, prevState)`
+* `componentWillMount(nextProps, nextState)` \(deprecated in React 17\)
+* `render()`
+* `componentDidMount()`
+
+**Update phase**
+
+If new props are being passed to a component or if state changes within the component, these update methods will be called. Alternatively, an explicit `forceUpdate()` method could be invoked.
+
+* `componentWillReceiveProps(nextProps)` \(deprecated in React 17\)
+* `static getDerivedStateFromProps(nextProps, prevState)`
+* `shouldComponentUpdate(nextProps, nextState)`
+* `componentWillUpdate(nextProps, nextState)` \(deprecated in React 17\)
+* `render()`
+* `getSnapshotBeforeUpdate(prevProps, prevState)`
+* `componentDidUpdate(prevProps, prevState, snapshot)`
+
+**Unmount phase**
+
+This phase only has one matching method which is called as soon as the component is removed from the DOM. It can be useful to tidy up event listeners and `setTimeOut()/setInterval()` calls which had been added during mounting of the component**:**
+
+* `componentWillUnmount()`
+
+**Error handling**
+
+Another method to deal with errors has been added to React with React 16. This method can be called to catch errors that occur during the rendering process in a lifecycle method or in the constructor of a **child component**.
+
+* `componentDidCatch()`
+
+Components which implement `componentDidCatch()` are commonly called **error boundary** and help to visualise an alternative to the erronous tree. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erronous action attached to the button.
+
