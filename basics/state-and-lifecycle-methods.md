@@ -151,7 +151,7 @@ this.setState(
 
 React offers a number of so-called **lifecycle methods** that can be called at different times in the **component's lifecycle**. These can be implemented in React **class components**.
 
-The lifecycle of a component starts as soon as it is **instantiated or mounted**, so when it is found in the `render()` method of a parent component being part of the returned component tree. The component's lifecycle ends if it is removed from the tree of renderable components. Additionally, there are **lifecycle methods** that react to **updates** or ****errors as well as being "unmounted".
+The lifecycle of a component starts as soon as it is **instantiated or mounted**, so when it is found in the `render()` method of a parent component being part of the returned component tree. The component's lifecycle ends if it is removed from the tree of components supposed to be rendered. Additionally, there are **lifecycle methods** that react to **updates** or ****errors as well as being "unmounted".
 
 ### **Overview of lifecycle methods**
 
@@ -191,5 +191,5 @@ Another method to deal with errors has been added to React with React 16. This m
 
 * `componentDidCatch()`
 
-Components which implement `componentDidCatch()` are commonly called **error boundary** and help to visualise an alternative to the erronous tree. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erronous action attached to the button.
+Components which implement `componentDidCatch()` are commonly called **error boundary** and help to visualize an alternative to the erroneous tree. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erroneous action attached to the button.
 
