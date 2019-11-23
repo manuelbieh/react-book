@@ -241,3 +241,187 @@ If we ever forget this during development mode, React will remind us if we try t
     in Clock
 {% endhint %}
 
+As opposed to previous examples, we only call `ReactDOM.render()` once. The component takes care of the rest and initiates the render process once its **state** has updated. This is the normal procedure when developing applications with React. A single `ReactDOM.render()` call is enough for the app to manage itself, allow interaction with the user and react to state changes and re-render the interface.
+
+### The combination of state and props
+
+We have seen a number of examples for components which process props as well **stateful** components and manage their own local state. But there is a lot more to discover. Only the combination of lots of different components make React as powerful as it is when it comes to user interface development. A component can have its own **state** and also pass it to child components via **props**. This not only enables us to strictly separate business and layout logic but also allows us to develop components which are ultimately task-based and only represent a small part of our application.
+
+The separation of business and layout components is often referred to by two different terms: **smart** components \(business logic\) and **dumb** components \(layout\). As you can guess, **smart components** should not be tied to the layout of the user interface at all, whereas **dumb components** should be free of any logic or side effects. Dumb components should only focus on the plain display of static values.
+
+Another example of multiple components interacting with each other:
+
+```jsx
+const ShowDate = ({ date }) => (
+  <div>Today is {date}</div>
+);
+
+const ShowTime = ({ time }) => (
+  <div>It is {time}.</div>
+);
+
+class DateTime extends React.Component {
+  state = {
+    date: new Date(),
+  };
+
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      this.setState(() => ({
+        date: new Date(),
+      }));
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  render() {
+    return (
+      <div>
+        <ShowDate date={this.state.date.toLocaleDateString()} />
+        <ShowTime time={this.state.date.toLocaleTimeString()} />
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<DateTime />, document.getElementById('root'));
+```
+
+Arguably this example is a little bit artificial but it illustrates the point. We can see how multiple components interact with each other. The `DateTime` component is our **logic component \(smart component\)** and takes care of "getting" the time and updating it. The **layout** component on the other hand deals with the actual display of the date \(`showDate`\) and the time \(`ShowTime`\) via the props it has been passed. The layout component is implemented as a simple **function component** as a **class component** would have been unnecessarily complex and produced too much overhead.
+
+### The role of lifecycle methods in combination with components
+
+In the beginning I mentioned a few other **lifecycle methods** apart from `componentDidMount()` and `componentWillMount()`. React also recognises these if they have been implemented within a **class component**. 
+
+In order to understand these different **lifecycle methods** better, let us create an example component in which we include the **lifecycle method** in debug messages. this will help us to see them in the browser console. To be more precise, the example actually consists of two components - one of them being a parent component, the other being a child component which receives props from its parent component \(which it simply ignores in this case\).
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const log = (method, component) => {
+  console.log(`[${component}]`, method);
+};
+
+class ParentComponent extends React.Component {
+  state = {};
+
+  constructor(props) {
+    super(props);
+    log('constructor', 'parent');
+  }
+
+  static getDerivedStateFromProps() {
+    log('getDerivedStateFromProps', 'parent');
+    return null;
+  }
+
+  componentDidMount() {
+    log('componentDidMount', 'parent');
+    this.intervalId = setTimeout(() => {
+      log('state update', 'parent');
+      this.setState(() => ({
+        time: new Date().toLocaleTimeString(),
+      }));
+    }, 2000);
+  }
+
+  shouldComponentUpdate() {
+    log('shouldComponentUpdate', 'parent');
+    return true;
+  }
+
+  getSnapshotBeforeUpdate() {
+    log('getSnapshotBeforeUpdate', 'parent');
+    return null;
+  }
+
+  componentDidUpdate() {
+    log('componentDidUpdate', 'parent')
+  }
+
+  componentWillUnmount() {
+    log('componentWillUnmount', 'parent');
+    clearInterval(this.intervalId);
+  }
+
+  render() {
+    log('render', 'parent');
+    return <ChildComponent time={this.state.time} />;
+  }
+}
+
+class ChildComponent extends React.Component {
+  state = {};
+
+  constructor(props) {
+    super(props);
+    log('constructor', 'child');
+  }
+
+  static getDerivedStateFromProps() {
+    log('getDerivedStateFromProps', 'child');
+    return null;
+  }
+
+  componentDidMount() {
+    log('componentDidMount', 'child');
+  }
+
+  shouldComponentUpdate() {
+    log('shouldComponentUpdate', 'child');
+    return true;
+  }
+
+  getSnapshotBeforeUpdate() {
+    log('getSnapshotBeforeUpdate', 'child');
+    return null;
+  }
+
+  componentDidUpdate() {
+    log('componentDidUpdate', 'child');
+  }
+
+  componentWillUnmount() {
+    log('componentWillUnmount', 'child');
+  }
+
+  render() {
+    log('render', 'child');
+    return <div>{this.props.time}</div>;
+  }
+}
+
+ReactDOM.render(<ParentComponent />, document.getElementById('root'));
+```
+
+Both of these components reliably lead to the following result:
+
+```text
+[parent] constructor
+[parent] getDerivedStateFromProps
+[parent] render
+[child] constructor
+[child] getDerivedStateFromProps
+[child] render
+[child] componentDidMount
+[parent] componentDidMount
+[parent] state update
+[parent] shouldComponentUpdate
+[parent] render
+[child] getDerivedStateFromProps
+[child] shouldComponentUpdate
+[child] render
+[child] getSnapshotBeforeUpdate
+[parent] getSnapshotBeforeUpdate
+[child] componentDidUpdate
+[parent] componentDidUpdate
+[parent] componentWillUnmount
+[child] componentWillUnmount
+```
+
+Wow! There is a lot happening here right now. Let us go through this one by one, starting with the mounting phase.
+
