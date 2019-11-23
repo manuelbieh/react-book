@@ -193,3 +193,51 @@ Another method to deal with errors has been added to React with React 16. This m
 
 Components which implement `componentDidCatch()` are commonly called **error boundary** and help to visualize an alternative to the erroneous tree. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erroneous action attached to the button.
 
+### Lifecycle methods in practice
+
+Let's have a look at how **lifecycle methods** behave in a simple component. The code implements a component which updates its own state every second and displays the current time. As soon as the component **mounts** an interval is started which updates the state of our component in the `componentDidMount()` method. A re-render is triggered and the current time is shown again.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class Clock extends React.Component {
+  state = {
+    date: new Date(),
+  };
+  
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      this.setState(() => ({
+        date: new Date(),
+      }));
+    }, 1000);
+  }
+  
+  componentWillUnmount() {
+    clearTimeout(this.intervalId);
+  }
+  
+  render() {
+    return (
+      <div>{this.state.date.toLocaleTimeString()}</div>
+    );
+  }
+}
+
+ReactDOM.render(<Clock />, document.getElementById('root'));
+```
+
+We see that the **lifecycle methods** `componentDidMount()` and `componentWillUnmount()` are being used in the above example. **Default state** is defined with the property `date` and holds an instance of the date object. When the component **mounts** \(`componentDidMount()`\) the `setInterval()` interval is started and its id is saved within the the instance porperty `this.intervalId`. As the interval invokes the `setState()` method every second, the component regularly triggers a re-render meaning the `render()` method is called again and shows the current time again.
+
+Generally,  the interval function is independent of the React component apart from the fact that it calls the `setState()` method of the component. Depending on how deeply interlinked the function and the component are, React determines if function calls should be stopped or not once the component is no longer needed. In the case of the `setInterval()` function, React does not and we have to take care of stopping the component ourselves. Luckily React provides a methods which enables us to do just that: `componentWillUnmount()`.
+
+This method is called just before React removes the component from the DOM and can be used to cancel any XHRs that might still be running, to remove event listeners or to cancel a running interval. And that is just what we need here: shortly before the component is removed, the `clearTimeOut()` is invoked and we pass the function the interval id which we previously saved in in the instance property.
+
+If we ever forget this during development mode, React will remind us if we try to call `this.setState()` on an already removed component:
+
+{% hint style="danger" %}
+**Warning:** Can't call setState \(or forceUpdate\) on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.  
+    in Clock
+{% endhint %}
+
