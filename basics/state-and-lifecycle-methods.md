@@ -455,3 +455,19 @@ The `componentDidMount()` method enters the scene once such a component is reach
 
 In the above example, we started a `setTimeOut()` within the `ParentComponent`which modifies the state of our component every 2000 milliseconds. It demonstrates which lifecycle methods are being called during the update of a component. Any other changes on the state of the mounted component are no longer part of the mounting phase but part of the update phase. This phase is entered after the the first 2000 milliseconds once the `ParentComponent` modifies its own state via `this.setState()`.
 
+#### `shouldComponentUpdate(nextProps, nextState)`
+
+Whenever a component updates, whether that is due to state change within the component or because it receives new props from the outside, `shouldComponentUpdate()` is called. But beware: there is a difference depending on whether the props or the state changed: if a component receives new props from the outside, `getDerivedStateFromProps()` is called shortly beforehand.
+
+The `shouldComponentUpdate()` method enables us to inform if a costly re-render is actually necessary. The method receives the **next props** and the **next state** as a parameter and can determine based on those whether a re-render should take place. The method either has to return `true` to trigger the re-render or `false` which will prohibit the calls of `componentDidUpdate()`, `getSnapshotBeforeUpdate()` as well as `render()`.
+
+In many more complex applications, the update cycle is only triggered because a change has happened somewhere in the parent component which however is irrelevant for the child components. In these cases, `shouldComponentUpdate()` can be helpful as to optimize the rendering performance by preventing further re-renders.
+
+If we were to return `false` from our `ParentComponent`'s `shouldComponent()` method, our logging output would be much shorter. Lines 14-18 would simply be missing. The component itself would not re-render, the `render()` method would not be called and the `ChildComponent` would also not re-render as well as update itself.
+
+However, in our code example `true` is returned which in turn calls the `render()` method of the `ParentComponent`. This triggers another re-render of the `ChildComponent` which receives new props which mirror the `ParentComponent` updated state. And just like that we find ourselves in the update cycle of the `ChildComponent`.
+
+Similar as already happened in the mount cycle, `getDerivedStateFromProps()` derives a new state based on the new props. Afterwards `shouldComponentUpdate()` is called. This is where we can check whether the component's relevant props have actually changed and if they did not, we could prohibit the re-render by returning `false` from `shouldComponentUpdate()`. If we did not do that, the obligatory call of the `render()` method would follow. Let's look at the next **lifecycle method** that would occur next in our component lifecycle.
+
+
+
