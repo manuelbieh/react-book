@@ -425,3 +425,33 @@ Both of these components reliably lead to the following result:
 
 Wow! There is a lot happening here right now. Let us go through this one by one, starting with the mounting phase.
 
+#### **`constructor(props)`**
+
+The first method to be called is the `constructor` of the `ParentComponent` component. React processes components in the tree from "the outside to the inside".  The further up the component is in the component hierarchy, the earlier it will be instanciated. Afterwards, its `render()` method is called. This is necessary as React would not know otherwise which child components actually need processed and included in the component tree. React only runs the **lifecycle methods** for those components which have actually been included in the `render()` method of their parent component.
+
+The constructor is passed the **props** of the component as a parameter and can transmit them to its parent component \(mostly `React.Component` or `React.PureComponent`\) via `super(props)`. If omitted, `this.props` in the constructor would be undefined leading to unexpected bugs and behavior. 
+
+In most cases today, it is not necessary anymore to declare the constructor. The Babel plugin **"Class properties"** can be used instead to implement instance methods as well as state as their own class properties. If it's not, the constructor is the place to define the intial state \(for example `this.state = { }`\) and bind the instance methods to their respective class instances with `.bind()` \(for example `this.handleClick = this.handleClick.bind(this)`\). This is necessary as instance methods would otherwise lose their context within the component as their event listeners are used inside JSX and `this` would not point to the instance of the component anymore.
+
+#### `static getDerivedStateFromProps(nextProps, prevState)`
+
+The constructor is followed by the static `getDerivedStateFromProps()` method. As can be inferred from its name, this is a **static** method and as does not have access to the component instance via `this`. Its primary goal is to calculate the **next state** of the component based on the props it has been passed and its last state and is returned as an object. If no changes need applied to the state, `null` is returned instead. The method's behavior is identical to that of `this.setState()` and only updates those parts of the state which are part of the returned object. Those properties are merged along with the **last state** into a **new state**.
+
+The method itself has been a controversial topic, succeeding the now **deprecated lifecycle method** `componentWillReceiveProps`. Other than the previous method, it does not have access to the component instance. The React core team has explained that the former can lead to unexpected behavior in asynchronous rendering of components and has thus marked it "unsafe". The same applies to `componentWillMount()` and `componentWillUpdate()`. While the term might be associated with security breaches, it actually  means something a little different. Components using this lifecycle method could lead to bugs and other side effects after React version 17.
+
+`getDerivedStateFromProps()` should not introduce any side effects \(for example it should not trigger any XHRequests\) and only **derive** the new state of the component instance based on its current props. In contrast to the constructor, this method is is not only called during the mounting phase of the component but also if the component receives new props. In order for that to happen the props do not have to have changed their content.
+
+#### `render()`
+
+Once a component has been created and its state has been derived, React calls the `render()` method which describes our user interface and the child components to render. The above example only contains one child component - the `ChildComponent`.
+
+We now rinse and repeat. The `constructor()`, `getDerivedStateFromProps()` and then the `render()` method of our child component is called just the same as was the case in the `ParentComponent`. The Child component in our example does not have any other children implying that no other elements are rendered. If it did, their lifecycle methods would also be run until React would find a component which does not return any other React components anymore.  It would simply contain DOM elements like `div`, `p`, `section` and `span` etc \(and of course any combination of these\), `null` or an array which in turn would not contain any other components.
+
+#### `componentDidMount()`
+
+The `componentDidMount()` method enters the scene once such a component is reached. It is called as soon as a component and all of its children have been rendered. From now on, we can also access the DOM Node of the component if necessary or start intervals or timeouts or initiate network requests via XHR/fetch. The `componentDidMount()` method is the best place for these.
+
+ As opposed to the constructor, this method is called from "the inside to the outside" determining the method's way of first processing child components and then their parent components. We can see this in action in our above example. The log clearly shows that first the `componentDidMount()` of the `ChildComponent` is called and only then `ParentComponent`'s `componentDidMount()`  is invoked.
+
+In the above example, we started a `setTimeOut()` within the `ParentComponent`which modifies the state of our component every 2000 milliseconds. It demonstrates which lifecycle methods are being called during the update of a component. Any other changes on the state of the mounted component are no longer part of the mounting phase but part of the update phase. This phase is entered after the the first 2000 milliseconds once the `ParentComponent` modifies its own state via `this.setState()`.
+
