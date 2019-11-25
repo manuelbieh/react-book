@@ -471,7 +471,7 @@ Similar as already happened in the mount cycle, `getDerivedStateFromProps()` der
 
 #### `getSnapshotBeforeUpdate(prevProps, prevState)`
 
-This method is relatively new and has only been introduced in React 16.3.0 along with `getDerivedStateFromProps()` to better deal with asynchronous rendering in React. It receives the **last props** and the **last state** and has acesss to the current state of the HTML DOM before React applies any modifications from the last `render()` cycle.
+This method is relatively new and has only been introduced in React 16.3.0 along with `getDerivedStateFromProps()` to better deal with asynchronous rendering in React. It receives the **last props** and the **last state** and has access to the current state of the HTML DOM before React applies any modifications from the last `render()` cycle.
 
 If we want to remember the current scroll position in a long list or table to be able to jump to the previously inspected item after an update, `getSnapshotBeforeUpdate()` can be really useful. It can return any value or `null` and its return value can be passed to `componentDidUpdate()` as a third parameter.
 
@@ -500,18 +500,6 @@ Event listeners are a good topic to end this chapter on. As opposed to working w
 ### Diagram of lifecycle methods
 
 ![Diagram depicting the different lifecycle methods and the phases in which they are run \(CC0 Dan Abramov\)](../.gitbook/assets/lifecycle-methods-2.jpg)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
