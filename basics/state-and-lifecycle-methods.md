@@ -469,5 +469,49 @@ However, in our code example `true` is returned which in turn calls the `render(
 
 Similar as already happened in the mount cycle, `getDerivedStateFromProps()` derives a new state based on the new props. Afterwards `shouldComponentUpdate()` is called. This is where we can check whether the component's relevant props have actually changed and if they did not, we could prohibit the re-render by returning `false` from `shouldComponentUpdate()`. If we did not do that, the obligatory call of the `render()` method would follow. Let's look at the next **lifecycle method** that would occur next in our component lifecycle.
 
+#### `getSnapshotBeforeUpdate(prevProps, prevState)`
+
+This method is relatively new and has only been introduced in React 16.3.0 along with `getDerivedStateFromProps()` to better deal with asynchronous rendering in React. It receives the **last props** and the **last state** and has acesss to the current state of the HTML DOM before React applies any modifications from the last `render()` cycle.
+
+If we want to remember the current scroll position in a long list or table to be able to jump to the previously inspected item after an update, `getSnapshotBeforeUpdate()` can be really useful. It can return any value or `null` and its return value can be passed to `componentDidUpdate()` as a third parameter.
+
+In my experience, `getSnapshotBeforeUpdate()` is rarely used. It might even be the least used out of all the **lifecycle methods** as we rarely need to access DOM elements directly. Most problems that used to be solved by manipulating the DOM API in an imperative fashion, can now be solved directly in the abstract component tree with JSX.
+
+#### `componentDidUpdate(prevProps, prevState, snapshot)`
+
+`componentDidUpdate()` forms the last method of the update cycle. It is called after `getDerivedStateFromProps()` has derived the new props, `shouldComponentUpdate()` has returned `true` and after `getSnapshotBeforeUpdate()` has created the last snapshot of the latest condition of the DOM.
+
+The method receives the **last props** as well as the **last state** - meaning the last  props and last state just before the component was updated. If the component contains a `getSnapshotBeforeUpdate()` method, its return value will be passed as a third parameter.
+
+Similarly to `componentDidMount()`, `componentDidUpdate()` is also resolved from the "inside to the outside". First, the `componentDidMount()` methods of the child components are called, then those of the parents. `componentDidUpdate()` is the perfect place to trigger side effects, for example starting XHRs if certain properties of the components have changed. This can easily be checked with a simple comparison between the current props and the last props \(which we have received as a parameter\)  or the current state and the last state.
+
+It is safe to access the **current DOM** during this method as React will have applied all the changes resulting from modified JSX in the `render()` method. 
+
+And with `componentDidUpdate()` the **update cycle**  has also come to a finish. While the **mounting cycle** is only ever run once, namely when the component **first** renders, the update cycle can be triggered an infinite amount times: as soon as the component changes its state or receives new props.
+
+#### `componentWillUnmount()` <a id="componentwillunmount"></a>
+
+I admit that I have cheated in the logs of our example. `componentWillUnmount()` is only ever run if a component is completely removed from the DOM. This has not happened in our example. A components counts as "unmounted" after it has been explicitly removed by calling `ReactDOM.unmounComponentAtNode()` \(this is particularly important for mount nodes\) or if it is not implicitly returned from the `render()` method of its parent component anymore.
+
+In those two cases, `componentWillUnmount()` will be called but of course only if it has been manually implemented. This is true for most **lifecycle methods** apart from `render()`. The `componentWillUnmount()` **lifecycle method** is an essential tool to "clean up" our application. It is the place where functions can and **should** be called to ensure that no traces are left behind. "Traces" can refer to timeouts we are still waiting on \(`setTimeout`\) or intervals which are still running \(`setInterval`\) but also DOM modifications which have taken place outside of our component JSX, as well as network requests which are still ongoing \(XHR/Fetch calls\) or simply event listeners which were added to the DOM via the API method `Element.addEventListener()`.
+
+Event listeners are a good topic to end this chapter on. As opposed to working with the regular DOM API, the use of `addEventListener()` is almost not necessary anymore in React as React introduces its own event system to aid readability and consistency.
+
+### Diagram of lifecycle methods
+
+![Diagram depicting the different lifecycle methods and the phases in which they are run \(CC0 Dan Abramov\)](../.gitbook/assets/lifecycle-methods-2.jpg)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
