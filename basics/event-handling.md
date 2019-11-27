@@ -84,7 +84,7 @@ The method is now invoked in the **scope of the component instance** and our cou
 
 #### Method binding in the constructor
 
-Another neater solution to bind a method to a class instance is to bind it when initialising a class in the constructor:
+Another neater solution to bind a method to a class instance is to bind it when initializing a class in the constructor:
 
 ```jsx
 class Counter extends React.Component {
@@ -103,7 +103,7 @@ This way, the method is only bound to the instance **once** and possible checks 
 
 Using this method allows us to avoid potential performance bottlenecks, even if a little bit more verbose. But it could still be considered a little bit messy and cumbersome. We will now look at an even easier way to bind a method to a class instance.
 
-**Class properties**
+#### **Class properties**
 
 **Beware:** in order to use method I am about to explain, you need to have installed the babel plugin `@babel/plugin-proposal-class-properties`. But as most React setups already include this by default, I will assume that we can use **class properties** safely and without error. If this is not the case for some reason, event handler methods should always be bound in the constructor.
 
