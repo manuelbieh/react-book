@@ -138,3 +138,13 @@ increase = () => { … }
 
 As mentioned earlier, we define a **real class method** within our first example whereas we assign a property within the class with same name an **arrow function** as a **value**. As it is not binding its own `this`, we access the `this` of the class instance instead.
 
+### Events outside of the component context
+
+While you can certainly also implement native browser events in React, you should try to use React's own event system whenever possible. It offers cross-browser compatibility, follows the W3C standard for browser events and also optimises when possible.
+
+From time to time however, it is necessary to define events outside of the component context. Some classic examples are `window.onresize` and `window.onscroll`. React's event system does not support global events outside of the component context but if you want to define native browser events you can do so in the `componentDidMount()` method. You should pay attention though, whenever an event listener is added with `addEventListener()`, these **need to removed** once you're done with them.
+
+The `componentWillUnmount()` method is the perfect place to do this. While it might seem annoying, global events can cause **performance bottlenecks** or even **memory leaks** if not removed properly as they would be added again each time a component is mounted and called multiple times. 
+
+
+
