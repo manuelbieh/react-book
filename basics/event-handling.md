@@ -1,12 +1,12 @@
 # Event Handling
 
-I know this is a little frustrating. For years, web developers have labored away and learned that event listeners should be neatly separated from the markup - The interaction between a user and the interface is foundational part of developing applications with complex user interfaces - especially with regard to **events**.
+The interaction between a user and the interface is foundational part of developing applications with complex user interfaces - especially with regard to **events**.
 
 I click a button and something happens. I write text into an input field and something happens. I select an element from a list and something happens. In vanilla JavaScript, the browser provides us with the `addEventListener()` and `removeEventListener()` methods. In React however, you can safely ignore them in most use cases. React provides its own system to define user interaction and does so \(don't be scared now\) with **inline events**.
 
 These **inline events** resemble HTML attributes \(for example `<button onclick="myFunction" />`\) but work entirely different.
 
-**separation of concerns** anyone? But React introduces a very different way of dealing with events.
+I know this is a little frustrating. For years, web developers have labored away and learned that event listeners should be neatly separated from the markup - **separation of concerns** anyone? But React introduces a very different way of dealing with events.
 
 Behind the scenes, React facilitates a lot of the hard work and also enables to us to safely and easily stay in the component context by allowing the definition of event handlers as **class methods**. Layout logic as well as behavioral logic is encapsulated in a single component meaning we do not have to jump between many different controllers or views.
 
@@ -146,5 +146,102 @@ From time to time however, it is necessary to define events outside of the compo
 
 The `componentWillUnmount()` method is the perfect place to do this. While it might seem annoying, global events can cause **performance bottlenecks** or even **memory leaks** if not removed properly as they would be added again each time a component is mounted and called multiple times. 
 
+### The `SyntheticEvent` Object
 
+React does not pass a native object to its event handlers but an object of type `SyntheticEvent`. Its primary purpose is to ensure cross-browser compatibility. If you ever feel an urge to access the original event though \(I actually never felt the need to\), React provides it to you via the object property `nativeEvent`.
+
+But that is not the only way how the `SyntheticEvent` object and native event object differ: the `SyntheticEvent` object is **short-lived** and **nullified** shortly after the event callback has been called \(mainly for performance reasons\). Accessing properties of the event object is not possible anymore once outside the original event handler.
+
+What does that mean in detail? Let's look at another example:
+
+```jsx
+class TextRepeater extends React.Component {
+  state = {};
+
+  handleChange = (e) => {
+    this.setState((state) => ({
+      value: e.target.value,
+    }));
+  }
+
+  render() {
+    return (
+      <div>
+        <input type="text" onChange={this.handleChange} />
+        <p>{this.state.value}</p>
+      </div>
+    )
+  }
+}
+```
+
+An `onChange` event is registered that is added into a paragraph once the value in the text field has changed. In order to access the provided value, the `Event` object provides a property called `target`. You might have encountered it already as it has been used in jQuery and vanilla JavaScript too. The `target` allows us to access the element on which the event has been performed, the text field in our case. This in turn contains a `value` property which we can use to write the current value of the text field into state.
+
+We are running into a bit of a problem though: `this.setState()` uses an **updater function** or more precisely a callback. However, it happens outside of the event handler scope meaning the `SyntheticEvent` has already been reset or `e.target` does not exist anymore.
+
+{% hint style="danger" %}
+**TypeError**  
+Cannot read property 'value' of null
+{% endhint %}
+
+The easiest solution for this problem is to define and object literal instead of an updater function:
+
+```jsx
+handleChange = (e) => {
+  this.setState({
+    value: e.target.value,
+  });
+}
+```
+
+While this would certainly solve the problem, it would not help us much. We still encounter the first problem when trying to access the properties of the `SyntheticEvent` object if, for example, it was wrapped within a `setTimeout()` callback. We need to come up with another solution.
+
+#### Writing values into variables
+
+In most situations it is sufficient to write certain values that should later be accessed in a callback into their own variable. The callback does not try to acccess the `SyntheticEvent` anymore but only the variable which has been assigned a value from the `SyntheticEvent`.
+
+```jsx
+handleChange = (e) => {
+  const value = e.target.value;
+  this.setState(() => ({
+    value: value,
+  }));
+}
+```
+
+This works! Bonus points for using **object destructuring** and the **object property shorthand**.
+
+```jsx
+handleChange = (e) => {
+  const { value } = e.target;
+  this.setState(() => ({ value }));
+}
+```
+
+#### Persisting `SyntheticEvents` with `e.persist()`
+
+While it is not used much in practice, it is theoretically possible to use the `SyntheticEvent` object's `persist()` method to keep a reference to the event in question. This could possibly be useful when trzing to pass a `SyntheticEvent` object to a callback function **outside** of the event handler.
+
+If you ever come across this situation though, it might be worth to considering whether that code of the callback function should actually live in the event handler itself. Our example function would look like this:
+
+```jsx
+handleChange = (e) => {
+  e.persist();
+  this.setState(() => ({
+    value: e.target.value,
+  }));
+}
+```
+
+First, the `e.persist()` method is invoked. Second, the **updater function** can safely access `e.target` and its `value` property.
+
+### Summary
+
+{% hint style="info" %}
+* **Always** use event props in JSX to define events:`onChange`, `onMouseOver`, `onTouchStart`, `onKeyDown`, `onAnimationStart`etc \(even if it seems a little odd at first\)
+* Event handlers have to be explicitly bound to the class instance if other class methods like `this.setState()` are accessed. **Public Class Properties** und **Arrow Functions** are the more elegant ways to do this.
+* Avoid defining your own events with `addEventListener()`API. If at all necessary, do not forget to remove the event when unmounting your component with`removeEventListener()` 
+* `SyntheticEvent`objects are „nullified“. Beware of using callback functions outside of the event handler. The event object might not exist anymore at the time of calling the callback.
+* `event.persist()` can force React to prevent resetting the event object to `null`.
+{% endhint %}
 
