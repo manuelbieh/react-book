@@ -57,3 +57,5 @@ The user can enter their username into a simple text field. The `uncontrolled` c
 
 In most cases, it is sufficient to define these type of **uncontrolled components** if forms are not overly complex. However, we have to remember that the react state and DOM state are completely **decoupled** from each other and only works **in one direction**. Once the `onChange` event has been triggered, the React state can update safely. However, the text field would not update if changes to value of the React state had been made elsewhere in the application \(for example due to a response in an asynchronous request\).
 
+A form field is said to be **controlled** as soon as a `value` attribute is set. From this point on, React expects the developer to synchronize the React state with the form field state. If we only want to set an initial value without converting the complete component into a **controlled component**, React allows us to define a `defaultValue` attribute instead of the usual `value` attribute, the equivalent being `defaultChecked` for checkboxes and radio buttons. The element itself will stay **uncontrolled** but show an initial value or status.
+
