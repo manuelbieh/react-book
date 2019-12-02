@@ -59,3 +59,53 @@ In most cases, it is sufficient to define these type of **uncontrolled component
 
 A form field is said to be **controlled** as soon as a `value` attribute is set. From this point on, React expects the developer to synchronize the React state with the form field state. If we only want to set an initial value without converting the complete component into a **controlled component**, React allows us to define a `defaultValue` attribute instead of the usual `value` attribute, the equivalent being `defaultChecked` for checkboxes and radio buttons. The element itself will stay **uncontrolled** but show an initial value or status.
 
+## Controlled components
+
+In order to portray state changes within form fields a well as transferring changes made by users in form fields into state, a **controlled component** is needed. React fully takes care of the state handling of these form elements. We transfer a value to the `value` attribute which we receive from the state and also derive the changed value and pass it back to the state.
+
+React state is seen as a **single source of truth** \(or a similar state container like Redux\). The only relevant value is the one that can be found in React state and inputs in a form will constantly reflect this value in the state. 
+
+Let's take a look at an example to illustrate this better:
+
+```jsx
+class Controlled extends React.Component {
+  state = {
+      username: '',
+      isValid: false,
+  };
+
+  changeUsername = (e) => {
+    const { value } = e.target;
+    this.setState(() => ({
+      username: value,
+      isValid: value.length > 3
+    }));
+  };
+
+  submitForm = (e) => {
+    e.preventDefault();
+    alert(`Hallo ${this.state.username}`);
+  };
+
+  render() {
+    return (
+      <form method="post" onSubmit={this.submitForm}>
+        <p>{username}</p>
+        <p>
+          <input
+            type="text"
+            name="username"
+            onChange={this.changeUsername}
+            value={this.state.username}/>
+          <input type="submit" disabled={!this.state.isValid} />
+        </p>
+      </form>
+    );
+  }
+}
+```
+
+At first glance the `Controlled` component does not look very different from the `Uncontrolled` component. The defining difference that turns this component into a `controlled`one rather than `uncontrolled` lies in line 29. The `value` attribute of this `<input />` indicated to React that it should now **control** the form element and that changes to the input field should be reflected in the state. In order to pass changes to the React state, it is important to define the `onChange` handler to keep the form field and React state in sync. Failing to do that, will result in input fields that do not update and is maybe, unsurprisingly, a mistake made relatively often.
+
+There are a few other things to consider. The `value` attribute is only ever allowed to be a **string** but never `undefined` or `null`. 
+
