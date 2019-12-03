@@ -262,7 +262,7 @@ I have used the `name` attribute as the key in the above example to save their v
 
 Saved values can also be nested if you so please and require to have more than one form within a component \(But **attention**: React Anti-pattern\). It is also not necessary to use React's own state to portray a **controlled component**. In practice, many developers choose to use an external state container such as **Redux, Unstated** or **MobX**.
 
-### Summary
+## Summary
 
 {% hint style="info" %}
 Forms in React can take a controlled or uncontrolled form.
