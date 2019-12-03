@@ -4,7 +4,7 @@ Forms play a special role among the other DOM elements in React and work a littl
 
 The state of a text field results from the value entered, the state of a checkbox or a radio button results from being selected or not and `<select></select>` lists hold the state of one or more `<option></option>` selected. React does not change any of these values. If you feel comfortable using the form state, you can keep using it without problem and nothing changes for the development of your components.
 
-React calls these components **uncontrolled components** as React does not concern itself with the state management of these components. State handling is either completely indepedent of React or only in the direction of DOM form state to React state, but **never the other way round**. A form element does not know about updates in React state and will keep showing the same value or status \(in the case of checkboxes, selects and radio buttons\) as before.
+React calls these components **uncontrolled components** as React does not concern itself with the state management of these components. State handling is either completely independent of React or only in the direction of DOM form state to React state, but **never the other way round**. A form element does not know about updates in React state and will keep showing the same value or status \(in the case of checkboxes, selects and radio buttons\) as before.
 
 **Controlled components**, in contrast, are deeply linked to React State. An update in the React state will have an effect on the value or the status of the form element and vice versa. While **controlled components** are harder to implement, they are "safer" to use as it is less likely that both states differ from each other.
 
@@ -119,7 +119,7 @@ React unifies the mechanism for changing values by enforcing a `value` attribute
 
 Changes made to the form elements always need to be sent back to **React state**. This can become cumbersome, especially when dealing with checkboxes or radio buttons which do not only change a value but a status \(`checked`\).
 
-The following example of a controlled component should provide an exhaustive list of all basic types of HTML form elements. Any other `input` elements  not listedlike `email`, `date` and `range` work exactly the same.
+The following example of a controlled component should provide an exhaustive list of all basic types of HTML form elements. Any other `input` elements  not listed like `email`, `date` and `range` work exactly the same.
 
 ```jsx
 class FullyControlledComponent extends React.Component {
@@ -222,7 +222,7 @@ The core of the form is formed by three event handlers that cater to the differe
 
 These are triggered by the `onChange` events in their corresponding form elements and are passed an object of type `SyntheticEvent`. We access properties of the `target` property of the `SyntheticEvent` via **ES2015 object destructuring** in order to update React state.
 
-For elements of type `<input type="text" />`, `<input type="radio" />`  and `<textarea />`, we pick `name` and `value`, for `<input type="checkbox" />` elements `name` and the `checked` property are of importance whereas `select` elements also need to provide a `name` and whether a selection is offered to the user or a mutiple select \(with `value` or `selectedOptions`\). We can find out whether we're dealing with a simple or multiple select by inspecting the `multiple` property with `e.target`.
+For elements of type `<input type="text" />`, `<input type="radio" />`  and `<textarea />`, we pick `name` and `value`, for `<input type="checkbox" />` elements `name` and the `checked` property are of importance whereas `select` elements also need to provide a `name` and whether a selection is offered to the user or a multiple select \(with `value` or `selectedOptions`\). We can find out whether we're dealing with a simple or multiple select by inspecting the `multiple` property with `e.target`.
 
 ### Changing of values
 
@@ -241,4 +241,34 @@ This is **business as usual** for the user and they will not notice that the for
 Checkboxes \(`<input type="checkbox" />`\) work in a similar fashion but their value will remain the same. Checkboxes change their state rather than their value by providing the boolean `true` or `false` in its `checked` property. If the `checked` property is controlled by React, the form field is said to be controlled. One can check whether the checkbox is activated \(`true`\) or not \(`false`\) by inspecting `e.target.checked` in the event handler which passes this information to React state. React then takes care of the re-render and showing the status of the checkbox to the user.
 
 Radio buttons on the other hand are some form of a hybrid element. Similarly to checkboxes, radio buttons are seen as controlled if their `checked` attribute is managed by React. However, there are often multiple radio buttons containing the same name but different values within the same document. It would not make sense to set the values of these names to either `true` or `false` as we are interested in the actual value of the selected radio button. Thus, the value of the radio button is written into state. We can check whether the selected value in the state is the same as the value of the field with `checked={this.state.radio === "1"}`. We set `checked` to true in this case if the value of the radio button `radio` is equal to 1.
+
+### Changing state with simple or multiple selects
+
+Let us get the start with the simple use case: a simple `<select>` list modifies its value just like a text field, then triggers a re-render and finally show the selected value in the freshly painted user interface. Multiple selects form an exception though. 
+
+Other than their counterparts, a simple select list or a simple text input, multiple select lists do not expect a string value but an **array of strings.** Annoyingly, we have to construct this array ourselves as `e.target.value` only ever contains a single value, even if multiple options are possible. The `e.target.selectedOptions` property, an object of type `HTMLCollection`, can help us and contains a list of `<option>` elements which are currently selected. This object can easily be transformed into an array using the static array method `Array.from()` added in ES2015. Using `Array.map()` we can furthermore iterate over this array and return a new array containing all the relevant values:
+
+```jsx
+Array.from(selectedOptions).map((option) => option.value);
+```
+
+ The newly created array is then written into state as a new value. But before that we check using `e.target.multiple` whether we are actually dealing with a `<select>` with multiple choices as it is only this `<select>` which expects an array as a value.
+
+Alternatively, we could have passed the `changeValue` method to the simple select and the `changeSelect` method to the select with multiple choices. Because each select would have received its own event handler, we could have avoided the additional check of checking for a `multiple` select. However, following the procedure I have shown above will make your code more resilient to change requests as the type can be easily changed in the future. In the end it is up to you though.
+
+### Special cases within controlled components
+
+I have used the `name` attribute as the key in the above example to save their value in state. This can come in handy while working with server-side React and if forms are automatically generated and processed. It is not a requirement though: theoretically neither a `name` attribute nor the exact match of the state name and the `name` attribute is needed. 
+
+Saved values can also be nested if you so please and require to have more than one form within a component \(But **attention**: React Anti-pattern\). It is also not necessary to use React's own state to portray a **controlled component**. In practice, many developers choose to use an external state container such as **Redux, Unstated** or **MobX**.
+
+### Summary
+
+{% hint style="info" %}
+Forms in React can take a controlled or uncontrolled form.
+
+**Uncontrolled components** are usually sufficient for simple forms, however it is recommended to have React control your form components to ensure a **single source of truth**. To achieve this, the `value` or `checked` attribute needs to be controlled by React while the developer needs to manually react to changes. 
+
+In contrast to regular HTML forms, React expects the value of textareas, selects and inputs to be in a `value` attribute.
+{% endhint %}
 
