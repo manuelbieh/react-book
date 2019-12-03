@@ -63,7 +63,7 @@ A form field is said to be **controlled** as soon as a `value` attribute is set.
 
 In order to portray state changes within form fields a well as transferring changes made by users in form fields into state, a **controlled component** is needed. React fully takes care of the state handling of these form elements. We transfer a value to the `value` attribute which we receive from the state and also derive the changed value and pass it back to the state.
 
-React state is seen as a **single source of truth** \(or a similar state container like Redux\). The only relevant value is the one that can be found in React state and inputs in a form will constantly reflect this value in the state. 
+React state is seen as a **single source of truth** \(or a similar state container like Redux\). The only relevant value is the one that can be found in React state and the corresponding input in a form will constantly reflect this value in the state. 
 
 Let's take a look at an example to illustrate this better:
 
@@ -108,4 +108,137 @@ class Controlled extends React.Component {
 At first glance the `Controlled` component does not look very different from the `Uncontrolled` component. The defining difference that turns this component into a `controlled`one rather than `uncontrolled` lies in line 29. The `value` attribute of this `<input />` indicated to React that it should now **control** the form element and that changes to the input field should be reflected in the state. In order to pass changes to the React state, it is important to define the `onChange` handler to keep the form field and React state in sync. Failing to do that, will result in input fields that do not update and is maybe, unsurprisingly, a mistake made relatively often.
 
 There are a few other things to consider. The `value` attribute is only ever allowed to be a **string** but never `undefined` or `null`. 
+
+![Warning for a controlled input field with the value &quot;null&quot;](../.gitbook/assets/react-uncontrolled-null.png)
+
+The `select` element is an exception to the rule and needs to provide a `multiple` attribute. The `value` attribute needs to be an **array** \(rather than a string\).
+
+Noticed anything? I spoke of a `value` attribute for a `<select>` field. But normally an `<option>` is selected by setting its`selected` attribute in HTML. React works a little different and controls the value with another `value` attribute. The same applies to the `<textarea>` element \(which usually indicates its initial value with the `textContent` attribute\).
+
+React unifies the mechanism for changing values by enforcing a `value` attribute for the `input`, `textarea` and `select` elements \(with the exceptions of `checkbox` and `radio` inputs\). This attribute always has to be a **string** or ,in the case of a `select` with a `multiple` attribute, an **array of strings**.
+
+Changes made to the form elements always need to be sent back to **React state**. This can become cumbersome, especially when dealing with checkboxes or radio buttons which do not only change a value but a status \(`checked`\).
+
+The following example of a controlled component should provide an exhaustive list of all basic types of HTML form elements. Any other `input` elements  not listedlike `email`, `date` and `range` work exactly the same.
+
+```jsx
+class FullyControlledComponent extends React.Component {
+  state = {
+    text: "",
+    textarea: "",
+    checkbox: false,
+    singleSelect: "",
+    multipleSelect: [],
+  };
+
+  changeValue = ({ target: { name, value } }) => {
+    this.setState(() => ({
+      [name]: value,
+    }));
+  };
+
+  changeCheckbox = ({ target: { name, checked } }) => {
+    this.setState(() => ({
+      [name]: checked,
+    }));
+  };
+
+  changeSelect = ({ target: { name, value, selectedOptions, multiple } }) => {
+    if (multiple) {
+      value = Array.from(selectedOptions).map((option) => option.value);
+    }
+
+    this.setState(() => ({
+      [name]: value,
+    }));
+  };
+
+  render() {
+    return (
+      <form>
+        <input
+          type="text"
+          name="text"
+          value={this.state.text}
+          onChange={this.changeValue}
+        />
+
+        <textarea
+          name="textarea"
+          value={this.state.textarea}
+          onChange={this.changeValue}
+        />
+
+        <input
+          type="checkbox"
+          name="checkbox"
+          checked={this.state.checkbox}
+          onChange={this.changeCheckbox}
+        />
+
+        <input
+          type="radio"
+          name="radio"
+          value="1"
+          checked={this.state.radio === "1"}
+          onChange={this.changeValue}
+        />
+        <input
+          type="radio"
+          name="radio"
+          value="2"
+          checked={this.state.radio === "2"}
+          onChange={this.changeValue}
+        />
+
+        <select
+          name="singleSelect"
+          value={this.state.singleSelect}
+          onChange={this.changeValue}
+        >
+          <option value="">Bitte auswählen</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+        </select>
+
+        <select
+          name="multipleSelect"
+          value={this.state.multipleSelect}
+          onChange={this.changeSelect}
+          multiple
+        >
+          <option value="1">One</option>
+          <option value="2">Two</option>
+        </select>
+
+        <pre>{JSON.stringify(this.state, null, 2)}</pre>
+      </form>
+    );
+  }
+}
+```
+
+The core of the form is formed by three event handlers that cater to the different types of form elements: `changeValue`, `changeCheckbox` and `changeSelect`.
+
+These are triggered by the `onChange` events in their corresponding form elements and are passed an object of type `SyntheticEvent`. We access properties of the `target` property of the `SyntheticEvent` via **ES2015 object destructuring** in order to update React state.
+
+For elements of type `<input type="text" />`, `<input type="radio" />`  and `<textarea />`, we pick `name` and `value`, for `<input type="checkbox" />` elements `name` and the `checked` property are of importance whereas `select` elements also need to provide a `name` and whether a selection is offered to the user or a mutiple select \(with `value` or `selectedOptions`\). We can find out whether we're dealing with a simple or multiple select by inspecting the `multiple` property with `e.target`.
+
+### Changing of values
+
+If a value is modified, as is the case with text inputs and radio buttons, the corresponding React state is set to the value provided by the user, triggered by the `onChange` event. Controlled components now mandate the following procedure:
+
+1. When the user inputs text, the value changes.
+2. The `onChange` event is triggered and processed by the event handler.
+3. The event handler sets state using the new value.
+4. React re-renders the user interface and sets `this.state` as the new value.
+5. The user sees their newly provided value on the screen.
+
+This is **business as usual** for the user and they will not notice that the form works differently behind the scenes and does not reflect usual  browser behavior. React fully takes care of the logic in the background and painted a new "frame" in the user interface.
+
+### Changing state in checkboxes and radio buttons
+
+Checkboxes \(`<input type="checkbox" />`\) work in a similar fashion but their value will remain the same. Checkboxes change their state rather than their value by providing the boolean `true` or `false` in its `checked` property. If the `checked` property is controlled by React, the form field is said to be controlled. One can check whether the checkbox is activated \(`true`\) or not \(`false`\) by inspecting `e.target.checked` in the event handler which passes this information to React state. React then takes care of the re-render and showing the status of the checkbox to the user.
+
+Radio buttons on the other hand are some form of a hybrid element. Similarly to checkboxes, radio buttons are seen as controlled if their `checked` attribute is managed by React. However, there are often multiple radio buttons containing the same name but different values within the same document. It would not make sense to set the values of these names to either `true` or `false` as we are interested in the actual value of the selected radio button. Thus, the value of the radio button is written into state. We can check whether the selected value in the state is the same as the value of the field with `checked={this.state.radio === "1"}`. We set `checked` to true in this case if the value of the radio button `radio` is equal to 1.
 
