@@ -8,19 +8,19 @@
 The **ES** in **ES2015** and **ES6** stands for **ECMAScript**. The organization ECMA International is responsible for the standardization of the **ECMA-262** specification. Since 2015, a new specification has been published each year. Historically, they attributed each version with an increasing number, however to increase clarity and understanding the versions now include the year in which they were published. This way, **ES6** becomes **ES2015**, **ES7** is **ES2016** and so on. 
 {% endhint %}
 
-People that work with React most definitely also use **Babel** as their **transpiler** in 99% of the cases as to change **JSX** into their respective `createElement()` calls. But this is not the only thing **Babel** can do. Previously named **6to5**, it achieved just this: transpile **ES6** syntax JavaScript into **ES5**. This unlocks the ability to use newer or soon-to-be-supported features and syntax extensions today while still supporting older browsers that do not natively support these.
+People that work with React most definitely also use **Babel** as their **transpiler** to change **JSX** into its respective `createElement()`, but this is not the only thing **Babel** can do. Previously named **6to5**, it did exactly what its name suggests: transpile **ES6** syntax JavaScript into **ES5**. This unlocks the ability to use newer, or soon-to-be-supported, features and syntax extensions today whilst still supporting older browsers that do not natively support these features.
 
 In this chapter I want to show and explain the most important and useful functionality and opportunities that **ES2015** and the following versions have brought about. I will focus on those features that you would commonly come across when developing with React and those that make life easiest for you.
 
 **If you already have experience working with ES2015 and its subsequent versions, feel free to skip this chapter!**
 
-## **Variable declarations with let and const**
+## **Variable declarations with `let` and `const`**
 
 For a long while, one could only use `var` to declare a variable in JavaScript. Since 2015 however, JavaScript has gained two new keywords which we can use to declare variables: `let` and `const`. Using `var` for variable declarations has become somewhat superfluous and in almost all cases `let` and `const` are the better choices. But what's the difference?
 
-As opposed to `var`, the new variable declarations, `let` and  `const`, only exist **inside of the scope in which they were defined**. These scopes can be a function as it was he case with `var` as well, but it can also be a loop or an `if` statement.
+As opposed to `var`, the new variable declarations, `let` and  `const`, only exist **inside of the scope in which they were defined**. These scopes can be a function, as was the case with `var`, but it can also be a loop or an `if` statement.
 
-**Tip:** Whenever you find an open curly bracket in your code, you are opeining a new scope. Similarly, a closing curly bracket closes the scope again. Using these new variable declarations, we have encapsulated our variables to a greater degree and limited their usage which is usually considered a good thing.
+**Tip:** Whenever you find an open curly bracket in your code, you are opening a new scope. Similarly, a closing curly bracket closes the scope again. Using these new variable declarations, we have encapsulated our variables to a greater degree and limited their usage which is usually considered a good thing.
 
 On the one hand, if you want to override the value of a variable \(e.g. in a loop\), you have to use `let` to achieve this. On the other hand, if the reference of the variable should stay the same, i.e. constant, one should use `const.` 
 
@@ -104,7 +104,7 @@ console.log(myObject);
 `{a: 1, b: 2}`
 {% endhint %}
 
-In this instance, we do not encounter any problems as we are only changing the object itself but not the reference to `myObject`. Arrays, similarly, follow the same rules. The elements in the array can be changed, but the value of the variable cannot. 
+In this instance, we do not encounter any problems as we are changing the object itself but not the reference to `myObject`. Arrays, similarly, follow the same rules. The elements in the array can be changed, but the value of the variable cannot. 
 
 **Allowed:**
 
@@ -136,7 +136,7 @@ If we want to ensure that `myArray` can easily be overridden, we have to use `le
 
 ## Arrow functions
 
-**Arrow functions** are yet another great addition in terms of simplicity since the introduction of ES2015. Previously function declarations were written in the following fashion: the keyword `function`, followed by an optional function name, parentheses in which the function arguments were given as well as the **function body**. The function body comprises the actual content of the function:
+**Arrow functions** are yet another great addition in terms of simplicity since the introduction of ES2015. Previously, function declarations were written in the following fashion: the keyword `function`, followed by an optional function name, parentheses in which the function arguments were given as well as the **function body**. The function body comprises the actual content of the function:
 
 ```
 function(arg1, arg2) {}
@@ -195,7 +195,7 @@ function TimeButton() {
 }
 ```
 
-As the function supplied as an **event listener** does not have access to its **parent scope**, the **TimeButton** in this case, we have to make amends with saving `this` in the variable `self`. This is not an uncommon pattern for ES5 JavaScript. Alternatively, the scope of the function could be **explicitly** bound to `this` and thus teach the **event listener** which scope to execute the code in:
+As the function supplied as an **event listener** it does not have access to its **parent scope** — the **TimeButton** in this case — we have to make amends with saving `this` in the variable `self`. This is not an uncommon pattern for ES5 JavaScript. Alternatively, the scope of the function could be **explicitly** bound to `this` and thus teach the **event listener** which scope to execute the code in:
 
 ```
 function TimeButton() {
@@ -277,7 +277,7 @@ The same applies to `String.prototype.padEnd()` although the string is filled up
 
 ### Arrays
 
-The Array has also gained new static as well as prototype methods. What do I even mean when I talk about prototype methods? Prototype methods work "with the actual array" - an already existing **array instance**. Static methods on the other hand can be thought of as helper methods which "do things" that are related to arrays.
+The Array has also gained new static and prototype methods. What do I even mean when I talk about prototype methods? Prototype methods work "with the actual array" — an already existing **array instance**. Static methods on the other hand can be thought of as helper methods which "do things" that are related to arrays.
 
 **Static array methods**
 
@@ -304,7 +304,7 @@ Array.findIndex(func);
 Array.includes(value);
 ```
 
-`Array.find()` finds the **first** element in an array that fullfils the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value. 
+`Array.find()` finds the **first** element in an array that fulfills the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value. 
 
 ```
 const numbers = [1, 2, 5, 9, 13, 24, 27, 39, 50];
@@ -383,10 +383,10 @@ const modifiedUser = Object.assign(
   {},
   user,
   { role: 'Admin' },
-  { name: 'Nicht Manuel', job: 'Developer' }
+  { name: 'Not Manuel', job: 'Developer' }
 );
 console.log(modifiedUser); 
-// -> { id: 1, name: 'Nicht Manuel', role: 'Admin', job: 'Developer' }
+// -> { id: 1, name: 'Not Manuel', role: 'Admin', job: 'Developer' }
 ```
 
 `Object.entries()`, `Object.keys()` and `Object.values()` offer similar functionality. They return the properties \(`keys`\), the values \(`values`\)  or the entries \(`entries()`\) as an **array**. **Entries** however returns a nested array of the following form:
@@ -407,7 +407,12 @@ Object.entries({id: 1, name: 'Manuel'});
 Lastly, let us look at `Object.freeze()` which does just what you would expect. It freezes an object and prohibits any further mutations, be it the adding of new properties, deleting old properties or even just changing values. Following React's principle of immutable objects, this is very useful.
 
 ```
-const user = Object.freeze({ id: 1, name: 'Manuel' });user.id = 2;delete user.name;user.role = 'Admin';console.log(user);// -> { id: 1, name: 'Manuel' }
+const user = Object.freeze({ id: 1, name: 'Manuel' });
+user.id = 2;
+delete user.name;
+user.role = 'Admin';
+console.log(user);
+// -> { id: 1, name: 'Manuel' }
 ```
 
 If an object created with `Object.freeze()` is attempted to be changed, for example using `Object.assign()`, it will throw a `TypeError`, thus preventing unwanted and accidental mutations on the object.
@@ -442,7 +447,7 @@ console.log(user);
 
  So far so good. I have tried to keep the example very simple at this point but its implications are evident. In more complex situations, this technique will allow us to write clean and easily readable code especially with regard to **JSX**.
 
-Another noteworthy addition for objects has been introduction of **shorthand property names**. Previously, code had to be written in the following form:
+Another noteworthy addition for objects has been the introduction of **shorthand property names**. Previously, code had to be written in the following form:
 
 ```
 const name = 'Manuel';
@@ -456,7 +461,7 @@ const user = {
 };
 ```
 
-We are using a lot of repetition here. **Shorthand property name syntax** in **ES2015** prevents this and allow us to only use the variable name if the name of the object property is the same. This reduces our code to:
+We are using a lot of repetition here. **Shorthand property name syntax** in **ES2015** prevents this and allow us to use only the variable name if the name of the object property is the same. This reduces our code to:
 
 ```
 const name = 'Manuel';
@@ -570,7 +575,7 @@ var myArray = [1, 2, 3];
 sumAll(...myArray);
 ```
 
-As can be seen, `apply()` is not necessary anymore. However, spreading arguments is not only useful and limited to function arguments. It can also be used to easily combine two arrays into one:
+As we can see, `apply()` is not necessary anymore. However, spreading arguments is not only useful and limited to function arguments. It can also be used to easily combine two arrays into one:
 
 ```
 const greenFruits = ['kiwi', 'apple', 'pear'];
@@ -582,7 +587,7 @@ const allFruits = [...greenFruits, ...redFruits];
 
 `['kiwi', 'apple', 'pear', 'strawberry', 'cherry', 'raspberry']`
 
-A new array is created which not only contains all values from `greenFruits` but also all values from `redFruits`. But there's more: a new array is also created for us - not just a reference to the old arrays. Thinking back to the previously mentioned **read-only** mentality in React, this will prove useful for the work with props. The spread operator can also be used to create a simple copy of an array:
+A new array is created which not only contains all values from `greenFruits` but also all values from `redFruits`. But there's more: a new array is also created for us — not just a reference to the old arrays. Thinking back to the previously mentioned **read-only** mentality in React, this will prove useful for the work with props. The spread operator can also be used to create a simple copy of an array:
 
 ```
 const users = ['Manuel', 'Chris', 'Ben'];
@@ -591,7 +596,7 @@ const selectedUsers = [...users];
 
 `selectedUsers` is a copy of `users`and all of its values. If we change the `users`array, no complications for `selectedUsers` occur.
 
-Let's shift our focus to objects. Using the spread operator with objects is very similar to using it with arrays. However, instead of using every single value every property that is enumerable in the object \(roughly those that are used during a `for(… in …)` loop\) will be used. 
+Let's shift our focus to objects. Using the spread operator with objects is very similar to using it with arrays. However, instead of using every single value, every property that is enumerable in the object \(roughly those that are used during a `for(… in …)` loop\) will be used. 
 
 The spread operator is a great choice to create objects:
 
@@ -621,7 +626,7 @@ const settings = {
 }
 ```
 
-If there are object properties with the same name in any two objects, the object declared last will come into effect:
+If there are object properties with the same name in any two objects, the property in the object declared last will be used:
 
 ```
 const globalSettings = { language: 'en-US', timezone: 'Berlin/Germany' };
@@ -676,7 +681,7 @@ console.log(c);
 {c: 3}
 ```
 
-As can be seen from the example above, `Object.assign()` did not create a new object for us.  It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should best be avoided.
+As can be seen from the example above, `Object.assign()` did not create a new object for us.  It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should be avoided.
 
 There's a trick though to ensure that objects can be combined via `Object.assign()` but also be created in a new object. Passing an empty object literal `{}` as the first argument to the function like this:
 
@@ -690,7 +695,7 @@ Object.assign({}, a, b, c);
 
 Before introducing the **rest operator** to you which is closely related to the **spread operator**, I want to talk about **destructuring assignments** \(or **destructuring** for short\).
 
-**Destructuring** allows the extraction of a single or more elements from any object or array and to assign it to a new variable. It is another great syntax extension that has been gifted to us with the introduction of ES2015.
+**Destructuring** allows the extraction of one or more elements from any object or array and to assign it to a new variable. It is another great syntax extension that has been gifted to us with the introduction of ES2015.
 
 **Destructuring Arrays**
 
@@ -721,7 +726,7 @@ const [gold, silver, bronze] = athletes;
 
 The array elements at index `0`, `1` and `2` are now all to be found in the variables for `gold`, `silver` and `bronze`. The result is the same as in the previous example, however the second version is much shorter and a lot more succinct.
 
-We can use array destructuring anywhere where the array has been initialised  on the right side, even if it contains a `return` value from the function.
+We can use array destructuring anywhere where the array has been initialized  on the right side, even if it contains a `return` value from the function.
 
 ```
 const getAllAthletes = () => {
@@ -745,10 +750,10 @@ As can be seen above, the array function returns an array with all the athletes.
 If we want to omit elements from the array, their values can literally be omitted.
 
 ```
-const [, silber, bronze] = athletes;
+const [, silver, bronze] = athletes;
 ```
 
-In this example, we do not declare a variable gold and only save the silver and bronze medallists to our variables.
+In this example, we do not declare a variable gold and only save the silver and bronze medalists to our variables.
 
 But **array destructuring** is not limited to assigning variables with `let` and `const`. There are many other cases that prove useful such as passing function arguments in the form of an array.
 
@@ -766,7 +771,7 @@ const logWinners = (athletes) => {
 }
 ```
 
-But this can be simpler:
+But this can be simplfied:
 
 ```
 const logWinners = ([gold, silver, bronze]) => {
@@ -830,7 +835,7 @@ const UserPersona = (props) => {
 };
 ```
 
-That already looks tidier and improved readability of the code. But we can simplify this further. Remember that it was possible to destructure arrays when they were being passed as a function argument. The same applies for objects. Instead of using the `props` argument, we can directly use **destructuring assignment**:
+That already looks tidier and improves readability of the code, but we can simplify this further. Remember that it was possible to destructure arrays when they were being passed as a function argument. The same applies for objects. Instead of using the `props` argument, we can directly use **destructuring assignment**:
 
 ```javascript
 const UserPersona = ({ firstName, lastName, image, job }) => (
@@ -842,7 +847,7 @@ const UserPersona = ({ firstName, lastName, image, job }) => (
 );
 ```
 
-As a nice side effect, we can simplify this further as the instant and implicit return from the **arrow function** allows us to omit the curly braces and the explicit `return`. We are left with just 5 lines of **JSX.**
+As a nice side effect, we can simplify this further as the implicit return from the **arrow function** allows us to omit the curly braces and the explicit `return`. We are left with just 5 lines of **JSX.**
 
 This syntax is very common in SFCs but you can find a similar destructuring assignments in the beginning of the `render()` method of **class components**:
 
@@ -882,7 +887,7 @@ In order to rename the variable, the invalid property name needs to be followed 
 const { name, class: ticketClass } = passenger;
 ```
 
-The value of the `class` property is written into the new variable `ticketClass` which as opposed to `class` is a valid name for a variable. The name of the passenger can easly be destructured into a variable with the name `name`.
+The value of the `class` property is written into the new variable `ticketClass` which, as opposed to `class`, is a valid name for a variable. The name of the passenger can easly be destructured into a variable with the name `name`.
 
 **Defaults in destructuring assignments**
 
@@ -896,7 +901,7 @@ If no property called `name` was present in the object or its value was `undefin
 
 **Combining renames and defaults**
 
-Now it's getting interesting because indeed combining renaming and default naming is possible. It might not be the simplest code to follow first but syntactically it is correct. Let use our previous `passenger` object again to illustrate this point. First, we define that the `name` property to be renamed to `passengerName` and then pass it the default value of `Unknown passenger` if no property `name` is found on the object. We also want to keep using `ticketClass` instead of the reserved `class` and assign the value `Economy` to it should it not exist as a property on the object.
+Now it's getting interesting because combining renaming and default naming is possible. It might not be the simplest code to follow first but syntactically it is correct. Let use our previous `passenger` object again to illustrate this point. First, we define that the `name` property to be renamed to `passengerName` and then pass it the default value of `Unknown passenger` if no property `name` is found on the object. We also want to keep using `ticketClass` instead of the reserved `class` and assign the value `Economy` to it should it not exist as a property on the object.
 
 ```javascript
 const {
@@ -905,7 +910,7 @@ const {
 } = passenger;
 ```
 
-If the newly named variables `passengerName` and `ticketClass` are not present in the object to be destructured, the values `Unknown passenger` and `Economy` are assigned. We do however need to ensure that the object itself is not null, otherwise the JavaScript interpreter will throw a hefty error:
+If the newly named variables `passengerName` and `ticketClass` are not present in the object to be destructured, the values `Unknown passenger` and `Economy` are assigned. We do however need to ensure that the object itself is not null, otherwise the JavaScript interpreter will throw an error:
 
 ```javascript
 const {
@@ -988,7 +993,7 @@ Example(1, 2, 3, 4, 5);
 `[1, 2, 3, 4, 5]`
 {% endhint %}
 
-But behold - this does not only work for a single function argument but also if you previously defined some other parameters. The **rest operator** will quite literally take care of the **rest**:
+But this does not only work for a single function argument but also if you previously defined some other parameters. The **rest operator** will quite literally take care of the **rest**:
 
 ```javascript
 const Example = (first, second, third, ...rest) => {
@@ -1009,7 +1014,7 @@ third: 3
 rest: [4, 5]`
 {% endhint %}
 
-One could say that the **rest operator** "collects" the remaining elements from a **destructuring** operation and saves them to variable which is indicated just after the three dots. Even though, we have named this variable `rest` in our previous examples, you can literally give it any valid name.
+One could say that the **rest operator** "collects" the remaining elements from a **destructuring** operation and saves them to variable which is indicated just after the three dots. Even though, we have named this variable `rest` in our previous examples, you can give it any valid name.
 
 The **rest operator** is not limited to functions but can also be used in **array destructuring**:
 
@@ -1110,15 +1115,15 @@ const fullName = `${firstName} ${lastName}`;
 It's important to note that one is not limited to using variables as shown above. Equally, you can use any JavaScript expressions \(i.e. function calls\) - in this case:
 
 ```javascript
-console.log(`Das heutige Datum ist ${new Date().toISOString()}`);
+console.log(`Today's date is: ${new Date().toISOString()}`);
 console.log(`${firstName.toUpperCase()} ${lastName.toUpperCase()}`);
 ```
 
 ## Promises and async/await
 
-Promises are not an exclusively new concept in JavaScript, however with ES2015 they been standardised and can be used without any other additional libraries for the first time. Promises allow for asynchronous development by linearising with callbacks. A promise takes in an **executor function** which again takes two arguments, namely `resolve` and `reject`, and can take any of three states: `pending`, `fulfilled` or `rejected`. The inital state of a promise is always `pending`. Depending on the operation of the executor function being successful or unsuccessful, meaning `resolve` or `reject`, the status of the of the promise will change to either `fulfilled` or `rejected`. You can react directly to these two states with`.then()` or `.catch()` respectively. If `resolve` is being passed to the executor function, the `then()` part will execute. If `reject` is called, **all** `then()` calls are skipped and the `catch()` block is executed instead.
+Promises are not an exclusively new concept in JavaScript, however with ES2015 they been standardized and can be used without any other additional libraries for the first time. Promises allow for asynchronous development by linearizing with callbacks. A promise takes in an **executor function** which again takes two arguments, namely `resolve` and `reject`, and can take any of three states: `pending`, `fulfilled` or `rejected`. The initial state of a promise is always `pending`. Depending on the operation of the executor function being successful or unsuccessful, meaning `resolve` or `reject`, the status of the of the promise will change to either `fulfilled` or `rejected`. You can react directly to these two states with`.then()` or `.catch()` respectively. If `resolve` is being passed to the executor function, the `then()` part will execute. If `reject` is called, **all** `then()` calls are skipped and the `catch()` block is executed instead.
 
-An executor function **has** to execute one of the two functions it has been passed, otherwise the promise will be stuck in an _unfillfilled_ state. This can lead to unexpected and false behaviour and can even cause memory leaks within an application.
+An executor function **has** to execute one of the two functions it has been passed, otherwise the promise will be stuck in an _unfulfilled_ state. This can lead to unexpected and false behavior and can even cause memory leaks within an application.
 
 To reiterate the difference between promises and callbacks, let us have a look at the following example:
 
@@ -1169,7 +1174,7 @@ getUser(id)
 .catch(errorHandler);
 ```
 
-Each step is being followed by `then()` to react to the previous promise.  Although the same end result is reached by this piece of code, we are only nesting 2 layers deep and readbility is improved immensly.
+Each step is being followed by `then()` to react to the previous promise.  Although the same end result is reached by this piece of code, we are only nesting 2 layers deep and readability is improved immensly.
 
 It is relatively simple to refactor code based on callbacks into one that is using promises. In order to demonstrate this, I will show you an example of the Geolocation API and its `getCurrentPosition()` method. For those of you who do not know it: the method exists on the `navigator.geolocation` object and opens a dialog in the browser asking the user for permission to use their current location. The method expects two callbacks as arguments, namely the success callback and the error callback. The first callback, the  success callback, is being passed an object with the user's location if they have previously agreed. The second callback, the error callback, is being passed an error object. This can occur because the user has given permission to use their current location or due to a location not being possible for other reasons.
 
@@ -1237,7 +1242,7 @@ For me personally asynchronous functions with `async` and `await` have been one 
 
 Modules in JavaScript are a bit of special topic. They did not exist officially but there have been many attempts to introduce JavaScript modules in the past. If you have been part of the development scene for a while, you might remember **AMD** \(Asynchronous Module Definition\) and if you have worked with Node.js before you should have come across CommonJS Modules \(i.e. `module.exports` and `require('./myModule')`\). There has been a lot of debate centering on which module standard should become the de-facto standard, what the syntax is supposed to look like and how the implementation should work on the side of the interpreter. In the end, consensus was reached on using `import` and `export` keywords to let the modules communicate with each other.
 
-Babel was first to implement a solution that was based on the previous standard of the specification. This implementation had to change inbetween though as updates were made to the standard. When webpack entered the scene, it implemented yet another mechanism to manage resolving and loading of JavaScript modules which is based on the now approved final standard. Just like TypeScript.
+Babel was first to implement a solution that was based on the previous standard of the specification. This implementation had to change in between though as updates were made to the standard. When webpack entered the scene, it implemented yet another mechanism to manage resolving and loading of JavaScript modules which is based on the now approved final standard. Just like TypeScript.
 
 After **10** years, we have finally reached consensus for the specification and JavaScript engines are busy implementing it. This sounds rather complicated. It surely has been in the past. However, nowadays most agree and developers finally found clarity. But there are a few gotchas still which is why we should still rely on Webpack, Babel or TypeScript to work with modules. But more on that later.
 
@@ -1245,9 +1250,9 @@ We've talked a lot about the history of modules now. But how do imports work and
 
 ### Modules in JavaScript
 
-The primary goal of modules is to encapsulate JavaScript scope for each module. In this case, a module is actually a single **file**. ****As long as you are not explicitly limiting their scope by using an **IIFE** \(_Immediately Invoked Function Expression_\), each function, each variable etc that you declare in JavaScript is available globally. Modules prevent this by only making the code inside it available **in the module itself**. This can avoid complications such as two libraries using the same variable. Moreover, modules encourage reusuable code without being scared of using already existing variables or overriding functions that have already been declared.
+The primary goal of modules is to encapsulate JavaScript scope for each module. In this case, a module is actually a single **file**. ****As long as you are not explicitly limiting their scope by using an **IIFE** \(_Immediately Invoked Function Expression_\), each function, each variable etc that you declare in JavaScript is available globally. Modules prevent this by only making the code inside it available **in the module itself**. This can avoid complications such as two libraries using the same variable. Moreover, modules encourage reusable code without being scared of using already existing variables or overriding functions that have already been declared.
 
-Modules can **export** functions, classes or variables that have been declared within them. Other modules can then import these exports if necessary. In order to export these functions and variables, a special `export` keyword is used. To import these, you might recognize a pattern here, there is an `import` keyword. Exporting can take two forms: **named exports** and **default exports**.
+Modules can **export:** functions, classes or variables that have been declared within them. Other modules can then import these exports if necessary. In order to export these functions and variables, a special `export` keyword is used. To import these, you might recognize a pattern here, there is an `import` keyword. Exporting can take two forms: **named exports** and **default exports**.
 
 **Named Exports**
 
