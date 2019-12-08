@@ -145,3 +145,126 @@ const MyList = () => (
 );
 ```
 
+## Fragments
+
+Fragments are some sort of a special component and allow us to create valid JSX without leaving visible traces in the rendered markup. They are a solution to the "problem" of only ever returning a single element at the top in JSX. This is valid JSX:
+
+```jsx
+render() {
+  return (
+    <ul>
+      <li>Bullet Point 1</li>
+      <li>Bullet Point 2</li>
+      <li>Bullet Point 3</li>
+    </ul>
+  );
+}
+```
+
+But this isn't:
+
+```jsx
+render() {
+  return (
+    <li>Bullet Point 1</li>
+    <li>Bullet Point 2</li>
+    <li>Bullet Point 3</li>
+  );
+}
+```
+
+In this example, multiple elements are being returned in the `render()` method without a surrounding element leading to an error. We do not always want to create new elements though, especially if the surrounding element is found in a parent component and the child element is found in its own component. 
+
+On top of that, many elements \(such as `table`, `ul`, `ol`, `dl`, ...\) do not allow for `div` elements to be used as an intermediary wrapper \(ignoring the fact that we would also litter the markup by using `divs`  everywhere for now\). As we are only permitted to ever return a single root element from a component, **Fragments** can be incredibly useful. We could transform our example from above into the following:
+
+```jsx
+render() {
+  return (
+    <React.Fragment>
+      <li>Bullet Point 1</li>
+      <li>Bullet Point 2</li>
+      <li>Bullet Point 3</li>
+    </React.Fragment>
+  );
+}
+```
+
+The rule that every element returned by a loop needs to have a `key` prop, still holds. Using a **Fragment** this is still possible. Let's illustrate this further by examining another slightly more complex yet more realistic example:
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const TicketMeta = ({ metaData }) => (
+  <dl>
+    {Object.entries(metaData).map(([property, value]) => (
+      <React.Fragment key={property}>
+        <dt>{property}</dt>
+        <dd>{value}</dd>
+      </React.Fragment>
+    ))}
+  </dl>
+);
+
+ReactDOM.render(
+  <TicketMeta
+    metaData={{
+      createdAt: '2018-06-09',
+      author: 'Manuel Bieh',
+      category: 'General',
+    }}
+  />,
+  document.getElementById('root')
+);
+```
+
+The resulting output would be the following:
+
+```markup
+<dl>
+  <dt>createdAt</dt>
+  <dd>2018-06-09</dd>
+  <dt>author</dt>
+  <dd>Manuel Bieh</dd>
+  <dt>category</dt>
+  <dd>General</dd>
+</dl>
+```
+
+It would simply not be possible to wrap a `div` or `span` or another element around the `<dt></dt>` or `<dd></dd>`. Trying to do that would result in this:
+
+```markup
+<dl>
+  <div>
+    <dt>createdAt</dt>
+    <dd>2018-06-09</dd>
+  </div>
+  <div>
+    <dt>author</dt>
+    <dd>Manuel Bieh</dd>
+  </div>
+  <div>
+    <dt>category</dt>
+    <dd>General</dd>
+  </div>
+</dl>
+```
+
+... and is invalid HTML! A `dl` element only permits `dt` and `dd` as its child element. The **Fragment** helps us to alleviate these situations and create valid JSX without creating invalid markup. It was only introduced in React 16.3 and meant that some React components were unnecessarily complex to deal with this problem and avoid violating JSX or HTML rules. 
+
+**Fragment** components can also be imported directly from React using a named import:
+
+```javascript
+import React, { Fragment } from 'react';
+```
+
+Now, the notation of `<Fragment>` instead of `<React.Fragment>` can be used saving us multiple key strokes.
+
+Using Babel 7 for transpilitation, we can shorten the notation even further. An _empty_ element can created using:
+
+```jsx
+<>Fragment in Kurzform-Syntax</>
+```
+
+This is a neat and tidy method to reduce the amount of fragments we need to explicitly define by name. But be careful: using the shorthand is not possible in loops as empty elements cannot contain any props. Elements in a loop require us to define a `key` prop thus forcing us to use `<React.Fragment>` instead in this case.
+
