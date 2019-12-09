@@ -274,3 +274,170 @@ Rendering components based on different conditions, **conditional rendering** fo
 
 A React component renders a **state** of a **user interface** based on its **props** and its current **state**. In an ideal situation, free from **side effects**. To correctly deal with these different and changing parameters, using the render function to react to different conditions is a powerful feature. If my parameter is A, render this; if my parameter is B, render that. If I have incoming data in a list, show this data as an HTML list. If I do not have any data, show a placeholder instead.
 
+If this sounds relatively simple, I can assure you, it is. But one should still be aware of knowing how to do conditional rendering in JSX. The `render()` function of **class components** as well as **stateless functional** **components** can return a **React element** \(also in form of JSX\), a **string**, a **number,** `null` \(if nothing should be rendered\) or an **array** of these types.
+
+There are a few methods of keeping the `render()` method nice and clean which I will explain now.
+
+### if/else
+
+Probably the most simple and commonly known way to **conditionally render** is using `if`/`else`:
+
+```jsx
+const NotificationList = ({ items }) => {
+  if (items.length) {
+    return (
+      <ul>
+        {items.map((notification) => (
+          <li>{notification.title}</li>
+        ))}
+      </ul>
+    );
+  }
+  return <p>No new notifications</p>
+};
+```
+
+Relatively simple use case. The `NotificationList` component receives a list of items in the form of props. If the list contains any entries at all, they are rendered as a list item of an unordered list. If however the list is empty, a message is returned informing the user that no new notifications are available.
+
+Another more complex example. Let's imagine we are working with a value that we want to make editable. Our component differentiates between the different modes of `edit` and `view`. Depending on which mode we are currently in, we either want to simply show text \(**View mode**\) or be able to see a text field containing the previously entered value \(**edit mode**\).
+
+```jsx
+import React from 'react';
+import { render } from 'react-dom';
+
+class EditableText extends React.Component {
+  state = {
+    value: null,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.value === null) {
+      return {
+        value: nextProps.initialValue || '',
+      };
+    }
+    return null;
+  }
+
+  handleChange = (e) => {
+    const { value } = e.target;
+    this.setState(() => ({
+      value,
+    }));
+  }
+
+  setMode = (mode) => () => {
+    this.setState(() => ({
+      mode,
+    }));
+  }
+
+  render() {
+    if (this.state.mode === 'edit') {
+      return (
+        <div>
+          <input 
+            type="text" 
+            value={this.state.value} 
+            onChange={this.handleChange} />
+          <br />
+          <button onClick={this.setMode('view')}>Done</button>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {this.state.value}
+        <br />
+        <button onClick={this.setMode('edit')}>Edit</button>
+      </div>
+    )
+  }
+}
+
+render(
+  <EditableText initialValue='Example' />, 
+  document.getElementById('root')
+);
+
+```
+
+The relevant part can be found in the `render()` method of the component. The state is tested against its property value in `mode`: if `edit` is currently the value in state, we directly return the input field with an "early return". If this is not the case, we assume that the "standard case" is taking place meaning that the current mode is `view`. The `else` part of this condition is not actually necessary here and would only add unnecessary complexity. Both times, the text is rendered with the difference that it is an editable `value` of an `input` field in one case, and a simple text node in the other. A button is included to switch between the different modes of `view` and `edit`.
+
+ Such `if`, `if`/`else` or `if`/`else if`/`else` constructs are a common occurence for displaying content based on **state** and **props** within a component. I will explain them in more detail in just a moment.
+
+### null
+
+No, this is not a mistake. Returning `null` is the most simple case of **conditional rendering**. If the `render()` method of a component returns `null`, nothing is rendered and also does not appear in the DOM. This can be useful for displaying error components that should only be displayed if the error has actually occured.
+
+```jsx
+render() {
+  if (!this.state.error) {
+    return null;
+  }
+
+  return (
+    <div className="error-message">{this.state.error.message}</div>
+  );
+}
+```
+
+Using this form of a conditional check, we test whether the state contains an error property. If this isn't the case, `null` is being returned. Otherwise, an error message containing the error in state is returned in a `div`. We achieve this by using a simple `if` condition similar to what we have used above.
+
+### Ternary Operator
+
+Using the conditions that we have just seen, are often used to deal with relatively big changes in a component. In many situations, we only want to differentiate between minor differences, for example setting a css class if a certain state is set. The ternary operator helps us to do just that. Let's refresh our knowledge. A ternary operator takes the following form: `condition ? met : not met`. For example: `isLoggedIn ? ' Logout' : ' Login';`
+
+That's our first example for a ternary operator in JSX! It can be used within props but also in conditions to differentiate between different forms of output to render based on conditions. To make the example more concrete, we could use the info from above to include it in a button:
+
+```jsx
+render() {
+  const { isLoggedIn } = this.props;
+  return (
+    <button type="submit">{ isLoggedIn ? 'Logout' : 'Login' }</button>
+  );
+}
+```
+
+We will always return a button, but based on its `isLoggedIn` prop it can either include **Logout** or **Login**.
+
+Equally, the **ternary operator** can be used in props. Let's assume that we want to render a list of users in which some users have been deactivated. In this case, we want to be able to set a class to mark it using CSS. Markup that deals with this problem could look like this:
+
+```jsx
+render() {
+  const { user } = this.props;
+  return (
+    <div className={user.isDisabled ? 'is-disabled' : 'is-active'}>{user.name}</div>
+  );
+}
+```
+
+Users that have been deactivated are now marked with the `is-disabled` class, whereas active users are denoted with `is-active`.
+
+Even complex JSX can be displayed using the **ternary operator**. As long as you follow the rule to use parentheses if the JSX spans multiple lines: 
+
+```jsx
+render() {
+  const { country } = this.props;
+  return (
+    <div>
+      <p>State:</p>
+      {country === 'de' ? (
+        <select name="state">
+          <option value="bw">Baden-Württemberg</option>
+          <option value="by">Bayern</option>
+          <option value="be">Berlin</option>
+          <option value="bb">Brandenburg</option>
+          […]
+        </select>
+      ) : (
+        <input type="text" name="state" />
+      )}
+    </div>
+  );
+}
+```
+
+A select list containg all German counties is rendered if we previously selected `de` \(for **Germany**\). In all other cases a simple text input is shown to user in which they can enter their county freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
+
