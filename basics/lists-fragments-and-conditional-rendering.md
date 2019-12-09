@@ -268,3 +268,9 @@ Using Babel 7 for transpilitation, we can shorten the notation even further. An 
 
 This is a neat and tidy method to reduce the amount of fragments we need to explicitly define by name. But be careful: using the shorthand is not possible in loops as empty elements cannot contain any props. Elements in a loop require us to define a `key` prop thus forcing us to use `<React.Fragment>` instead in this case.
 
+## Conditional rendering
+
+Rendering components based on different conditions, **conditional rendering** for short, is a central concept in React. As React components are composed of JavaScript functions, objects and classes under the hood, conditions function and behave just as in regular JavaScript.
+
+A React component renders a **state** of a **user interface** based on its **props** and its current **state**. In an ideal situation, free from **side effects**. To correctly deal with these different and changing parameters, using the render function to react to different conditions is a powerful feature. If my parameter is A, render this; if my parameter is B, render that. If I have incoming data in a list, show this data as an HTML list. If I do not have any data, show a placeholder instead.
+
