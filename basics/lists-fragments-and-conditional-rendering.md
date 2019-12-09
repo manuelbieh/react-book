@@ -1,6 +1,6 @@
 # Lists, Fragments, and Conditional Rendering
 
-You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**, you've learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that's being rendered and how you can leverage **lifecycle methods** to react to changes in our data. All of these lay the groundwork for simple React applications.
+ constructs are a common occurrence for displaying content based on You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**, you've learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that's being rendered and how you can leverage **lifecycle methods** to react to changes in our data. All of these lay the groundwork for simple React applications.
 
 But there a few details that we have not examined yet and which have not been mentioned so far \(or not explained in detail\). However, these details will become more relevant the more complex our applications get.
 
@@ -365,11 +365,11 @@ render(
 
 The relevant part can be found in the `render()` method of the component. The state is tested against its property value in `mode`: if `edit` is currently the value in state, we directly return the input field with an "early return". If this is not the case, we assume that the "standard case" is taking place meaning that the current mode is `view`. The `else` part of this condition is not actually necessary here and would only add unnecessary complexity. Both times, the text is rendered with the difference that it is an editable `value` of an `input` field in one case, and a simple text node in the other. A button is included to switch between the different modes of `view` and `edit`.
 
- Such `if`, `if`/`else` or `if`/`else if`/`else` constructs are a common occurence for displaying content based on **state** and **props** within a component. I will explain them in more detail in just a moment.
+ Such `if`, `if`/`else` or `if`/`else if`/`else`**state** and **props** within a component. I will explain them in more detail in just a moment.
 
 ### null
 
-No, this is not a mistake. Returning `null` is the most simple case of **conditional rendering**. If the `render()` method of a component returns `null`, nothing is rendered and also does not appear in the DOM. This can be useful for displaying error components that should only be displayed if the error has actually occured.
+No, this is not a mistake. Returning `null` is the most simple case of **conditional rendering**. If the `render()` method of a component returns `null`, nothing is rendered and also does not appear in the DOM. This can be useful for displaying error components that should only be displayed if the error has actually occurred.
 
 ```jsx
 render() {
@@ -387,7 +387,7 @@ Using this form of a conditional check, we test whether the state contains an er
 
 ### Ternary Operator
 
-Using the conditions that we have just seen, are often used to deal with relatively big changes in a component. In many situations, we only want to differentiate between minor differences, for example setting a css class if a certain state is set. The ternary operator helps us to do just that. Let's refresh our knowledge. A ternary operator takes the following form: `condition ? met : not met`. For example: `isLoggedIn ? ' Logout' : ' Login';`
+Using the conditions that we have just seen, are often used to deal with relatively big changes in a component. In many situations, we only want to differentiate between minor differences, for example setting a CSS class if a certain state is set. The ternary operator helps us to do just that. Let's refresh our knowledge. A ternary operator takes the following form: `condition ? met : not met`. For example: `isLoggedIn ? ' Logout' : ' Login';`
 
 That's our first example for a ternary operator in JSX! It can be used within props but also in conditions to differentiate between different forms of output to render based on conditions. To make the example more concrete, we could use the info from above to include it in a button:
 
@@ -439,5 +439,5 @@ render() {
 }
 ```
 
-A select list containg all German counties is rendered if we previously selected `de` \(for **Germany**\). In all other cases a simple text input is shown to user in which they can enter their county freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
+A select list containing all German counties is rendered if we previously selected `de` \(for **Germany**\). In all other cases a simple text input is shown to user in which they can enter their county freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
 
