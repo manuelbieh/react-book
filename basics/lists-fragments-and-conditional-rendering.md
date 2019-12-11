@@ -1,6 +1,6 @@
 # Lists, Fragments, and Conditional Rendering
 
- constructs are a common occurrence for displaying content based on You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**, you've learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that's being rendered and how you can leverage **lifecycle methods** to react to changes in our data. All of these lay the groundwork for simple React applications.
+You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**, you've learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that's being rendered and how you can leverage **lifecycle methods** to react to changes in our data. All of these lay the groundwork for simple React applications.
 
 But there a few details that we have not examined yet and which have not been mentioned so far \(or not explained in detail\). However, these details will become more relevant the more complex our applications get.
 
@@ -41,7 +41,7 @@ const cryptos = [
 ];
 ```
 
-First, we will aim to show this data as a simple unordered list in HTML. A resulting component could look similar to this&gt;
+First, we will aim to show this data as a simple unordered list in HTML. A resulting component could look similar to this:
 
 ```jsx
 const CryptoList = ({ currencies }) => (
@@ -56,7 +56,7 @@ const CryptoList = ({ currencies }) => (
 );
 ```
 
-The component could be used like this:
+The component could then be used like this:
 
 ```jsx
 <CryptoList currencies={cryptos} />
@@ -499,9 +499,77 @@ class Countdown extends React.Component {
 }
 ```
 
-This **can** improve readibility of the `render()` method but also increases the complexity of the component slightly. Many people recommend to move parts of the code into their own **function components** instead though \(myself included\).
+This **can** improve readability of the `render()` method but also increases the complexity of the component slightly. Many people recommend to move parts of the code into their own **function components** instead though \(myself included\).
 
 {% hint style="info" %}
 As soon as you begin to consider moving parts of your code into custom `render()` methods within your component, you should think about moving these into their own separate **function components**.
 {% endhint %}
+
+### Custom Components with complex conditions
+
+Instead of using multiple `render()` methods, we can create new **function components**. These will receive **props** from their parent component and then take care of their own data display as an independent, self-managed and testable component.
+
+Careful consideration should be given as to how and which data actually needs passed down to the new child component\(s\) and should not contain too much logic or state. 
+
+Using custom components becomes useful once the `render()` method in one component has become too complex or if the same elements are used repetitvely within a component.
+
+Let's look at a form which consists of many similar text fields. Each of these text fields is embraced by its own paragraph, contains a label and a `type` attribute. The label also needs to be equipped with an id that needs uniquely set for each field.
+
+```jsx
+render() {
+  return (
+    <form>
+      <p>
+        <label for="email">
+          Email
+        </label>
+        <br />
+        <input type="email" name="email" id="email" />
+      </p>
+      <p>
+        <label for="password">
+          Password
+        </label>
+        <br />
+        <input type="password" name="password" id="password" />
+      </p>
+      <input type="submit" value="Send" />
+    </form>
+  );
+}
+```
+
+We only have two form fields in this example but in most projects you will find many more fields in way more complex forms. Even in this case, it might make sense to extract recurring fields into their own components to save ourselves keystrokes.
+
+First, create a `TextField` component and then cut the recurring JSX from the form component into this one:
+
+```jsx
+const TextField = ({ id, label, ...HTMLInputAttributes }) => (
+  <p>
+    <label for={id}>
+      {label}
+    </label>
+    <br />
+    <input {...HTMLInputAttributes} id={id} />
+  </p>
+);
+
+export default TextField;
+```
+
+This new component receives an `id` which is needed to link the label to the text input. Using **Object Rest/Spread**, we add all remaining props to the `input` element as attributes, transforming the component into the following:
+
+```jsx
+render() {
+  return (
+    <form>
+      <TextField name="email" label="Email" id="email" type="email" />
+      <TextField name="password" label="Password" id="password" type="password" />
+      <input type="submit" value="Send" />
+    </form>
+  );
+}
+```
+
+We have just transformed long and potentially hard to read markup into a clean and precise `render()` method which only consists of very few components. If we ever wanted to add a change which should affect all of our text fields \(for example adding a class\), this can be added with ease by only changing data in one place - in the new `TextField` component.
 
