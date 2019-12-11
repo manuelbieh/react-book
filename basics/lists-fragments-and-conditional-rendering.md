@@ -441,7 +441,7 @@ render() {
 
 A select list containing all German counties is rendered if we previously selected `de` \(for **Germany**\). In all other cases a simple text input is shown to user in which they can enter their county freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
 
-### Logical AND \(`&&`\) und Logical OR \(`||`\)
+### Logical AND \(`&&`\) and Logical OR \(`||`\)
 
 The **Logical Operator** seems to resemble the **Ternary Operator** at first glance, but it is even shorter and more precise. As opposed to the **Ternary operator**, a second "else" case is not needed and can be skipped. If the condition of the **Logical AND Operator** is not met, the expression simply returns `undefined` resulting in no visible markup for the user interface:
 
@@ -475,7 +475,7 @@ The button will be labelled **Logout** if the `isLoggedIn` **prop** is `true`, o
 
 Another way to increase the readability during complex **conditional rendering** is to move parts from the regular `render()` method to separate `renderXY()` methods. The regular `render()` method still forms the core of the component and decides which oarts of the user interface to show to the use. Thus, this method should not become overly complex or contain an unnecessary amount of logic.
 
-It is not uncommon to move parts of long and complex `render()` methods into much smaller, more digestable chunks and implement these as custom class methods. If proper naming is used, this technique usually aids readability and understanding. Often these custom `render()` blocks are combined with `if` blocks:
+It is not uncommon to move parts of long and complex `render()` methods into much smaller, more digestible chunks and implement these as custom class methods. If proper naming is used, this technique usually aids readability and understanding. Often these custom `render()` blocks are combined with `if` blocks:
 
 ```jsx
 class Countdown extends React.Component {
@@ -511,7 +511,7 @@ Instead of using multiple `render()` methods, we can create new **function compo
 
 Careful consideration should be given as to how and which data actually needs passed down to the new child component\(s\) and should not contain too much logic or state. 
 
-Using custom components becomes useful once the `render()` method in one component has become too complex or if the same elements are used repetitvely within a component.
+Using custom components becomes useful once the `render()` method in one component has become too complex or if the same elements are used repetitively within a component.
 
 Let's look at a form which consists of many similar text fields. Each of these text fields is embraced by its own paragraph, contains a label and a `type` attribute. The label also needs to be equipped with an id that needs uniquely set for each field.
 
