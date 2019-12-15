@@ -1,2 +1,101 @@
 # CSS and Styling
 
+Styling in React is a topic of its own in React. React does not offer its own in-house solution to make styling easier, however the introduction of CSS-in-JS has shaken up the scene a little bit. Adopeted wiedely and loved by some but hotly debated by others. With CSS-in-JS, the styling of components also moves into JavaScript to not break with the paradigm of component-based development. But let's start with the basics and explore the topic bit by bit.
+
+### Styling with the style attribute
+
+The simplest way to style components in React is using the `style` attribute on regular HTML elements. It differs from regular HTML though and React components expect an **object** in the form of `property: value`. The property itself needs to be declared in JavaScript \(not its regular CSS counterpart\) form meaning `zIndex` instead of `z-index`,  `backgroundColor` instead of `background-color` or `marginTop` instead of `margin-top`. If the values accept declarations in pixels, it is optional to explicitly define `px` as the corresponding unit:
+
+
+
+```jsx
+<div style={{border: '1px solid #ccc', marginBottom: 10}}>
+  A div with a grey border and a 10 pixel margin at the bottom
+</div>
+```
+
+Values that are not used with a unit \(for example `z-index`, `flex` or `fontWeight`\) are not affected by this and can be used just like we are used to. React does not add `px` to these.
+
+By using an object instead of a string, React keeps a consistent approach to dealing with styles. The regular `style` property of DOM elements `document.getElementById('root').style` is also an object and also ensures that we secure these by preventing XSS.
+
+While using inline styling is not exactly recommended, it can be useful at times if the styling of an element depends on partcular values in state.
+
+### Using CSS classes in JSX
+
+It is much cleaner and nicer to use real CSS classes in JSX, just like we do in regular HTML with the difference being that we declare classes by using `className` instead of `class`:
+
+```jsx
+<div className="item">...</div>
+```
+
+React renders normal syntax with our HTML equivalent:
+
+```markup
+<div class="item">...</div>
+```
+
+It is also quite common to concatenate values in the `className` prop dynamically:
+
+```jsx
+render() {
+  let className = 'item';
+  if (this.state.selectedItem === this.props.itemId) {
+    className += ' item--selected';
+  }
+  return (
+    <div className={className}>
+      ...
+    </div>
+  );
+}
+```
+
+In this example the value for `className` is `item` in each case. If the selected item is the current item, it also gets the class `item item--selected`.
+
+The package `classnames` has become the de-facto standard to let classes be defined based on a condition. It can be installed via the CLI:
+
+```bash
+npm install classnames
+```
+
+```bash
+yarn add classnames
+```
+
+Now, we only need to import the package in those components where we want to use it:
+
+```javascript
+import classNames from 'classnames';
+```
+
+This way, we are importing the function and give it the name of `classNames.` The function expects an arbitrary amount of parameters which can be a string or an object in the form of `{ class: true | false }`. It works similar to what you might already expect: if the value in the condition is `true`, `classNames` employs a class with the same property name:
+
+```jsx
+render() {
+  return (
+    <div className={classNames('item', {
+      'item--selected': this.state.selectedId === this.props.itemId
+    })}>
+      ...
+    </div>
+  );
+}
+```
+
+Objects can also be used to work with multiple properties. Multiple classes can be set if the condition is `true`:
+
+```jsx
+render() {
+  return (
+    <div className={classNames({
+      'item': true,
+      'item--selected': this.state.selectedId === this.props.itemId
+    })}>
+      ...
+    </div>
+  );
+}
+```
+
+If regular CSS classes are used, we should also ensure that the corresponding stylesheet is also linked in the HTML document. React does not usually take care of this on its own.
+
