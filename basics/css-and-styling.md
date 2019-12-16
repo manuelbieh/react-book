@@ -157,11 +157,11 @@ const ProfileImage = () => {
 
 ### CSS-in-JS - Moving styles into JavaScript
 
-I've already mentioned in the introduction that **CSS-in-JS** is a bit of a hotly debated topic. Opponents say that users of **CSS-in-JS** do simply not understand the cascade to write scalable CSS. Proponents on the other hand explain that the cascade is not the main reason for choosing CSS-in-JS but argue that a safer way is needed to write highly isolated components. I'm a bit more diplomatic myself  and think that there's room and reasons for both. **CSS-in-JS** certainly has reason to exist. But what even is **CSS-in-JS**?
+I've already mentioned in the introduction that **CSS-in-JS** is a bit of a hotly debated topic. Opponents say that users of **CSS-in-JS** do simply not understand the cascade to write scalable CSS. Proponents on the other hand explain that the cascade is not the main reason for choosing **CSS-in-JS** but argue that a safer way is needed to write highly isolated components. I'm a bit more diplomatic myself  and think that there's room and reasons for both. **CSS-in-JS** certainly has reason to exist. But what even is **CSS-in-JS**?
 
 The **CSS-in-JS** approach mandates that the styles which are commonly found in CSS files are now moved into JavaScript. As was already the case in **CSS modules**, the primary goal is to create highly isolated components which are free of conflict making them easy to reuse throughout the application. However, as opposed to **CSS modules**, the styling in **CSS-in-JS** happens entirely in JavaScript. The syntax is very similar and it mostly feels like you're writing regular CSS.
 
-**CSS-in-JS** is the umbrella term for the concept as such whereas the actual implementation is achieved by a number of different libaries. If you are looking for a great overview, I suggest you checkout out [http://michelebertoli.github.io/css-in-js/](https://michelebertoli.github.io/css-in-js/) - this site covers over 60 different libraries that can help you to implement your own **CSS-in-JS** solution.
+**CSS-in-JS** is the umbrella term for the concept as such whereas the actual implementation is achieved by a number of different libraries. If you are looking for a great overview, I suggest you checkout out [http://michelebertoli.github.io/css-in-js/](https://michelebertoli.github.io/css-in-js/) - this site covers over 60 different libraries that can help you to implement your own **CSS-in-JS** solution.
 
 In the remaining parts of the chapter, I want to focus on **styled components** which is the most popular library with around 23,000 starts on GitHub. In order to use it, we need to first install it via the command line:
 
