@@ -1,6 +1,6 @@
 # CSS and Styling
 
-Styling in React is a topic of its own in React. React does not offer its own in-house solution to make styling easier, however the introduction of CSS-in-JS has shaken up the scene a little bit. Adopeted wiedely and loved by some but hotly debated by others. With CSS-in-JS, the styling of components also moves into JavaScript to not break with the paradigm of component-based development. But let's start with the basics and explore the topic bit by bit.
+Styling in React is a topic of its own in React. React does not offer its own in-house solution to make styling easier, however the introduction of CSS-in-JS has shaken up the scene a little bit. Adopted widely and loved by some but hotly debated by others. With CSS-in-JS, the styling of components also moves into JavaScript to not break with the paradigm of component-based development. But let's start with the basics and explore the topic bit by bit.
 
 ### Styling with the style attribute
 
@@ -18,7 +18,7 @@ Values that are not used with a unit \(for example `z-index`, `flex` or `fontWei
 
 By using an object instead of a string, React keeps a consistent approach to dealing with styles. The regular `style` property of DOM elements `document.getElementById('root').style` is also an object and also ensures that we secure these by preventing XSS.
 
-While using inline styling is not exactly recommended, it can be useful at times if the styling of an element depends on partcular values in state.
+While using inline styling is not exactly recommended, it can be useful at times if the styling of an element depends on particular values in state.
 
 ### Using CSS classes in JSX
 
@@ -98,4 +98,10 @@ render() {
 ```
 
 If regular CSS classes are used, we should also ensure that the corresponding stylesheet is also linked in the HTML document. React does not usually take care of this on its own.
+
+### Modular CSS with CSS Modules
+
+**CSS Modules** are some sort of pre-decessor to **CSS-in-JS** and combine a number of properties from CSS and JavaScript modules. As the name already suggests, the CSS is found in their own importable **modules**, which however contain pure CSS and are tied to one particular component. If we were to develop a component to display a profile picture in a file called `ProfileImage.js`, the **CSS Modules** approach often introduces another file with the name `ProfileImage.module.css`.When these CSS modules are imported, a cryptic classname is generated to ensure that the classname is only given one and is only used in the single component. This aims to prevent that classnames are accidentally used by two different components.
+
+**CSS Modules** are only a concept first of all, and do not dictate a particular approach or implementation. The implementation is achieved by tools such as `css-loader` for Webpack.
 
