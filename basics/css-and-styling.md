@@ -234,5 +234,21 @@ const Button = styled.button`
 `;
 ```
 
-The cursor icon would change into a `not-allowed` symbol in this case if the button had a `disabled` property.
+The cursor icon would change into a `not-allowed` symbol in this case if the button had a `disabled` property. Moreover, **styled components** offers support for theming, server-side rendering, css animations and much more. For those of you who would like an in-depth explanation and overview, I suggest you check out the [thorough documentation](https://www.styled-components.com/docs/basics). 
+
+The main advantages of **CSS-in-JS** and **styled components** in particular are well summarized in the documentation:
+
+* Critical CSS, so the CSS which is relevant for the current page, is automatically generated as **styled component** knows which components are used on each page and which styles they need
+* By automatically generating classnames, the risk of conflicts is reduced to a minimum
+* As all CSS is tied to a component, it is easy to spot redundant CSS. If a **styled component** is no longer used in the application, the CSS is no longer needed either and the component can be safely deleted.
+* Component logic and component styling \(CSS-in-JS\) are found in the same spot, some times even in the exact same file. Developers do not need to spend a long amount of time anymore to find where exactly a styling change needs to take place.
+* **Styled components** automatically generates CSS that contains vendor prefixes for all browsers.
+
+**Styled components** is only one of many CSS-in-JS solutions. While it is probably the most well-known and most widely adopted, there are a number of great alternatives which can help you to find a solution which fits your project's specific needs. Other great and well-known alternatives are:
+
+* [emotion](https://github.com/emotion-js/emotion)
+* [styled-jsx](https://github.com/zeit/styled-jsx)
+* [react-jss](https://github.com/cssinjs/jss/tree/master/packages/react-jss)
+* [radium](https://github.com/FormidableLabs/radium)
+* [linaria](https://github.com/callstack/linaria)
 
