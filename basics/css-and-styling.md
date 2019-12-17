@@ -201,5 +201,38 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
+By using the notation ```const Button = styled.button````` **styled components** creates a new ****`Button` component and equips it with the CSS properties that we have defined within the **template literals**. Inside of the template literals, regular CSS can be used.
 
+If we want to use pseudo selectors or elements, we can use these without their previous selector. For a `:hover` status, we can define the following:
+
+```jsx
+const Button = styled.button`
+  background: yellow;
+  border: 2px solid black;
+  color: black;
+  padding: 8px;
+  
+  :hover {
+    background: gold;
+  }
+`;
+```
+
+**Props** can also be accessed in **styled components**. By calling a function within the template string, all **props** of the element can be passed as the first parameter:
+
+```jsx
+const Button = styled.button`
+  background: yellow;
+  border: 2px solid black;
+  color: black;
+  cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointer'};
+  padding: 8px;
+  
+  :hover {
+    background: gold;
+  }
+`;
+```
+
+The cursor icon would change into a `not-allowed` symbol in this case if the button had a `disabled` property.
 
