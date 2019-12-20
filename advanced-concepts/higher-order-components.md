@@ -32,3 +32,147 @@ const FormattedComponent = withFormatting(({ bold, italic }) => (
 
 Typically, **Higher Order Components** can be used to encapsulate logic. They relate closely to the concept of **smart** and **dumb** components. Smart components \(which also encompass **Higher Order Components**\) are used to display business logic, deal with API communication or behavioral logic. _Dumb components_ in contrast mostly get passed static props and keep logic to a minimum which is only used to for display-logic. For example, it might decide whether to show a profile image or, if it is not present, show a placeholder image instead. Sometimes, we also refer to **Container Components** \(for _Smart_ components\) and **Layout Components** \(for _Dumb_ components\).
 
+But why categorize components as such? This strict divide into business logic and display logic enables component based development. It allows us to create layout components which do not know of possible API connections and only display data which is passed to them, no matter where they come from. It also enables the business logic components to only concern themselves with business logic without caring about how the data is displayed in the end.
+
+Assume we want to switch between a **list** and **map** view in a user interface. A **container component** will be in charge of gathering the data which is needed for the user and will pass them to the configurable **layout component**.As long as both components keep to the interface the developer has set up \(think **PropTypes**\), both components are easily interchangeable and can be tested and developed independently.
+
+But enough of the theory. Let us look at an example. Let's load a list of the 10 biggest cryptocurrencies and their current price. In order to obtain the data from the Coinmarketcap API, we create a **Higher Order Component** which loads the data and passes it to the Layout component:
+
+```jsx
+const withCryptoPrices = (WrappedComponent) => {
+  return class extends React.Component {
+    state = {
+      isLoading: true,
+      items: []
+    };
+
+    componentDidMount() {
+      this.loadData();
+    }
+
+    loadData = async () => {
+      this.setState(() => ({
+        isLoading: true,
+      }));
+
+      try {
+        const cryptoTicker = await fetch(
+          'https://api.coinmarketcap.com/v2/ticker/?limit=10&convert=EUR'
+        );
+        const cryptoTickerResponse = await cryptoTicker.json();
+
+        this.setState(() => ({
+          isLoading: false,
+          items: this.convertResponseToArray(cryptoTickerResponse)
+        }));
+      } catch (err) {
+        this.setState(() => ({
+          isLoading: false,
+        }));
+      }
+    };
+
+    convertResponseToArray = (response) => {
+      return Object.entries(response.data).map(([id, item]) => item);
+    };
+
+    render() {
+      const { isLoading, items } = this.state;
+      return (
+        <WrappedComponent
+          isLoading={isLoading}
+          items={items}
+          loadData={this.loadData}
+        />
+      );
+    }
+  };
+};
+```
+
+Et voila! We've written an **HOC** to obtain the data of the crypto prices from coinmarketcap.com. But the **Higher Order Component** itself is not enough to make this work: we also need to define a layout component to which we delegate the task of displaying the data.
+
+In order to do that, we define a generic `PriceTable` component which does not know about which data exactly it displays: it could be current yoghurt prices from the local supermarket or cryptocurrency prices from a stock market. Thus, we've given it a very generic name, `PriceTable`:
+
+```jsx
+const PriceTable = ({ isLoading, items, loadData }) => {
+  if (isLoading) {
+    return <p>Prices are being loaded. Please wait.</p>;
+  }
+
+  if (!items || items.length === 0) {
+    return (
+      <p>
+        No data available. <button onClick={loadData}>Try again!</button>
+      </p>
+    );
+  }
+
+  return (
+    <table>
+      {items.map(item => (
+        <tr key={item.id}>
+          <td>
+            {item.name} ({item.symbol})
+          </td>
+          <td>EUR {item.quotes.EUR.price}</td>
+        </tr>
+      ))}
+      <tr>
+        <td colSpan="2">
+          <button onClick={loadData}>Reload</button>
+        </td>
+      </tr>
+    </table>
+  );
+};
+```
+
+This component knows about three props: `isLoading`, to inform it which data is still being loaded, `items`, which represents an array of articles with their corresponding prices and `loadData`, a function which allows us to start another API request to obtain new data.
+
+Both components act completely independent of each other, The `PriceTable` can not only show cryptocurrency prices and the `withCryptoPrices` component does not necessarily need to display its data in a `PriceTable` component. We managed to write two completely encapsulated and reusable components.
+
+But how do we combine these two components now? We can simply pass the `PriceTable` component as a parameter to the `withCryptoPrices` HOC component. This will look like this:
+
+```jsx
+const CryptoPriceTable = withCryptoPrices(PriceTable);
+```
+
+Whenever an instance of the `CryptoPRiceTablke` is rendered, the **Higher Order Component** will trigger an API request in the `componentDidMount()` lifecycle method and pass its result to the `PriceTable` component. The `PriceTable`  then only needs to concern itself with the display of the data:
+
+```jsx
+ReactDOM.render(
+  <CryptoPriceTable />, 
+  document.getElementById("root")
+);
+```
+
+This opens up a number of opportunities for us. First of all, both components are able to be independently tested. I will provide a bit more information in a later chapter about how exactly we can test layout component with snapshot testing. 
+
+We also have the opportunity to combine other layout components with the `withCryptoPrices` HOC. To illustrate this, we are going to display the prices in CSV format. Our HOC will remain the same whereas the layout component can be implemented as such:
+
+```jsx
+const PriceCSV = ({ isLoading, items, loadData, separator=";" }) => {
+  if (isLoading) {
+    return <p>Prices are loaded, please wait.</p>;
+  }
+
+  if (!items || items.length === 0) {
+    return (
+      <p>
+        No data available <button onClick={loadData}>Try again</button>
+      </p>
+    );
+  }
+
+  return (
+    <pre>
+      {items.map(
+        ({ name, symbol, quotes }) =>
+          `${name}${separator}${symbol}${separator}${quotes.EUR.price}\n`
+      )}
+    </pre>
+  );
+}
+```
+
