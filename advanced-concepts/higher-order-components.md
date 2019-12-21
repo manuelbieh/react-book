@@ -176,3 +176,51 @@ const PriceCSV = ({ isLoading, items, loadData, separator=";" }) => {
 }
 ```
 
+And just like that we have implemented our very first own CSV Layout component. We check again whether the data is being loaded, then whether `items` are present. This could also be extracted into another HOC component as HOCs can be nested as many times as you like. In the end, they are all just functions which are passed as parameters to yet another function.
+
+At last, we can render the output: we iterate through the list of `items`, pick the relevant properties `name`, `symbol` and `quotes` via **Object Destructuring** and then wrap the individual lines with a `pre` element to correctly display the end of the line.
+
+In contrast to the `PriceTable` component, we have introduced another optional prop: `separator` - to tell the render component how many separating symbols it should use to display the data. This separator prop can be passed as a simple prop \(as is common in JSX\):
+
+```jsx
+const CryptoCSV = withCryptoPrices(PriceCSV);
+
+ReactDOM.render(
+  <CryptoCSV separator="," />, 
+  document.getElementById("root")
+);
+```
+
+However, by introducing this change in the CSV component, another change needs to made in the `withCryptoPrices` HOC. So far only the `isLoading`, `items` and `loadData` props are passed to the child component \(`WrappedComponent`\):
+
+```jsx
+return (
+  <WrappedComponent
+    isLoading={isLoading}
+    items={items}
+    loadData={this.loadData}
+  />
+);
+```
+
+In order to pass the `separator` prop which was defined in `<CryptoCSV separator="," />` correctly to the `PriceCSV` component, we need to inform the **HOC** to also pass other remaining props to the `WrappedComponent`. You can either choose to explicitly pass other props or to only pass the **remaining** ones:
+
+```jsx
+return (
+  <WrappedComponent
+    {...this.props}
+    isLoading={isLoading}
+    items={items}
+    loadData={this.loadData}
+  />
+);
+```
+
+`{...this.props}`can be used to pass the remaining props to the child component using Spread Syntax from ES2015+.
+
+{% hint style="info" %}
+**Higher Order Components** are a great way to „centralize“ logic and structure applications better. Logic can be easily extracted from Layout components and would further complicate such components. Even though they have been a fairly new concept in React, the concept itself is a very old one.
+
+**Higher Order Components** are still widely used and there's nothing controversial about their usage. However, newer concepts to achieve same or similar objects objectives have been introduced of which many increase readability. Two of these are **Functions as a Child** and the newer **Context API**, which has been introduced in React in Version 16.3.0. Both of these will be explained in the next two chapters.
+{% endhint %}
+
