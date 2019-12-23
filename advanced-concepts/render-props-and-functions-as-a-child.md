@@ -34,3 +34,108 @@ const Formatter = (props) => {
 }
 ```
 
+We have defined two functions: the `bold` function and the `italic` function. `props.children` can then be called in a Formatter function after checking whether the `children` props is actually function. The function takes in an object with two properties: `bold` with the `bold` function as its value and `italic` with the `italic` function as its value.The invoked function is returned by the component.
+
+Using this **Function as Children** component, a function in JSX is passed to the child element:
+
+```jsx
+<div>
+  <p>This text does not know about the Formatter function</p>
+  <Formatter>
+  {({ bold }) => (
+    <p>This text is {bold('bold though and does')}</p>
+  )}
+  </Formatter>
+</div>
+```
+
+This increases flexibility as components no longer need wrapped by a Higher Order Function just to reuse functionality. In contrast to Higher Order Components, it is also possible to pass parameters directly from JSX into a function as a Child component and communicate with it.
+
+Let us look at our second example again which we talked about in the chapter on Higher Order Components. This is what the rendered list pf cryptocurrencies looks like as Function as a Child:
+
+```jsx
+class CryptoPrices extends React.Component {
+  state = {
+    isLoading: true,
+    items: []
+  };
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData = async () => {
+    this.setState(() => ({
+      isLoading: true
+    }));
+
+    const { limit } = this.props;
+
+    try {
+      const cryptoTicker = await fetch(
+        `https://api.coinmarketcap.com/v2/ticker/?limit=${limit || 10}&convert=EUR`
+      );
+      const cryptoTickerResponse = await cryptoTicker.json();
+
+      this.setState(() => ({
+        isLoading: false,
+        items: this.convertResponseToArray(cryptoTickerResponse)
+      }));
+    } catch (err) {
+      this.setState(() => ({
+        isLoading: false
+      }));
+    }
+  };
+
+  convertResponseToArray = (response) => {
+    return Object.entries(response.data).map(([id, item]) => item);
+  };
+
+  render() {
+    const { isLoading, items } = this.state;
+    const { children } = this.props;
+
+    if (typeof children !== "function") {
+      return null;
+    }
+
+    return children({
+      isLoading, 
+      items, 
+      loadData: this.loadData 
+    });
+  }
+}
+```
+
+At first glance, the example does not look much different to the one we've introduced in the previous chapter using Higher Order Components. But if you pay attention, you will notice some differences:
+
+* No new component is generated and we can work directly with our current component
+* The `loadData` method can access `this.props` to read the `limit` prop. This can then be used as a parameter in the API call
+* The `render()` method does not return any component that was passed in anymore and calls the `children` function instead which it receives from its own props
+* The `children` function receives the `isLoading` state and returns the items.
+
+Using this component is similar to that from our previous example, with the exception that we can also pass an optional `limit` prop in this case:
+
+```jsx
+<div>
+  <h1>Current Crypto Currency Prices</h1>
+  <CryptoPrices limit={5}>
+    {({ isLoading, items }) =>
+      isLoading ? (
+        <p>Loading prices. Please be patient.</p>
+      ) : (
+        <ul>
+          {items.map((item) => (
+            <li>
+              {item.name} ({item.symbol}): EUR {item.quotes.EUR.price}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </CryptoPrices>
+</div>
+```
+
