@@ -139,3 +139,90 @@ Using this component is similar to that from our previous example, with the exce
 </div>
 ```
 
+We can now combine the `PriceTable` component which expects three props with the `CryptoPrices` component \(that returns the values needed in the `PriceTable`\).
+
+```jsx
+<CryptoPrices limit={5}>
+  {({ isLoading, items, loadData }) => (
+    <PriceTable isLoading={isLoading} items={items} loadData={loadData} />
+  )}
+</CryptoPrices>
+```
+
+Or even more succinct using spread syntax:
+
+```jsx
+<CryptoPrices limit={5}>
+  {(props) => <PriceTable {...props} />}
+</CryptoPrices>
+```
+
+We've allowed for a great deal of flexibility in this example and do not explicitly need to tie a component to a HOC to enable logic \(which saves us valuable time and effort\).
+
+But be careful: **Functions as a Child Components do also have limitiations that Higher Order Components do not have**. The data that is received by a **FaaC** component can also be used **within JSX**. If we wanted to include highly abstract methods in logic components higher up in the component hierarchy, it would not be possible using **FaaCs**.
+
+### Render Props
+
+But wait - what are **Render Props** and how to they differ from **Function as Children** components?
+
+Put simply, they differ in the name of the prop. Some popular libraries eventually started using `render` as a name for a prop which expects functions as their values. In our `CryptoPrices` component, we would then use `render` instead of `children`:
+
+```jsx
+<CryptoPrices limit={5} render={(props) => <PriceTable {...props} />} />
+```
+
+Within the `CryptoPrices` component, we can write:
+
+```jsx
+render() {
+  const { isLoading, items } = this.state;
+  const { render } = this.props;
+
+  if (typeof render !== "function") {
+    return null;
+  }
+
+  // Careful: render() does not have anything to do with the component with
+  // the same name and gets injected via this.props.render
+  return render({
+    isLoading, 
+    items, 
+    loadData: this.loadData 
+  }); 
+}
+```
+
+It's personal preference to a degree. You do not need to give this prop the name of `render` and could theoretically choose any valid name. Any passed function will eventually turn the component into a "Render Prop".
+
+It's possible to have an arbitrary amount of props in such a component. If you were to implement a component which returns a table which includes a table head and a body, both receiving data from the data component, that would be no problem at all. 
+
+### Render Props and FaaCs in combination with Higher Order Components
+
+Here's a neat little trick: If you ever need a **Higher Order Component** but you want to turn it into a **FaaC** or **Render Prop** component, you can turn these into an HOC:
+
+```jsx
+function withCryptoPrices(WrappedComponent) {
+  return class extends React.Component {
+    render() {
+      return (
+        <CryptoPrices>
+          {(cryptoPriceProps) => (
+            <WrappedComponent {...this.props} {...cryptoPriceProps} />
+          )}
+        </CryptoPrices>
+      );
+    }
+  };
+}
+```
+
+However, you won't need to do this much in practice.
+
+{% hint style="info" %}
+The **Function as a Child** pattern and the **Render-Props** pattern are both used to separate business logic and layout in different components. They are a more lightweight alternative to **Higher Order Components**, which cater to a similar use case.
+
+In contrast to an HOC, they can be easily used within the `render()` method of a component and do not need "linked" with another additional component making them more flexible and readable than **Higher Order Components**.
+{% endhint %}
+
+
+
