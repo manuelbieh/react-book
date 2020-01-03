@@ -171,3 +171,50 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
+First of all, we define an object `defaultLanguageContextValue` which holds the default value of the newly generated context object. This consists of:
+
+* an object called `translationStore` which contains all available translations
+* a standard language - German in this case \(`de`\) which is saved to a property called `language`
+* an array named `availableLanguages` that lists all available languages of the `translationStore` object which we dynamically generate with `Object.keys()` - in our case: `["de", "en"]`
+* a placeholder function \(`changeLanguage()`\) which is later replaced with an actual implementation in the `Localized` component. This helps us to avoid the case of incorrectly calling a function which is not yet implemented. Otherwise the warning: _"Function changeLanguage\(\) isn't implemented"_.
+
+The `changeLanguage()` function can only be implemented in the component itself as React cannot control the state \(in this case languages and their translations\) anywhere else other than **inside of a component.** We could save the current language settings inside of a global variable, however React would not re-render the component if something changed in this global variable as neither state nor props changed.
+
+The `Localized` component serves as a wrapper component for our newly generated context. We can save and modify the user's selected language here by changing the state accordingly. The `defaultLanguageContextValue` object is saved in the state of the component and furthermore the `changeLanguage()` method is implemented here. This function receives a language \(`de` or `en`\) and modifies the state accordingly and also fetches the translations for the language just chosen from the `translationStore` object and writes it to the state as new `translations`. If the user changes their language setting from German \(default\) to English, the function overrides all German translations currently in state with its English translations. By calling `this.setState()` a re-render is triggered and all context consumers within the component tree will be rendered with the updated value \(which we pass to the context provider through the render\(\) method in the component\).
+
+If this all sounds a little complicated so far, worry not as it will become more intuitive once it is used in practice. I hereby strongly advise you again to try the above example yourself and play with the code.
+
+However, there's a little gotcha in the above example: usually the state of a class component is defined first and only then properties and methods of this class will follow. In this example however, we didn't follow this convention and implemented the `changeLanguage()` method first. Why? By defining `changeLanguage()` first, we ensure that `this.changeLanguage` will not be `undefined`. Only then, we construct the `state` property of our class.
+
+The code snippet is still relatively complex and unnecessarily complex, too. We built an own component for both, the headline and the greeting, to provide it with access to a context consumer which in turn has access to the object containing the translations. However, we can optimize the code for constructing a generic component with which we can directly access the translations currently in the the `translations` object. This component will be called `Translated` and receives a single prop: the property which we want to access in the `translations` object. In our example, this could either be `greeting` or `headline`.
+
+```jsx
+const Translated = ({ translationKey }) => (
+  <LanguageContext.Consumer>
+    {(contextValue) => contextValue.translations[translationKey]}
+  </LanguageContext.Consumer>
+)
+```
+
+Our `App` component will now look like this:
+
+```jsx
+const App = () => (
+  <Localized>
+    <LanguageSelector />
+    <p><Translated translationKey="greeting" /></p>
+    <p><Translated translationKey="headline" /></p>
+  </Localized>
+);
+```
+
+We can then safely eliminate the `Headline` and `Greeting` component from our example.
+
+**Attention:** Especially when dealing with translations, it is not uncommon to denote the key for the translations with "key" . This would surely be a nice addition for our `Translated` component:
+
+```jsx
+<Translated key="greeting" />
+```
+
+But `key` is a reserved word in React is used to identify elements in arrays and we can therefore not use it in this case. If you want to freshen up your knowledge about these, please refer to the chapter "Lists, Refs, Fragments and Conditional Rendering" in the "Basics" section and check in the section on "Lists".
+
