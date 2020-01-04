@@ -218,3 +218,104 @@ We can then safely eliminate the `Headline` and `Greeting` component from our ex
 
 But `key` is a reserved word in React is used to identify elements in arrays and we can therefore not use it in this case. If you want to freshen up your knowledge about these, please refer to the chapter "Lists, Refs, Fragments and Conditional Rendering" in the "Basics" section and check in the section on "Lists".
 
+## Usage of multiple contexts
+
+It is entirely possible to use multiple context providers within the same component hierarchy. Nesting them is not problem. Even Providers of the same context type can be nested inside of each other. The context value of the _above_ provider is given to the consumer components:
+
+```jsx
+<MyContext.Provider value="1">
+  <MyContext.Provider value="2">
+    <MyContext.Consumer>
+      {(value) => <p>The value is {value}</p>}
+    </MyContext.Consumer>
+  </MyContext.Provider>
+</MyContext.Provider>
+```
+
+The above example is completely valid. The output would be the following:
+
+```markup
+<p>The value is 2</p>
+```
+
+The **Consumer component** gets its data from the most adjacent **Context Provider** which is the one passing the value of "2".
+
+Although it does not make sense to nest the _same_ **Context Providers** within each other, it is not uncommon and not bad to use _different_ **Context Providers** within each other. An application can consist of a Theme Provider, a Language Provider and an Account. The latter would take care of data handling for logged in users and manage access tokens or user-specific settings.
+
+## Abbreviation: contextType
+
+While using Class components, we can employ a trick which allows us to avoid building another consumer component furthermore bloating our component tree.
+
+In order to do this, we can use `contextType`: it can be assigned to a class component in the form of a static property. The context value can then be accessed within the component via `this.context`. The value of the `contextType` property is created by `React.createContext()` which you need to call beforehand.
+
+But be careful: It is only possible to assign **a single context type** to a class. If we want to access two or more contexts, we have to wrap the respective JSX in a consumer component. By using _Public Class Fields Syntax_ from ES2015+, it is sufficient to define a static class property `contextType` and assigning it a context. 
+
+If applied to our previous `Translated` component, the result would be:
+
+```jsx
+class Translated extends React.Component {
+  static contextType = LanguageContext;
+  render() {
+    return this.context.translations[this.props.translationKey];
+  }
+}
+```
+
+The value of the current `LanguageContext` is assigned to the static `contextType` property of the component \(which is no longer a Functional component but a Class component\). Its value can be read by accessing `this.context`.
+
+Without using Public Class Fields Syntax \(which I strongly encouraged in the previous chapters\), the above code would look like the following:
+
+```jsx
+class Translated extends React.Component {
+  render() {
+    return this.context.translations[this.props.translationKey];
+  }
+}
+
+Translated.contextType = LanguageContext;
+```
+
+The `contextType` would be defined outside of the component and no longer inside of it. In the end, it all boils down to personal taste and does not have any real implications. We're only using another form of syntax which is only allowed in later versions of ECMAScript or provided by Babel via transpiling \(by using the babel plugin `@babel/plugin-proposal-class-properties`\).
+
+## Performance Gotchas
+
+React massively optimizes **Context** under the hood in order to avoid unnecessary re-renders of components or avoid lengthy component hierarchies. Comparing the old value of the context provider with the new one, **consumer components** are only re-rendered if the value in the **Context Provider** has actually changed.
+
+While this sounds easy for a change, it does create a little gotcha which we need to look out for. It concerns the Consumer Provider which value is recreated on-the-fly if we use it within the `render()` method. Thus, it is recommended to create the value of the context outside of the `render()` method and pass a **reference**  to the value instead of a **newly created value**.
+
+Here is an example which you should NOT recreate:
+
+```jsx
+class App extends React.Component {
+  state = {
+    color: 'red',
+  };
+
+  render() {
+    <Provider value={{color: this.state.color}}>
+      <MoreComponents />
+    </Provider>
+  }
+}
+```
+
+We're creating a new object `{color: this.state.color}` with each call of the `render()` method. As React only checks if the reference of the `value` in the current `render()` is the same as the reference in the previous `render()` call \(which is never the case as a new object is created on the fly each time\), all consumer components would re-render.
+
+However, we can transform the above example to avoid this situation and make sure that React's performance algorithm can get to work:
+
+```jsx
+class App extends React.Component {
+  state = {
+    color: 'red',
+  };
+
+  render() {
+    <Provider value={this.state}>
+      <MoreComponents />
+    </Provider>
+  }
+}
+```
+
+In this example, we are merely passing a _reference ****_to the `state` object of the component. As this remains intact during the re-renders of the component, it does not trigger a re-render if the content of the state did not change. 
+
