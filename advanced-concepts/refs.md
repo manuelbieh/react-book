@@ -125,3 +125,69 @@ If you were to name the prop `ref`, leaving us with `<UsernameInput ref={this.se
 
 However, if forwarding refs to child components is something you are trying to achieve, you are better off using the `forwardRef()` method. I will explain it at the end of this chapter.
 
+### Refs via createRef\(\)
+
+With React 16.3, we've seen the introduction of the top-level API method `React.createRef()`. It resembles the usage of **callback refs** but differs in a few cases. As was the case with **callback refs**, you also need to take of ref handling yourself and it is still common practice to assign the **ref** to an **instance property**.
+
+Instead of passing an almost identical method in the form of `(el) => { this.property = el }` each time, the reference is already created during the instantiation of the component which is then gibven to the `ref` prop of the element.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class ComponentWithCreatedRef extends React.Component {
+  usernameEl = React.createRef();
+
+  componentDidMount() {
+    this.usernameEl.current.focus();
+  }
+
+  render() {
+    return (
+      <input type="text" name="username" ref={this.usernameEl} />
+    );
+  }
+}
+
+ReactDOM.render(
+  <ComponentWithCreatedRef />, 
+  document.getElementById('app')
+);
+```
+
+While this looks very similar to **callback refs**, there is an apparent difference: you access the reference via `this.usernameEl.current`.
+
+The reference to the element is not saved in the instance property which you assign the ref to, but in its `.current()` property. Apart from this, the behavior of `createRef()` is similar to that of callback refs. They can still be passed to child components via props and the DOM element can be accessed in the parent component.
+
+To have a direct comparison - this was the use case with **callback refs**:
+
+```jsx
+class MyComponent extends React.Component {
+  usernameEl = null;
+  
+  render () {
+    return (
+      <input ref={(el) => { this.usernameEl = el; }} />
+    )
+  }
+}
+```
+
+And this is the reference created with `React.createRef()`:
+
+```jsx
+class MyComponent extends React.Component {
+  usernameEl = React.createRef();
+  
+  render () {
+    return (
+      <input ref={this.usernameEl} />
+    )
+  }
+}
+```
+
+We're accessing the element via `this.usernameEl.current`.
+
+### Ref forwarding
+
