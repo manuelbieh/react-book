@@ -191,3 +191,118 @@ We're accessing the element via `this.usernameEl.current`.
 
 ### Ref forwarding
 
+**Ref forwarding** \(references to a component or a DOM element\) enables passing a reference through a component to a child component. In most cases, this will not be necessary but it can become of interest if you are creating reusable component libraries.
+
+A **ref** is forwarded via `React.forwardRef()` and is passed a function as a parameter during this process. The ref itself passes props as well as well as the **ref** to it.
+
+This sounds incredibly cumbersome, so let us look at an example instead. Let us first implement an Input component without a ForwardRef:
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+
+const UsernameField = (props) => (
+  <div className="myInput">
+    <input ref={props.ref} {...props} />
+  </div>
+);
+
+class App extends React.Component {
+  usernameEl = React.createRef();
+
+  componentDidMount() {
+    console.log(this.usernameEl);
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <UsernameField ref={this.usernameEl} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+In this case, `componentDidMount()` does not have access to our input field from the `UsernameField` component. Instead, the instance of the component would actually be the **ref** itself. As `UsernameField` is a **Function Component**, we do not even have an instance of the component. The associated`console.log` result would be: `{ current: null }` - not exactly ideal if we want to gain access to the input element in order to focus on it.
+
+It is sufficient in this case to wrap the `UsernameField` component with a `React.forwardRef()` call. We can now amend the code of the `UsernameField` in the above example:
+
+```jsx
+const UsernameField = React.forwardRef((props, ref) => (
+  <div className="myInput">
+    <input ref={ref} {...props} />
+  </div>
+));
+```
+
+We have thus informed React that it should forward the `ref` prop on the `UsernameField` in our `App` component to the component. It is passed the **ref**  as a second parameter of the function and can pass this ref to any other element in the DOM or to another component.
+
+If the **ref** is passed to a component lower in the component tree, the same restrictions apply: The relevant component either has to be a class component  \(then the reference would point to the instance of the class\) or the component needs to conduct ref forwarding via `forwardRef()`.
+
+#### Be careful with Higher Order components!
+
+Careful consideration and care needs to be taken with **refs** while implementing **Higher Order Components**. If there is doubt whether these HOC should be able to access forwarded Refs, they also need to be wrapped by a `forwardRef()` call.
+
+Let's extend our example from above and assume that we want to create a **HOC** to show all of our form elements in a unified layout. Thus, a **HOC** `withInputStyles` is created which can wrap `input` elements in which it is possible to assign them a ref. 
+
+This procedure is a little complicated and I have found it a llittle complicated to explain this properly in written form without confusing the reader further. Instead, I invite you to inspect the following code closely and read its associated comments. As soon the idea of **Higher Order Components**  and **forwardRefs** has manifested in your head, the example should be sufficient to understand the actual explanation. And if it is not clear from the get go: this case is so incredibly rare that you will not need it much in practice.
+
+So let's look at the example of forwardRefs and Higher Order Components: 
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+
+const withInputStyles = (InputComponent) => {
+  class WithInputStyles extends React.Component {
+    render() {
+      // We access the forwarded Ref in the props of the component 
+      const { forwardedRef, ...props } = this.props;
+      
+      // ... and use it as the ref for the component wrapped by the HOC
+      return (
+        <InputComponent
+          {...props}
+          ref={forwardedRef}
+          style={{ border: "2px solid black", padding: 8 }}
+        />
+      );
+    }
+  }
+  
+  // We return a forwardRef from the HOC
+  return React.forwardRef((props, ref) => (
+    // Wir geben die Ref als temporäre Prop `forwardedRef` weiter
+    <WithInputStyles {...props} forwardedRef={ref} />
+  ));
+};
+
+// Here, we pass the ref of our component to a regular React.forwardRef() call
+const UsernameField = React.forwardRef((props, ref) => (
+  <input ref={ref} {...props} />
+));
+
+// Here, we connect the HOC to the UsernameField component
+const StyledUsername = withInputStyles(UsernameField);
+
+class App extends React.Component {
+  // Here we are creating the Ref as we usually do and to access it later
+  usernameEl = React.createRef();
+
+  componentDidMount() {
+    this.usernameEl.current.focus();
+  }
+
+  render() {
+    return (
+      <div>
+        <StyledUsername ref={this.usernameEl} />
+      </div>
+    );
+  }
+}
+```
+
