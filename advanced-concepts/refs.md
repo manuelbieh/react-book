@@ -195,7 +195,7 @@ We're accessing the element via `this.usernameEl.current`.
 
 A **ref** is forwarded via `React.forwardRef()` and is passed a function as a parameter during this process. The ref itself passes props as well as well as the **ref** to it.
 
-This sounds incredibly cumbersome, so let us look at an example instead. Let us first implement an Input component without a ForwardRef:
+This sounds incredibly cumbersome, so let us look at an example instead. Let us first implement an Input component without a forwardRef:
 
 ```jsx
 import React from "react";
@@ -242,15 +242,15 @@ We have thus informed React that it should forward the `ref` prop on the `Userna
 
 If the **ref** is passed to a component lower in the component tree, the same restrictions apply: The relevant component either has to be a class component  \(then the reference would point to the instance of the class\) or the component needs to conduct ref forwarding via `forwardRef()`.
 
-#### Be careful with Higher Order components!
+#### Be careful with Higher Order Components!
 
 Careful consideration and care needs to be taken with **refs** while implementing **Higher Order Components**. If there is doubt whether these HOC should be able to access forwarded Refs, they also need to be wrapped by a `forwardRef()` call.
 
 Let's extend our example from above and assume that we want to create a **HOC** to show all of our form elements in a unified layout. Thus, a **HOC** `withInputStyles` is created which can wrap `input` elements in which it is possible to assign them a ref. 
 
-This procedure is a little complicated and I have found it a llittle complicated to explain this properly in written form without confusing the reader further. Instead, I invite you to inspect the following code closely and read its associated comments. As soon the idea of **Higher Order Components**  and **forwardRefs** has manifested in your head, the example should be sufficient to understand the actual explanation. And if it is not clear from the get go: this case is so incredibly rare that you will not need it much in practice.
+This procedure is a little complicated and I have found it a little complicated to explain this properly in written form without confusing the reader further. Instead, I invite you to inspect the following code closely and read its associated comments. As soon the idea of **Higher Order Components**  and **forwardRefs** has manifested in your head, the example should be sufficient to understand the actual explanation. And if it is not clear from the get go: this case is so incredibly rare that you will not need it much in practice.
 
-So let's look at the example of forwardRefs and Higher Order Components: 
+So let's look at the example of **forwardRef** and **Higher Order Components**: 
 
 ```jsx
 import React from "react";
