@@ -81,3 +81,29 @@ As `componentDidCatch()` is not a static method, it would be entirely possible t
 
 Finally, we react to possible errors in the `render()` method. If the `hasError` property in state is set to `true`, we know that an error has occurred and can thus display a warning such as `<h1>An error occured.</h1>`. If on the other hand everything works as expected, we simply return `this.props.children`. How exactly the errors encountered are dealt with is up to the developer. For example, it might be sufficient to inform the user that certain information cannot be displayed at the moment if the error is only small. If however serious errors have been encountered, we should prompt the user to reload the application.
 
+### Error Boundaries in practice
+
+We now know hot to implement an **Error Boundary**: by adding either `static getDerivedStateFromError()` or `componentDidCatch()` to your components. **Error Boundaries** should not implement their own logic, not be too tightly coupled to other components and be as independent as possible. It's at the developer's discretion to decide how granular the **Error Boundary** should be according to the specific use case.
+
+It's a good idea to implement different and nested **Error Boundaries** to cater to a variety of errors: one Error Boundary that wraps around the whole application, as well as one that wraps only optional components in the component tree. Let's look at another example:
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = () => {
+  return (
+    <ErrorBoundary>
+      <ApplicationLogic />
+      <ServiceUnavailableBoundary>
+        <WeatherWidget />
+      </ServiceUnavailableBoundary>
+    </ErrorBoundary>
+  )
+};
+
+ReactDOM.render(<App />, document.querySelector('#root'));
+```
+
+Two **Error Boundaries** are used in the above example: `ErrorBoundary` and `ServiceUnavailableBoundary`. While the outer boundary will catch errors that might occur in the `ApplicationLogic` component, the `ServiceUnavailableBoundary` could catch errors in the weather widget and display a more granular error message like _"the service requested cannot be reached at the moment. Please try again later"_.
+
