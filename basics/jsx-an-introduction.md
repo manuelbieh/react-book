@@ -2,7 +2,7 @@
 
 ### JSX as an important building block in React development
 
-Before diving deeper into the development of components, I want to first talk about **JSX**. As mentioned earlier, JSX makes up a large portion of the code written in most React components and thus a large amount in React in general. In my opinion, JSX is one of the reasons why React has been so widely and happily adopted by the developer community. Nowadays, even other frameworks or libraries like Vue.js offer the possibility to use JSX to supercharge their components.
+Before diving deeper into the development of components, I want to first talk about **JSX**. As mentioned earlier, JSX makes up a large portion of the code written in most React components and thus a large amount in React in general. In my opinion, JSX is one of the reasons why React has been so widely and readily adopted by the developer community. Nowadays, even other frameworks or libraries like Vue.js offer the possibility to use JSX to supercharge their components.
 
 At first glance JSX does not look very different from HTML or XML. As in XML or in XHTML, every opening element also needs to have a matching closing element `</div>` or has to be self-closing \(`<img/>`\). In contrast to XML and XTHML though, JSX can include **JavaScript expressions** making it extremely powerful.
 
@@ -34,7 +34,7 @@ The second argument of the `createElement()` call are the **props** of an elemen
 
 All other arguments are the so-called _"children"_ of the element. In our example above, the `div` contains two children: two paragraphs \(`<p>`\) . These in turn do not have any other props though \(`null`\)  and only contain a text string \(`A paragraph in JSX`  and `Another paragraph`\) as their children.
 
-If anyone is a little confused at this point or finds JSX a little intimidating, I can assure you that writing JSX will become second nature to you in no time. It will feel like writing HTML markup. I still deem it very important to understand how JSX works under the hood though especially to grasp slightly more complex examples in the future.
+If anyone is a little confused at this point or finds JSX a little intimidating, I can assure you that writing JSX will become second nature to you in no time. It will feel like writing HTML. I still deem it very important to understand how JSX works under the hood though especially to grasp slightly more complex examples in the future.
 
 ## Expressions in JavaScript
 
@@ -107,7 +107,7 @@ Example for an arrow function:
 };
 ```
 
-All of this will become important very soon. To put the cherry on top, I will tell you now that expressions can in turn include other JSX. You can play this game until infinity.
+All of this will become important very soon. To put the cherry on top, I will tell you now that expressions can in turn include other JSX.
 
 Let's look at a few other examples of JSX that contain valid JavaScript expressions to really drive home these concepts:
 
@@ -125,7 +125,7 @@ Let's look at a few other examples of JSX that contain valid JavaScript expressi
 
 ### Ternary operator as a value of a prop
 
-```text
+```jsx
 <div className={user.isAdmin ? 'is-admin' : null}>…</div>
 ```
 
@@ -145,15 +145,15 @@ Let's look at a few other examples of JSX that contain valid JavaScript expressi
 <input type="range" min={0} max={100} />
 ```
 
-All of these are great examples of using expressions to ensure JSX is much more than just HTML.
+All of these are great examples of using expressions to showcase that JSX is much more than just HTML.
 
 ## What else you should know
 
-For those of you who have paid close attention, you may have noticed a few things depending on the level of your JavaScript knowledge. In some examples, parentheses appear in seemingly odd places. The parentheses, \(so "`(`" and "`)`" \), need to be wrapped around any JSX which spans more than one line - so not quite so random anymore.
+For those of you who have paid close attention, you may have noticed a few things depending on the level of your JavaScript knowledge. In some examples, parentheses appear in seemingly odd places. The parentheses, "\(" and "\)", need to be wrapped around any JSX which spans more than one line — so not quite so random anymore.
 
 You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi-line JSX actually requires parentheses.
 
-If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly braces. These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
+If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly braces \("{" and "}"\). These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
 
 {% hint style="warning" %}
 For each object, **two** opening and closing curly braces need to be used. The outer braces introduce the expression whereas the inner ones represent the curly braces of the object contained within.
