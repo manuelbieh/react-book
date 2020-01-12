@@ -4,7 +4,7 @@
 
 We've already implemented our first `Hello World` component in the section "Into the deep end". While this component taught us the basics of **React** and **React components**, it was a simplistic example and did not make use of everything React offers.
 
-**Components** are relatively easy to explain: they allow us to de-construct complex user interfaces into multiple parts. Ideally, these parts are reusable, isolated and closed in itself. They can deal with any input from the outside so-called **props** \(from "properties"\) and describe what's going to be rendered on the screen by whatever they define in the `render()` method.
+**Components** are relatively easy to explain: they allow us to de-construct complex user interfaces into multiple parts. Ideally, these parts are reusable, isolated and self-contained. They can deal with any input from the outside so-called **props** \(from "properties"\) and describe what's going to be rendered on the screen by whatever they define in the `render()` method.
 
 We can cluster components into two different versions: **function components**, which are expressed in the form of a function, and **class components**, which build upon the newly introduced ES2015 classes. Until recently the term **Stateless Functional Component** was very common as state could only managed in class components before the introduction of React Hooks. We are going to take a deep dive into **Hooks** and how state is managed from React 16.8.0 onward in a later chapter.
 
@@ -22,7 +22,7 @@ To be classified as a valid **React component** the function has to fulfill two 
 
 ### Class Components
 
-The second method of defining a **React component** has already been shown to you in a previous chapter! But let's mention it once again - I am talking about **Class components**. These are based upon the ES2015 classes and extend `React.Component` or `React.PureComponent`. Don't worry if you to not know what `PureComponent` is for now, we are going to look at them soon. Class components have at least one method named `render()`:
+The second method of defining a **React component** has already been shown to you in a previous chapter! But let's mention it once again — I am talking about **Class components**. These are based upon the ES2015 classes and extend `React.Component` or `React.PureComponent`. Don't worry if you to not know what `PureComponent` is for now, we are going to look at them soon. Class components have at least one method named `render()`:
 
 ```jsx
 class Hello extends React.Component {
@@ -252,7 +252,7 @@ Since **React 16.0.0** we are also allowed to return:
 </React.Fragment>
 ```
 
-Since **Transpiling** with **Babel version 7**, fragments can also be expressed in their short form which contain an empty opening and closing element:
+Since **transpiling** with **Babel version 7**, fragments can also be expressed in their short form which contain an empty opening and closing element:
 
 ```jsx
 <>
@@ -262,11 +262,11 @@ Since **Transpiling** with **Babel version 7**, fragments can also be expressed 
 </>
 ```
 
-Components can be composed into anything you like. It makes sense to break up large and complex components into many smaller and easier to read components to improve readability and make them reusuable. This process often happens organically as you program as you will come to a point at which you will notice that breaking up your components would become useful.
+Components can be composed into anything you like. It makes sense to break up large and complex components into many smaller and easier to read components to improve readability and make them reusable. This process often happens organically as you program as you will come to a point at which you will notice that breaking up your components would become useful.
 
 ## Dividing components - keeping an overview
 
-Let's have a look at an example of a Header component which includes a logo, a navigation and a search bar. This is a common example which we come across plenty in web development:
+Let's have a look at an example of a Header component which includes a logo, a navigation and a search bar. This is a common example which you will come across all the time in web development:
 
 ```jsx
 function Header() {
@@ -364,15 +364,15 @@ Last but not least, we have also increased the reusability of our components. If
 
 I have talked about **props** lot already in the book. I think it is about time to reveal the secret and explain what they are.
 
-**Props** enable components to receive any form of data and access it within the **component**. Let us think back to our **functional component**. We passed the **props** to our function as a regular argument. **Class components** work in a similar fashion with the difference that the **props** are passed to the component via the class **constructor**. They are only available to it via `this.props` as opposed to a plain function argument as was the case with the functional component.  React takes care of this all in the parsing stage of the `createElement()` calls.
+**Props** enable components to receive any form of data and access it within the **component**. Let us think back to our **function component**. We passed the **props** to our function as a regular argument. **Class components** work in a similar fashion with the difference that the **props** are passed to the component via the class **constructor**. They are only available to it via `this.props` as opposed to a plain function argument as was the case with the function component.  React takes care of this all in the parsing stage of the `createElement()` calls.
 
-But remember: Whenever a component receives new **props** from the outside, it triggers a re-render of the component! We can explicitly prevent this from happening by using the `shouldComponentUpdate()` **lifecycle method**. We are going to look at **lifecycle methods and state** in the following chapter. For now just keep in mind that if a **component** receives **props** from the outside it will cause **component** as well as its children to re-render.
+But remember: Whenever a component receives new **props** from the outside, it triggers a re-render of the component! We can explicitly prevent this from happening by using the `shouldComponentUpdate()` **lifecycle method**. We are going to look at **lifecycle methods and state** in the following chapter. For now just keep in mind that if a **component** receives **props** from the outside it will cause the **component** as well as its children to re-render.
 
 ### Props inside a component are read-only
 
-Irrespective of the way in which **props** enter a component, they are **always read-only** inside the component and can and can only be read but not modified. People generally speak of **immutability** or **immutable objects** in this case. In order to work with changing data, React uses **state**. But let's focus on **props** for now.
+Regardless of the way in which **props** enter a component, they are **always read-only** inside the component and can and can only be read but not modified. People generally speak of **immutability** or **immutable objects** in this case. In order to work with changing data, React uses **state**. But let's focus on **props** for now.
 
-Functions that do not modify their input and do not have any external dependencies are commonly referred to as **pure functions** in functional programming. The reasoning behind this is relatively simple: if anything changes outside of the function, the function itself should not depend on the changes as its functionality is closed in itself and well encapsulated thus being free of **side effects**. All important parameters are simply passed to the function resulting in the same output with the same input each and every time.
+Functions that do not modify their input and do not have any external dependencies are commonly referred to as **pure functions** in function programming. The reasoning behind this is relatively simple: if anything changes outside of the function, the function itself should not depend on the changes as its functionality is closed in itself and well encapsulated thus being free of **side effects**. All important parameters are simply passed to the function resulting in the same output with the same input each and every time.
 
 To put in other words: it does not matter which variables change their value outside of the function or how often other functions are called elsewhere. If a **pure function** receives the same parameters as before, it will result in the same output as before. Each and every time.
 
@@ -400,7 +400,7 @@ function impureCalculation(number) {
 }
 ```
 
-This second function is no longer _pure ****_ ****as it will not realiably return the same output every time, even if its input is identical to the one before. At the moment, my browser's window size is 1920 pixels wide. If am calling this function with the value `10` as the argument, I will get back `1930` \(`10 + 1920`\). If the window size is decreased to 1280 pixels though and the function is called again with the same argument of `10`  I will receive a different result \(`1290`\). Hence, this is not a **pure function**.
+This second function is no longer _pure ****_ ****as it will not reliably return the same output every time, even if its input is identical to the one before. At the moment, my browser's window size is 1920 pixels wide. If am calling this function with the value `10` as the argument, I will get back `1930` \(`10 + 1920`\). If the window size is decreased to 1280 pixels though and the function is called again with the same argument of `10`  I will receive a different result \(`1290`\). Hence, this is not a **pure function**.
 
 It is possible to change this function into a "pure" function by passing the window width as another argument:
 
@@ -463,17 +463,17 @@ console.log(accelerate(car))
 // {speed: 1}
 ```
 
-And yes - it's -"pure"! Same input, same output.
+And yes, it's "pure"! Same input, same output.
 
-You might wonder at this point of time, why I even bother telling you all this. After all, you have come to learn React \(at least I would wonder at this point why I am supposed to understand all of this\).
+You might wonder at this point, why I even bother telling you all this. After all, you have come to learn React \(at least I would wonder at this point why I am supposed to understand all of this\).
 
-React is an extremely liberal library. It does not enforce much and leaves a lot of freedom and choice for its developers. However, one thing is really important and React takes this quite seriously: **Components and their relation to props have to behave similar those of "pure functions". If the same props are passed, the same output needs to generated.**
+React is an extremely liberal library: It does not enforce much and leaves a lot of freedom and choice for its developers. However, one thing is really important and React takes this quite seriously: **Components and their relation to props have to behave in the same way as "pure functions". If the same props are passed, the same output needs to generated.**
 
-If you do not pay attention and ignore this guideline, React might behave strangely and we might have to deal with unexpected and undesirable side effects. And trust me, you do not want to deal with such bug fixes. I mean, the desire to develop professional interfaces in a short amount is what led you to pick up this book in the first place. You wanted to learn about a tool that can facilitate that. React can do that, as long as you abide by this one rule.
+If you do not pay attention and ignore this guideline, React might behave strangely and we might have to deal with unexpected and undesirable side effects. And trust me, you do not want to deal with such bug fixes. I mean, the desire to develop professional interfaces in a short amount of time is what led you to pick up this book in the first place. You wanted to learn about a tool that can facilitate that, and React can do that, as long as you abide by this one rule.
 
 At the same time though, this principle has a nice side effect. By embracing "pure functions"  React components are easier to test.
 
-That's nice and all that, but what exactly means "read-only inside of a component"? After studying "pure functions", this is explained quickly. It does not matter how our `props` are accessed - if it is via the `props` argument in  a **function component**, via the `constructor()` in a **class component** or at any other point in a **class component** via `this.props`. The most important thing to remember is this: I do not want to and also should not under any circumstances change the value of the **props** I pass in.
+That's nice and all that, but what exactly does "read-only inside of a component" mean? After studying "pure functions", this is explained quickly. It does not matter how our `props` are accessed — if it is via the `props` argument in  a **function component**, via the `constructor()` in a **class component** or at any other point in a **class component** via `this.props`. The most important thing to remember is this: I do not want to and also should not under any circumstances change the value of the **props** I pass in.
 
 Outside of the component, it is an entirely different story. We can change values as we please \(provided that we do not use another component to change our current component's props which just had these passed in\).
 
@@ -526,7 +526,7 @@ ReactDOM.render(
 
 **Result**
 
-```jsx
+```markup
 <div>(6) Manuel Bieh</div>
 ```
 
@@ -562,7 +562,7 @@ function renderApp() {
 renderApp();
 ```
 
-Let us go through this one by one. First of all, we set the variable `renderCounter` to its initial value of `0`. This variable will count for us how often our `App` component renders or to be more precise, how often we call `ReactDOM.render()` which will cause the `App` component to re-render.
+Let us go through this one by one. First of all, we set the variable `renderCounter` to its initial value of `0`. This variable will count how often our `App` component renders, or to be more precise: how often we call `ReactDOM.render()` which will cause the `App` component to re-render.
 
 Second, we start an interval which invokes the `renderApp()` function every 2000 milliseconds. But the interval not only executes the function every 2 seconds, it also increments our `renderCounter` variable by 1 each time. It is actually quite exciting what's happening here: we're modifying our `renderCounter` prop from **"the outside"**.
 
