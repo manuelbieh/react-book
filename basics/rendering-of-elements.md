@@ -1,6 +1,6 @@
 # Rendering of Elements
 
-In the previous chapters I have used them a few times without explaining them; what are **React elements**!? 
+In the previous chapters I have used them a few times without explaining them; what are **React elements**? 
 
 **React elements** are the smallest building blocks in a **React application**.They describe what is going to be rendered on the screen. Although they sound similar to DOM elements, they differ regarding an important point: React elements are only simple objects and thus easy to create and performant. Calling `React.createElement()` to create a **React element** does not trigger a DOM operation.
 
