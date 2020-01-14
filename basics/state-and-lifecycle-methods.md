@@ -1,8 +1,8 @@
 # State and Lifecycle Methods
 
-We've mentioned it in places and now we are finally going to look at it in greater detail - **state** and the so-called **lifecycle methods**.
+We've mentioned it in places and now we are finally going to look at it in greater detail — **state** and the so-called **lifecycle methods**.
 
-As mentioned in the previous chapter, components can hold their own **state**, manage and change it. But: **If the state within a component changes, it always triggers a re-render of the component**. This behavior _can_ be avoided by opting for `PureComponent` as we've learned in the previous chapter which might be useful in some cases. The foundational logic remains though. A state change leads to a re-render of a component and all of its children, except from those cases in which the children are actually a `PureComponent` or its call is surrounded by a `React.memo()` call.
+As mentioned in the previous chapter, components can hold their own **state**, manage and change it. But **If the state within a component changes, it always triggers a re-render of the component**. This behavior _can_ be avoided by opting for `PureComponent` as we've learned in the previous chapter which might be useful in some cases. The foundational logic remains though. A state change leads to a re-render of a component and all of its children, except from those cases in which the children are actually a `PureComponent` or its call is surrounded by a `React.memo()` call.
 
 Relying on state to change our interface is extremely useful. It means that we do not need to rely on manually calling `ReactDOM.render()` to update our interface and that components manage their re-renders independently.
 
@@ -10,7 +10,7 @@ State is tightly connected to the so-called **lifecycle methods.** These compris
 
 Since **React 16.8.0**, **function components** can also manage their own state through the use of **hooks**. Hooks can also react to certain lifecycle events but we will not describe them in detail at this point. This chapter will focus primarily on class components and their associated lifecycle methods. Hooks on the other hand will receive their own dedicated chapter later in the book as they can still be considered a relatively new and extensive topic. 
 
-## A first stateful component
+## Our first stateful component
 
 **State** inside a class component can be accessed via the instance property `this.state`. It is encapsulated to the **component** and neither parent or child components can access it.
 
@@ -58,11 +58,11 @@ To change state within components, React offers a new method for use inside of *
 
 Whenever state is supposed to change within the component, `this.setState()` should be used to achieve this. By calling `this.setState()` React knows to execute **lifecycle methods** \(for example `componentDidUpdate()`\) and thus **re-render** the component. If we were to change state directly, for example by using `this.state.counter = 1;`, nothing would happen initially as the render process would not be triggered. React would not know about its change in state.
 
-The  `this.setState()` method might look a little complex at the state. But this is also due to the fact that old state is not simply replaced by new state and triggering a re-render, but because many other things are happening behind the scenes. But let's take it step by step.
+The  `this.setState()` method might look a little complex at the start. This is also due to the fact that old state is not simply replaced by new state, triggering a re-render, but because many other things take place behind the scenes. Let's take a look at it step by step.
 
 The function itself can take **two different types of arguments**. The first being an **object** containing the new or updated state properties and the second being an **updater function** which again returns an object or `null` if nothing should change. If you happen to have the same property name in your object it will be **overridden** while all other properties will **remain the same**. To reset properties in state, their values need to be explicitly set to `null` or `undefined`. The new state that is being passed is thus **never replaced** but **merged together** with the existing state. 
 
-Let us have another look at our example from above in which we defined state with a `counter` property whose initial value was `0`. Assuming that we want to change this state and add another `date` property to pass the current date, we can construct the new object like so:
+Let us have another look at our example above in which we defined state with a `counter` property whose initial value was `0`. Assuming that we want to change this state and add another `date` property to pass the current date, we can construct the new object like so:
 
 ```javascript
 this.setState({
@@ -100,7 +100,7 @@ Finally, our component contains the new state:
 To guarantee that only the most current state is always accessed, an **updater function** should be used which contains the current state as a parameter. Many developers have already made the mistake of trying to access `this.state` right after calling `setState()` only to realize that their state is still old.
 
 {% hint style="danger" %}
-React "collects" many sequential `setState()`calls und **does not immediately invoke them** to avoid an unnecessary amount of re-renders. Sequential `setState()`calls which are called right after each other are executed as a **batch process**. This is important to keep in mind as we cannot reliably access new state with `this.state` just after a `setState()`call.
+React "collects" many sequential `setState()`calls and **does not immediately invoke them** to avoid an unnecessary amount of re-renders. Sequential `setState()`calls which are called right after each other are executed as a **batch process**. This is important to keep in mind as we cannot reliably access new state with `this.state` just after a `setState()`call.
 {% endhint %}
 
 Assume that we would like to increment the `state` counter three times in quick succession. Intuitively, we might feel compelled to write the following code:
@@ -132,7 +132,7 @@ this.setState((state) => ({ counter: state.counter + 1 });
 this.setState((state) => ({ counter: state.counter + 1 });
 ```
 
-This example uses an **updater function** and always updated the current state value. The value of `this.state.counter` is `3` in this case, as we expected, because the `state` parameter which we provide to the updater function is accessing the current state. While this is possible in theory, it is not exactly recommended. Values should be collected first and then batch processed in a single `setState()` call. This avoids unnecessary re-renders with potentially outdated state.
+This example uses an **updater function** which always updates the current state's value. The value of `this.state.counter` is `3` in this case, as we expected, because the `state` parameter which we provide to the updater function is accessing the current state. While this is possible in theory, it is not exactly recommended. Values should be collected first and then batch processed in a single `setState()` call. This avoids unnecessary re-renders with potentially outdated state.
 
 In some situations it might be necessary to access the value of the modified state. Luckily, React offers the possibility to provide a second parameter in the `setState()` call. This parameter is a callback function which is called **after** the state has updated so that we can safely access the state we have just modified.
 
@@ -142,14 +142,14 @@ this.setState(
     time: new Date().toLocaleTimeString() 
   }, 
   () => {
-    console.log('Neue Zeit:', this.state.time);
+    console.log('New Time:', this.state.time);
   }
 );
 ```
 
 ## Lifecycle Methods
 
-React offers a number of so-called **lifecycle methods** that can be called at different times in the **component's lifecycle**. These can be implemented in React **class components**.
+React offers a number of so-called **lifecycle methods** that can be called at different times in a **component's lifecycle**. These can be implemented in React **class components**.
 
 The lifecycle of a component starts as soon as it is **instantiated or mounted**, so when it is found in the `render()` method of a parent component being part of the returned component tree. The component's lifecycle ends if it is removed from the tree of components supposed to be rendered. Additionally, there are **lifecycle methods** that react to **updates** or ****errors as well as being "unmounted".
 
@@ -159,7 +159,7 @@ The following shall be a comprehensive overview of the **lifecycle methods** tha
 
 **Mount phase**
 
-These methods are only called **once** when the component is first rendered \(or put simply added to the DOM\).
+These methods are only called **once** when the component is first rendered \(or put simply: added to the DOM\).
 
 * `constructor(props)`
 * `static getDerivedStateFromProps(nextProps, prevState)`
@@ -169,7 +169,7 @@ These methods are only called **once** when the component is first rendered \(or
 
 **Update phase**
 
-If new props are being passed to a component or if state changes within the component, these update methods will be called. Alternatively, an explicit `forceUpdate()` method could be invoked.
+If new props are being passed to a component, or if state changes within the component, these update methods will be called. Alternatively, an explicit `forceUpdate()` method could be invoked.
 
 * `componentWillReceiveProps(nextProps)` \(deprecated in React 17\)
 * `static getDerivedStateFromProps(nextProps, prevState)`
@@ -181,7 +181,7 @@ If new props are being passed to a component or if state changes within the comp
 
 **Unmount phase**
 
-This phase only has one matching method which is called as soon as the component is removed from the DOM. It can be useful to tidy up event listeners and `setTimeOut()/setInterval()` calls which had been added during mounting of the component**:**
+This phase only has one matching method which is called as soon as the component is removed from the DOM. It can be useful to tidy up event listeners and `setTimeOut()` or `setInterval()` calls which had been added during mounting of the component**:**
 
 * `componentWillUnmount()`
 
@@ -191,7 +191,7 @@ Another method to deal with errors has been added to React with React 16. This m
 
 * `componentDidCatch()`
 
-Components which implement `componentDidCatch()` are commonly called **error boundary** and help to visualize an alternative to the erroneous tree. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erroneous action attached to the button.
+Components which implement `componentDidCatch()` are commonly called **error boundaries** and help to visualize an alternative to the erroneous tree of components. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erroneous action attached to the button.
 
 ### Lifecycle methods in practice
 
@@ -228,11 +228,11 @@ class Clock extends React.Component {
 ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
-We see that the **lifecycle methods** `componentDidMount()` and `componentWillUnmount()` are being used in the above example. **Default state** is defined with the property `date` and holds an instance of the date object. When the component **mounts** \(`componentDidMount()`\) the `setInterval()` interval is started and its id is saved within the the instance porperty `this.intervalId`. As the interval invokes the `setState()` method every second, the component regularly triggers a re-render meaning the `render()` method is called again and shows the current time again.
+We see that the **lifecycle methods** `componentDidMount()` and `componentWillUnmount()` are being used in the above example. **Default state** is defined with the property `date` and holds an instance of the date object. When the component **mounts** \(`componentDidMount()`\) the `setInterval()` interval is started and its id is saved within the the instance property `this.intervalId`. As the interval invokes the `setState()` method every second, the component regularly triggers a re-render meaning the `render()` method is called again and shows the current time again.
 
-Generally,  the interval function is independent of the React component apart from the fact that it calls the `setState()` method of the component. Depending on how deeply interlinked the function and the component are, React determines if function calls should be stopped or not once the component is no longer needed. In the case of the `setInterval()` function, React does not and we have to take care of stopping the component ourselves. Luckily React provides a methods which enables us to do just that: `componentWillUnmount()`.
+Generally,  the interval function is independent of the React component apart from the fact that it calls the `setState()` method of the component. Depending on how deeply interlinked the function and the component are, React determines if function calls should be stopped or not once the component is no longer needed. In the case of the `setInterval()` function, React does not, and we have to take care of stopping the component ourselves. Luckily React provides a methods which enables us to do just that: `componentWillUnmount()`.
 
-This method is called just before React removes the component from the DOM and can be used to cancel any XHRs that might still be running, to remove event listeners or to cancel a running interval. And that is just what we need here: shortly before the component is removed, the `clearTimeOut()` is invoked and we pass the function the interval id which we previously saved in in the instance property.
+This method is called just before React removes the component from the DOM and can be used to cancel any XMLHttpRequests that might still be running, to remove event listeners or to cancel a running interval — and that is just what we need here. Shortly before the component is removed, the `clearTimeOut()` is invoked and we pass the function the interval id which we previously saved in in the instance property.
 
 If we ever forget this during development mode, React will remind us if we try to call `this.setState()` on an already removed component:
 
