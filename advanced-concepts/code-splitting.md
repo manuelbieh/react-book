@@ -55,5 +55,38 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-This method allows us to easily optimize for the size of our JavaScript bundle and only load certain files from the server when they are actually requested by the user. During the time it takes loading and receiving the data from the server to being executed, we will see information informing us that `<div>Application is loading</div>`. This is only possible because we are using a feature which has also been added to React in version **16.6**: `React.Suspense.`
+This method allows us to easily optimize for the size of our JavaScript bundle and only load certain files from the server when they are actually requested by the user. During the time it takes loading and receiving the data from the server to being executed, we will see information informing us that `<div>Application is loading</div>`. This is only possible because we are using a feature which has also been added to React in version **16.6**: `React.Suspense.` 
+
+### Display fallbacks with React.Suspense
+
+Back in the day, the Suspense component on the React object was named **Placeholder**. This is a very accurate description of the task it fulfills: acting as a placeholder for components which have not yet been rendered and displaying alternative content in the meantime. These fallbacks can take many forms: they can be a message that parts of the application are still being loaded or take the form of a loading animation. The placeholder to display is passed to **Suspense** in the `fallback` prop and _has_ to be defined. Any valid React Element can be used and passed as a prop. Strings such as `<Suspense fallback="Loading ...">[…]</Suspense>` are also a valid.
+
+As long as the component which you want to lazy load has not fully loaded, all children of the Suspense element will be replaced with the indicated fallback. No limit concerning the number of React.lazy\(\) component imports have been enforced. The fallback placeholder will be shown until all components have loaded and can be displayed.
+
+Nesting components is also possible and can be great idea in certain scenarios. When there are parts of the site which are slightly less important and might interfere with the rendering of the primary user interface, it is recommended to wrap these parts of the application / the component tree in their own `Suspense` element. This will boost performance and drive the important parts of the application to load first.
+
+A possible scenario to use `Suspense` in practice is image editing. In these type of cases, it can be useful to display the image to edit to the user already to give visual clues. The rest of the user interface containing the actual editing functionality will be loaded in a further step if loading the actual component is taking longer.
+
+```jsx
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom";
+
+const ImageCanvas = React.lazy(() => import("./ImageCanvas"));
+const ImageToolbar = React.lazy(() => import("./ImageToobar"));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Application loading</div>}>
+      <ImageCanvas url="https://via.placeholder.com/350x240"/>
+      <Suspense fallback={<div>Image editing tools are being loaded</div>}>
+        <ImageToolbar />
+      </Suspense>
+    </Suspense>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+
 
