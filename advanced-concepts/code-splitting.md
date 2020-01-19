@@ -88,5 +88,23 @@ function App() {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
+In this example we have defined two main components: `ImageCanvas` which displays an image and `ImageToolbar` which contains the editing tools for the images. Both of these elements are embraced by a Suspense element. The fallback `<div>Application loading</div>` will be shown until the `ImageCanvas` component has been loaded by the server.
 
+If this happens **before** the `ImageToolbar` has loaded, the second inner `Suspense` element will take effect and show a message that _"Image editing tools are being loaded."_  until it has been fully loaded.
+
+If however, the `ImageCanvas` component is only loaded **after** the `ImageToolbar` has completed loading, the outer `Suspense` will prevent the `ImageToolbar` from being displayed until the `ImageCanvas` has also loaded. It will display the outer fallback message and render the components to the screen as soon as the `ImageCanvas` has completed loading.
+
+Thus, our user interface can take three different forms:
+
+* `ImageCanvas` and `ImageToolbar` have loaded successfully and are both displayed
+* `ImageCanvas` has not finished loading and the message "Application is loading" message is displayed \(independent of the status of the `ImageToolbar`\)
+* `ImageCanvas` has loaded but `ImageToolbar` has not. In this case, `ImageCanvas` will be displayed but instead of the `ImageToolbar`, a message saying _"Image editing tools are being loaded."_  will be shown.
+
+This way we explicitly prevent the image editing tools from being displayed to the user without having a fully loaded image to display alongside it. Nesting `Suspense` fallbacks allow for a greater degree of flexibility and granular decision making of which components should be shown at any time.
+
+**Suspense** and their associated fallbacks are only supported in conjunction with `React.lazy()` at the moment. However, in the future loading asynchronous data such as API calls shall also be supported by **Suspense**.
+
+{% hint style="warning" %}
+**Be careful:** **Lazy** and **Suspense** are only supported in **client-side** applications for now. Currently, there is no support for this feature for **server-side** rendering but is in active development.
+{% endhint %}
 
