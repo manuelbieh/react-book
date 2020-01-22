@@ -156,3 +156,11 @@ yarn add --dev babel-plugin-transform-react-remove-prop-types
 
 ## Flow
 
+In contrast to **React PropTypes**, **Flow** is a **static typechecker** for all **JavaScript** not just for React components. **Flow** is also developed in-house at Facebook and thus integrates nicely with most React setups. Up to version **Babel 6**, it even came pre-installed as part of the `babel-preset-react` and could be used without any further setup.
+
+Since **Babel version7**, **Flow** has been ported to its own **Babel preset**. In order to install you can run `npm install @babel/preset-flow` or `yarn add @babel/preset-flow`. In addition to the installation step, you also have to manually  set the`@babel/preset-flow` as a present in the Babel config. **Presets** allow us to remove non-JavaScript syntax - in this case **Flow syntax** - during the build process so that we won't run into errors in the browser.
+
+Apart from the Babel Preset, the **Flow executable** needs installed via `npm install flow-bin` \(or `yarn add flow-bin`\) which takes care of the actual **typechecking**.
+
+Once **Flow** has been installed and the Babel Preset has been set up, you have to create a **Flow config** by executing `./node_modules/flow init` in the terminal in your current project directory.
+
