@@ -164,3 +164,41 @@ Apart from the Babel Preset, the **Flow executable** needs installed via `npm in
 
 Once **Flow** has been installed and the Babel Preset has been set up, you have to create a **Flow config** by executing `./node_modules/flow init` in the terminal in your current project directory.
 
+**Hint:** To avoid prepending `./node_modules` every time you are calling Flow, you can make an addition in the `script` section of the `package.json`:
+
+```javascript
+{
+  "scripts": {
+    [...]
+    "flow": "flow"
+  }
+}
+```
+
+This allows us to call Flow via npm or yarn:
+
+```bash
+npm run flow init
+```
+
+```bash
+yarn flow init
+```
+
+Once `flow init` has been executed, a new file called `.flowconfig` should have been created in the project directory. The file itself looks very empty for now but Flow needs it to function correctly.  In the future, you can manage which files should be checked by Flow or which shouldn't based on the options set in these files.
+
+Did you update your Babel config, install `flow-bin` in your object and created the `.flowconfig`? Awesome. We can now start typechecking with Flow. In order to check that everything has been set up correctly, you can execute `flow.` If you added the entry to the `package.json` as shown above, running `yarn flow` will suffice. When everything has been set up correctly, a message such as this one is displayed to you:
+
+```bash
+No errors!
+Done in 0.57s.
+```
+
+This means that Flow has checked all of our files and has not found any errors. But this is kind of self-explanatory as we have not created any files containing any typechecks - yet.
+
+The standard settings of Flow mandate that only those files will be typechecked that have included a specific code comment at the top of the file:
+
+```javascript
+// @flow
+```
+
