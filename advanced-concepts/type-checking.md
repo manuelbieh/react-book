@@ -202,3 +202,140 @@ The standard settings of Flow mandate that only those files will be typechecked 
 // @flow
 ```
 
+Let us look at our previous example, but this time using **Flow** instead of **PropTypes**:
+
+```jsx
+// @flow
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+​
+type PropsT = {
+  date: Date,
+  description?: string,
+  ticketsUrl?: string,
+  title: string,
+};
+
+class EventOverview extends React.Component<PropsT> {
+  render() {
+    const { date, description, ticketUrl, title } = this.props;
+    return (
+      <div>
+        <h1>{title}</h1>
+        <h2>{date.toLocaleString()}</h2>
+        {description && (
+          <div className="description">{description}</div>
+        )}
+        {ticketsUrl && <a href={ticketsUrl}>Tickets!</a>}
+      </div>
+    );
+  }
+}
+​
+ReactDOM.render(
+  <EventOverview date={new Date()} title="Learning React" />,
+  document.getElementById('root')
+);
+```
+
+As opposed to **PropTypes**, we start off by defining a **Type definition**  with the name of `PropsT`. You can choose freely which names to give to your Type definitions, but it has become some sort of Developer convention to use the suffix of `T` or `Type`. However, it is not enforced or technically necessary. This newly defined type can then be passed to the component using a so-called "generic type".
+
+```jsx
+class EventOverview extends React.Component<PropsT>
+```
+
+Type definitions can be inlined as well, however the longer the list of the definitions, the harder it becomes to read them in this form. 
+
+```jsx
+class EventOverview extends React.Component<{
+  date: Date,
+  description?: string,
+  ticketsUrl?: string,
+  title: string,
+}> {
+  […]
+}
+```
+
+But let's inspect the **Type definition**  a little further: just as we already learned in the section on **PropTypes**, we define which **props** can be passed to the component and which **type** they have to be. In this case, we have defined a `date` prop which needs to be an instance of `Date`, the optional props `description` and `ticketsUrl` of type `string` which have been marked as optional due to their use of the `?` after their name, and finally the `title` prop which also needs to be passed in the form of a `string`. In contrast to **PropTypes** where one needs to explicitly indicate which props are required by using `isRequired`, Flow syntax describes which fields are optional instead.
+
+**Function components**  can also be typed using Flow by passing the props and their Type as a function argument:
+
+```jsx
+const EventOverview = (props: PropsT) => (/*…*/);
+```
+
+Or in even shorter, destructured form:
+
+```jsx
+const EventOverview = ({ date, description, ticketUrl, title }: PropsT) => (/*…*/);
+```
+
+You can also use inline definitions in Function components:
+
+```jsx
+const EventOverview = ({
+    date,
+    description,
+    ticketUrl,
+    title
+}: {
+    date: Date,
+    description?: string,
+    ticketsUrl?: string,
+    title: string
+}) => {
+  /*…*/
+};
+```
+
+But that's not all! **Flow** can check any JavaScript and not only those bits that describe the props of React components. You can also type the State of your component by passing a second parameter in the so-called **Generics**.
+
+```jsx
+// @flow
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+​
+type PropsT = {
+  date: Date,
+  description?: string,
+  ticketsUrl?: string,
+  title: string,
+};
+
+type StateT = {
+  isBookmarked: boolean,
+};
+
+class EventOverview extends React.Component<PropsT, StateT> {
+  state = {
+    isBookmarked: false,
+  };
+  […]
+}
+```
+
+In contrast to previous examples in the book, the imports follow a slightly different structure. Instead of:
+
+```jsx
+import React from 'react';
+```
+
+React has been imported like this:
+
+```jsx
+import * as React from 'react';
+```
+
+This allows us to also import React's **type definitions** which is necessary if we want to return a React element from a function and type it, for example.
+
+## TypeScript
+
+**TypeScript** has been created by Microsoft and is a so-called **typed superset** of JavaScript ****meaning that it cannot be directly executed in the browser but has to be compiled into "real" JavaScript first. Nevertheless, valid JavaScript is always valid **TypeScript**. **TypeScript** might look very similar to **Flow** at first glance, but differs in the sense that it offers a lot more functionality as its a superset of JS. **Flow** is only a typechecker. Before **ES2015** was formally introduced, a lot of functionality such as classes and imports were already readily available in **TypeScript**.
+
+**TypeScript** has been gaining momentum and lots of popularity lately and can now be found in many React projects. While I certainly find **TypeScript** worth mentioning in this chapter, **TypeScript** alone could easily fill up a whole book by itself which is why I'd rather not go into more detail at this point.
+
+**TypeScript** files are easy to spot as they usually have the file ending of `.ts` or, if **TypeScript** is used in a React project,  `.tsx`.
+
+With the release of **Babel 7**, the integration of **TypeScript** in projects has become much easier as one does not have to install the **TypeScript** compiler \(`tsc`\) anymore but can simply use a Babel plugin. This plugin is installed once you install the Babel Preset `@babel/preset-typescript`. If you are looking for more information on how to use **TypeScript** in your React projects, the official **TypeScript** documentation is a great place to start: [https://www.typescriptlang.org/docs](https://www.typescriptlang.org/docs).
+
