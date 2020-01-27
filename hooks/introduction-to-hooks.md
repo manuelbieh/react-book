@@ -14,3 +14,23 @@ A little personal anecdote: Since the introduction of **Hooks**, I have had to r
 
 **Hooks** were thus introduced with the aim to make it possible to share complex logic much easier and without the need for writing a  lot of unnecessary duplicated code. But I will be honest with you, if you are comfortable with Class components and how they work, Hooks might force you to completely re-think how components can and should interact. Processes as well as the composition of the components themselves have changed. Where complex classes with class properties, inheritance and a mutual `this` context have prevailed in the past, **Hooks** replace these with relatively simple and clean functions. How this is achieved in detail, we are going to look at in the course of this chapter.
 
+## Are class components still worth it?
+
+Now we only have to answer the question: are class components still worth using?
+
+This question came up again and again shortly after the announcement and introduction of **React Hooks**. The React Team has discouraged people from rewriting their existing applications which use classes at the moment into **Function components** using **Hooks**. Classes will remain part of React.
+
+The community did not really take this advice to heart and many developers started rewriting entire applications post **React 16.7.0-alpha** \(the first version containing **Hooks**\) and announced on Twitter how excited they were about the simplicity **Hooks** introduced for their development and the reduced overhead from not having to use Class components.
+
+Of course you can continue to use Class components as they continue to be supported. There are no plans to remove them from React either. Once you have started getting used to writing components with React **Hooks** however, it will be tough to trade the simplicity and increased understanding of this new component.
+
+## Class Components vs Hooks - a comparison
+
+In order to demonstrate just how much simpler a component definition can be by using Hooks, Sunil Pal \(one of the React Core Team developers\) has created an example in which he compares a Class component with a **Function component** using **Hooks**. Logic that is shared between the two is coloured in the same colour in both examples. Logic from the class component that is no longer needed has been blacked out. What you see below is an interesting result which demonstrates clearly just how the information is now bundled in the version using Hooks and not littered across the component:
+
+![Class component](../.gitbook/assets/react-class.jpg)
+
+![The same functionality with React Hooks](../.gitbook/assets/react-hooks.jpg)
+
+
+
