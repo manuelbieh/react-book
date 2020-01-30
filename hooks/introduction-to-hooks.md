@@ -26,11 +26,11 @@ Of course you can continue to use Class components as they continue to be suppor
 
 ## Class Components vs Hooks - a comparison
 
-In order to demonstrate just how much simpler a component definition can be by using Hooks, Sunil Pal \(one of the React Core Team developers\) has created an example in which he compares a Class component with a **Function component** using **Hooks**. Logic that is shared between the two is coloured in the same colour in both examples. Logic from the class component that is no longer needed has been blacked out. What you see below is an interesting result which demonstrates clearly just how the information is now bundled in the version using Hooks and not littered across the component:
+In order to demonstrate just how much simpler a component definition can be by using Hooks, Sunil Pai \(one of the React Core Team developers\) has created an example in which he compares a Class component with a **Function component** using **Hooks**. Logic that is shared between the two is coloured in the same colour in both examples. Logic from the class component that is no longer needed has been blacked out. What you see below is an interesting result which demonstrates clearly just how the information is now bundled in the version using Hooks and not littered across the component:
 
 ![Class component](../.gitbook/assets/react-class.jpg)
 
 ![The same functionality with React Hooks](../.gitbook/assets/react-hooks.jpg)
 
-
+Source: [Sunil Pai on Twitter](https://twitter.com/threepointone/status/1056594421079261185)
 
