@@ -104,3 +104,112 @@ If you are wondering at this point how you would manage very complex state, I wo
 
 ### Side effects with useEffect\(\) 
 
+The name of the `useEffect()` **Hook** derives from its intended usage: for **Side Effects**. In this case, we mean loading Data via an API, registering global events or manpulation DOM elements. The `useEffect()` Hook includes functionality that was previously found in the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` lifecycle methods. 
+
+If you're wondering whether all these lifecycle methods have now been replaced and been combined in a single Hook, I can assure you you have read correctly. Instead of using _three_ methods, you only need to use _a single_ **Hook** which takes effect in similar places of where the class component methods were previously used. The trick is to use particular function parameters and return values which are intended for the `useEffect()` Hook.
+
+In order to use the `useEffect()` Hook, you pass the `useEffect()` function another function as its first parameter. This function, which we will call the **Effect function** for now, is invoked **after** each rendering of the component and "replaces" the `componentDidMount()` part of class components.
+
+As this **Effect function** is called after **each** rendering of the component, it is also called after the **first** render. This equates to what has been typically covered in the `componentDidMount()` lifecycle method.
+
+Moreover, the _Effect function_ can optionally return another function. Let's call this function a **Cleanup function**. This function is invoked during the **unmounting** of the component which roughly equates to the `componentWillUnmount()` class component method.
+
+But be careful: while this sounds similar, the `useEffect()` Hook works a little different here when compared to class components. Our _cleanup function_ is not only called during the **Unmounting** of the component but also **before each new execution** of the _Effect function_.
+
+We can control this behaviour though by passing a so-called **dependency array** to the `useEffect()` Hook as the second parameter. These indicate the values on which the execution of the **Effect function** depends on. If a **dependency array** is passed, the Hook is only invoked initially and then conditionally based on at least one of the values in the **dependency array** has changed.
+
+If you explicitly try to replicate behaviour previously covered by `componentDidMount()`, you can pass an empty array as your second parameter. React then only executes the **Effect function** on initial render and only calls a cleanup function again during **unmount**.
+
+This probably sounds all very complex and theoretical now, especially if you are new to Hooks and do not quite understand how they work yet. Let us look at an example to clear things up a little bit:
+
+```jsx
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+
+const defaultTitle = 'React with Hooks';
+
+const Counter = () => {
+  const [ value, setValue ] = useState(0);
+  
+  useEffect(() => {
+    // `document.title` is set with each change (didMount/didUpdate).
+    // Given the `value` has changed
+    document.title = `The button has been clicked ${value} times.`;
+
+    // Here we're returning our "Cleanup function" which resets the title to the default
+    // before each update
+    return () => {
+      document.title = defaultTitle;
+    }
+  
+  // Lastly, our dependency array. This way the Effect function is only invoked 
+  // when the `value` has actually changed.
+  }, [value]);
+  
+  return (
+    <div>
+      <p>Counter: {value}</p>
+      <button onClick={() => setValue(value + 1)}>
+        +1
+      </button>
+    </div>
+  );
+}
+
+ReactDOM.render(<Counter />, document.getElementById('root'));
+```
+
+As the Hook is always found _inside_ of the function, it has complete access to **props** and **state** \(as has been the case already in the lifecycle methods of class components\). In this case, the state itself only another **Hook** realized in this case with a `useState()` Hook.
+
+By using the `useEffect()` **Hook**, we can dramatically reduce the complexity of the component as it does not have to execute many different and yet very similar things in many different parts of the component. Instead it can deal with all the associated lifecycle events with just a single function, the **Hook**.
+
+To compare this with class component code, I have prepared a little example which implements the same functionality as the `useEffect()` Hook:
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+
+const defaultTitle = "React mit Hooks";
+
+class Counter extends React.Component {
+  state = {
+    value: 0,
+  };
+
+  componentDidMount() {
+    document.title = `The button has been clicked ${this.state.value} times`;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.value !== this.state.value) {
+      document.title = `The button has been clicked ${this.state.value} times`;
+    }
+  }
+
+  componentWillUnmount() {
+    document.title = defaultTitle;
+  }
+
+  render() {
+    return (
+      <div>
+        <p>Counter: {this.state.value}</p>
+        <button
+          onClick={() => {
+            this.setState(state => ({ value: state.value + 1 }));
+          }}
+        >
+          +1
+        </button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Counter />, document.getElementById("root"));
+```
+
+Of course you can debate whether it would be useful to extract the call to change `document.title` into its own class method such as `setDocumentTitle()` however this is not really adding much to our discussion as they do not change anything about the complexity at hand.
+
+Even then, we would still need to call the same \(and now abstracted\) function in two places: `componentDidMount()` and `componentDidUpdate()`. Additionally, we would have to add another class method which further bloats our class component and only reduces duplication by adding more abstraction layers.
+
