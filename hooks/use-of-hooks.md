@@ -213,3 +213,41 @@ Of course you can debate whether it would be useful to extract the call to chang
 
 Even then, we would still need to call the same \(and now abstracted\) function in two places: `componentDidMount()` and `componentDidUpdate()`. Additionally, we would have to add another class method which further bloats our class component and only reduces duplication by adding more abstraction layers.
 
+### Accessing Context with useContext\(\)
+
+The third and final basic Hook is `useContext()`. It allows us to consume data from a Context Provider without having to define a Provider component with a function as a child.
+
+`useContext()` is passed a context which you have created by `React.createContext()` just before. It will then return the value of the next higher up provider in the component hierarchy. If the value in the context is changed within the provider, the `useContext()` Hook will trigger a re-render with the updated data from the provider. And that just about sums up the functionality of the `useContext()` Hook.
+
+In practice, this translates to something like the following example:
+
+```jsx
+import React, { useContext } from "react";
+import ReactDOM from "react-dom";
+
+const AccountContext = React.createContext({});
+
+const ContextExample = () => {
+  const accountData = useContext(AccountContext);
+
+  return (
+    <div>
+      <p>Name: {accountData.name}</p>
+      <p>Role: {accountData.role}</p>
+    </div>
+  );
+};
+
+const App = () => (
+  <AccountContext.Provider value={{ name: "Manuel", role: "admin" }}>
+    <ContextExample />
+  </AccountContext.Provider>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+The `ContextExample` component is receiving its data from the pseudo-account data provider,  the`AccountContext` provider. This works without having to wrap an `AccountContext.Consumer` component around `ContextExample`. It does not only save us multiple lines of code in the component itself, but also leads to a much better debugging experience as the component tree is not as deeply nested as it would be otherwise.
+
+However, this simplification is entirely optional. If you prefer to keep using the well-known Consumer component to access data from a provider, that is completely fine.
+
