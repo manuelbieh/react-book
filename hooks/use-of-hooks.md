@@ -1,6 +1,6 @@
 # Use of Hooks
 
-React currently offers **10** Hooks for us to use. Of these 10, **3** of these are the fundamental or **basic**, the remaining 7 are **additional**  - according to the official React documentation. It's a useful distinction as the **3 Basic Hooks** `useState()`, `useEffect()` and `useContext()` will be sufficient in most cases.
+We can control this behavior though by passing a so-called React currently offers **10** Hooks for us to use. Of these 10, **3** of these are the fundamental or **basic**, the remaining 7 are **additional**  - according to the official React documentation. It's a useful distinction as the **3 Basic Hooks** `useState()`, `useEffect()` and `useContext()` will be sufficient in most cases.
 
 The remaining **additional Hooks** will help us to cover edge cases or to deal with certain optimizations at a later date. In this chapter however, we will focus on "simple" Hooks and how we can now implement functionality in **Function** **components** that was previously reserved for **Class components.**
 
@@ -104,7 +104,7 @@ If you are wondering at this point how you would manage very complex state, I wo
 
 ### Side effects with useEffect\(\) 
 
-The name of the `useEffect()` **Hook** derives from its intended usage: for **Side Effects**. In this case, we mean loading Data via an API, registering global events or manpulation DOM elements. The `useEffect()` Hook includes functionality that was previously found in the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` lifecycle methods. 
+The name of the `useEffect()` **Hook** derives from its intended usage: for **Side Effects**. In this case, we mean loading Data via an API, registering global events or manipulation DOM elements. The `useEffect()` Hook includes functionality that was previously found in the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` lifecycle methods. 
 
 If you're wondering whether all these lifecycle methods have now been replaced and been combined in a single Hook, I can assure you you have read correctly. Instead of using _three_ methods, you only need to use _a single_ **Hook** which takes effect in similar places of where the class component methods were previously used. The trick is to use particular function parameters and return values which are intended for the `useEffect()` Hook.
 
@@ -116,9 +116,9 @@ Moreover, the _Effect function_ can optionally return another function. Let's ca
 
 But be careful: while this sounds similar, the `useEffect()` Hook works a little different here when compared to class components. Our _cleanup function_ is not only called during the **Unmounting** of the component but also **before each new execution** of the _Effect function_.
 
-We can control this behaviour though by passing a so-called **dependency array** to the `useEffect()` Hook as the second parameter. These indicate the values on which the execution of the **Effect function** depends on. If a **dependency array** is passed, the Hook is only invoked initially and then conditionally based on at least one of the values in the **dependency array** has changed.
+**dependency array** to the `useEffect()` Hook as the second parameter. These indicate the values on which the execution of the **Effect function** depends on. If a **dependency array** is passed, the Hook is only invoked initially and then conditionally based on at least one of the values in the **dependency array** has changed.
 
-If you explicitly try to replicate behaviour previously covered by `componentDidMount()`, you can pass an empty array as your second parameter. React then only executes the **Effect function** on initial render and only calls a cleanup function again during **unmount**.
+If you explicitly try to replicate behavior previously covered by `componentDidMount()`, you can pass an empty array as your second parameter. React then only executes the **Effect function** on initial render and only calls a cleanup function again during **unmount**.
 
 This probably sounds all very complex and theoretical now, especially if you are new to Hooks and do not quite understand how they work yet. Let us look at an example to clear things up a little bit:
 
