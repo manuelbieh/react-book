@@ -71,3 +71,15 @@ const Tabs = () => {
 ReactDOM.render(<Tabs/>, document.getElementById("root"));
 ```
 
+We've implemented three basic components in this example which help us to display our content: `DefaultContent`, `SpecialContent` and `OtherSpecialContent`. Two of these components already use our **custom hook** `useBackgroundColor()` to change the global background color in a `useEffect()` once the component has mounted.
+
+Alternatively, we could have implemented the `useEffect()` Hook manually in each component that needs to change its background color. However, this would have led to a lot of code duplication. Instead, we're much better off by extracting this logic into its own custom Hook and making it configurable by passing the required color in. This can then  be used in as many **function components** as you wish.
+
+While JSX allows us to create reusuable components on the user interface layer, Hooks offer us the opportunity to reuse logic across components without having to make any compromises.
+
+
+
+
+
+
+
