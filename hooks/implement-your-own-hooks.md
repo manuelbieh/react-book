@@ -81,7 +81,7 @@ While JSX allows us to create reusable components on the user interface layer, H
 
 Passing data via **Custom Hooks** is no one-way street. In our first custom Hook example we've seen that we can pass data into a **Custom Hook** as a function parameter. The Hook can also _return_ data though that can then be used in component. The form in which this data is returned from the **Hook** is entirely at the discretion of the developer. You can easily return strings, tuples but also entire React components or elements or even a combination of all of them. You're free to choose so to say.
 
-Let's assume that we want to access data from an API. We should parameterise the data that we want to access to make it easier to work with said data. Hooks can help us in this case to access this data \(it does not matter in which component it ends up being used\) and then return it to the component that needs it. In our next example, we will deal with user data from GitHub. Thus, a good name for our next **Custom Hook** would be `useGitHubUserData`.
+Let's assume that we want to access data from an API. We should parameterize the data that we want to access to make it easier to work with said data. Hooks can help us in this case to access this data \(it does not matter in which component it ends up being used\) and then return it to the component that needs it. In our next example, we will deal with user data from GitHub. Thus, a good name for our next **Custom Hook** would be `useGitHubUserData`.
 
 We pass a GitHub username to this Hook and obtain an object with all the relevant information from the user. The Hook itself deals with requesting the data from the GitHub API and will pass it to the component:
 
