@@ -86,5 +86,151 @@ While `StateClass` collects and merges the data of all calls of `this.setState()
 
 If the updater function returns the **exact same value** as the value currently in state, the state update is cancelled and no re-render or side-effects are triggered.
 
+## useEffect
 
+```javascript
+useEffect(effectFunction, dependenciesArray);
+```
+
+This **Hook** is intended for **imperative side effects** such as API requests, timers or global event listeners. Normally, these **side effects** should be avoided in **function components** as they can lead to unexpected behaviour or bugs that might be hard to solve for.
+
+The `useEffect()` **Hook** combats this problem and allows for a _safe_ mechanism to use side effects within **function components**.
+
+The **Hook** expects a **function** as its first parameter and a **dependency array** as its second. The function is called **after** the component has rendered. If we have passed an **optional dependency array** to this Hook, the function we passed in will only be executed if at least one of the values in the **dependency array** has changed. If an **empty dependency array** has been passed, the function will only be run on the **first render** of the component - similar to `componentDidMount()` lifecycle method which we learned about in class components.
+
+### Cleaning up side effects
+
+Sometimes side effects leave "traces" that have to be cleaned up once a component is no longer in use. If for example you had intervals which you had started with `setInterval()`, these should be stopped with `clearTimeOut()` once the component has been removed. If left untreated, these side effects can lead to actual problems or even memory leaks.
+
+Globally registered event listeners such as `resize` or `orientationchange` which have been added to the `window` object with `addEventListener()` should also be removed once the component unmounts by using `removeEventListener()` so they will not be executed anymore if the component itself is not even part of the component tree anymore.
+
+In order to make this cleanup a bit more systematic and easier, we can return a **cleanup function** from the **effect function**. If an **effect function** returns a **cleanup function**, it is called before each call of the **effect function** with the exception of the very first call:
+
+```javascript
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+
+const Clock = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  return `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+);
+
+ReactDOM.render(<Clock />, document.getElementById("root"));
+```
+
+In the above example we have set up an interval that starts once the component **mounts**. Once the component **unmounts** we stop the timer as we would otherwise change the state of the component which is not part of the component tree anymore. If we tried to do this, React would inform us with a warning and suggest to **clean up** asynchronous tasks and subscriptions in a **cleanup function**:
+
+{% hint style="danger" %}
+Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+{% endhint %}
+
+By returning a cleanup function from the **effect function** we can stop the interval with a call of `clearInterval()`. This happens before each call of the effect function, but at the very latest it would happen during Unmounting.
+
+### Conditional calls of the effect function
+
+Normally the `useEffect()` Hook or its associated effect function is executed after each render of a component. This way, we ensure that the effect is executed each time once of its dependencies have changed. If we access state or props of a component within the effect function, the side effect should also be executed if one of the dependencies change. If we wanted to display profile data of a particular user and requested this data from an API, the API request should also be initiated if the user's profile that we want to look at changes while the component is already mounted.
+
+However, this might lead to a lot of unnecessary calls of this function and it might even be executed if no data has actually changed since the last render \(which are relevant for the side effect\). This is why the React allows us to define a **dependency array** as a second parameter in the **effect function**. Only if at least one value in the **dependency array** has changed, the function will be called again. Let's put our previous example into a little code snippet:
+
+```javascript
+useEffect(
+  () => {
+    const user = api.getUser(props.username);
+    setUser(user);
+  }, 
+  [props.username]
+);
+```
+
+In this example, we have put the username into the dependency array which we use to request data from the API. 
+
+While creating such a **dependency array**, we should take utmost care to include all values that are present in the function and could change within the lifetime of the component in this dependency array. If the effect function should only be run once and perform a similar task such as `componentDidMount()`, you should leave the **dependency array** empty. 
+
+{% hint style="info" %}
+In order to facilitate or automate the creation of **dependency arrays**, the  `eslint-plugin-react-hooks` offers an `exhaustive-deps` rule which will automatically write dependencies used in the effect function into the **dependency array** or at least warns that they should be included. These could be run on _Format on Save_ or another similar editor configuration.
+
+You can active it by setting `"exhaustive-deps": "warn"` in the`rules` block of the ESLint configuration.
+{% endhint %}
+
+### Sequence of operations
+
+The **effect function** is called **asynchronously** with a little bit of delay after the **layout and paint phase** of the browser. For most side effects this should be sufficient. You might run into situations though in which it is necessary to to **synchronously** run side effects. For example, you might need to perform DOM mutations and a delay in execution would lead to an inconsistent user interface or jarring content on the screen.
+
+To deal with these problems, React introduced the `useLayoutEffect()` Hook. It works almost identical to the `useEffect()` hook: it expects an **effect function** which can also return a **cleanup function** and also contains a dependency array. This dependency array is identical to that in the regular `useEffect()` Hook. The difference in the two Hooks is that the `useLayoutEffect()` hook is executed synchronously and run just after all DOM mutations have finished as opposed to asynchronously as is the case in the regular `useEffect()` hook.
+
+`useLayoutEffect()` can read from the DOM and can also synchronously modify it **before** the browser will display these changes in its **paint phase**.
+
+### Asynchronous effect functions
+
+Even if **effect functions** can be run with delay, they are not allowed to be asynchronously by definition and are not allowed to return a promise. If we tried to perform such an operation, React would give us the following warning:
+
+{% hint style="danger" %}
+Warning: An Effect function must not return anything besides a function, which is used for clean-up.
+
+It looks like you wrote useEffect\(async \(\) =&gt; ...\) or returned a Promise. Instead, you may write an async function separately and then call it from inside the effect \[…\]
+
+In the future, React will provide a more idiomatic solution for data fetching that doesn't involve writing effects manually.
+{% endhint %}
+
+In the above example, an **incorrect** `useEffect()` Hook could have looked like the following \(please don't do this\):
+
+```javascript
+useEffect(async () => {
+  const response = await fetch('https://api.github.com/users/manuelbieh');
+  const accountData = await response.json();
+  setGitHubAccount(accountData);
+
+  fetchGitHubAccount("manuelbieh");
+}, []);
+```
+
+This is **not allowed** as the effect function is declared with the `async` keyword. So how would we go about solving this problem? There's a relatively simple solution to this problem. We move the asynchronous part of this function into its own asynchronous function **within the effect function** and then only call this function:
+
+```jsx
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+
+const App = (props) => {
+  const [gitHubAccount, setGitHubAccount] = useState();
+
+  useEffect(() => {
+    const fetchGitHubAccount = async () => {
+      const response = await fetch(`https://api.github.com/users/${props.username}`);
+      const accountData = await response.json();
+      setGitHubAccount(accountData);
+    };
+
+    fetchGitHubAccount();
+  }, [props.username]);
+
+  if (!gitHubAccount) {
+    return null;
+  }
+
+  return (
+    <p>
+      {gitHubAccount.name} has {gitHubAccount.public_repos} public repos
+    </p>
+  );
+};
+
+ReactDOM.render(
+  <App username="manuelbieh" />, 
+  document.getElementById("root")
+);
+```
+
+In this case, the effect function itself is not asynchronous. The asynchronous functionality has been extracted into its own asynchronous function `fetchGitHubAccount()` which defined **inside** of the `useEffect()` hook.
+
+The asynchronous function does not necessarily need to be defined **inside** of the effect function. But the effect function itself is not allowed to be asynchronous.
 
