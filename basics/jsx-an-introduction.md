@@ -2,7 +2,7 @@
 
 ### JSX as an important building block in React development
 
-Before diving deeper into the development of components, I want to first talk about **JSX**. As mentioned earlier, JSX makes up a large portion of the code written in most React components and thus a large amount in React in general. In my opinion, JSX is one of the reasons why React has been so widely and happily adopted by the developer community. Nowadays, even other frameworks or libraries like Vue.js offer the possibility to use JSX to supercharge their components.
+Before diving deeper into the development of components, I want to first talk about **JSX**. As mentioned earlier, JSX makes up a large portion of the code written in most React components and thus a large amount in React in general. In my opinion, JSX is one of the reasons why React has been so widely and readily adopted by the developer community. Nowadays, even other frameworks or libraries like Vue.js offer the possibility to use JSX to supercharge their components.
 
 At first glance JSX does not look very different from HTML or XML. As in XML or in XHTML, every opening element also needs to have a matching closing element `</div>` or has to be self-closing \(`<img/>`\). In contrast to XML and XTHML though, JSX can include **JavaScript expressions** making it extremely powerful.
 
