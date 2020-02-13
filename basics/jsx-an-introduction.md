@@ -149,11 +149,11 @@ All of these are great examples of using expressions to ensure JSX is much more 
 
 ## What else you should know
 
-For those of you who have paid close attention, you may have noticed a few things depending on the level of your JavaScript knowledge. In some examples, parentheses appear in seemingly odd places. The parentheses, \(so "`(`" and "`)`" \), need to be wrapped around any JSX which spans more than one line - so not quite so random anymore.
+For those of you who have paid close attention, you may have noticed a few things depending on the level of your JavaScript knowledge. In some examples, parentheses appear in seemingly odd places. The parentheses, "\(" and "\)", need to be wrapped around any JSX which spans more than one line — so not quite so random anymore.
 
 You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi-line JSX actually requires parentheses.
 
-If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly braces. These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
+If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly braces \("{" and "}"\). These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
 
 {% hint style="warning" %}
 For each object, **two** opening and closing curly braces need to be used. The outer braces introduce the expression whereas the inner ones represent the curly braces of the object contained within.
