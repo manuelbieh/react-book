@@ -107,13 +107,3 @@ ReactDOM.render(<App />, document.querySelector('#root'));
 
 Two **Error Boundaries** are used in the above example: `ErrorBoundary` and `ServiceUnavailableBoundary`. While the outer boundary will catch errors that might occur in the `ApplicationLogic` component, the `ServiceUnavailableBoundary` could catch errors in the weather widget and display a more granular error message like _"the service requested cannot be reached at the moment. Please try again later"_.
 
-If the `WeatherWidget` component throws an error, the `ServiceUnavailableBoundary` will catch it and everything that is currently used in the `ApplicationLogic` component will remain intact.  If we didn't include the `WeatherWidget` in its own **Error Boundary**, the outer **Error Boundary** would be used instead and the `ApplicationLogic` component would not be shown.
-
-Generally, it is good practice to have at least one **Error Boundary** as high up as possible in the component hierarchy. This will catch most unexpected errors like a `500 Internal Server Error` page would do and can also log them. If needed, further **Error Boundaries** should be added to encompass useful logic in further component trees. This depends entirely on how error prone a specific area of the tree is \(due to unknown or changing data\) or if a specific area of the tree has been neglected.
-
-{% hint style="info" %}
-Since React version 16, components will be "unmounted" and removed from the tree if a serious error occurred or an exception was thrown. This is important as it ensures that the user interface does not suddenly stop working or returns incorrect data. It is especially critical to ensure if we were to work with online banking data. Imagine the consequences if we were to incorrectly send money to the wrong recipient or transfer an incorrect amount.
-
-In order to deal with these errors and risks properly, **Error Boundaries** were introduced. They allow developers to inform users that the application is currently in an erroneous state. As errors and mistakes can never be fully avoided in an application, using **Error Boundaries** is highly recommended.
-{% endhint %}
-
