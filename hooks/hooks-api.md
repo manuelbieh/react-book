@@ -234,3 +234,15 @@ In this case, the effect function itself is not asynchronous. The asynchronous f
 
 The asynchronous function does not necessarily need to be defined **inside** of the effect function. But the effect function itself is not allowed to be asynchronous.
 
+## useContext
+
+```javascript
+const myContextValue = useContext(MyContext);
+```
+
+This Hook only expects one parameter: a context type which we create by calling `React.createContext()`. It will then return the value of the next higher context provider in the component hierarchy.
+
+The `useContext()` Hook acts like a context consumer component and causes a re-render of the **function component** as soon as the value of the context in the provider element changes.
+
+Using this hook is optional and it is still possible to create Context consumers in **JSX** of **function components**. However, the Hook is much more convenient and easier to read as no new hierarchical layer is created in the component tree.
+
