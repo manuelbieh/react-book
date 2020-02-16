@@ -246,3 +246,101 @@ The `useContext()` Hook acts like a context consumer component and causes a re-r
 
 Using this hook is optional and it is still possible to create Context consumers in **JSX** of **function components**. However, the Hook is much more convenient and easier to read as no new hierarchical layer is created in the component tree.
 
+## useReducer
+
+```javascript
+const [state, dispatch] = useReducer(reducerFunc, initialState, initFunc);
+```
+
+The `useReducer()` Hook is an alternative solution for `useState()` and allows us to manage more complex states. It is based on flux architecture in which a **reducer function** creates a new state by being passed the **last state** and a so called **action**.
+
+The **reducer function** is called by executing a **dispatch function** which in turn receives an **action**. The **action** is an object which always has a `type` property and often a `payload` property. From this **action** and the **previous state**, the **reducer function** can then create the **new state**. One could summarise this in the following form: `(oldState, action) => newState`.
+
+Let us have a look at a simple example. We have developed a `Counter` component which can increment or decrement a counter by pressing a + and - button respectively:
+
+```jsx
+import React, { useReducer } from "react";
+import ReactDOM from "react-dom";
+
+const initialState = {
+  count: 0,
+};
+
+const reducerFunction = (state, action) => {
+  switch (action.type) {
+    case "INCREMENT":
+      return { count: state.count + 1 };
+    case "DECREMENT":
+      return { count: state.count - 1 };
+    default:
+      throw new Error('Unknown action');
+  }
+};
+
+const Counter = () => {
+  const [state, dispatch] = useReducer(reducerFunction, initialState);
+
+  return (
+    <div>
+      <h1>{state.count}</h1>
+      <button onClick={() => dispatch({ type: "INCREMENT" })}>+</button>
+      <button onClick={() => dispatch({ type: "DECREMENT" })}>-</button>
+    </div>
+  );
+};
+
+ReactDOM.render(<Counter />, document.getElementById("root"));
+```
+
+We have defined the initial State `initialState` and the reducer function `reducerFunction`. The initial state only consists of an object which holds a `count` property which is `0` initially. The reducer function on the other hand expects a `state` and an `action` which are later passed to the reducer function by calling the `dispatch` function. These two parameters will then create the **new** state. **But beware**: instead of mutating an existing state, we always have to create a new state! Otherwise mutations of the existing state will lead to side effects which are not intended and cause incorrect display of components. A **reducer** function should always be a **pure** function.
+
+The **reducer function** as well as the initial state are then passed to the `useReducer()` Hook which will in turn return a tuple. The tuple consists of two values: the first element will portray the **current state** in this particular rendering phase and the second value will be the so-called **dispatch** function.
+
+If we want to change our current state, we call the `dispatch` function and pass this function an **action**. In our current example, we achieve this by clicking one of the two buttons which will either dispatch the `{ type: "INCREMENT" }` \(to increase the counter\) action or `{ type: "DECREMENT" }` \(to decrease the counter\) action/
+
+If an action has been _"dispatched",_ a new state is creeated and React will trigger a re-render. The new state will now be accesible in the new `state` variable which was returned by the reducer function. If however the same state was returned from the **reducer**, no re-render will be triggered.
+
+### The third parameter
+
+Apart from the `reducer` function and `initialState` which we always need to specify, we can also pass a third optional parameter to the `useReducer()` Hook. This third parameter is called an `init` function which can be used to calculate the initial state. The function could be used to extract the value of a **reducer** in an external function which is outside of the reducer itself.
+
+If such an `init` function has been passed to the Hook, it will be called during the **first** call. The `initialState` will be passed to it as its **initial argument**. This can be really useful if the **initial state** of your component is based on props for example. These props can be passed as the second parameter inside of the `init function` which can then create the initial state of the **reducer** based on these:
+
+```jsx
+import React, { useReducer } from "react";
+import ReactDOM from "react-dom";
+
+const reducerFunction = (state, action) => {
+  switch (action.type) {
+    case "INCREMENT":
+      return { count: state.count + 1 };
+    case "DECREMENT":
+      return { count: state.count - 1 };
+    default:
+      throw new Error("Unknown action");
+  }
+};
+
+const initFunction = (initValue) => {
+  return { count: initValue };
+};
+
+const Counter = (props) => {
+  const [state, dispatch] = useReducer(
+    reducerFunction, props.startValue, initFunction
+  );
+
+  return (
+    <div>
+      <h1>{state.count}</h1>
+      <button onClick={() => dispatch({ type: "INCREMENT" })}>+</button>
+      <button onClick={() => dispatch({ type: "DECREMENT" })}>-</button>
+    </div>
+  );
+};
+
+ReactDOM.render(<Counter startValue={3} />, document.getElementById("root"));
+```
+
+In this example, the `useReducer()` hook has been extended to include a third and optional parameter: the **init** function. The `initialState` is now an argument for the **init** function. The value for this argument is passed to the component via **props**, `startValue` in particular.
+
