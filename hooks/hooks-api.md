@@ -254,7 +254,7 @@ const [state, dispatch] = useReducer(reducerFunc, initialState, initFunc);
 
 The `useReducer()` Hook is an alternative solution for `useState()` and allows us to manage more complex states. It is based on flux architecture in which a **reducer function** creates a new state by being passed the **last state** and a so called **action**.
 
-The **reducer function** is called by executing a **dispatch function** which in turn receives an **action**. The **action** is an object which always has a `type` property and often a `payload` property. From this **action** and the **previous state**, the **reducer function** can then create the **new state**. One could summarise this in the following form: `(oldState, action) => newState`.
+The **reducer function** is called by executing a **dispatch function** which in turn receives an **action**. The **action** is an object which always has a `type` property and often a `payload` property. From this **action** and the **previous state**, the **reducer function** can then create the **new state**. One could summarize this in the following form: `(oldState, action) => newState`.
 
 Let us have a look at a simple example. We have developed a `Counter` component which can increment or decrement a counter by pressing a + and - button respectively:
 
@@ -298,7 +298,7 @@ The **reducer function** as well as the initial state are then passed to the `us
 
 If we want to change our current state, we call the `dispatch` function and pass this function an **action**. In our current example, we achieve this by clicking one of the two buttons which will either dispatch the `{ type: "INCREMENT" }` \(to increase the counter\) action or `{ type: "DECREMENT" }` \(to decrease the counter\) action/
 
-If an action has been _"dispatched",_ a new state is creeated and React will trigger a re-render. The new state will now be accesible in the new `state` variable which was returned by the reducer function. If however the same state was returned from the **reducer**, no re-render will be triggered.
+If an action has been _"dispatched",_ a new state is created and React will trigger a re-render. The new state will now be accessible in the new `state` variable which was returned by the reducer function. If however the same state was returned from the **reducer**, no re-render will be triggered.
 
 ### The third parameter
 
