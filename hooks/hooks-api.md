@@ -344,3 +344,195 @@ ReactDOM.render(<Counter startValue={3} />, document.getElementById("root"));
 
 In this example, the `useReducer()` hook has been extended to include a third and optional parameter: the **init** function. The `initialState` is now an argument for the **init** function. The value for this argument is passed to the component via **props**, `startValue` in particular.
 
+### Reducers in practice
+
+The guiding principle of **reducers** should be known to those in the React community who have had exposure to **Redux**. **Redux** is a library that allows us to manage complex state in a comfortable manner and was the first point of call whenever handling local state became hard to read and cumbersome. It also created a solution for the so-called "prop drilling" which meant that previously props needed to be passed through multiple hierarchical layers.
+
+**Redux** manages reducer functions and makes state and their dispatch functions available to those components which should read or modify the global state. The `useReducer()` hook is React's custom solution to realize complex state management using reducer functions.
+
+A common use case for reducers forms the management of API requests. Common conventions dictate that three actions for each API request should be defined:
+
+* an action which informs the application that the data is loading when the request has started
+* an action which resets the loading state and \(if the request has failed\) can inform the state of an error
+* an action which writes the data received by the API request into state if it was successful
+
+Let's have a look at an example using our previous account data example using the GitHub API:
+
+```jsx
+import React, { useEffect, useReducer } from "react";
+import ReactDOM from "react-dom";
+
+const initialState = {
+  data: null,
+  isLoading: false,
+  isError: false,
+  lastUpdated: null,
+};
+
+const accountReducer = (state, action) => {
+  switch (action.type) {
+    case "REQUEST_START":
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case "REQUEST_SUCCESS":
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+        isError: false,
+        lastUpdated: action.meta.lastUpdated,
+      };
+    case "REQUEST_ERROR":
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+  }
+};
+
+const RepoInfo = (props) => {
+  const [state, dispatch] = useReducer(accountReducer, initialState);
+
+  useEffect(() => {
+    const fetchGitHubAccount = async (username) => {
+      try {
+        dispatch({
+          type: "REQUEST_START",
+        });
+        const response = await fetch(
+          `https://api.github.com/users/${username}`
+        );
+
+        const accountData = await response.json();
+        dispatch({
+          type: "REQUEST_SUCCESS",
+          payload: accountData,
+          meta: {
+            lastUpdated: new Date(),
+          },
+        });
+      } catch (err) {
+        dispatch({
+          type: "REQUEST_ERROR",
+          error: true,
+        });
+      }
+    };
+
+    fetchGitHubAccount(props.username);
+  }, [props.username]);
+
+  if (state.isError) {
+    return <p>An error occurred.</p>;
+  }
+
+  if (state.isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!state.data) {
+    return <p>No GitHub account has been loaded.</p>;
+  }
+
+  return (
+    <p>
+      {state.data.name} has {state.data.public_repos} public repositories.
+    </p>
+  );
+};
+
+ReactDOM.render(
+  <RepoInfo username="manuelbieh" />,
+  document.getElementById("root")
+);
+```
+
+The `useReducer()` hook is used and passed to the `accountReducer` function. In this function, we deal with the three **actions** of **type** `REQUEST_START`, `REQUEST_SUCCESS`, and `REQUEST_ERROR`. 
+
+The `initialState` consists of an object with an empty `data` property, an `isFetching` and `isError` flag and a `lastUpdated` property. The flags can inform us whether the data has actually loaded or whether an error occurred whilst the `lastUpdated` property will store a timestamp of the last successful request. We can use these later to only use one request per minute or to signal to the user that they might be seeing data but that the interface has not changed for a while.
+
+In addition, we use an `useEffect()` hook to initiate loading the data once the GitHub username in the **props** changes. Once this has happened, we dispatch the `REQUEST_START` **action**. The reducer will then create the new state:
+
+```diff
+{
+  data: null,
+- isLoading: false,
++ isLoading: true,
+  isError: false,
+  lastUpdated: null,
+}
+```
+
+As we have defined a condition a bit lower down in our component, we will now display the following:
+
+```jsx
+if (state.isLoading) {
+  return <p>Loading...</p>;
+}
+```
+
+This is a clear signal for the user that data is currently being loaded.
+
+After this state, we can be left with one of the following cases: the request either fails or data is successfully obtained from the API.
+
+If the requests failed, the `REQUEST_ERROR` **action** would be dispatched. The state would be reflected as such:
+
+```diff
+{
+  data: null,
+- isLoading: true,
++ isLoading: false,
+- isError: false,
++ isError: true,
+  lastUpdated: null,
+};
+```
+
+As no further request will be fired, the `isLoading` flag will be reset from `true` to `false` so as to not signal to the user that data might still be loading. As an error has occurred, the state of `isError` is set from `false` to `true`. As the code snippet above also contained a condition to handle the state of an error, we can display a message to the user:
+
+```jsx
+if (state.isError) {
+  return <p>An error occurred.</p>;
+}
+```
+
+It might be a good idea to tell the user which operation has failed and how they might be able to recover from the error. Maybe the provided username did not exist and we could offer an opportunity to the user to re-enter the username and correct their mistake. Another possibility could be that the API might not be available at the moment which could inform the user to try again at a later point of time.
+
+If however the request was dealt with successfully and we could obtain data from the API, we dispatch the `REQUEST_SUCCESS` **action**. This not only contains a `payload` but also a `meta` property which includes the timestamp of the request.
+
+The **new state** which is created by the **reducer** differs from the previous state in the following way:
+
+```diff
+{
+- data: null,
++ data: {
++   "login": "manuelbieh",
++   "name": "Manuel Bieh",
++   "public_repos": 59,
++   [...]
++ },
+- isLoading: true,
++ isLoading: false,
+  isError: false,
+- lastUpdated: null,
++ lastUpdated: "2019-03-19T02:29:10.756Z",
+}
+```
+
+The `data` property contains the data which we have received from the API. The state of `isLoading` is set back to `false` and`lastUpdated` is updated to reflect the point of time when the data was successfully written to state. Based on this information, we can now display to the user:
+
+```jsx
+return (
+  <p>
+    {state.data.name} has {state.data.public_repos} public repositories.
+  </p>
+);
+```
+
+Apart from writing our first more complex reducer, we have also successfully learned about how `useEffect()` and `useReducer()` can be used together.
+
+As an aside: Similarly to the `useState()` hook, the `useReducer()` hook will not trigger another re-render if the reducer function returns the exact same state as before.
+
