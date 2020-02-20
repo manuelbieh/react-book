@@ -536,3 +536,84 @@ Apart from writing our first more complex reducer, we have also successfully lea
 
 As an aside: Similarly to the `useState()` hook, the `useReducer()` hook will not trigger another re-render if the reducer function returns the exact same state as before.
 
+## useCallback
+
+```javascript
+const memoizedFunction = useCallback(callbackFunction, dependencyArray);
+```
+
+the `useCallback()` hook can be used to optimize the performance of an application. It receives a function and then creates an **unique identity** of that function, which will remain active until the **dependencies** of the hook itself change.
+
+This is important as we need to provide the same reference to a function, when dealing with `PureComponents`, when functions implement their own `shouldComponentUpdate()` method or if they are wrapped by `React.memo()`.
+
+`useCallback()` expects two parameters. The first being a function and the second being a dependency array \(similar to that in `useEffect()`\). It will return a **stable** reference to the function that we passed in, meanin that the reference only changes if one of its **dependencies** changed. Up to this point, references to `PureComponents` or components with `React.memo()` are the same.
+
+But this sounds a little complicated in theory, let's look at an example:
+
+```jsx
+import React, { useState, useCallback } from "react";
+import ReactDOM from "react-dom";
+
+const FancyInput = React.memo(({ name, onChange }) => {
+  console.log("Rendering FancyInput");
+  return (
+    <input type="text" name={name} onChange={onChange} />
+  );
+});
+
+const Form = () => {
+  const [values, setValues] = useState({});
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+
+    setValues((state) => {
+      return {
+        ...state,
+        [name]: value,
+      };
+    });
+  };
+
+  return (
+    <>
+      <pre>{JSON.stringify(values, null, 2)}</pre>
+      <FancyInput name="example" onChange={changeHandler} />
+    </>
+  );
+};
+
+ReactDOM.render(<Form />, document.getElementById("root"));
+```
+
+We've defined two components here: `FancyInput` and `Form`. The `Form` component renders a `FancyInput` component and not only passes it  a `name` attribute but also a function. It will change the state of the `Form` component whenever changes are made to the input field and subsequently trigger a re-render.
+
+The `changeHandler`  function is created in the **form component** and thus is generated fresh with every render, meaning **the reference to the function changes**. We are passing the same function but not an identical one.
+
+Thus, we can't make use of the `React.memo()` optimization mechanism in `FancyInput.` `React.memo()` checks **before** each re-render of a component if its **props** changed compared to the previous render and will trigger a re-render if this is the case. As the `changeHandler` function is generated from scratch every time the `Form` component renders, this condition will always be true and the `FancyInput` will always re-render too.
+
+We can use `useCallback()` to combat this. By wrapping our `changehandler()` function in this hook, React can creat a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
+
+```jsx
+const changeHandler = useCallback((e) => {
+  const { name, value } = e.target;
+
+  setValues((state) => {
+    return {
+      ...state,
+      [name]: value,
+    };
+  });
+}, []);
+```
+
+We can now use the the optimization techniques of `React.memo()` \(or in Class components: `PureComponent`\) without triggering unecessary renders.
+
+If the function depends on values which can change in the lifespan of the component, we can put these in the **dependency array** \(as was the case in `useEffect()`\) as the second parameter. React will then create a new function with a new reference, if one of the dependencies changes.
+
+{% hint style="info" %}
+As was the case in`useEffect()` hook, the `exhaustive-deps` rule of the`eslint-plugin-react-hooks` can help us to configure the **Dependency Arrays**.
+{% endhint %}
+
+
+
