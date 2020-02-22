@@ -683,7 +683,7 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 This app consists of an input field for numbers. If a number is entered and submitted with the **enter** key, the number is written into state within the `values` field. In this case, this state corresponds to an array which will hold all the numbers we have entered. The component will then iterate through all of the numbers entered and then renders a `FibonacciNumber` component which will receive each of this values.
 
-The `FibonacciNumber` component will then calculate the corresponding fibonacci number for the entered nuber and display it to the user. Depending on the number and computational power, it might take some time to calculate this number \(on my PC it took about 2-3 seconds for the 40th Fibonacci number\).
+The `FibonacciNumber` component will then calculate the corresponding Fibonacci number for the entered number and display it to the user. Depending on the number and computational power, it might take some time to calculate this number \(on my PC it took about 2-3 seconds for the 40th Fibonacci number\).
 
 Currently, the calculation will happen **each** time **even if the number is already present** in the array. If I entered 40, I would have to wait 3 seconds to get a result. If I entered 40 again, I would need to wait 3 seconds again \(on top of the previous 3 seconds\) as the value is calculated in both components again.
 
@@ -729,7 +729,7 @@ function App() {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-But we're not doing this hook enough justice: **refs** in **function components** also serve a different purpose: they allow us to create a **mutable reference** which will persist for the entire lifespan of the component\(meaning until it unmounts\). It can be compared to performing similar tasks as instance variables in class components.
+But we're not doing this hook enough justice: **refs** in **function components** also serve a different purpose: they allow us to create a **mutable reference** which will persist for the entire lifespan of the component \(meaning until it unmounts\). It can be compared to performing similar tasks as instance variables in class components.
 
 `useRef()` takes in an optional initial value and returns an object with a `current` property which can then be accessed within the **function component**. This access is not limited to read access but also allows write access. If we wanted to provide data whose changes would not trigger a re-render but whose reference would stay the same between two rendering cycles, we can use the `useRef()` hook.
 
