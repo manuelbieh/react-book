@@ -546,7 +546,7 @@ the `useCallback()` hook can be used to optimize the performance of an applicati
 
 This is important as we need to provide the same reference to a function, when dealing with `PureComponents`, when functions implement their own `shouldComponentUpdate()` method or if they are wrapped by `React.memo()`.
 
-`useCallback()` expects two parameters. The first being a function and the second being a dependency array \(similar to that in `useEffect()`\). It will return a **stable** reference to the function that we passed in, meanin that the reference only changes if one of its **dependencies** changed. Up to this point, references to `PureComponents` or components with `React.memo()` are the same.
+`useCallback()` expects two parameters. The first being a function and the second being a dependency array \(similar to that in `useEffect()`\). It will return a **stable** reference to the function that we passed in, meaning that the reference only changes if one of its **dependencies** changed. Up to this point, references to `PureComponents` or components with `React.memo()` are the same.
 
 But this sounds a little complicated in theory, let's look at an example:
 
@@ -592,7 +592,7 @@ The `changeHandler`  function is created in the **form component** and thus is g
 
 Thus, we can't make use of the `React.memo()` optimization mechanism in `FancyInput.` `React.memo()` checks **before** each re-render of a component if its **props** changed compared to the previous render and will trigger a re-render if this is the case. As the `changeHandler` function is generated from scratch every time the `Form` component renders, this condition will always be true and the `FancyInput` will always re-render too.
 
-We can use `useCallback()` to combat this. By wrapping our `changehandler()` function in this hook, React can creat a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
+We can use `useCallback()` to combat this. By wrapping our `changehandler()` function in this hook, React can create a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
 
 ```jsx
 const changeHandler = useCallback((e) => {
@@ -607,7 +607,7 @@ const changeHandler = useCallback((e) => {
 }, []);
 ```
 
-We can now use the the optimization techniques of `React.memo()` \(or in Class components: `PureComponent`\) without triggering unecessary renders.
+We can now use the the optimization techniques of `React.memo()` \(or in Class components: `PureComponent`\) without triggering unnecessary renders.
 
 If the function depends on values which can change in the lifespan of the component, we can put these in the **dependency array** \(as was the case in `useEffect()`\) as the second parameter. React will then create a new function with a new reference, if one of the dependencies changes.
 
@@ -615,5 +615,121 @@ If the function depends on values which can change in the lifespan of the compon
 As was the case in`useEffect()` hook, the `exhaustive-deps` rule of the`eslint-plugin-react-hooks` can help us to configure the **Dependency Arrays**.
 {% endhint %}
 
+## useMemo
 
+```javascript
+const memoizedValue = useMemo(valueGetterFunction, dependencyArray);
+```
+
+The other Hook that's useful for hardcore **performance optimization** is the `useMemo()` hook. It works similarly to the `useCallback()` hook, however it does not provide a unique identity for the function going in, but for the return value from the function which has been passed into the `useMemo()` hook.
+
+So this snippet of code:
+
+```javascript
+useCallback(fn, deps);
+```
+
+corresponds to this:
+
+```javascript
+useMemo(() => fn, deps);
+```
+
+While `useCallback()` returns a _memoized_ \(a "remembered"\) version of the **function that has been passed in**, `useMemo()` provides a _memoized_ version of the **return value** of the function that has been passed in. `useMemo()` can be really useful in situations where functions perform complex computational tasks that do not need to be executed in each render.
+
+Let us have a look at a non-optimized component:
+
+```jsx
+import React, { useState, useMemo } from "react";
+import ReactDOM from "react-dom";
+
+const fibonacci = (num) =>
+  num <= 1 ? 1 : fibonacci(num - 1) + fibonacci(num - 2);
+
+const FibonacciNumber = ({ value }) => {
+  const result = fibonacci(value);
+  return (
+    <p>{value}: {result}</p>
+  );
+};
+
+const App = () => {
+  const [values, setValues] = useState([]);
+
+  const handleKeyUp = (e) => {
+    const { key, target } = e;
+    const { value } = target;
+    if (key === "Enter") {
+      if (value > 40 || value < 1) {
+        alert('Invalid value');
+        return;
+      }
+      setValues((values) => values.concat(target.value));
+    }
+  };
+
+  return (
+    <>
+      <input type="number" min={1} max={40} onKeyUp={handleKeyUp} />
+      {values.map((value, i) => (
+        <FibonacciNumber value={value} key={`${i}:${value}`} />
+      ))}
+    </>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+This app consists of an input field for numbers. If a number is entered and submitted with the **enter** key, the number is written into state within the `values` field. In this case, this state corresponds to an array which will hold all the numbers we have entered. The component will then iterate through all of the numbers entered and then renders a `FibonacciNumber` component which will receive each of this values.
+
+The `FibonacciNumber` component will then calculate the corresponding fibonacci number for the entered nuber and display it to the user. Depending on the number and computational power, it might take some time to calculate this number \(on my PC it took about 2-3 seconds for the 40th Fibonacci number\).
+
+Currently, the calculation will happen **each** time **even if the number is already present** in the array. If I entered 40, I would have to wait 3 seconds to get a result. If I entered 40 again, I would need to wait 3 seconds again \(on top of the previous 3 seconds\) as the value is calculated in both components again.
+
+We can `useMemo()` to deal with such situations more efficiently. By changing the following line from
+
+```javascript
+const result = fibonacci(value);
+```
+
+to:
+
+```javascript
+const result = useMemo(() => fibonacci(value), [value]);
+```
+
+... we have created a _memoized_ value.
+
+React will calculate this value during the **first render**, **remember** the value and only re-calculates if the value of the `value` prop changes for this component. If the value / the **dependencies** do not change between the two renders, React will use the value of the previous calculation without actually performing the computation.
+
+**But be careful**: This is all happening due to a **single** call of the `useMemo()` hook. If I called the same function twice in two different `useMemo()` hooks, the calculation would still be performed twice even if both functions use the same parameters. The second hook will **not** use the result of the previous calculation.
+
+## useRef
+
+```javascript
+const ref = useRef(initialValue);
+```
+
+`useRef()` is used to create **Refs** by using a dedicated hook. 
+
+```jsx
+import React, { useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
+
+function App() {
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  return <input ref={inputRef} />;
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+But we're not doing this hook enough justice: **refs** in **function components** also serve a different purpose: they allow us to create a **mutable reference** which will persist for the entire lifespan of the component\(meaning until it unmounts\). It can be compared to performing similar tasks as instance variables in class components.
+
+`useRef()` takes in an optional initial value and returns an object with a `current` property which can then be accessed within the **function component**. This access is not limited to read access but also allows write access. If we wanted to provide data whose changes would not trigger a re-render but whose reference would stay the same between two rendering cycles, we can use the `useRef()` hook.
 
