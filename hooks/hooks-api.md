@@ -733,3 +733,98 @@ But we're not doing this hook enough justice: **refs** in **function components*
 
 `useRef()` takes in an optional initial value and returns an object with a `current` property which can then be accessed within the **function component**. This access is not limited to read access but also allows write access. If we wanted to provide data whose changes would not trigger a re-render but whose reference would stay the same between two rendering cycles, we can use the `useRef()` hook.
 
+## useLayoutEffect
+
+I've briefly mentioned `useLayoutEffect()` when I presented `useEffect().` It follows a similar pattern as the `useEffect()` hook but differs in the timing of its execution and its synchronous nature.
+
+While `useEffect()` is executed with a little bit of delay **after** the **layout and paint** phase of the browser, `useLayoutEffect()` is executed **after layout** but **before paint**. This difference in timing allows `useLayoutEffect()` to read the current layout from the DOM and change it **before** it is being displayed in the browser.
+
+This kind of behavior is similar to what was previously achieved by `componentDidMount()` or `componentDidUpdate()` in class components. Due to performance reasons however, it is advisable to use `useEffect()` in most cases and only use `useLayoutEffect()` if you know exactly what you are doing. `useLayoutEffect()` can also help if you are struggling to migrate **class components** to **function components** due to the different timings of the effects.
+
+But be careful: neither ****`useEffect()` nor `useLayoutEffect()` will be executed server-side. While this does not pose a problem for `useEffect()` as it is only executed after the layout and painting phase of the browser, `useLayoutEffect()` might lead to differences in the server-side rendered markup compared to the initial client-side render. React will usually inform us of these differences and create a warning in the console. In these cases, `useEffect()` should be used instead or components using `useLayoutEffect()` should be mounted after the browser's paint phase.
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+
+const App = () => {
+  const [ mountLayoutComp, setMountLayoutComp ] = useState(false);
+
+  useEffect(() => {
+    setMountLayoutComp(true);
+  }, []);
+
+  return mountLayoutComp 
+    ? <ComponentWithLayoutEffect /> 
+    : null;
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+In this example, the component using the `useLayoutEffect()` is only registered after the component as mounted. We achieve this by checking for the `mountLayoutComp` state after the first paint phase.
+
+## useDebugValue
+
+```javascript
+useDebugValue(value);
+```
+
+This hook \(`useDebugValue()`\) is purely for optimizing the developer's debugging experience. It does not create any real value in an application for the **end user**. `useDebugValue()` allows us to give custom hooks a label which we can then inspect in the **React Dev tools**:
+
+```jsx
+import React, { useDebugValue, useEffect } from "react";
+
+const usePageTitle = (title) => {
+  useDebugValue(title);
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+};
+
+export default usePageTitle;
+```
+
+In this example, we have implemented a **hook** to change the page title in the browser. In the Dev tools, we can see the following:
+
+![The debugValue appearing next to the name of the hook](../.gitbook/assets/usedebugvalue.png)
+
+### Delayed formatting of the debug value
+
+If you recall, I have just mentioned that `useDebugValue()` does not have any real positive implication for the end user. However, this does not mean that it does not influence the user experience of the user interface. Slow calculations to display the value of the debug value can indeed decrease the rendering performance of an application.
+
+As this is not really desirable, it is possible to pass a second parameter to the `useDebugValue()` hook: a formatting function. The formatting of the value is only executed, once the value is actually inspected in the Dev tools. Declaring the hook would look like this:
+
+```javascript
+useDebugValue(value, (value) => formattedValue);
+```
+
+The hook is passed a **debug value** as its first argument just as we have provided before. However, as the second argument it will not receive a function that will executed the formatting of the debug value. This function will receive the **value** from the **hook** and will return the formatted value.
+
+If you are looking for a clear if unrealistic example, I can provide another example using the Fibonacci function we have already seen in the `useMemo()` example. We are going to display the debug value once with and once without the formatting function and inspect how the time to display the app changes:
+
+```jsx
+import React, { useDebugValue, useEffect } from "react";
+import ReactDOM from "react-dom";
+
+const fibonacci = (num) =>
+  num <= 1 ? 1 : fibonacci(num - 1) + fibonacci(num - 2);
+
+const useNumber = (number) => {
+  useDebugValue(number, (number) => fibonacci(number));
+  // without formatting function:
+  // useDebugValue(fibonacci(number));
+  useEffect(() => {});
+  return number;
+};
+
+function App() {
+  useNumber(41);
+  return <p>Debug Value Formatting Function example</p>;
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+Using `useDebugValue()` without the formatting function does significantly increase the loading time of the app which of course affects the user experience for the end user.
+
