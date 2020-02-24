@@ -828,3 +828,72 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 Using `useDebugValue()` without the formatting function does significantly increase the loading time of the app which of course affects the user experience for the end user.
 
+## useImperativeHandle
+
+```javascript
+useImperativeHandle(ref, createHandle, [deps])
+```
+
+I will be entirely honest with you all: I found it extremely difficult to construct a use case in which `useImperativeHandle()` will post a useful solution. Frustrated, I took to Twitter and crafted a post to ask for help. I was lucky enough to get an answer by Dan Abramov, core developer in the React team at Facebook, who informed me that I must be doing something right. This hook should not be used and has a long name to dissuade people from using it. For matters of completion and for understanding why this hook exists, I want to present it to you anyway.
+
+![Dan Abramov advising me that useImperativeHandle should not really be used in the wild ](../.gitbook/assets/useimperativehandle.png)
+
+I've spent a lot of time thinking about use cases worth of using the `useImperativeHandle()`. In most cases you should indeed explore other ways to express logic without the use of this hook. The official React documentation also discourages anyone from using this hook. As the name might suggest, this hook caters to imperative code and does not work well with the mostly declarative style that React openly advocates. However, there are situations in which one might need to work with classes and objects, especially when working with external libraries.
+
+But be careful examining the following example which illustrates the use of this **hook**. We have created a `FancyForm` component which displays its **children** and offers a couple of methods which can be called in the parent component consuming them. In this example, we have implemented a method called `focusFirstInput` to be able to focus onto the first input in our `FancyForm` form. We furthermore extend the form with another method called `getFormValues` which allows us to return our data that we entered in JSON format. The form can be sent off programmatically and reset by passing the forwarded **forwardRef** the imperative methods `reset()` and `submit()` from the HTML `<form>` element.
+
+```jsx
+import React, { useImperativeHandle, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
+
+const FancyForm = React.forwardRef((props, forwardedRef) => {
+  const formRef = useRef();
+
+  useImperativeHandle(forwardedRef, () => ({
+    focusFirstInput: () => {
+      (formRef.current.querySelector("input") || {}).focus();
+    },
+    getFormValues: () => {
+      return Array.from(new FormData(formRef.current)).reduce(
+        (acc, [value, name]) => {
+          acc[name] = value;
+          return acc;
+        },
+        {}
+      );
+    },
+    reset: () => formRef.current.reset(),
+    submit: () => formRef.current.submit(),
+  }), []);
+
+  return <form ref={formRef}>{props.children}</form>;
+});
+
+const App = () => {
+  const formRef = useRef();
+
+  useEffect(() => {
+    formRef.current.focusFirstInput();
+  }, []);
+
+  const submit = (e) => {
+    e.preventDefault();
+    console.log(formRef.current.getFormValues());
+  };
+
+  return (
+    <FancyForm ref={formRef}>
+      <p>
+        <input type="text" name="name" placeholder="name" />
+      </p>
+      <p>
+        <input type="email" name="email" placeholder="email" />
+      </p>
+      <input type="submit" onClick={submit} />
+    </FancyForm>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
