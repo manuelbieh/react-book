@@ -93,3 +93,87 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
+In this example, we can see that two different components are rendered in different parts of our application, depending on the URL which is currently active.
+
+However, while the above is completely valid code, one could argue that we are creating unnecessary duplication in this example. Thus, many try to avoid this structure and would rewrite the above example as the following:
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+const Home = () => (
+  <>
+   <main>Home Content</main>
+   <aside>Home Sidebar</aside>
+  </>
+);
+
+const Account = () => (
+  <>
+   <main>Account Content</main>
+   <aside>Account Sidebar</aside>
+  </>
+);
+
+const App = () => {
+  return (
+    <Router>
+      <Route path="/account" component={Account} />
+      <Route path="/" component={Home} />
+    </Router>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+While we avoided duplication of routing in this case, we have created duplication of the layout code. One should probably abstract this structure in its own layout component.
+
+```jsx
+import React from "react";
+
+const Layout = props => (
+  <>
+    <main>{props.content}</main>
+    <aside>{props.sidebar}</aside>
+  </>
+);
+
+const Home = () => <Layout content="Home Content" sidebar="Home Sidebar" />;
+const Account = () => <Layout content="Account Content" sidebar="Account Sidebar" />;
+
+const App = () => {
+  return (
+    <Router>
+      <Route path="/account" component={Account} />
+      <Route path="/" component={Home} />
+    </Router>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+If you have tried these code examples on your own, you might have noticed something that strikes you as a little odd. **React Router** intentionally has a rather relaxed approach to path matching. When we hit the `/account` URL, we do not only render the `Account` component, but also the Home component as the `/account` url **also includes** the path of `/` which then renders both components. This is intentional as it allows us to group certain areas of the page under a certain URL prefix and have all components render on these types of routes.
+
+Imagine a user account and a sidebar within this user account. Let's assume that we are building a community which has a user area which is divided into different subcategories: `/account/edit` to edit your profile, `/account/images` to view your own pictures or `/account/settings` to change your account settings. We can use a generic route in this application:
+
+```jsx
+<Route path="/account" component={AccountSidebar} />
+```
+
+This `AccountSidebar` component would now be rendered on every subpage that is part of the `/account` area, as all their URLs would also include `/account`.
+
+### Limit matching with props
+
+In order to limit the matching between `path` and the URL, React Router provides with an `exact` prop on the `Route` component. If this boolean prop is provided, the route is only rendered if the path prop exactly matches the current URL.
+
+```jsx
+<Route exact path="/" component={Home} />
+```
+
+Where exactly you place this prop in **JSX**, is not important. I like to place it just before the path prop to let it speak for itself: "Here is a route that matches an **exact path.**"  If we included the `exact` prop in the Account Sidebar, the sidebar would only be rendered if the URL with `/account` was hit, and would not register the components for `/account/edit`, `/account/images` oder `/account/settings`.
+
+
+
