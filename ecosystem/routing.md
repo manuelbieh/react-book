@@ -175,5 +175,100 @@ In order to limit the matching between `path` and the URL, React Router provides
 
 Where exactly you place this prop in **JSX**, is not important. I like to place it just before the path prop to let it speak for itself: "Here is a route that matches an **exact path.**"  If we included the `exact` prop in the Account Sidebar, the sidebar would only be rendered if the URL with `/account` was hit, and would not register the components for `/account/edit`, `/account/images` oder `/account/settings`.
 
+### Limiting matching to a single route via Switch component
 
+The `exact` prop only ever covers a **single route** and does not affect other routes at all. If we have a number of URLs which could all match multiple routes, it would be very cumbersome to add an exact prop to all of these routes. **React Router** offers a solution to this problem though by offering the `Switch` component.
+
+The `Switch` component that can wrap a number of `<Route />` elements, helps us to only ever render the **first** route whose `path` matches with the currently present in the URL. It is not a bad idea to wrap Routes with a `Switch` element by default unless you want more than one route rendered. In the above example, we could have used a `Switch` component instead of the `exact` prop too:
+
+```jsx
+<Router>
+  <Switch>
+    <Route path="/account" component={Account} />
+    <Route path="/" component={Home} />
+  </Switch>
+</Router>
+```
+
+Once the `/account` URL is hit, the first route would match and all other routes that follow would be ignored. In this case, only the `Account` component would get rendered. `Switch` components only match the URL of their **direct** children. If the `Account` component contained its own routes, the Switch component would not take care of these. These routes would get rendered if the `path` matched the current URL.
+
+Using Switch, we can implement a 404 page as a fallback route. If we remove the `path` prop from the route, the route now matches **every** URL. However, if it is used within a `Switch` element as the very last component, we inform **React Router** to only ever render this component if no other component matches:
+
+```jsx
+const Error404 = () => <h1>404 – Page not found</h1>;
+
+const App = () => (
+  <Router>
+    <Switch>
+      <Route path="/account" component={Account} />
+      <Route path="/contacts" component={Contacts} />
+      <Route path="/inbox" component={Inbox} />
+      <Route exact path="/" component={Home} />
+      <Route component={Error404} />
+    </Switch>
+  </Router>
+);
+```
+
+In this particular `Switch` element example, we also need to provide an `exact` prop for the `/` route. Why? If we did not provide the exact prop, this route would always match. Even an error route like `/does-not-exist` would be found under the `/` route. By providing the `exact` prop on the `/` route, we avoid this particular problem and an error component at the end of the `Switch` component can be safely rendered \(if no other route matches\). It fulfills a similar job to the `default` case of a `switch` statement in JavaScript.
+
+### Parameters in URLs
+
+Most applications require some sort of usage of parameters in URLs. React Router also supports parameters by using colons \( : \) which many of you might be already familiar with.
+
+```jsx
+<Route path="/users/:userid" component={UserProfile} />
+```
+
+One can easily restrict which parameters should be detected and can even provide further customization. For example, React Router allows the limitation of matching of routes by providing an `asc` \(ascending\) or `desc` \(descending\) keyword in regular expressions just after the parameter:
+
+```jsx
+<Route path="/products/:order(asc|dec)" />
+```
+
+ The above route would only match, if the URL provided was either `/products/asc` or `/products/desc`.
+
+If we were to only allow numerical values in the :userid, we would define routes such as `/users/:userid(\d*)` or `/users/:userid([0-9]*)` to limit these. A URL of `/users/123` would lead to a render of the `UserProfile` component, while `/users/abc` would not.
+
+If **React Router** finds such a URL, the value of the parameter is extracted and passed in to the rendered component via the `match` prop.
+
+### Controlling redirects of particular routes
+
+Apart from the usual `Route` component to react to particular Routes, **React Router** also offers a `Redirect` component. The Redirect component is initialized with a `to` prop in which we can provide a destination URL that the component should redirect to. It allows us to declaratively decide in **JSX** where to send a particular user in certain situations. Whenever a `Redirect` component is equipped with only a `to` prop, a redirect to the URL provided will take place. 
+
+`Redirect` components are a great solution to the common use case of having to redirect users to a login page if they are not logged in. Logged in users will continue to be directed to a Dashboard:
+
+```jsx
+<Route
+  exact
+  path="/"
+  render={() => {
+    return isLoggedIn ? <Dashboard /> : <Redirect to="/login" />;
+  }}
+/>
+```
+
+The `render` prop of the Route component can be used to check whether a user is logged in. If they are, a `Dashboard` component will be shown on the `/` Route, otherwise the user will be redirected to the `/login` Route via the `Redirect` component.
+
+`Redirect` components can also be used inside `Switch` elements. It behaves just like a `Route` component and only matches if no other `Route` or `Redirect` has matched with the current URL.
+
+If the `Redirect` is used inside of a `Switch` element, it can also receive a `from` prop. This is the equivalent to the `path` prop of the `Route` component, but ensures that the `Redirect` is taking place whenever the URL matches the value provided in the from prop:
+
+```jsx
+<Switch>
+  <Redirect from="/old" to="/new" />
+  <Route path="/new" component={NewComponent} />
+</Switch>
+```
+
+The `Redirect` component behaves just as the `Route` component concerning URL matching. It also supports the `exact` prop and also supports redirects to other routes with parameters:
+
+```jsx
+<Switch>
+  <Redirect from="/users/:userid" to="/users/profile/:userid" />
+  <Route path="/users/profile/:userid" component={UserProfile} />
+</Switch>
+```
+
+If the URL `/old` is hit \(first example\) or `/users/123` \(second example\), the user will be redirected to the URL specified in the `to` prop.
 
