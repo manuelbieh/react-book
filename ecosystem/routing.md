@@ -272,3 +272,63 @@ The `Redirect` component behaves just as the `Route` component concerning URL ma
 
 If the URL `/old` is hit \(first example\) or `/users/123` \(second example\), the user will be redirected to the URL specified in the `to` prop.
 
+### Using Router Props
+
+Each component that was rendered by React Router and has been added as a `component` prop to a `Route` component, automatically receives three other props:
+
+* `match` 
+* `location` 
+* `history`
+
+Each of these props can be accessed just like any other props. **Class coponents** can access these via `this.props` whereas **function components** can access these with `props`:
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+const Example = (props) => {
+  console.log(props);
+  return <p>Example</p>;
+}
+
+const App = () => (
+  <Router>
+    <Route path="/users/:userid" component={Example} />
+  </Router>
+);
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+Let's have a look at the console output of this component when the route `/users/123` is hit:
+
+```javascript
+{
+  history: { /* ... */ },
+  location: { /* ... */ },
+  match: {
+    path: "/:userid",
+    url: "/users/123",
+    isExact: true,
+    params: {
+      userid: "123"
+    }
+  }
+}
+```
+
+Without getting into too much detail for each and every property, we get a feel for which properties of the router we are able to access. For now, we only care about the `match` property which will contain the `paths` we have defined in the `match.params` once a matching URL is called. In this case, we can access `match.params.userid` which will yield the value of `123`.
+
+A possible extension of this use case could be the start of an API request in a user profile component. The user id could be used to fetch the particular data for the user `123` and then display their user profile.
+
+**React Router** ensures that each component connected to the Router will have a `match` property which always has its own `params` property. This will either contain the actual parameters or an empty object. `props.match.params` is therefore safe to access without having to fear that the property might be `undefined` and throwing an error. 
+
+The `render` prop on the `Route` component also receives the props of the router:
+
+```jsx
+<Route path="/users/:userid" render={(props) => {
+  return <p>Profile of ID {props.match.params.userid}</p>;
+}} />
+```
+
