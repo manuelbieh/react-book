@@ -167,13 +167,13 @@ This `AccountSidebar` component would now be rendered on every subpage that is p
 
 ### Limit matching with props
 
-In order to limit the matching between `path` and the URL, React Router provides with an `exact` prop on the `Route` component. If this boolean prop is provided, the route is only rendered if the path prop exactly matches the current URL.
+In order to limit the matching between `path` and the URL, React Router provides an `exact` prop on the `Route` component. If this Boolean prop is provided, the route is only rendered if the path prop exactly matches the current URL.
 
 ```jsx
 <Route exact path="/" component={Home} />
 ```
 
-Where exactly you place this prop in **JSX**, is not important. I like to place it just before the path prop to let it speak for itself: "Here is a route that matches an **exact path.**"  If we included the `exact` prop in the Account Sidebar, the sidebar would only be rendered if the URL with `/account` was hit, and would not register the components for `/account/edit`, `/account/images` oder `/account/settings`.
+Where exactly you place this prop in **JSX**, is not important. I like to place it just before the path prop to let it speak for itself: "Here is a route that matches an **exact path.**"  If we included the `exact` prop in the Account Sidebar, the sidebar would only be rendered if the URL with `/account` was hit, and would not register the components for `/account/edit`, `/account/images` or `/account/settings`.
 
 ### Limiting matching to a single route via Switch component
 
@@ -228,7 +228,7 @@ One can easily restrict which parameters should be detected and can even provide
 
  The above route would only match, if the URL provided was either `/products/asc` or `/products/desc`.
 
-If we were to only allow numerical values in the :userid, we would define routes such as `/users/:userid(\d*)` or `/users/:userid([0-9]*)` to limit these. A URL of `/users/123` would lead to a render of the `UserProfile` component, while `/users/abc` would not.
+If we were to only allow numerical values in the ~~`:userid`~~, we would define routes such as `/users/:userid(\d*)` or `/users/:userid([0-9]*)` to limit these. A URL of `/users/123` would lead to a render of the `UserProfile` component, while `/users/abc` would not.
 
 If **React Router** finds such a URL, the value of the parameter is extracted and passed in to the rendered component via the `match` prop.
 
@@ -280,7 +280,7 @@ Each component that was rendered by React Router and has been added as a `compon
 * `location` 
 * `history`
 
-Each of these props can be accessed just like any other props. **Class coponents** can access these via `this.props` whereas **function components** can access these with `props`:
+Each of these props can be accessed just like any other props. **Class components** can access these via `this.props` whereas **function components** can access these with `props`:
 
 ```jsx
 import React from "react";
@@ -331,4 +331,46 @@ The `render` prop on the `Route` component also receives the props of the router
   return <p>Profile of ID {props.match.params.userid}</p>;
 }} />
 ```
+
+### Navigating different routes
+
+Once we've divided an application into different routes, we would also like to be able to link between these URLs. While we could easily use regular HTML anchors `<a href="...">...</a>`, this is not recommended. Each time such an anchor is used, we would trigger a "hard" page refresh in the browser. The page would be left **completely** and then be loaded again.
+
+In practice, we would ask for an HTML document which would in turn load CSS and the JavaScript containing our React application from the server again \(unless it is in the browser cache\). Doing this would mean that everything is re-initialised based on each new URL. Any state that might have been set globally previously would be reset.
+
+Single Page Applications should not follow this pattern and any HTML, CSS and JavaScript should only be loaded from the server once. Global state should be persisted once one navigates through the routes and only those parts of the page which actually change, should re-render.
+
+To facilitate said behavior, **React Router** supports a `Link` component. It can be imported from the `react-router-dom` package and also comes with a `to` prop, which roughly equates to the regular `href` attribute on a HTML anchor element.
+
+```jsx
+<Link to="/account">Account</Link>
+```
+
+**React Router** also uses an `<a href />` under the hood. However, any clicks to this page are being intercepted and sent to an internal function which then deals with displaying new page content based on the new URL - without triggering a complete refresh of the page.
+
+Apart from the `to` prop, `Links` can also be equipped with an `innerRef`. These will be filled by `createRef()` or `useRef()` which both create a ref that can be used by the component. Moreover, `Link` also supports a `replace` prop which allows us to replace the current URL in the browser history instead of creating a new history entry. Be careful though, you cannot access the previous route when pressing the back button in the browser anymore if you chose to make use of the `replace`prop.
+
+Any other props that are passed to the `<Link />` element, will be passed down to the generated anchor element. `<Link to="/" title="Homepage">Home</Link>` would generate the following markup: `<a href="/" title="Homepage">Home</a>`.
+
+### Special case: NavLink
+
+A special form of the `Link` element is the `NavLink` element. Apart from the usual props that can also be received by the `Link` component, `NavLinks` can change based on their state.  `NavLinks` can access information relating to which page they are currently linking to and whether that page is the same as the current page. If this is the case, we can alter it's display using `activeClassName` and `activeStyle`.
+
+A classic example for this type of behavior is the overall page navigation. The currently active route in the menu is highlighted in a different color:
+
+```jsx
+<NavLink to="/" activeClassName="active">Home</NavLink>
+<NavLink to="/account" activeClassName="active">Account</NavLink>
+<NavLink to="/contacts" activeClassName="active">Contacts</NavLink>
+```
+
+Only the Link of the current page receives the `activeClassName` active. If we had navigated to the `/account` URL, the markup would resemble the following:
+
+```markup
+<a href="/">Home</a>
+<a href="/account" class="active">Account</a>
+<a href="/contacts">Kontakte</a>
+```
+
+`NavLinks` can also receive an `exact` and `strict` prop \(similar to the same **props** for the `Route` component\) as well as an `isActive` prop. The latter expects a function which is either returns `true` \(if the current page is the same as the one provided in `NavLink`\) or `false` \(active page is not the same as `NavLink`\). The function takes the aforementioned `match` object as its first argument and a `location` object as its second which are passed in from the router. The function can then decide whether to mark the `NavLink` as active or not - based on the information available.
 
