@@ -374,3 +374,164 @@ Only the Link of the current page receives the `activeClassName` active. If we h
 
 `NavLinks` can also receive an `exact` and `strict` prop \(similar to the same **props** for the `Route` component\) as well as an `isActive` prop. The latter expects a function which is either returns `true` \(if the current page is the same as the one provided in `NavLink`\) or `false` \(active page is not the same as `NavLink`\). The function takes the aforementioned `match` object as its first argument and a `location` object as its second which are passed in from the router. The function can then decide whether to mark the `NavLink` as active or not - based on the information available.
 
+### Navigating programmatically using the History API
+
+We now know how we can use `Route` elements on different URLs and how to react with different components. We have also learned how to avoid a full page reload by using the `<Link />` element. In some cases however, it can be useful to programmatically force the change of a URL. For example, we might want to send the user to another site after successful completion of an asynchronous request.
+
+The `history` property which can be accessed via each `Route`'s props can help with this endeavor:
+
+```javascript
+{
+  history: {
+    action: "POP"
+    block: Function(prompt),
+    go: Function(number),
+    goBack: Function(),
+    goForward: Function(),
+    length: 1
+    push: Function(path, state)
+    replace: Function(path, state)
+  },
+  location: { /* ... */ },
+  match: { /* ... */ }
+}
+```
+
+Let's look at the `push()` and `replace()` functions in particular. Using `props.history.push('/destination')`, we can change the URL to `/destination` as well as triggering a re-render. This will create a new entry in the browser's history just as using a `Link` component did. If no entry in the browser's history is desired, the `props.history.replace('/destination')` function can be used instead.
+
+We also have access to a so-called `props.history.go()` function which allows us to programmatically switch between entries in the browser's history. The function expects a parameter which indicates how many pages ahead or back should be turned. A negative value informs the function to go back in the entries whereas a positive value informs the function to go forward in the collection of entries. `goBack()` and `goForward()` are shortcuts for going back a step in the browser's history and forward. They are equivalent to calling `go(-1)` and `go(1)`.
+
+The `action` property in `history` confirms how the user has ended up on the current page. Possible values include `POP`,  `PUSH` or `REPLACE`. `POP` can either signify that the user has pressed the back button in the browser or that they have loaded the page for the first time. `PUSH` informs us that the `history.push()` method has been called which is also the case once a `<Link />` has been clicked. If the `action` properties value is `REPLACE`, `history.replace()` has been called or a `<Link />` element has been clicked that contained a `replace` property.
+
+### Connecting components with a router using HOC
+
+Each component which is used as a `component` prop in a `Router` element, is automatically passed the router props `history`, `location`, and `match`. Sometimes however, it would prove useful to not only be able to access Router functionality in components which are not using a direct Route. For example: to redirect to another page using `history.push()`. 
+
+In order to allow for such use cases, **React Router** provides a `withRouter` Higher Order Component. Each component wrapped by this HOC will automatically receive the router's props even though they are not used as a Route component:
+
+```jsx
+withRouter(MyComponent);
+```
+
+This component is sometimes used in another situation: it can prevent **"Update blocking"**. This used to be a necessary workaround before **React Router 5.0.0**. Since then however, this problem has been solved and is no longer necessary. I will still outline the reasons and rationale as to why this is necessary though should you ever find yourself working with older versions of **React Router**.
+
+If components have been implemented as `PureComponent`s or have been wrapped by a `React.memo()` call for optimization reasons, re-renders are suppressed if no **props** or **state** have changed. As most Router components, for example `NavLink`, access data in the router via **React context**, a `PureComponent` or component wrapped by `React.memo()` might not receive any information that its children need re-rendered.
+
+In those types of situations, it is recommend to wrap these components with a `withRouter()` HOC. Whenever a change in the Routing occurs and new props with a new location are passed to the respective component, a re-render will be triggered. This principle also applies to the state management library **Redux**. If a component is connected to the **Redux** store via the `connect()` function, the component would prohibit the re-rendering of router-specific parts, unless something has also changed in the store.
+
+To avoid such cases, these components should be wrapped by a `withRouter()` HOC:
+
+```javascript
+withRouter(connect()(MyComponent));
+```
+
+Since **React 16.3.0** however and **React Router 5.0.0**, this issue has been solved though and you will only come across it while working with previous versions of these two libraries.
+
+### React Router and Hooks
+
+Since React Router **5.1.0**, the library has been enhanced by a number of own hooks that are available to the developer. It is now possible to access Router information in **function components** without using the `withRouter()` HOC provided that these components are not directly used as argument for the `<Route />` element prop component  \(`<Route component={MyComponent} />`\).
+
+As is the case with most hooks, using React Router's own hooks is a very pleasant and straightforward experience. Four hooks allow us to access the `location` object, the `history` instance, the Route parameter or the `match` object. Conveniently, these hooks are aptly called `useLocation`, `useHistory`, `useParams` and `useRouteMatch`. In order to use these hooks, the component intended for the hooks implementation needs to be be nested within a `<Router>` tree. However, it is not necessary for the component to follow directly after the Router element or be placed on the most upper layer. These hooks can access the Router context and can thus be used anywhere in your application.
+
+#### useLocation\(\) 
+
+First, let's have a closer look at the arguably most simple hook in our list. We can import it via the `react-router-dom` package. Once installed, we can access location data by using the return value of the hook:
+
+```jsx
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+
+const ShowLocationInfo = () => {
+  const location = useLocation();
+  return <pre>{JSON.stringify(location, null, 2)}</pre>;
+}
+```
+
+In this example, we would obtain the following output for the `showLocationInfo` component:
+
+```javascript
+{
+  "pathname": "/",
+  "search": "",
+  "hash": ""
+}
+```
+
+#### useHistory\(\)
+
+This hook allows us to the `history` instance of React Router. It can access and change the URL via the `push()` and `replace()` methods and thus trigger a re-render of the application. `goBack()`, `goForward()` as well as the more general `go()` can be used to navigate the browser's history.
+
+```jsx
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
+const NavigateHomeButton = () => {
+  const history = useHistory();
+  
+  const goHome = () => {
+    history.push('/');
+  };
+  
+  return <button onClick={goHome}Take me home</button>;
+}
+```
+
+This example demonstrates how we can implement a button which will direct us to the home page once it's clicked using the `useHistory()` hook.
+
+#### useParams\(\)
+
+This hook is basically a shortcut for accessing parameters which were hidden in `match.params`. If a route has been implemented using placeholders, such as `/users/:userid` , and then a URL such as `/users/123` has been called, the `params` object will contain a key/value pair in the form of `{ "userid": "123" }.`
+
+The `useParams()` hook allows us to _directly_ access this object:
+
+```jsx
+import React from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+
+const ShowParams = () => {
+  const params = useParams();
+  const location = useLocation();
+  return <pre>{JSON.stringify({ location, params }, null, 2)}</pre>;
+};
+```
+
+If a route such as `/users/:userid` had been created and a URL such as `/users/123` has been called, the output would resemble the following:
+
+```javascript
+{
+  "location": {
+    "pathname": "/users/123",
+    "search": "",
+    "hash": ""
+  },
+  "params": {
+    "userid": "123"
+  }
+}
+```
+
+#### useRouteMatch\(\)
+
+The last hook introduced by React Router **5.1.0** forms the `useRouteMatch()`  hook. It allows us to access the whole `match` object of a Route, meaning we can now obtain information on `params`, `url`, `path` and `isExact`. This means that one can now safely check whether the URL matches the `path` of a route.
+
+The function can take in a path which will in turn return a `match` object for the said route. If no particular path is provided to the function, the path of the current route will be used. Using our previous example with the path of `/users/:userid` , the Route `<Route path="/users/:userid">` will return the following `match` object if the URL `/users/123` is provided as an argument:
+
+```javascript
+{
+  "path": "/users/:userid",
+  "url": "/users/123",
+  "isExact": true,
+  "params": {
+    "userid": "123"
+  }
+}
+```
+
+If the hook is called with a path that does not match with the current route, `null` will be returned from the function:
+
+```jsx
+useRouteMatch('/orders/:orderid')
+```
+
+Calling this function with `/users/:userid` will return a value of `null`.
+
