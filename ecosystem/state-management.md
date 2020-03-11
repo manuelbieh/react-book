@@ -123,3 +123,5 @@ If we pass another parameter to the `createStore` function, this parameter would
 const store = createStore(counterReducer, 3);
 ```
 
+Instead of `undefined`, the inital value for our `state` parameter that is passed to the `counterReducer` would equate to `3`. The `initialState` would not be set and our counter would start counting at `3` instead of `0`.
+
