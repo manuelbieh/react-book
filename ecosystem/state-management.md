@@ -60,7 +60,7 @@ Let's have a look at a typical **action** in **Redux**:
 
 Once an **action** has been _dispatched_ \(the **store** provides this `dispatch` method for us\), the current **state** as well as the **action** dispatched are passed to the **reducer**. The **reducer** is a **pure function** which we also already encountered in React. Its primary aim is to create a **new state** based on the **current state** and the action's `type` and `payload` properties. A little reminder: a **pure function** always creates the **same output**, given the **same input parameters** - no matter how many times it is being called. This behavior makes **Reducers** predictable and also easy to to test.
 
-Example for a **reducer**:
+Example of a **reducer**:
 
 ```javascript
 const reducer = (state, action) => {
@@ -76,5 +76,50 @@ const reducer = (state, action) => {
     }
   }
 };
+```
+
+A **store** generally expects only a **single reducer**. **Redux** allows us to split the **reducer** function into many small little parts, making them more digestible and easy to read. A `combineReduers()` function then takes care of merging all these parts into one main **reducer** - the **root reducer**. When an action is _dispatched_, each **reducer** is called with the same parameters: **state** and the **action**. 
+
+Each **reducer** reacts to the `type` property of an **action**. Due to this, a convention has emerged to extract all used types into variables with the same name which allow us to avoid typos. Why is that? Typos might be hard to spot \(e.g. `USER_ADDDED`\) without. On top of that, the JavaScript interpreter will throw an error if we tried to access a variable which is not defined, eliminating yet another source of error that's hard to track down. Thus, you often find the following code-blocks at the beginning of a file in **Redux** applications:
+
+```javascript
+const PLUS = 'PLUS';
+const MINUS = 'MINUS';
+```
+
+This allow us to create some sort of coherence among the different **action types**.
+
+### Creating a store
+
+To create a store which will manage the global state, we habe to import the `createStore` function from the `redux` package. We can call it by passing it a **reducer** function. This function will return a store object to us which will contain all the methods necessary to interact with the store, namely `dispatch`, `getState` and `subscribe`. The latter two are not of the same importance when working with React, but I have mentioned them for the sake of completion. In React and Redux applications, the `react-redux` bindings components take care of the re-rendering of components if they are affected by a change of the **state**.
+
+```javascript
+import { createStore } from "redux";
+
+const initialState = 0;
+
+const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "PLUS": {
+      return state + (action.payload || 0);
+    }
+    case "MINUS": {
+      return state - (action.payload || 0);
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+const store = createStore(counterReducer);
+```
+
+We've just created our first simple store with a counter reducer. The `createStore` function only takes a single parameter in this example \(the `counterReducer`\) indicating that the initial `state` will be set to `undefined`. Thus, we have set the `initialState` as the standard parameter which equates to 0 in this example.
+
+If we pass another parameter to the `createStore` function, this parameter would be passed as first state to our reducer function:
+
+```javascript
+const store = createStore(counterReducer, 3);
 ```
 
