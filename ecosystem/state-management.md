@@ -1,6 +1,6 @@
 # State Management
 
-The more an application grows in the size, the more its complexity and data grows. Managing **application state** becomes increasingly difficult and cumbersome to do. When do I pass props to which component and how? How do the props influence the state of my components and what happens if I change the state of a component?
+are a powerful piece of functionality in Redux and can allow us to eliminate repetition. Using The more an application grows in the size, the more its complexity and data grows. Managing **application state** becomes increasingly difficult and cumbersome to do. When do I pass props to which component and how? How do the props influence the state of my components and what happens if I change the state of a component?
 
 React has introduced great tooling in the last few years to deal with this increase of complexity in application state. The **Context API** as well as the **useReducer** **hook** have been great additions to the React developer's toolbox and allow us to work more comfortably with complex data. However, in some cases it is still very difficult to keep track of all the different pieces of data and how they transform. To deal with this type of problem, external tools for **global state management** can be a great choice. The React ecosystem has seen a number of players enter this space giving us lots of libraries to choose from.
 
@@ -193,7 +193,79 @@ store.dispatch(add(1));
 store.dispatch(subtract(2));
 ```
 
-By following sensible naming conventions, the readability of the overall code is greatly improved. **Action creators** are a powerful piece of functionality in Redux and can allow us to eliminate repitition. Using **action creators** can also help to avoid common mistakes such as typos in a `type` of an action - for example `PLSU` instead of `PLUS`.
+By following sensible naming conventions, the readability of the overall code is greatly improved. **Action creators action creators** can also help to avoid common mistakes such as typos in a `type` of an action - for example `PLSU` instead of `PLUS`.
 
+### Complex reducers
 
+The previous examples were intended for us to form an understanding of **actions** and **reducers**. Moreover, they allowed us to understand how **actions** are used in practice and how the **reducer** mutates the **store**. Typically, most React applications will deal with much more **complicated state** than what we have seen in the examples. To understand **Redux** in context of much larger state, we will look at a more realistic example.
+
+The example will describe a simple **To-Do** app and we will look how the **state management** for said app can be implemented. The to-do app will manage lists of to-dos and also contain a logged-in user area. The state will consist of two top level properties: `todos` \(of type array\) and `user` \(of type object\). This is reflected in our current state:
+
+```javascript
+const initialState = Object.freeze({
+  user: {},
+  todos: [],
+});
+```
+
+To ensure that a new state object is being created instead of mutating the previous object, the initial state object is wrapped by `Object.freeze()`. If there was an attempt to directly mutate the **state object** a `TypeError` would be thrown.
+
+Let's have a look at how a **reducer function** could be implemented that manages the todos \(adding, removing and changing the status of todos\) and sets the login area of a user:
+
+```javascript
+const rootReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "SET_USER": {
+      return {
+        user: {
+          name: action.payload.name,
+          accessToken: action.payload.accessToken,
+        },
+        todos: state.todos,
+      };
+    }
+    case "ADD_TODO": {
+      return {
+        user: state.user,
+        todos: state.todos.concat({
+          id: action.payload.id,
+          text: action.payload.text,
+          done: Boolean(action.payload.done),
+        }),
+      };
+    }
+    case "REMOVE_TODO": {
+      return {
+        user: state.user,
+        todos: state.todos.filter((todo) => todo.id !== action.payload),
+      };
+    }
+    case "CHANGE_TODO_STATUS": {
+      return {
+        user: state.user,
+        todos: state.todos.map((todo) => {
+          if (todo.id !== action.payload.id) {
+            return todo;
+          }
+          return {
+            ...todo,
+            done: action.payload.done,
+          };
+        }),
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+const store = createStore(rootReducer);
+```
+
+I do not want to go into too much detail, however a few things should be properly explained in this instead. Let's look at each `switch` block in turn in which each `case` block returns a new state object.
+
+Let's start with `SET_USER`: the **state object** being created here changes the `user` object and sets its `name` property to `action.payload.name` as well as the `accessToken` property to `action.payload.accessToken`. One could also set `user` to `action.payload` but this would mean that the complete **payload** of the **action** would be transferred to the `user` object. Moreover, one has to ensure that the `action.payload` is an object as to not change the initial form of the `user` object. This could become problematic if other parts of the **reducer** also access this object and its type had suddenly changed. We have ignored all other properties in our example by explicitly accessing `name` and `accessToken` from the **payload** of the action.
+
+Apart from the modified `user`, we also return a `todos` property which we set to `state.todos`. This indicates that we do not change this value and leave it as is \(initial value\). **This is important** - as the `todos` would have otherwise disappeard from the state. We would have set the user but removed all their todos from state.
 
