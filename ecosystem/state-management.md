@@ -123,5 +123,38 @@ If we pass another parameter to the `createStore` function, this parameter would
 const store = createStore(counterReducer, 3);
 ```
 
-Instead of `undefined`, the inital value for our `state` parameter that is passed to the `counterReducer` would equate to `3`. The `initialState` would not be set and our counter would start counting at `3` instead of `0`.
+Instead of `undefined`, the initial value for our `state` parameter that is passed to the `counterReducer` would equate to `3`. The `initialState` would not be set and our counter would start counting at `3` instead of `0`.
+
+The first initial **action** being _dispatched_ takes the form of `{type: '@@redux/INIT5.3.p.j.l.8'}`. Looking at our example, this means that the `default` case will get activated and that only the `state` passed will be returned \(which also equates to the `initialState`\).
+
+This `default` case is important. If no other `case` of the `switch` statement can be fulfilled, the current `state` needs to be returned from the function to avoid unwanted side-effects. The `reducer` function is executed after **each** `dispatch` call and dictates the value of the **next state** by returning it from the function.
+
+Calling `store.getState()` after initialization, we obtain an `initialState` of `0`:
+
+```javascript
+console.log(store.getState()); // 0
+```
+
+Let's try things out a bit and try **dispatch a few actions** to see how **state** reacts to these **actions**:
+
+```javascript
+store.dispatch({ type: "PLUS", payload: 2 });
+console.log(store.getState()); // 2
+
+store.dispatch({ type: "PLUS", payload: 1 });
+console.log(store.getState()); // 3
+
+store.dispatch({ type: "MINUS", payload: 2 });
+console.log(store.getState()); // 1
+```
+
+We've _dispatched_ an **action** of `type` `PLUS` twice and of `type` `MINUS` once. A `payload` is also passed that indicates by how many numbers our last state is supposed to be incremented or decremented by. These operations result in the following **state mutations**:
+
+```javascript
+0 (initialer State) + 2 (payload) = 2 (neuer State)
+2 (alter State)     + 1 (payload) = 3 (neuer State)
+3 (alter State)     - 2 (payload) = 1 (neuer State)
+```
+
+This state remains relatively simple and only consists of a single value. We will look at more complex **state** consisting of different objects soon and create a number of different **reducers**.
 
