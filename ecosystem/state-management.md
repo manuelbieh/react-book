@@ -158,3 +158,42 @@ We've _dispatched_ an **action** of `type` `PLUS` twice and of `type` `MINUS` on
 
 This state remains relatively simple and only consists of a single value. We will look at more complex **state** consisting of different objects soon and create a number of different **reducers**.
 
+### Action Creators vs Actions
+
+Those who read articles or the official documentation of **Redux** will have encountered the two terms **action** and **action creators**. The difference is not completely clear in the beginning. I struggled to really understand differences myself and know many others who have felt the same. The situation is furthermore complicated by the fact that some use the terms interchangeably, although they mean different things. Let's quickly dive into how **action creators** and **actions** differ.
+
+**Actions,** which were already introduced earlier, are simple, _serializable ****_**objects** that can be used to describe how exactly **state** should change. They always contain a `type` property and often a `payload`.
+
+An **action creator** however describes a **function** that returns an **action**. One could also say that it is a **factory** which creates **actions** \(thus the name _Creator_\). In most situations, **action creators** are used to **encapsulate logic** that is necessary to create to an **action**. Sometimes they are also used to abstract away complex logic from the **actions** themselves. In those cases, the **action creator** function is called instead of the **action** and passed to the `dispatch` method.
+
+Typical **action creators** might take the following form using the previous example:
+
+```javascript
+const add = (number) => {
+  return { type: 'PLUS', payload: number };
+};
+
+const subtract = (number) => {
+  return { type: 'MINUS', payload: number };
+}
+```
+
+Or using **ES2015+ shorthand notation**:
+
+```javascript
+const add = (payload) => ({ type: 'PLUS', payload });
+const subtract = (payload) => ({ type: 'MINUS', payload });
+```
+
+Consequently, the **action creators** will be called as parameters of the `dispatch` method instead of passing an **action** directly:
+
+```javascript
+store.dispatch(add(2));
+store.dispatch(add(1));
+store.dispatch(subtract(2));
+```
+
+By following sensible naming conventions, the readability of the overall code is greatly improved. **Action creators** are a powerful piece of functionality in Redux and can allow us to eliminate repitition. Using **action creators** can also help to avoid common mistakes such as typos in a `type` of an action - for example `PLSU` instead of `PLUS`.
+
+
+
