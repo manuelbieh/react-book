@@ -341,7 +341,7 @@ export default (state = initialState, action) => {
 };
 ```
 
-This way, we have not only achieved readibilty by creating two **reducer** functions but the functions themselves could also be simplified. Instead of returning the _unchanged_ parts of the **state tree** as well, we only return those parts of the **reducer** _which are relevant to this reducer_. For the **user reducer** we only return the **user** while in the **todos reducer** we only return **todos**.
+This way, we have not only achieved readability by creating two **reducer** functions but the functions themselves could also be simplified. Instead of returning the _unchanged_ parts of the **state tree** as well, we only return those parts of the **reducer** _which are relevant to this reducer_. For the **user reducer** we only return the **user** while in the **todos reducer** we only return **todos**.
 
 In order to combine the _smaller_ **reducers** into a _****big_ **reducer**, we can use the aforementioned `combineReducers()` method which will create a root reducer which can then be passed to the `createStore()` method. The `combineReducers()` function expects an object whose property name matches that of the newly created state tree. The values also have to be _valid_ **reducers**.
 
@@ -386,7 +386,7 @@ To use `combineReducers()`, a few formal rules have to be followed. They do not 
 * Reducer functions used in the `combineReducer()` function can never return `undefined`. This is different to the **root reducer** which is allowed to do this. In the case of the former, the `combineReducers()` function will throw an **error** to inform us of this error. We deal with this effectively in our example by including a `default` case in the `switch` block which will simply return the `state`
 * If the `state` passed in the first argument is of `type` `undefined`, the **initial state** has to be returned. It's probably easiest to use the initial state as a default value as we have done in the above example \(`state = initialState`\).
 
-**An aside**: `combineReducer()` can be nested as many times as you like, The **reducer** fuinctions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning to `combineReducer()` calls\).
+**An aside**: `combineReducer()` can be nested as many times as you like, The **reducer** functions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning to `combineReducer()` calls\).
 
 ### Asynchronous actions
 
@@ -400,13 +400,75 @@ The `createStore()` function from the `redux` package can deal with up to three 
 * **Initial state**: One can pre-populate the store with data by providing a value in the initial state. This initial state is also passed to the **reducer function**.
 * An **enhancer function**: This function can be used to enhance the store's capability with our own functionality: in this case we enhance it with the **middleware** mentioned above.
 
-If the `createStore` function receives a **function** as a second parameter, thisa second parameter will be treated as an **enhancer function**. If the second parameter takes the form of anything different, the second parameter will be treated as **initial state** and passed to the **reducer function** as such.
+If the `createStore` function receives a **function** as a second parameter, the second parameter will be treated as an **enhancer function**. If the second parameter takes the form of anything different, the second parameter will be treated as **initial state** and passed to the **reducer function** as such.
 
 **Redux middleware** is wrapped around the `dispatch` method and interrupts the usual call before it is executed. It can modify the **action** _before_ it is sent to the **reducer** and returns a new `dispatch` function. If we wanted to pass asynchronous functions \(for examples Promises\) to the `dispatch()` method, we can use the **store enhancer** to register the **middleware** that allows us to do just that. The most common piece of middleware is the so-called **thunk middleware**.
 
+Install it via:
 
+```bash
+npm install redux-thunk
+```
+
+or using Yarn:
+
+```bash
+yarn add redux-thunk
+```
+
+Once the **thunk middleware** has been installed, it has to be _registered_ via the **Redux** `applyMiddleware()` function in the **enhancer**. We import the **middleware** and import the `applyMiddleware()` function from the `redux` package. The **middleware** we want to use has to be passed to the `applyMiddleware()` function as a parameter. In this case, we are passing `thunk`:
 
 ```javascript
-const rootReducer = combineReducers({ todos, user }
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
+
+// ...
+
+const store = createStore(
+  reducer, 
+  applyMiddleware(thunk)
+);
 ```
+
+By implementing this piece of **thunk middleware**, we can now easily compose **action creators** that execute _asynchronous_ code and only _dispatch_ the **actions** once we have obtained a result. The **thunk function** is an **action creator** which returns a function whose parameters are also a `dispatch()` and a `getState()` function. We can decide ourselves when we should _dispatch_ an action in the **thunk action creator** function.
+
+```javascript
+const delayedAdd = (newTodo) => {
+  return (dispatch, getState) => {
+    setTimeout(() => {
+      return dispatch({
+        type: 'ADD_TODO',
+        payload: newTodo,
+      });
+    }, 500);
+  };
+};
+
+store.dispatch(delayedAction({
+  id: 1,
+  text: 'Explaining thunk actions',
+  done: false,
+}));
+```
+
+In this example we have created a `delayedAdd` **action creator**. It receives a new todo element and then returns a new function in the form of `(dispatch, getState) => {})`. The **thunk middleware** ensures that that this function always receives the `dispatch()` and `getState()` functions. After a delay of 500ms, we call the `dispatch()` function with the `ADD_TODO` **action** and add the new object.
+
+To be able to _dispatch_ said action, we can use the _asynchronous_ **action creator** in the same fashion as the _synchronous_ **action creator** - by passing the called function to the `dispatch()` function to the **store**: `store.dispatch(ActionCreator)`. The thunk middleware will recognize if a **thunk** function is being used, execute it and pass it `dispatch` and `getState` as an argument.
+
+If you are familiar with **arrow function syntax** of ES2015, you can simplify things further:
+
+```javascript
+const delayedAdd = (newTodo) => (dispatch, getState) => {
+  setTimeout(() => {
+    return dispatch({
+      type: 'ADD_TODO',
+      payload: newTodo,
+    });
+  }, 500);
+};
+```
+
+In this example, we have used a shorter **arrow function** with an **implicit return** which can then be direcly returned by the function called by the **thunk middleware**. By not having to write another `return`, we have eliminated another two lines of code. Beware however, that you do not trade readbility and understanding for shorter code.
+
+
 
