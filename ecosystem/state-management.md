@@ -269,3 +269,144 @@ Let's start with `SET_USER`: the **state object** being created here changes the
 
 Apart from the modified `user`, we also return a `todos` property which we set to `state.todos`. This indicates that we do not change this value and leave it as is \(initial value\). **This is important** - as the `todos` would have otherwise disappeared from the state. We would have set the user but removed all their todos from state. 
 
+Let's continue with `ADD_TODO`: this works differently from `SET_USER` as the `user` is returned unchanged from the state tree. A new todo is added to the array of todos via the `.concat()` method. It's important to make the distinction between `push()` and `concat()`: `push()` is a _mutating_ method which means that it would change our current state instead of creating a new one. By using `state.todos.concat`, we use the current `todos` array as the basis and create a new array which contains the previous array as well as the newest todo item.
+
+The case of `REMOVE_TODO` works in a similar fashion. The `user` is returned just as was the case in `ADD_TODO`. The `todos` array on the other hand is filtered by the entry to remove. We pass an `id` to the filter which has been provided in terms of an action as part of the  `action.payload`. The filtered array forms the new `todos` state. Again, the choice of `Array.filter()` has been made as it is non _mutating_ and creates a new array as opposed to comparable methods such as `Array.splice()` which mutate the the original array.
+
+The last case illustrated in our example is `CHANGE_TODO_STATUS`. It allows us to set the status of our todo element from to do - `false` - to done - `true` or vice-versa. The `user` object remains unchanged and the previous state is returned. To change the status of a todo, we use a map function to iterate over the array of todos. In this map, we check whether the id of the current todo object is equal to the id of the `action.payload`. If this is not the case, we just return the unchanged todo element.
+
+If the id of the payload is equal to the id of the current todo element, a new object is created and all properties with their respective values are copied over into the new object while overriding the `done` property with the new value from the action payload. This is achieved via the ES2015+ spread syntax \(`{...todo}`\). Creating new objects instead of mutating the existing ones helps to ensure that our **reducers** remain **pure functions**, creating a new state every single time. Using `Array.map()` ensures that a new array is created each time.
+
+We've only dealt with two parts of the state tree: `user` and `todos` but the **reducer function's** complexity has already become apparent. If the complexity of the state grew, the function would become increasingly longer and more prone to **mistakes**. As we not only return the changed parts of the state but also the parts that have not changed, the function becomes even harder to read and manage. To combat this we can use ES2015+ **Object Spread Syntax** to create a new state from the previous state and override the the changing branch of the state tree. In terms of the `ADD_TODO` case, one could refactor to the following snippet:
+
+```javascript
+case "ADD_TODO": {
+  return {
+    ...state,
+    todos: state.todos.concat(action.payload),
+  };
+}
+```
+
+This only minimizes the risk to an extent. We might still forget to return the unchanged part of the state along with the newly created state. `combineReducer()` function to the rescue! This method allows to separate the **reducer** \(or to say the **state** which they create\) into many smaller parts which only deal with a particular task. They can even be placed into their own files.
+
+Applying this logic to our current example, `user` and `todos` can be extracted into their own **reducer functions**. Both can be placed in their own respective files while the **reducer** functions have to be exported with `default`:
+
+```javascript
+// user/reducer.js
+const initialState = Object.freeze({});
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case "SET_USER": {
+      return {
+        name: action.payload.name,
+        accessToken: action.payload.accessToken,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+```
+
+```javascript
+// todos/reducer.js
+const initialState = Object.freeze([]);
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case "ADD_TODO": {
+      return state.concat(action.payload);
+    }
+    case "REMOVE_TODO": {
+      return state.filter((todo) => todo.id !== action.payload);
+    }
+    case "CHANGE_TODO_STATUS": {
+      return state.map((todo) => {
+        if (todo.id !== action.payload.id) {
+          return todo;
+        }
+        return {
+          ...todo,
+          done: action.payload.done,
+        };
+      });
+    }
+    default: {
+      return state;
+    }
+  }
+};
+```
+
+This way, we have not only achieved readibilty by creating two **reducer** functions but the functions themselves could also be simplified. Instead of returning the _unchanged_ parts of the **state tree** as well, we only return those parts of the **reducer** _which are relevant to this reducer_. For the **user reducer** we only return the **user** while in the **todos reducer** we only return **todos**.
+
+In order to combine the _smaller_ **reducers** into a _****big_ **reducer**, we can use the aforementioned `combineReducers()` method which will create a root reducer which can then be passed to the `createStore()` method. The `combineReducers()` function expects an object whose property name matches that of the newly created state tree. The values also have to be _valid_ **reducers**.
+
+```javascript
+import { combineReducers, createStore } from "redux";
+import userReducer from './store/user/reducer';
+import todosReducer from './store/todos/reducer';
+
+const rootReducer = combineReducers({
+  todos: todosReducer,
+  user: userReducer,
+});
+
+const store = createStore(rootReducer);
+```
+
+The `combineReducers()` function is used to put together all the reducers from the passed object into a new function, the so-called **root reducer**. This **root reducer** can now be passed to the `createStore()` function. The created function calls _each_ reducer passed when executed and creates a new state object based on all the return values. It matches the form of the initial state object to achieve this task:
+
+```javascript
+{
+  "todos": [],
+  "user": {}
+}
+```
+
+ Another piece of advice: by using ES2015+ object shorthand notation in a clever way, we can save even more lines of code by calling the imports by the same as the properties which they will represent in state:
+
+```javascript
+import user from './store/user/reducer';
+import todos from './store/todos/reducer';
+```
+
+The object which we have to then pass to `combineReducer()` reduces to the following:
+
+```javascript
+const rootReducer = combineReducers({ todos, user });
+```
+
+To use `combineReducers()`, a few formal rules have to be followed. They do not hinder us from developing code effectively but have to be followed. Each reducer function that is passed to  `combineReducers()` has to fulfill the following criteria
+
+* For each unknown **action** \(so each **action** whose `type` argument we do not react to\) that the **reducer** receives, the first `state` that the **reducer** receives needs to be returned.
+* Reducer functions used in the `combineReducer()` function can never return `undefined`. This is different to the **root reducer** which is allowed to do this. In the case of the former, the `combineReducers()` function will throw an **error** to inform us of this error. We deal with this effectively in our example by including a `default` case in the `switch` block which will simply return the `state`
+* If the `state` passed in the first argument is of `type` `undefined`, the **initial state** has to be returned. It's probably easiest to use the initial state as a default value as we have done in the above example \(`state = initialState`\).
+
+**An aside**: `combineReducer()` can be nested as many times as you like, The **reducer** fuinctions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning to `combineReducer()` calls\).
+
+### Asynchronous actions
+
+All **actions** in the previous examples were executed **synchronously**. This means that each **action creator** was executed whenever we wanted to modify state without having to wait for the result of an asynchronous process to finish. In many dynamic web applications, this situation is highly unlikely though. Many **React applications** have to deal with **asynchronous data flows**, network requests in particular. _Synchronous_ **action creators** do not really offer a great solution to this problem as the `dispatch` method of a **store** expects an **action** which contains a simple object containing a `type` property.
+
+**Redux middleware** concepts, **Redux Thunk middleware** in particular, can help to deal with this problem. 
+
+The `createStore()` function from the `redux` package can deal with up to three parameters:
+
+* The **reducer** function: this is only **mandatory** parameter and deals with the executed **actions** of our **state** by returning a **state** for each **action** dispatched
+* **Initial state**: One can pre-populate the store with data by providing a value in the initial state. This initial state is also passed to the **reducer function**.
+* An **enhancer function**: This function can be used to enhance the store's capability with our own functionality: in this case we enhance it with the **middleware** mentioned above.
+
+If the `createStore` function receives a **function** as a second parameter, thisa second parameter will be treated as an **enhancer function**. If the second parameter takes the form of anything different, the second parameter will be treated as **initial state** and passed to the **reducer function** as such.
+
+**Redux middleware** is wrapped around the `dispatch` method and interrupts the usual call before it is executed. It can modify the **action** _before_ it is sent to the **reducer** and returns a new `dispatch` function. If we wanted to pass asynchronous functions \(for examples Promises\) to the `dispatch()` method, we can use the **store enhancer** to register the **middleware** that allows us to do just that. The most common piece of middleware is the so-called **thunk middleware**.
+
+
+
+```javascript
+const rootReducer = combineReducers({ todos, user }
+```
+
