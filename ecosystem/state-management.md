@@ -468,7 +468,116 @@ const delayedAdd = (newTodo) => (dispatch, getState) => {
 };
 ```
 
-In this example, we have used a shorter **arrow function** with an **implicit return** which can then be direcly returned by the function called by the **thunk middleware**. By not having to write another `return`, we have eliminated another two lines of code. Beware however, that you do not trade readbility and understanding for shorter code.
+In this example, we have used a shorter **arrow function** with an **implicit return** which can then be directly returned by the function called by the **thunk middleware**. By not having to write another `return`, we have eliminated another two lines of code. Beware however, that you do not trade readability and understanding for shorter code.
 
+### Typical asynchronous action example
 
+Many applications working with APIs inform the user that data is loading while is is being fetched from the API. Loading Spinners or text such as _"Loading data ..."_  are common ways to convey this information. **Thunk actions** are a great way to cover this case using a **reducer**.
+
+Let's set up three cases in the **reducer** which react to the following three **actions**:
+
+* `FETCH_REPOS_REQUEST`: will reset any previously failed network requests and initiate a loading status
+* `FETCH_REPOS_SUCCESS`: will be called upon once a successful request has taken place. It will receive the result of the request as well the date of the last update of the data
+* `FETCH_REPOS_FAILURE`: will react to any errors and potentially set an `error` flag to inform the user that the request has failed
+
+A possible implementation could look like this:
+
+```javascript
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import axios from 'axios';
+
+const initialState = Object.freeze({
+  error: null,
+  items: [],
+  isFetching: false,
+  lastUpdated: null,
+  selectedAccount: 'manuelbieh',
+});
+
+const rootReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'FETCH_REPOS_REQUEST': {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case 'FETCH_REPOS_SUCCESS': {
+      return {
+        ...state,
+        isFetching: false,
+        items: action.payload.items,
+        lastUpdated: action.payload.lastUpdated,
+      };
+    }
+    case 'FETCH_REPOS_FAILED': {
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+const fetchGithubRepos = () => (dispatch, getState) => {
+  dispatch({ type: 'FETCH_REPOS_REQUESTED' });
+  const state = getState();
+  axios
+    .get(`https://api.github.com/users/${state.selectedAccount}/repos`)
+    .then((response) => {
+      dispatch({
+        type: 'FETCH_REPOS_SUCCESS',
+        payload: {
+          lastUpdated: new Date(),
+          items: response.data,
+        },
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: 'FETCH_REPOS_FAILURE',
+        error: true,
+        payload: error.response.data,
+      });
+    });
+};
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+
+store.dispatch(fetchGithubRepos());
+```
+
+Once the `fetchGitHubRepos()` **action creator** has been _dispatched_, a few things will happen:
+
+First of all, the **thunk middleware** will register that we do not deal with a simple **action** \(an object\) but a function, meaning that it will execute it it in the form of `Action()(dispatch, getState)`. The **action creator** receives the `dispatch` function to be able to _dispatch_ **actions** from the **action creator** function.
+
+Inside of the **action creator**, the `FETCH_REPOS_REQUESTED` is _dispatched_. The **reducer** will react to the **action**, create a new **state object** by copying the _existing_ **state** into a new object using the **ES2015+ spread operator** and potentially reset any existing `error` to `null`. The state is informed that a request will follow via `isFetching` at the same time. But this is personal taste and I am aware that some people prefer to set the `error` property to `null` only if the subsequent request has been successful.
+
+The request will access the _current_ **state** via `getState()` from which it will access the `selectedAccount`. Once obtained, we can use this to perform the API request for the `selectedAccount`'s GitHub repositories. The request is performed using Axios \(mainly for simplicity\). We can then react to the following two cases:
+
+* The request was successful: This means that we obtain data from the GitHub API and can _dispatch_ the `FETCH_REPOS_SUCCESS` **action**. The current time \(which can later be used for caching or automated reloads\) as well as the array containing the repos hidden in `response.data` are both passed to the action. We also set `isFetching` to `false` as the request is no longer active.
+* The request fails: Should this occur, the `FETCH_REPOS_FAILURE` **action** is _dispatched_. The error messaged provided by Axios in `error.response.data` will be provided to the **action** as a payload. `isFetching` is set to `false` as the request has been performed already \(even if it was not necessarily the desired result\).
+
+The state now either contains a number of GitHub repositories if the request was successful \(for user in`state.selectedAccount`\) or an error if it failed. Both cases have now been dealt with effectively and their results can be used to take appropriate action in the user interface.
+
+### Debugging using the Redux Dev Tools
+
+We have a number of tools available to inspect what's currently in the **store**. For example, **Logger middleware** such as redux-logger from LogRocket allows us to log each dispatched **action**, its previous state and the new state into the browser console \([https://github.com/LogRocket/redux-logger](https://github.com/LogRocket/redux-logger)\).
+
+We can also manually log these to the console using `console.log(store.getState())`. However, this can become cumbersome quickly and difficult especially when dealing with asynchronous actions.
+
+The **Redux Devtools** are another great alternative for debugging purposes. Implemented as a browser extension for Chrome, Firefox and soon Edge as well, the **Redux Devtools** they integrate seamlessly with the existing developer tools. You can find them in the stores here:
+
+* Chrome: [https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)
+* Firefox: [https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
+
+Once installed, the browser developer tools are extended by an extra tab called **"Redux"** now easily accessible for any debugging purposes. In order to use it fully, we have to make a few modifications to our codebase though: another **enhancer** has to be ****added to the **store**.
+
+![Browser Devtools including the Redux addon](../.gitbook/assets/redux-devtools.png)
 
