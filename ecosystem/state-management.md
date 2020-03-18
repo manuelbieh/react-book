@@ -581,3 +581,42 @@ Once installed, the browser developer tools are extended by an extra tab called 
 
 ![Browser Devtools including the Redux addon](../.gitbook/assets/redux-devtools.png)
 
+The **Redux Devtools**  can be registered on the `window` object with two global variables: `window.REDUX_DEVTOOLS_EXTENSION` and `WINDOW.REDUX_DEVTOOLS_EXTENSION_COMPOSE`. If no own store enhancer is used \(for example not using `applyMiddleware()` to register middleware such as Thunk\), then things can be solved pretty simply: We check whether the **Redux Devtools** are installed and if they are, we pass a call of `WINDOW.REDUX_DEVTOOLS_EXTENSION` to the `createStore()` function:
+
+```javascript
+createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ &&   window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+```
+
+This allows us to automatically supervise any dispatched **action** in the **devtools**, see which **action** was _dispatched_ with which **payload**, or even manually _dispatch_ **actions**. Another cool feature that can be used with the **devtools** is **Time Traveling** - the ability to "travel back" and inspect previous states of the store which can be a very powerful debugging technique.
+
+**Reducers** need to be **pure functions** so that they will always create the same **state**, even if we "travel back" through states in the **store**. Otherwise, we might not be able to reproduce bugs as every call would create a different **state**.
+
+If we are using an enhancer function, the `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE` function will be used instead. This function of type `compose` allows the bundling of _multiple_ **enhancer** functions into a _single_ one, allowing us to call each of them in turn. The principle is similar to that we have talked about in the `combineReducers()` section for **reducers**. 
+
+Redx offers a `compose` function too which allows us to bundle multiple enhancers into a single one. It can be imported to then be used to create a custom `composeEnhancer()` function. If the Redux Devtools are installed, we will use the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to to add the **devtools** of the **store enhancer**. If they are not installed however, Redux' own `compose()` function can be used instead to create the same signature:
+
+```javascript
+import { applyMiddleware, compose, createStore } from 'redux';
+import thunk from 'thunk-middleware';
+
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ 
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) 
+  : compose;
+
+// ...
+
+const store = createStore(
+  rootReducer, 
+  composeEnhancers(
+    applyMiddleware(thunk),
+  )
+);
+```
+
+If you feel a little overwhelmed by the number of different functions and the terminology introduced, I can provide a little reassurance: in most applications, it is not necessary to understand all these moving parts in great detail. I use the **Redux Devtools** in almost all of my projects but still have to check each and every time how I can set them up properly. This text should serve as an introduction as to how **redux stores** can be debugged and provide an opportunity to learn for those that want to learn more.
+
