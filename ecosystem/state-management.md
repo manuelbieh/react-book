@@ -620,3 +620,55 @@ const store = createStore(
 
 If you feel a little overwhelmed by the number of different functions and the terminology introduced, I can provide a little reassurance: in most applications, it is not necessary to understand all these moving parts in great detail. I use the **Redux Devtools** in almost all of my projects but still have to check each and every time how I can set them up properly. This text should serve as an introduction as to how **redux stores** can be debugged and provide an opportunity to learn for those that want to learn more.
 
+### Using Redux with React
+
+We've now covered how to create a **store**, how to _dispatch_ **actions**, what exactly **reducers** do and how we can use **middleware**. So far, we haven't looked at how Redux interacts with React though, so let's do that now.
+
+I've briefly mentioned the `react-redux` package at the beginning of the chapter. This package includes the _"official React bindings for Redux"_ and was developed originally by Dan Abramov \(now part of the Core React Team\) and is maintained by the Redux community.
+
+The package consists of two components: one component and a function which will create a **Higher Order Component** \(there's also another function that is used by React Redux internally but developers typically never come into contact with it\). The `Provider` component forms the entry point for Redux. We can wrap the component tree with a `Provider` component and then access a common **store** via the `connect()` function. This function returns a **Higher Order Component** and allows us to connect components to the store.
+
+#### The Provider Component
+
+As most applications tend to only consist of a single **store**, it is useful to place the `Provider` component up highly in the component tree. In many situations, it might even make sense to use the `Provider` component as the very first component of the component tree. The `Provider` component receives a **Redux store** as a `store` prop and also contains a number of children. All children have access to the `store` prop value given \(the **store** provided\) and can also read it or change it via the _dispatching_ of **actions**.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
+const dummyReducer = (state = {}, action) => {
+  return state;
+};
+
+const store = createStore(dummyReducer);
+
+const App = () => (
+  <p>We can have access to the Redux store here.</p>
+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+```
+
+In most previous examples, only the `<App />` component was passed to `ReactDOM.render()`. Here however, we place a `<Provider />` component around the App and also pass a dummy store to it.
+
+In theory, `Provider` components can be nested inside each other. Components connected to a store, will always the **store** of the next `Provider` component up. However, this is not common practice and leads to more confusion that necessary. When two stores exist in parallel, reducers of both stores should be combined via `combineReducer()` into one big store. This will allow the `Provider` to wrap around the rest of the elements using only a single store.
+
+#### Connecting components to a store using the connect function
+
+Now onto the harder part of React with Redux: **connecting** a React component to a **Redux store** using a `connect()` function. This function can take up to 4 parameters of which the first 3 are functions which can also take 3 parameters. That sounds like a lot. But be rest assured: in most cases, we only really need 2 out of these 4 parameters and the functions will only take a single argument. But let's go through everything step by step increasing the complexity with each step. 
+
+The function takes the following form:
+
+```javascript
+connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
+```
+
+Calling the `connect()` function will create a **Higher Order Component**. It can be used to transfer parts of the state of the store to this component. In order to decide which parts of the state should be passed as props, we use the first parameter: `mapStateToProps`.
+
