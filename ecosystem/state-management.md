@@ -672,3 +672,426 @@ connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
 
 Calling the `connect()` function will create a **Higher Order Component**. It can be used to transfer parts of the state of the store to this component. In order to decide which parts of the state should be passed as props, we use the first parameter: `mapStateToProps`.
 
+#### Accessing parts of the global state with mapStateToProps
+
+`mapStateToProps` receives the complete **state** as a first parameter and the so-called `ownProps` of the component as a second parameter. These props might be passed to the HOC. Depending on whether only the first or both parameters are passed, the function is either called if something changes within the **Redux state** _or_ if the **props** change which are passed to the component.
+
+```javascript
+const mapStateToProps = (state, ownProps) => {
+  // ...
+};
+```
+
+The function will always expect an **object** return value. The properties of this object will then be passed to the component as `stateProps`. Let's remember our previous Todo Store example. We would now like to pass pre-filtered todos a based on their status as well as the number of todos to the component.
+
+This would result in a `mapStateProps` function which looks like this:
+
+```jsx
+const mapStateToProps = (state) => {
+  return {
+    openTodos: state.todos.filter((todo) => todo.completed !== true),
+    completedTodos: state.todos.filter((todo) => todo.completed === true),
+    totalCount: state.todos.length,
+  };
+};
+```
+
+The properties of this object, `openTodos`, `completedTodos` and `totalCount` will be passed to the wrapping component  as **props**. How? By passing `mapStateToProps` to the `connect()` function. This will in turn return an HOC which we can then pass our component to \(in which we access the props from state\):
+
+```jsx
+const ConnectedTodoList = connect(mapStateToProps)(TodoList); 
+```
+
+We've defined a `ConnectedTodoList` which can now be used in **JSX** and be wrapped by a `Provider` component. It will render the `TodoList` with the given props from the global **Redux store:**
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { combineReducers, createStore } from "redux";
+import { Provider, connect } from "react-redux";
+import user from "./store/user/reducer";
+import todos from "./store/todos/reducer";
+
+const rootReducer = combineReducers({ todos, user });
+
+const store = createStore(rootReducer);
+
+const TodoList = (props) => (
+  <div>
+    <p>
+      {props.totalCount} Todos. {props.completedTodos.length} completed 
+      and {props.openTodos.length} open.
+    </p>
+  </div>
+);
+
+const mapStateToProps = (state) => {
+  return {
+    openTodos: state.todos.filter((todo) => todo.completed !== true),
+    completedTodos: state.todos.filter((todo) => todo.completed === true),
+    totalCount: state.todos.length,
+  };
+};
+
+const ConnectedTodoList = connect(mapStateToProps)(TodoList);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <ConnectedTodoList />
+  </Provider>,
+  document.getElementById("root")
+);
+```
+
+This will render a very small and spartan `TodoList` component showing us the number of all todos as well as the number of completed and open todos.
+
+If we only wanted to display open _or_ closed todos meaning only parts of the state, we can make use of the second parameter in the `mapStateToProps` function \(`ownProps`\) which will allow us to access the **props** of the component and decide which parts of the state we want to pass to the connected component. 
+
+```jsx
+const mapStateToProps = (state, ownProps) => {
+  const filteredTodos =
+    ownProps.type === "completed"
+      ? state.todos.filter((todo) => todo.completed === true)
+      : state.todos.filter((todo) => todo.completed !== true);
+
+  return {
+    totalCount: state.todos.length,
+    todos: filteredTodos,
+  };
+};
+
+const ConnectedTodoList = connect(mapStateToProps)(TodoList);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <ConnectedTodoList type="completed" />
+  </Provider>,
+  document.getElementById("root")
+);
+```
+
+Let's step through this snippet: Initially, we check whether we want to show completed or open todos by passing the `ownProps.type`. We can then filter `state.todos` and only return those todos which we are actually interested in. As we do not have to filter these todos according to type anymore \(we're defining a pre-selection in `mapStateToProps`\), we only return a regular `todos` property which we can then access with `props.todos` in the component.
+
+Let's recap: with `mapStateToProps()`, we can get read-access to the whole **state** from the **Redux store**. All the data that we might like to use in a component will be returned to us in object form. The relevant React component will only re-render if data in the store has actually changed. Only then a re-render will be triggered.
+
+#### Dispatching actions via mapDispatchToProps
+
+Let's look at the second parameter for the `connect()` function: `mapDispatchToProps`:
+
+```javascript
+const mapDispatchToProps = (dispatch, ownProps) => {
+  // ...
+};
+```
+
+or alternatively:
+
+```javascript
+const mapDispatchToProps = {
+  // ...
+};
+```
+
+While `mapStateToProps` grants us access to the store to **read** data, `mapDispatchToProps` allows us to change the store's data with **write** access. `mapDispatchToProps`'s function signature looks similar to that of `mapStateToProps`. However, instead of receiving the whole state as a first parameter, we receive the `dispatch` method of the store that we connect to. The second parameter of `mapDispatchToProps` form `ownProps` - the **props** of the component itself - that are passed to component. It is also possible to pass a `mapDispatchToProps` **object** instead of a function to the `connect()` call. But let's look at that later. First, let's investigate how to use `mapDispatchToProps`.
+
+We want to add the possibility of adding new todos to our `TodoList`, mark them as resolved and remove them from the list completely. We've already defined these **actions** a bit further up in the chapter already: `ADD_TODO`, `REMOVE_TODO` and `CHANGE_TODO_STATUS`. We now want to add the option for a user to _dispatch_ these **actions** by interacting with our application:
+
+```javascript
+// Helper function to create a (hopefully ;)) unique ID
+const getPseudoRandomId = () =>
+  Math.random()
+    .toString(36)
+    .slice(-6);
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTodo: (text) =>
+      dispatch({
+        type: "ADD_TODO",
+        payload: {
+          id: getPseudoRandomId(),
+          text,
+        },
+      }),
+    removeTodo: (id) =>
+      dispatch({
+        type: "REMOVE_TODO",
+        payload: id,
+      }),
+    changeStatus: (id, done) =>
+      dispatch({
+        type: "CHANGE_TODO_STATUS",
+        payload: {
+          id,
+          done,
+        },
+      }),
+  };
+};
+```
+
+A new object with the object properties `addTodo`, `removeTodo` and `changeStatus` is returned. Each of these is passed as **props** to a connected component with the same name. We pass `mapStateToProps()` to the `connect()` function as a second parameter to achieve this:
+
+```javascript
+const ConnectedTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList);
+```
+
+The **actions** which have been passed to `mapDispatchToProps` inline are normally extracted into respective **action creators**. These lead to better readability, are easier to test and often easier to read:
+
+```javascript
+const addTodo = (text) => ({
+  type: "ADD_TODO",
+  payload: {
+    id: getPseudoRandomId(),
+    text,
+  },
+});
+
+const removeTodo = (id) => ({
+  type: "REMOVE_TODO",
+  payload: id,
+});
+
+const changeStatus = (id, done) => ({
+  type: "CHANGE_TODO_STATUS",
+  payload: {
+    id,
+    done,
+  },
+});
+```
+
+This reduces `mapStateToProps` drastically and makes it much easier to read:
+
+```javascript
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTodo: (text) => dispatch(addTodo(text)),
+    removeTodo: (id) => dispatch(removeTodo(id)),
+    changeStatus: (id, done) => dispatch(changeStatus(id, done)),
+  };
+};
+```
+
+But there's another advantage here: in order to avoid repition as much as possible, Redux offers a shorthand. If the function signature of the **action creators** match those of the function which we return from `mapDispatchToProps`, we can return the **action creators** as **ES2015+ shorthand objects**. **Redux** will automatically wrap the `dispatch()` call around all of the functions.
+
+The following snippet achieves the exact same functionality as that from the previous example but does so in a much more concise fashion:
+
+```javascript
+const mapDispatchToProps = {
+  addTodo,
+  removeTodo,
+  changeStatus,
+}
+```
+
+Be careful though: This only works when _all_ **action creators** functions are called with the same functions from their connected React components counterparts and when `mapDispatchToProps` is passed in this exact form.
+
+By combining `mapStateToProps` and `mapDispatchToProps`, we obtain a call which resembles this:
+
+```jsx
+<TodoList todos={...} addTodo={...} removeTodo={...} changeStatus={...} />
+```
+
+All the properties returned by `mapStateToProps` as well as `mapDispatchToProps` are passed to the component which is connected to the **store** via the `connect()` function. We can then access these via **props**, _dispatch_ **actions** via `mapDispatchToProps` or read state from the **store** using the properties from `mapStateToProps`.
+
+Of we wanted to only pass `mapDispatchToProps()` to the `connect()` call to be able to dispatch **actions** from a component, we can pass `null` as a first parameter. This means that we do not have read access to the component.
+
+```javascript
+const ConnectedTodoList = connect(
+  null,
+  mapDispatchToProps
+)(TodoList);
+```
+
+#### Merging StateProps and DispatchProps using MergeProps
+
+The third parameter, `mergeProps()`, deals with a more special use case that is not really encountered out in the wild. For the sake of completion though, I want to explain it briefly. 
+
+```javascript
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  // ...
+}
+```
+
+The function receives the result of `mapStateToProps` as its first parameter, that of `mapDispatchToProps` as a second and `ownProps` as a third. The return value is a new object whose properties are alsopassed via props to the component connected to the store.
+
+`mergeProps()` can be powerful if you want to dispatch certain **actions** which are dependent on data from the state but do not use **thunk middleware**. It's also possible to filter the **actions** based on the state so that a component would not receive an `updateProfile()` **action** if `state.profile` does not exist \(meaning if a user is not logged in\). However, such scenarios are usually solved more elegantly on the component level.
+
+#### Lastly: the fourth parameter for connect\(\)
+
+If you actually want to use the fourth parameter of the `connect()` method, you should really know what you're doing. Redux is optimized to only ever really need these options in very rare edge cases. For example, you can define your own context for Redux to use or define functions that compare whether a component needs re-rendered or not. This list is a complete summary of the options available:
+
+```javascript
+{
+  context: Object,
+  pure: boolean,
+  areStatesEqual: Function,
+  areOwnPropsEqual: Function,
+  areStatePropsEqual: Function,
+  areMergedPropsEqual: Function,
+  forwardRef: boolean,
+}
+```
+
+If you feel like you might need these options \(Spoiler alert: in most cases the answer is "No, you don't need these"\), you should check out the official documentation: [https://react-redux.js.org/api/connect\#options-object](https://react-redux.js.org/api/connect#options-object)
+
+#### Combining the puzzle pieces
+
+We now know how to use the `connect()` method and why we need a `Provider`.  Let's have a look at a more detailed but very complete example that outlines a totally functional TodoList App. It allows us to add new todos, mark them as complete or not and allows us to remove them if we want:
+
+```javascript
+// store/todos/reducer.js
+const initialState = Object.freeze([]);
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case 'ADD_TODO': {
+      return state.concat(action.payload);
+    }
+    case 'REMOVE_TODO': {
+      return state.filter((todo) => todo.id !== action.payload);
+    }
+    case 'CHANGE_TODO_STATUS': {
+      return state.map((todo) => {
+        if (todo.id !== action.payload.id) {
+          return todo;
+        }
+        return {
+          ...todo,
+          done: action.payload.done,
+        };
+      });
+    }
+    default: {
+      return state;
+    }
+  }
+};
+```
+
+```javascript
+// store/todos/actions.js
+const getPseudoRandomId = () =>
+  Math.random()
+    .toString(36)
+    .slice(-6);
+
+export const addTodo = (text) => ({
+  type: "ADD_TODO",
+  payload: {
+    id: getPseudoRandomId(),
+    text,
+  },
+});
+
+export const removeTodo = (id) => ({
+  type: "REMOVE_TODO",
+  payload: id,
+});
+
+export const changeStatus = (id, done) => ({
+  type: "CHANGE_TODO_STATUS",
+  payload: {
+    id,
+    done,
+  },
+});
+```
+
+```jsx
+// TodoList.js
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { addTodo, removeTodo, changeStatus } from './store/todos/actions';
+
+const TodoList = (props) => {
+  const [todoText, setTodoText] = useState('');
+
+  return (
+    <div>
+      <p>{props.todos.length} Todos.</p>
+      <ul>
+        {props.todos.map((todo) => (
+          <li key={todo.id}>
+            <button
+              type="button"
+              onClick={() => {
+                props.removeTodo(todo.id);
+              }}>
+              remove
+            </button>
+            <label
+              style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>
+              <input
+                type="checkbox"
+                name={todo.id}
+                checked={Boolean(todo.done)}
+                onChange={(e) => {
+                  const { name, checked } = e.target;
+                  props.changeStatus(name, checked);
+                }}
+              />
+              {todo.text}
+            </label>
+          </li>
+        ))}
+      </ul>
+      <input onChange={(e) => setTodoText(e.target.value)} value={todoText} />
+      <button
+        type="button"
+        onClick={() => {
+          props.addTodo(todoText);
+          setTodoText('');
+        }}>
+        add
+      </button>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  todos: state.todos,
+});
+
+const mapDispatchToProps = {
+  addTodo,
+  removeTodo,
+  changeStatus,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList);
+```
+
+```jsx
+// index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { combineReducers, createStore } from 'redux';
+import { Provider } from 'react-redux';
+import todosReducer from './store/todos/reducer';
+import TodoList from './TodoList';
+
+const rootReducer = combineReducers({
+  todos: todosReducer,
+});
+
+const store = createStore(rootReducer);
+
+const App = () => (
+  <Provider store={store}>
+    <TodoList />
+  </Provider>
+);
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **action** - all of which should sound familiar from previous examples.  To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
+
