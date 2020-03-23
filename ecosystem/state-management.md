@@ -876,7 +876,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 ```
 
-But there's another advantage here: in order to avoid repition as much as possible, Redux offers a shorthand. If the function signature of the **action creators** match those of the function which we return from `mapDispatchToProps`, we can return the **action creators** as **ES2015+ shorthand objects**. **Redux** will automatically wrap the `dispatch()` call around all of the functions.
+But there's another advantage here: in order to avoid repetition as much as possible, Redux offers a shorthand. If the function signature of the **action creators** match those of the function which we return from `mapDispatchToProps`, we can return the **action creators** as **ES2015+ shorthand objects**. **Redux** will automatically wrap the `dispatch()` call around all of the functions.
 
 The following snippet achieves the exact same functionality as that from the previous example but does so in a much more concise fashion:
 
@@ -917,7 +917,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 ```
 
-The function receives the result of `mapStateToProps` as its first parameter, that of `mapDispatchToProps` as a second and `ownProps` as a third. The return value is a new object whose properties are alsopassed via props to the component connected to the store.
+The function receives the result of `mapStateToProps` as its first parameter, that of `mapDispatchToProps` as a second and `ownProps` as a third. The return value is a new object whose properties are also passed via props to the component connected to the store.
 
 `mergeProps()` can be powerful if you want to dispatch certain **actions** which are dependent on data from the state but do not use **thunk middleware**. It's also possible to filter the **actions** based on the state so that a component would not receive an `updateProfile()` **action** if `state.profile` does not exist \(meaning if a user is not logged in\). However, such scenarios are usually solved more elegantly on the component level.
 
@@ -1094,4 +1094,173 @@ ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **action** - all of which should sound familiar from previous examples.  To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
+
+{% hint style="warning" %}
+There's always heated debate about how folders and files should be structured within an application. I have worked with a number of different structures but have found a separation by domain \(i.e. `todos`, `user`, `repositories` ...\) and according to type \(`actions`, `reducer`\) to be most effective. However, others prefer to place all of the actions in a single `actions` directory and all the reducers in a `reducer` directory. Some even avoid the separation of actions and reducers at all.
+
+There's no _Right_ or _Wrong_ here. While some of this decision will be influenced by personal taste, it will also depend on the size, setup, complexity and users of the application.
+{% endhint %}
+
+Let's now define a file which will contain the `TodoList` component: `./TodoList.js`. This file will display the todos, create todos or remove them as well as enable the user to mark them as complete. In order to to do this, we connect the component to the store via `connect()`. The component also needs to import the **actions** which are passed to the `connect()` function  in `mapDispatchToProps`. **Object shorthand syntax** allows us to keep things concise:
+
+```javascript
+const mapDispatchToProps = {
+  addTodo,
+  removeTodo,
+  changeStatus,
+};  
+```
+
+React Redux will automatically wrap these with a `dispatch` call.
+
+in `mapStateToProps`, we define that the want to pass the `todos` branch of our store to our components. Then, `mapStateToProps` as well as `mapDispatchToProps` will be passed to the `connect()` function:
+
+```javascript
+connect(
+  mapStateToProps,
+  mapDispatchToProps
+)
+```
+
+But that's not at all: `connect()` creates a new **HOC** which we pass to our `TodoList` component.
+
+```javascript
+connect(...)(TodoList);
+```
+
+We've now connected the `TodoList` component  with the **Redux store**. As long as we use this component within a `<Provider>` element, we are good to go! Moreover, `export default` should be used before calling `connect()` so that the component will be exported using connect.
+
+Lastly, we will have a look at `index.js` which marks the entry-point of our app. `ReactDOM.render()` is placed here in which we render our application to its respective DOM element. A few steps happen just before that:
+
+`combineReducers` and `createStore` are imported from Redux and used to create the `store` object. We also import the `todosReducer` which we defined previously and pass it to `combineReducers()` to create a new **root reducer**. While this is not strictly necessary at this point as we only use a single **reducer**, it is worth doing so anyway as we expect our application to grow in size and complexity.
+
+Moreover, the `Provider` component is imported from `react-redux` which will receive the created **store**. We also import the connected component from `TodoList.js`. This component can then be used within `App` inside of the `Provider` component.
+
+Once we are set up, we can now create new todos, mark them as complete or remove them completely - all by interacting with the `TodoList` component. 
+
+Go and try changing some actions and interactions and see how the changes affect the store. To see this in action, it would be best to have the Redux Devtools all setup. We change the following line in `index.js` :
+
+```javascript
+const store = createStore(rootReducer);
+```
+
+into this:
+
+```javascript
+const store = createStore(rootReducer, __REDUX_DEVTOOLS_EXTENSIONS__());
+```
+
+Please ensure that you have the Redux Devtools installed in your browser.
+
+### Redux with React Hooks
+
+With React-Redux v7.1.0, Hooks have officially landed in the official React bindings for Redux. Hooks increase the usability of Redux in React manyfold. While creating a store is much the same, `connect()` HOC can be avoided completely. Each method of access - reading or writing by dispatching actions - can be achieved by Hooks.
+
+The most important hooks to remember are `useSelector` and `useDispatch` which can be loosely compared to `mapStateToProps` and `mapDispatchToProps`. Following this analogy, the `useSelector` hook is used to _read_ data from the store while `useDispatch` is used to _dispatch_ actions to write data to the store. React Redux offers a third hook, `useStore`, which is not really used in the wild. Its usage should be more of a last resort should you really need access to the store object.
+
+These hooks can be imported as named imports from react-redux:
+
+```javascript
+import { useSelector, useDispatch, useStore } from 'react-redux';
+```
+
+As is the case with other hooks, Redux Hooks can only be used in function components. If you prefer using Class components, you can keep using the `connect()` HOC.
+
+#### useSelector\(selectorFn, equalityFn\)
+
+The `useSelector` hook enables us to read values from the store. It expects a so-called selector function as its first parameter. This function receives the complete Redux store and then returns a simple or calculated value \(or even a whole tree\) of data:
+
+```jsx
+import React from 'react';
+import { useSelector } from 'react-redux';
+
+const TodoList = () => {
+  const openTodos = useSelector(
+    (state) => state.todos.filter((todo) => todo.completed !== true)
+  );
+  const completedTodos = useSelector(
+    (state) => state.todos.filter((todo) => todo.completed === true)
+  );
+  const allTodos = useSelector((state) => state.todos);
+
+  return (
+    <div>
+      <p>
+        {allTodos.length} Todos. {completedTodos.length} complete 
+        and {openTodos.length} open.
+      </p>
+    </div>
+  );
+}
+```
+
+The selector function can extracted if you wish to increase reuse and structure:
+
+```jsx
+import { useSelector } from 'react-redux';
+
+const selectOpenTodos = (state) => state.todos.filter(
+  (todo) => todo.completed !== true
+);
+
+const selectCompletedTodos = (state) => state.todos.filter(
+  (todo) => todo.completed === true
+);
+
+const selectAllTodos = (state) => state.todos;
+
+const TodoList = () => {
+  const openTodos = useSelector(selectOpenTodos);
+  const completedTodos = useSelector(selectCompletedTodos);
+  const allTodos = useSelector(selectAllTodos);
+
+  return (
+    <div>
+      <p>
+        {allTodos.length} Todos. {completedTodos.length} complete 
+        and {openTodos.length} open.
+      </p>
+    </div>
+  );
+}
+```
+
+Whenever a component is rendered, the selector function is called. It may return a temporary value if the selector function has already been called and the value has not changed since. To determine whether this is the case, Redux uses a _Strict Reference Equality Check_ \(`===`\) to check whether the current render has the same reference as the one before.
+
+If an action has been _dispatched_, `useSelector` will trigger a re-render of the component if the value is not strictly the same as before. Compared to the `connect()` HOC, we might encounter more re-renders. For example, selector functions will also be called if the component has re-rendered without actually receiving new props. If you encounter this issue while using the `useSelector` hook, you have a number of options:
+
+* The component can be wrapped by `React.memo`. This will avoid unnecessary re-renders of components in which the props did not change.
+* The `useSelector` hook can be configured to use a shallowEqual comparison \(`==`\) instead and avoids testing for referential equality \(`===`\). `shallowEqual` can be imported from `react-redux` and be passed to the hook as a second parameter `useSelector(selectorFn, shallowEqual)`
+* [Reselect](https://github.com/reduxjs/reselect) can be useful to use instead as Reselect will always return the same values for as long as nothing has changed in state.
+
+#### useDispatch\(\)
+
+The `useDispatch()` hook will return a reference to the `dispatch` function of the store. It can be used to _dispatch_ actions in a similar fashion to the `connect()` HOC using `mapDispatchToProps`:
+
+```javascript
+import React from 'react';
+import { useDispatch } from 'react-redux';
+
+const addTodoAction = (text) => ({
+  type: "ADD_TODO",
+  payload: { text },
+});
+
+const TodoApp = () => {
+  const dispatch = useDispatch();
+  const addTodo = () => dispatch(addTodoAction('A new todo element'));
+  
+  return <button onClick={addTodo}>Add todo</button>
+};
+```
+
+The action is triggered by the call od `dispatch()`. However, it does not need to be passed via `mapDispatchToProps` to arrive in the component as was the case in the `connect()` HOC.
+
+### Summary
+
+Confession time: I underestimated the complexity of this chapter - by a lot. **Redux** has become one of the go-to tools for me in the last few years and using it now feels _natural_ to me. In my opinion, **Redux** is a great tool that effectively manages very complex state and deoes so in a predictable and reasonable fashion.
+
+However, while writing this chapter I noticed how overwhelming and daunting **Redux** can seem to a beginner. It might be possible that some of the explanations in this chapter do not make sense right away for a beginner. If you feel this might be the case for you, I suggest you open the Redux Devtools to play around with **actions** and **reducers** in the browser. This way, it might become more intuitive how one influences the other and how components, store, state, props and `connect()` as well as **actions** and **reducers** interact with each other.
+
+Should there be any remaining questions after reading this chapter, please feel free to contact me!
 
