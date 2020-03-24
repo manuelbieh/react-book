@@ -489,9 +489,9 @@ It is safe to access the **current DOM** during this method as React will have a
 
 And with `componentDidUpdate()` the **update cycle**  has also come to a finish. While the **mounting cycle** is only ever run once, namely when the component **first** renders, the update cycle can be triggered an infinite amount times: as soon as the component changes its state or receives new props.
 
-#### `componentWillUnmount()` <a id="componentwillunmount"></a>
+#### `componentWillUnmount()`
 
-I admit that I have cheated in the logs of our example. `componentWillUnmount()` is only ever run if a component is completely removed from the DOM. This has not happened in our example. A components counts as "unmounted" after it has been explicitly removed by calling `ReactDOM.unmounComponentAtNode()` \(this is particularly important for mount nodes\) or if it is not implicitly returned from the `render()` method of its parent component anymore.
+I admit that I have cheated in the logs of our example. `componentWillUnmount()` is only ever run if a component is completely removed from the DOM. This has not happened in our example. A components counts as "unmounted" after it has been explicitly removed by calling `ReactDOM.unmountComponentAtNode()` \(this is particularly important for mount nodes\) or if it is not implicitly returned from the `render()` method of its parent component anymore.
 
 In those two cases, `componentWillUnmount()` will be called but of course only if it has been manually implemented. This is true for most **lifecycle methods** apart from `render()`. The `componentWillUnmount()` **lifecycle method** is an essential tool to "clean up" our application. It is the place where functions can and **should** be called to ensure that no traces are left behind. "Traces" can refer to timeouts we are still waiting on \(`setTimeout`\) or intervals which are still running \(`setInterval`\) but also DOM modifications which have taken place outside of our component JSX, as well as network requests which are still ongoing \(XHR/Fetch calls\) or simply event listeners which were added to the DOM via the API method `Element.addEventListener()`.
 
