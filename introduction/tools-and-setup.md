@@ -191,6 +191,6 @@ Using `yarn eject`, we can bid our app goodbye. All the build scripts, dependenc
 {% hint style="info" %}
 In order to understand all the code examples in the book, I strongly suggest to install **Create React App** at this stage. Most of the examples can then be copy and pasted into the `App.js` file and then run. To maximize your learning though, I would advise you to type out the examples instead of simply copying them.
 
-If you do not want to install CRA locally or if you are in a hurry, you can try working with [CodeSandbox](https://codesandbox.io/). It allows you to create a new setup with [**Create React App**](https://codesandbox.io/s/new) ****in seconds and then interact with it in a browser environment.
+If you do not want to install CRA locally or if you are in a hurry, you can try working with [CodeSandbox](https://codesandbox.io/). It allows you to create a new setup with [**Create React App**](https://codesandbox.io/s/new) in seconds and then interact with it in a browser environment.
 {% endhint %}
 
