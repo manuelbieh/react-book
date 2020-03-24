@@ -20,7 +20,7 @@ Does this mean that you cannot build complex web applications with React? No. Ab
 
 ## When should I use React and when is it best to avoid it?
 
-The more React gained in popularity, the more the question arose whether jQuery's days were numbered. Should we develop everything in React now? Is it useful to use React or ~~~~maybe not so much?
+The more React gained in popularity, the more the question arose whether jQuery's days were numbered. Should we develop everything in React now? Is it useful to use React or maybe not so much?
 
 As mentioned previously, React is primarily a _library for building user interfaces._ User Interfaces always contain interaction which mandates the usage of state management. For example, I am pressing a button and a dropdown opens. The state of the dropdown changes from _closed_ to _open_. Or, I could enter information into a form input and receive feedback whether the data I entered is correct. If it is not valid, the state of the form input will change from _valid_ to _invalid_. React is great at modelling these changes. If I do not have a large amount of changing data or user interactions on my page \(for example if you are developing a static website for a client\), you _probably_ do not need React.
 
