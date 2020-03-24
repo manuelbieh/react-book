@@ -129,7 +129,7 @@ Let's look at a few other examples of JSX that contain valid JavaScript expressi
 <div className={user.isAdmin ? 'is-admin' : null}>…</div>
 ```
 
-### Array.map\(\) with JSX as its return value \(which in turn contains an expression\) <a id="array-map-mit-jsx-als-rueckgabewert-das-wiederum-einen-ausdruck-enthaelt"></a>
+### Array.map\(\) with JSX as its return value \(which in turn contains an expression\)
 
 ```jsx
 <ul>
