@@ -300,9 +300,11 @@ class App extends React.Component {
   };
 
   render() {
-    <Provider value={{ color: this.state.color }}>
-      <MoreComponents />
-    </Provider>;
+    return (
+      <Provider value={{ color: this.state.color }}>
+        <MoreComponents />
+      </Provider>
+    );
   }
 }
 ```
@@ -318,9 +320,11 @@ class App extends React.Component {
   };
 
   render() {
-    <Provider value={this.state}>
-      <MoreComponents />
-    </Provider>;
+    return (
+      <Provider value={this.state}>
+        <MoreComponents />
+      </Provider>
+    );
   }
 }
 ```
