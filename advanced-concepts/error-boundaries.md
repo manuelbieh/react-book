@@ -39,13 +39,13 @@ Let's look at an implementation of an **Error Boundary**:
 ```jsx
 class ErrorBoundary extends React.Component {
   state = {
-    hasError: false
+    hasError: false,
   };
 
   static getDerivedStateFromError(error) {
     return {
       hasError: true,
-      error
+      error,
     };
   }
 
@@ -88,8 +88,8 @@ We now know hot to implement an **Error Boundary**: by adding either `static get
 It's a good idea to implement different and nested **Error Boundaries** to cater to a variety of errors: one Error Boundary that wraps around the whole application, as well as one that wraps only optional components in the component tree. Let's look at another example:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const App = () => {
   return (
@@ -102,7 +102,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector('#root'));
 ```
 
 Two **Error Boundaries** are used in the above example: `ErrorBoundary` and `ServiceUnavailableBoundary`. While the outer boundary will catch errors that might occur in the `ApplicationLogic` component, the `ServiceUnavailableBoundary` could catch errors in the weather widget and display a more granular error message like _"the service requested cannot be reached at the moment. Please try again later"_.

@@ -90,7 +90,7 @@ EventOverview.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
   description: PropTypes.string,
   ticketsUrl: PropTypes.string,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 ```
 
@@ -102,11 +102,11 @@ In some cases, it can be useful to define sensible default values if no specific
 const Greeting = ({ name }) => <h1>Hello {name}!</h1>;
 
 Greeting.propTypes = {
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
 };
 
 Greeting.defaultProps = {
-  name: "Guest"
+  name: 'Guest',
 };
 ```
 
@@ -271,12 +271,12 @@ const EventOverview = ({
   date,
   description,
   ticketUrl,
-  title
+  title,
 }: {
   date: Date,
   description?: string,
   ticketsUrl?: string,
-  title: string
+  title: string,
 }) => {
   /*…*/
 };
@@ -311,13 +311,13 @@ class EventOverview extends React.Component<PropsT, StateT> {
 In contrast to previous examples in the book, the imports follow a slightly different structure. Instead of:
 
 ```jsx
-import React from "react";
+import React from 'react';
 ```
 
 React has been imported like this:
 
 ```jsx
-import * as React from "react";
+import * as React from 'react';
 ```
 
 This allows us to also import React's **type definitions** which is necessary if we want to return a React element from a function and type it, for example.

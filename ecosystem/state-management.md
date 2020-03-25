@@ -65,10 +65,10 @@ Example of a **reducer**:
 ```javascript
 const reducer = (state, action) => {
   switch (action.type) {
-    case "PLUS": {
+    case 'PLUS': {
       return state + action.payload;
     }
-    case "MINUS": {
+    case 'MINUS': {
       return state - action.payload;
     }
     default: {
@@ -83,8 +83,8 @@ A **store** generally expects only a **single reducer**. **Redux** allows us to 
 Each **reducer** reacts to the `type` property of an **action**. Due to this, a convention has emerged to extract all used types into variables with the same name which allow us to avoid typos. Why is that? Typos might be hard to spot \(e.g. `USER_ADDDED`\) without. On top of that, the JavaScript interpreter will throw an error if we tried to access a variable which is not defined, eliminating yet another source of error that's hard to track down. Thus, you often find the following code-blocks at the beginning of a file in **Redux** applications:
 
 ```javascript
-const PLUS = "PLUS";
-const MINUS = "MINUS";
+const PLUS = 'PLUS';
+const MINUS = 'MINUS';
 ```
 
 This allow us to create some sort of coherence among the different **action types**.
@@ -94,16 +94,16 @@ This allow us to create some sort of coherence among the different **action type
 To create a store which will manage the global state, we habe to import the `createStore` function from the `redux` package. We can call it by passing it a **reducer** function. This function will return a store object to us which will contain all the methods necessary to interact with the store, namely `dispatch`, `getState` and `subscribe`. The latter two are not of the same importance when working with React, but I have mentioned them for the sake of completion. In React and Redux applications, the `react-redux` bindings components take care of the re-rendering of components if they are affected by a change of the **state**.
 
 ```javascript
-import { createStore } from "redux";
+import { createStore } from 'redux';
 
 const initialState = 0;
 
 const counterReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "PLUS": {
+    case 'PLUS': {
       return state + (action.payload || 0);
     }
-    case "MINUS": {
+    case 'MINUS': {
       return state - (action.payload || 0);
     }
     default: {
@@ -138,13 +138,13 @@ console.log(store.getState()); // 0
 Let's try things out a bit and try **dispatch a few actions** to see how **state** reacts to these **actions**:
 
 ```javascript
-store.dispatch({ type: "PLUS", payload: 2 });
+store.dispatch({ type: 'PLUS', payload: 2 });
 console.log(store.getState()); // 2
 
-store.dispatch({ type: "PLUS", payload: 1 });
+store.dispatch({ type: 'PLUS', payload: 1 });
 console.log(store.getState()); // 3
 
-store.dispatch({ type: "MINUS", payload: 2 });
+store.dispatch({ type: 'MINUS', payload: 2 });
 console.log(store.getState()); // 1
 ```
 
@@ -170,19 +170,19 @@ Typical **action creators** might take the following form using the previous exa
 
 ```javascript
 const add = (number) => {
-  return { type: "PLUS", payload: number };
+  return { type: 'PLUS', payload: number };
 };
 
 const subtract = (number) => {
-  return { type: "MINUS", payload: number };
+  return { type: 'MINUS', payload: number };
 };
 ```
 
 Or using **ES2015+ shorthand notation**:
 
 ```javascript
-const add = (payload) => ({ type: "PLUS", payload });
-const subtract = (payload) => ({ type: "MINUS", payload });
+const add = (payload) => ({ type: 'PLUS', payload });
+const subtract = (payload) => ({ type: 'MINUS', payload });
 ```
 
 Consequently, the **action creators** will be called as parameters of the `dispatch` method instead of passing an **action** directly:
@@ -215,7 +215,7 @@ Let's have a look at how a **reducer function** could be implemented that manage
 ```javascript
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_USER": {
+    case 'SET_USER': {
       return {
         user: {
           name: action.payload.name,
@@ -224,7 +224,7 @@ const rootReducer = (state = initialState, action) => {
         todos: state.todos,
       };
     }
-    case "ADD_TODO": {
+    case 'ADD_TODO': {
       return {
         user: state.user,
         todos: state.todos.concat({
@@ -234,13 +234,13 @@ const rootReducer = (state = initialState, action) => {
         }),
       };
     }
-    case "REMOVE_TODO": {
+    case 'REMOVE_TODO': {
       return {
         user: state.user,
         todos: state.todos.filter((todo) => todo.id !== action.payload),
       };
     }
-    case "CHANGE_TODO_STATUS": {
+    case 'CHANGE_TODO_STATUS': {
       return {
         user: state.user,
         todos: state.todos.map((todo) => {
@@ -298,7 +298,7 @@ const initialState = Object.freeze({});
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case "SET_USER": {
+    case 'SET_USER': {
       return {
         name: action.payload.name,
         accessToken: action.payload.accessToken,
@@ -317,13 +317,13 @@ const initialState = Object.freeze([]);
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_TODO": {
+    case 'ADD_TODO': {
       return state.concat(action.payload);
     }
-    case "REMOVE_TODO": {
+    case 'REMOVE_TODO': {
       return state.filter((todo) => todo.id !== action.payload);
     }
-    case "CHANGE_TODO_STATUS": {
+    case 'CHANGE_TODO_STATUS': {
       return state.map((todo) => {
         if (todo.id !== action.payload.id) {
           return todo;
@@ -346,9 +346,9 @@ This way, we have not only achieved readability by creating two **reducer** func
 In order to combine the _smaller_ **reducers** into a _\*\*\*\*big_ **reducer**, we can use the aforementioned `combineReducers()` method which will create a root reducer which can then be passed to the `createStore()` method. The `combineReducers()` function expects an object whose property name matches that of the newly created state tree. The values also have to be _valid_ **reducers**.
 
 ```javascript
-import { combineReducers, createStore } from "redux";
-import userReducer from "./store/user/reducer";
-import todosReducer from "./store/todos/reducer";
+import { combineReducers, createStore } from 'redux';
+import userReducer from './store/user/reducer';
+import todosReducer from './store/todos/reducer';
 
 const rootReducer = combineReducers({
   todos: todosReducer,
@@ -370,8 +370,8 @@ The `combineReducers()` function is used to put together all the reducers from t
 Another piece of advice: by using ES2015+ object shorthand notation in a clever way, we can save even more lines of code by calling the imports by the same as the properties which they will represent in state:
 
 ```javascript
-import user from "./store/user/reducer";
-import todos from "./store/todos/reducer";
+import user from './store/user/reducer';
+import todos from './store/todos/reducer';
 ```
 
 The object which we have to then pass to `combineReducer()` reduces to the following:
@@ -419,8 +419,8 @@ yarn add redux-thunk
 Once the **thunk middleware** has been installed, it has to be _registered_ via the **Redux** `applyMiddleware()` function in the **enhancer**. We import the **middleware** and import the `applyMiddleware()` function from the `redux` package. The **middleware** we want to use has to be passed to the `applyMiddleware()` function as a parameter. In this case, we are passing `thunk`:
 
 ```javascript
-import { applyMiddleware, createStore } from "redux";
-import thunk from "redux-thunk";
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
 
 // ...
 
@@ -434,7 +434,7 @@ const delayedAdd = (newTodo) => {
   return (dispatch, getState) => {
     setTimeout(() => {
       return dispatch({
-        type: "ADD_TODO",
+        type: 'ADD_TODO',
         payload: newTodo,
       });
     }, 500);
@@ -444,7 +444,7 @@ const delayedAdd = (newTodo) => {
 store.dispatch(
   delayedAction({
     id: 1,
-    text: "Explaining thunk actions",
+    text: 'Explaining thunk actions',
     done: false,
   })
 );
@@ -460,7 +460,7 @@ If you are familiar with **arrow function syntax** of ES2015, you can simplify t
 const delayedAdd = (newTodo) => (dispatch, getState) => {
   setTimeout(() => {
     return dispatch({
-      type: "ADD_TODO",
+      type: 'ADD_TODO',
       payload: newTodo,
     });
   }, 500);
@@ -482,28 +482,28 @@ Let's set up three cases in the **reducer** which react to the following three *
 A possible implementation could look like this:
 
 ```javascript
-import { applyMiddleware, createStore } from "redux";
-import thunk from "redux-thunk";
-import axios from "axios";
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import axios from 'axios';
 
 const initialState = Object.freeze({
   error: null,
   items: [],
   isFetching: false,
   lastUpdated: null,
-  selectedAccount: "manuelbieh",
+  selectedAccount: 'manuelbieh',
 });
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "FETCH_REPOS_REQUEST": {
+    case 'FETCH_REPOS_REQUEST': {
       return {
         ...state,
         isFetching: true,
         error: null,
       };
     }
-    case "FETCH_REPOS_SUCCESS": {
+    case 'FETCH_REPOS_SUCCESS': {
       return {
         ...state,
         isFetching: false,
@@ -511,7 +511,7 @@ const rootReducer = (state = initialState, action) => {
         lastUpdated: action.payload.lastUpdated,
       };
     }
-    case "FETCH_REPOS_FAILED": {
+    case 'FETCH_REPOS_FAILED': {
       return {
         ...state,
         isFetching: false,
@@ -525,13 +525,13 @@ const rootReducer = (state = initialState, action) => {
 };
 
 const fetchGithubRepos = () => (dispatch, getState) => {
-  dispatch({ type: "FETCH_REPOS_REQUESTED" });
+  dispatch({ type: 'FETCH_REPOS_REQUESTED' });
   const state = getState();
   axios
     .get(`https://api.github.com/users/${state.selectedAccount}/repos`)
     .then((response) => {
       dispatch({
-        type: "FETCH_REPOS_SUCCESS",
+        type: 'FETCH_REPOS_SUCCESS',
         payload: {
           lastUpdated: new Date(),
           items: response.data,
@@ -540,7 +540,7 @@ const fetchGithubRepos = () => (dispatch, getState) => {
     })
     .catch((error) => {
       dispatch({
-        type: "FETCH_REPOS_FAILURE",
+        type: 'FETCH_REPOS_FAILURE',
         error: true,
         payload: error.response.data,
       });
@@ -598,17 +598,20 @@ If we are using an enhancer function, the `window.REDUX_DEVTOOLS_EXTENSION_COMPO
 Redx offers a `compose` function too which allows us to bundle multiple enhancers into a single one. It can be imported to then be used to create a custom `composeEnhancer()` function. If the Redux Devtools are installed, we will use the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to to add the **devtools** of the **store enhancer**. If they are not installed however, Redux' own `compose()` function can be used instead to create the same signature:
 
 ```javascript
-import { applyMiddleware, compose, createStore } from "redux";
-import thunk from "thunk-middleware";
+import { applyMiddleware, compose, createStore } from 'redux';
+import thunk from 'thunk-middleware';
 
 const composeEnhancers =
-  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
 // ...
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk))
+);
 ```
 
 If you feel a little overwhelmed by the number of different functions and the terminology introduced, I can provide a little reassurance: in most applications, it is not necessary to understand all these moving parts in great detail. I use the **Redux Devtools** in almost all of my projects but still have to check each and every time how I can set them up properly. This text should serve as an introduction as to how **redux stores** can be debugged and provide an opportunity to learn for those that want to learn more.
@@ -626,10 +629,10 @@ The package consists of two components: one component and a function which will 
 As most applications tend to only consist of a single **store**, it is useful to place the `Provider` component up highly in the component tree. In many situations, it might even make sense to use the `Provider` component as the very first component of the component tree. The `Provider` component receives a **Redux store** as a `store` prop and also contains a number of children. All children have access to the `store` prop value given \(the **store** provided\) and can also read it or change it via the _dispatching_ of **actions**.
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
 const dummyReducer = (state = {}, action) => {
   return state;
@@ -643,7 +646,7 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 ```
 
@@ -696,12 +699,12 @@ const ConnectedTodoList = connect(mapStateToProps)(TodoList);
 We've defined a `ConnectedTodoList` which can now be used in **JSX** and be wrapped by a `Provider` component. It will render the `TodoList` with the given props from the global **Redux store:**
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { combineReducers, createStore } from "redux";
-import { Provider, connect } from "react-redux";
-import user from "./store/user/reducer";
-import todos from "./store/todos/reducer";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { combineReducers, createStore } from 'redux';
+import { Provider, connect } from 'react-redux';
+import user from './store/user/reducer';
+import todos from './store/todos/reducer';
 
 const rootReducer = combineReducers({ todos, user });
 
@@ -710,8 +713,8 @@ const store = createStore(rootReducer);
 const TodoList = (props) => (
   <div>
     <p>
-      {props.totalCount} Todos. {props.completedTodos.length} completed and {props.openTodos.length}{" "}
-      open.
+      {props.totalCount} Todos. {props.completedTodos.length} completed and{' '}
+      {props.openTodos.length} open.
     </p>
   </div>
 );
@@ -730,7 +733,7 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedTodoList />
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 ```
 
@@ -741,7 +744,7 @@ If we only wanted to display open _or_ closed todos meaning only parts of the st
 ```jsx
 const mapStateToProps = (state, ownProps) => {
   const filteredTodos =
-    ownProps.type === "completed"
+    ownProps.type === 'completed'
       ? state.todos.filter((todo) => todo.completed === true)
       : state.todos.filter((todo) => todo.completed !== true);
 
@@ -757,7 +760,7 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedTodoList type="completed" />
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 ```
 
@@ -795,7 +798,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addTodo: (text) =>
       dispatch({
-        type: "ADD_TODO",
+        type: 'ADD_TODO',
         payload: {
           id: getPseudoRandomId(),
           text,
@@ -803,12 +806,12 @@ const mapDispatchToProps = (dispatch) => {
       }),
     removeTodo: (id) =>
       dispatch({
-        type: "REMOVE_TODO",
+        type: 'REMOVE_TODO',
         payload: id,
       }),
     changeStatus: (id, done) =>
       dispatch({
-        type: "CHANGE_TODO_STATUS",
+        type: 'CHANGE_TODO_STATUS',
         payload: {
           id,
           done,
@@ -821,14 +824,17 @@ const mapDispatchToProps = (dispatch) => {
 A new object with the object properties `addTodo`, `removeTodo` and `changeStatus` is returned. Each of these is passed as **props** to a connected component with the same name. We pass `mapStateToProps()` to the `connect()` function as a second parameter to achieve this:
 
 ```javascript
-const ConnectedTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
+const ConnectedTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList);
 ```
 
 The **actions** which have been passed to `mapDispatchToProps` inline are normally extracted into respective **action creators**. These lead to better readability, are easier to test and often easier to read:
 
 ```javascript
 const addTodo = (text) => ({
-  type: "ADD_TODO",
+  type: 'ADD_TODO',
   payload: {
     id: getPseudoRandomId(),
     text,
@@ -836,12 +842,12 @@ const addTodo = (text) => ({
 });
 
 const removeTodo = (id) => ({
-  type: "REMOVE_TODO",
+  type: 'REMOVE_TODO',
   payload: id,
 });
 
 const changeStatus = (id, done) => ({
-  type: "CHANGE_TODO_STATUS",
+  type: 'CHANGE_TODO_STATUS',
   payload: {
     id,
     done,
@@ -931,13 +937,13 @@ const initialState = Object.freeze([]);
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_TODO": {
+    case 'ADD_TODO': {
       return state.concat(action.payload);
     }
-    case "REMOVE_TODO": {
+    case 'REMOVE_TODO': {
       return state.filter((todo) => todo.id !== action.payload);
     }
-    case "CHANGE_TODO_STATUS": {
+    case 'CHANGE_TODO_STATUS': {
       return state.map((todo) => {
         if (todo.id !== action.payload.id) {
           return todo;
@@ -960,7 +966,7 @@ export default (state = initialState, action) => {
 const getPseudoRandomId = () => Math.random().toString(36).slice(-6);
 
 export const addTodo = (text) => ({
-  type: "ADD_TODO",
+  type: 'ADD_TODO',
   payload: {
     id: getPseudoRandomId(),
     text,
@@ -968,12 +974,12 @@ export const addTodo = (text) => ({
 });
 
 export const removeTodo = (id) => ({
-  type: "REMOVE_TODO",
+  type: 'REMOVE_TODO',
   payload: id,
 });
 
 export const changeStatus = (id, done) => ({
-  type: "CHANGE_TODO_STATUS",
+  type: 'CHANGE_TODO_STATUS',
   payload: {
     id,
     done,
@@ -983,12 +989,12 @@ export const changeStatus = (id, done) => ({
 
 ```jsx
 // TodoList.js
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { addTodo, removeTodo, changeStatus } from "./store/todos/actions";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { addTodo, removeTodo, changeStatus } from './store/todos/actions';
 
 const TodoList = (props) => {
-  const [todoText, setTodoText] = useState("");
+  const [todoText, setTodoText] = useState('');
 
   return (
     <div>
@@ -1004,7 +1010,9 @@ const TodoList = (props) => {
             >
               remove
             </button>
-            <label style={{ textDecoration: todo.done ? "line-through" : "none" }}>
+            <label
+              style={{ textDecoration: todo.done ? 'line-through' : 'none' }}
+            >
               <input
                 type="checkbox"
                 name={todo.id}
@@ -1024,7 +1032,7 @@ const TodoList = (props) => {
         type="button"
         onClick={() => {
           props.addTodo(todoText);
-          setTodoText("");
+          setTodoText('');
         }}
       >
         add
@@ -1048,12 +1056,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
 
 ```jsx
 // index.js
-import React from "react";
-import ReactDOM from "react-dom";
-import { combineReducers, createStore } from "redux";
-import { Provider } from "react-redux";
-import todosReducer from "./store/todos/reducer";
-import TodoList from "./TodoList";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { combineReducers, createStore } from 'redux';
+import { Provider } from 'react-redux';
+import todosReducer from './store/todos/reducer';
+import TodoList from './TodoList';
 
 const rootReducer = combineReducers({
   todos: todosReducer,
@@ -1067,7 +1075,7 @@ const App = () => (
   </Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **action** - all of which should sound familiar from previous examples. To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
@@ -1135,7 +1143,7 @@ The most important hooks to remember are `useSelector` and `useDispatch` which c
 These hooks can be imported as named imports from react-redux:
 
 ```javascript
-import { useSelector, useDispatch, useStore } from "react-redux";
+import { useSelector, useDispatch, useStore } from 'react-redux';
 ```
 
 As is the case with other hooks, Redux Hooks can only be used in function components. If you prefer using Class components, you can keep using the `connect()` HOC.
@@ -1145,11 +1153,13 @@ As is the case with other hooks, Redux Hooks can only be used in function compon
 The `useSelector` hook enables us to read values from the store. It expects a so-called selector function as its first parameter. This function receives the complete Redux store and then returns a simple or calculated value \(or even a whole tree\) of data:
 
 ```jsx
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 const TodoList = () => {
-  const openTodos = useSelector((state) => state.todos.filter((todo) => todo.completed !== true));
+  const openTodos = useSelector((state) =>
+    state.todos.filter((todo) => todo.completed !== true)
+  );
   const completedTodos = useSelector((state) =>
     state.todos.filter((todo) => todo.completed === true)
   );
@@ -1158,7 +1168,8 @@ const TodoList = () => {
   return (
     <div>
       <p>
-        {allTodos.length} Todos. {completedTodos.length} complete and {openTodos.length} open.
+        {allTodos.length} Todos. {completedTodos.length} complete and{' '}
+        {openTodos.length} open.
       </p>
     </div>
   );
@@ -1168,11 +1179,13 @@ const TodoList = () => {
 The selector function can extracted if you wish to increase reuse and structure:
 
 ```jsx
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 
-const selectOpenTodos = (state) => state.todos.filter((todo) => todo.completed !== true);
+const selectOpenTodos = (state) =>
+  state.todos.filter((todo) => todo.completed !== true);
 
-const selectCompletedTodos = (state) => state.todos.filter((todo) => todo.completed === true);
+const selectCompletedTodos = (state) =>
+  state.todos.filter((todo) => todo.completed === true);
 
 const selectAllTodos = (state) => state.todos;
 
@@ -1184,7 +1197,8 @@ const TodoList = () => {
   return (
     <div>
       <p>
-        {allTodos.length} Todos. {completedTodos.length} complete and {openTodos.length} open.
+        {allTodos.length} Todos. {completedTodos.length} complete and{' '}
+        {openTodos.length} open.
       </p>
     </div>
   );
@@ -1204,17 +1218,17 @@ If an action has been _dispatched_, `useSelector` will trigger a re-render of th
 The `useDispatch()` hook will return a reference to the `dispatch` function of the store. It can be used to _dispatch_ actions in a similar fashion to the `connect()` HOC using `mapDispatchToProps`:
 
 ```javascript
-import React from "react";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
 const addTodoAction = (text) => ({
-  type: "ADD_TODO",
+  type: 'ADD_TODO',
   payload: { text },
 });
 
 const TodoApp = () => {
   const dispatch = useDispatch();
-  const addTodo = () => dispatch(addTodoAction("A new todo element"));
+  const addTodo = () => dispatch(addTodoAction('A new todo element'));
 
   return <button onClick={addTodo}>Add todo</button>;
 };

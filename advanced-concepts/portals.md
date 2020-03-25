@@ -26,8 +26,8 @@ The following example shows a common HTML snippet using portals:
 While this snippet shows the corresponding React App:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const App = () => {
   return (
@@ -37,7 +37,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector('#root'));
 ```
 
 As our `<App />` is placed into the the `div` with the id of `root`, the `<body>` of the app would now result in this HTML snippet:
@@ -56,19 +56,22 @@ As our `<App />` is placed into the the `div` with the id of `root`, the `<body>
 Each additional component or each additional HTML element which is used in the JSX of our App component would end up in the `div` with the `id="root"`. If we are dealing with a **Portal** however, the code would resemble the following:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const PortalExample = () => {
-  return ReactDOM.createPortal(<div>Portal says Hello</div>, document.querySelector("#portal"));
+  return ReactDOM.createPortal(
+    <div>Portal says Hello</div>,
+    document.querySelector('#portal')
+  );
 };
 ```
 
 Here, we can see the `createPortal()` method in action: first, we indicate which type of JSX should be rendered and second, we pass in the type of container where the JSX should be rendered into. Let's place this `PortalExample` component into our App:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const App = () => {
   return (
@@ -79,7 +82,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector('#root'));
 ```
 
 The resulting `<body>` in the HTML document will look like this:
@@ -110,28 +113,30 @@ During the time in which the value of the state changes from `false` to `true`, 
 In code form, we are left with the following example:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 const ModalPortal = (props) => {
   return ReactDOM.createPortal(
     <div
       style={{
-        background: "rgba(0,0,0,0.7)",
-        height: "100vh",
+        background: 'rgba(0,0,0,0.7)',
+        height: '100vh',
         left: 0,
-        position: "fixed",
+        position: 'fixed',
         top: 0,
-        width: "100vw"
+        width: '100vw',
       }}
     >
-      <div style={{ background: "white", margin: 16, padding: 16 }}>{props.children}</div>
+      <div style={{ background: 'white', margin: 16, padding: 16 }}>
+        {props.children}
+      </div>
     </div>,
-    document.getElementById("portal")
+    document.getElementById('portal')
   );
 };
 class App extends React.Component {
   state = {
-    modalIsOpen: false
+    modalIsOpen: false,
   };
   openModal = () => {
     this.setState({ modalIsOpen: true });
@@ -154,7 +159,7 @@ class App extends React.Component {
     );
   }
 }
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 We need to pay special attention to the `this.closeModal()` method. Even though this method is defined in the `App` component, it is called within the `ModalPortal` component in the context of the `App` component once a user has clicked on the button "Close Modal".

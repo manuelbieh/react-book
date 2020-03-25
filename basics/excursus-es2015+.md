@@ -794,10 +794,10 @@ The semantics are very similar to those of arrays, with the difference that valu
 
 ```javascript
 const user = {
-  firstName: "Manuel",
-  lastName: "Bieh",
-  job: "JavaScript Developer",
-  image: "manuel.jpg",
+  firstName: 'Manuel',
+  lastName: 'Bieh',
+  job: 'JavaScript Developer',
+  image: 'manuel.jpg',
 };
 const { firstName } = user;
 ```
@@ -869,8 +869,8 @@ Sometimes it is necessary to rename properties. Either because a variable with t
 
 ```javascript
 const passenger = {
-  name: "Manuel Bieh",
-  class: "economy",
+  name: 'Manuel Bieh',
+  class: 'economy',
 };
 ```
 
@@ -897,7 +897,7 @@ The value of the `class` property is written into the new variable `ticketClass`
 It is also possible to use defaults with **destructuring**. If you are trying to destructure a property in an object in which it does not exist, you can define a default to use instead. Instead of using a colon as we did for reserved names, we use the equality sign followed by the default value we want to pass:
 
 ```javascript
-const { name = "Unknown passenger" } = passenger;
+const { name = 'Unknown passenger' } = passenger;
 ```
 
 If no property called `name` was present in the object or its value was `undefined`, `name` would result in `Unknown passenger` in this example. If however an empty string is passed or `null`, the default would **not** be used.
@@ -907,13 +907,19 @@ If no property called `name` was present in the object or its value was `undefin
 Now it's getting interesting because combining renaming and default naming is possible. It might not be the simplest code to follow first but syntactically it is correct. Let use our previous `passenger` object again to illustrate this point. First, we define that the `name` property to be renamed to `passengerName` and then pass it the default value of `Unknown passenger` if no property `name` is found on the object. We also want to keep using `ticketClass` instead of the reserved `class` and assign the value `Economy` to it should it not exist as a property on the object.
 
 ```javascript
-const { name: passengerName = "Unknown passenger", class: ticketClass = "economy" } = passenger;
+const {
+  name: passengerName = 'Unknown passenger',
+  class: ticketClass = 'economy',
+} = passenger;
 ```
 
 If the newly named variables `passengerName` and `ticketClass` are not present in the object to be destructured, the values `Unknown passenger` and `Economy` are assigned. We do however need to ensure that the object itself is not null, otherwise the JavaScript interpreter will throw an error:
 
 ```javascript
-const { name: passengerName = "Unknown passenger", class: ticketClass = "economy" } = null;
+const {
+  name: passengerName = 'Unknown passenger',
+  class: ticketClass = 'economy',
+} = null;
 ```
 
 {% hint style="danger" %}
@@ -923,8 +929,10 @@ Uncaught TypeError: Cannot destructure property \`name\` of 'undefined' or 'null
 There is an untidy yet highly practical trick to ensure that the object we're working with is not `null` or `undefined`. The **logical OR operator** can be used to declare a fallback object of our actual object is `null` or `undefined.`
 
 ```javascript
-const { name: passengerName = "Unknown passenger", class: ticketClass = "economy" } =
-  passenger || {};
+const {
+  name: passengerName = 'Unknown passenger',
+  class: ticketClass = 'economy',
+} = passenger || {};
 ```
 
 With the addition of `|| {}` we express that if the `passenger` object is **falsy**, an empty object should be used instead. Arguably, it would be "cleaner" to check if `passenger` is an object first and only then to continue and destructure it. The **Logical OR operator** provides a handy and concise alternative for our tool set though and should be sufficient in most cases.
@@ -932,8 +940,8 @@ With the addition of `|| {}` we express that if the `passenger` object is **fals
 **Destructuring** and the **spread operator** can be used together too:
 
 ```javascript
-const globalSettings = { language: "en-US" };
-const userSettings = { timezone: "Berlin/Germany" };
+const globalSettings = { language: 'en-US' };
+const userSettings = { timezone: 'Berlin/Germany' };
 const { language, timezone } = { ...globalSettings, ...userSettings };
 ```
 
@@ -992,10 +1000,10 @@ But this does not only work for a single function argument but also if you previ
 
 ```javascript
 const Example = (first, second, third, ...rest) => {
-  console.log("first:", first);
-  console.log("second:", second);
-  console.log("third:", third);
-  console.log("rest:", rest);
+  console.log('first:', first);
+  console.log('second:', second);
+  console.log('third:', third);
+  console.log('rest:', rest);
 };
 Example(1, 2, 3, 4, 5);
 ```
@@ -1012,14 +1020,14 @@ The **rest operator** is not limited to functions but can also be used in **arra
 
 ```javascript
 const athletes = [
-  "Usain Bolt",
-  "Andre De Grasse",
-  "Christophe Lemaitre",
-  "Adam Gemili",
-  "Churandy Martina",
-  "LaShawn Merritt",
-  "Alonso Edward",
-  "Ramil Guliyev",
+  'Usain Bolt',
+  'Andre De Grasse',
+  'Christophe Lemaitre',
+  'Adam Gemili',
+  'Churandy Martina',
+  'LaShawn Merritt',
+  'Alonso Edward',
+  'Ramil Guliyev',
 ];
 const [gold, silver, bronze, ...competitors] = athletes;
 console.log(gold);
@@ -1051,10 +1059,10 @@ console.log(competitors);
 
 ```javascript
 const user = {
-  firstName: "Manuel",
-  lastName: "Bieh",
-  job: "JavaScript Developer",
-  hair: "Brown",
+  firstName: 'Manuel',
+  lastName: 'Bieh',
+  job: 'JavaScript Developer',
+  hair: 'Brown',
 };
 const { firstName, lastName, ...other } = user;
 console.log(firstName);
@@ -1084,13 +1092,13 @@ If you wanted to mix them with JavaScript expressions or values, you would norma
 
 ```javascript
 var age = 7;
-var text = "My daughter is " + age + " years old";
+var text = 'My daughter is ' + age + ' years old';
 ```
 
 ```javascript
-var firstName = "Manuel";
-var lastName = "Bieh";
-var fullName = firstName + " " + lastName;
+var firstName = 'Manuel';
+var lastName = 'Bieh';
+var fullName = firstName + ' ' + lastName;
 ```
 
 **Template strings** allow us to include **JavaScript expressions** in this variation of a string. In order to do this, you wrap the expression you want to include in this form: `${ }`. Let us look at our previous examples but rewrite them using **template literals**:
@@ -1101,8 +1109,8 @@ const text = `My daughter is ${age} years old`;
 ```
 
 ```javascript
-const firstName = "Manuel";
-const lastName = "Bieh";
+const firstName = 'Manuel';
+const lastName = 'Bieh';
 const fullName = `${firstName} ${lastName}`;
 ```
 
@@ -1123,7 +1131,7 @@ To reiterate the difference between promises and callbacks, let us have a look a
 
 ```javascript
 const errorHandler = (err) => {
-  console.error("An error occured:", err.message);
+  console.error('An error occured:', err.message);
 };
 
 getUser(
@@ -1133,10 +1141,10 @@ getUser(
       friends[0].getSettings((settings) => {
         if (settings.notifications === true) {
           email.send(
-            "You are my first friend!",
+            'You are my first friend!',
             (status) => {
               if (status === 200) {
-                alert("User has been notified via email!");
+                alert('User has been notified via email!');
               }
             },
             errorHandler
@@ -1157,7 +1165,7 @@ Let us rewrite this and assume that our fictional API methods will each return \
 
 ```javascript
 const errorHandler = (err) => {
-  console.error("An error occured:", err.message);
+  console.error('An error occured:', err.message);
 };
 
 getUser(id)
@@ -1165,12 +1173,12 @@ getUser(id)
   .then((friends) => friends[0].getSettings())
   .then((settings) => {
     if (settings.notifications === true) {
-      return email.send("You are my first friend!");
+      return email.send('You are my first friend!');
     }
   })
   .then((status) => {
     if (status === 200) {
-      alert("User has been notified via email");
+      alert('User has been notified via email');
     }
   })
   .catch(errorHandler);
@@ -1183,10 +1191,12 @@ It is relatively simple to refactor code based on callbacks into one that is usi
 ```javascript
 navigator.geolocation.getCurrentPosition(
   (position) => {
-    console.log(`User position is at ${position.coords.latitude}, ${position.coords.longitude}`);
+    console.log(
+      `User position is at ${position.coords.latitude}, ${position.coords.longitude}`
+    );
   },
   () => {
-    console.log("Unable to locate user");
+    console.log('Unable to locate user');
   }
 );
 ```
@@ -1206,10 +1216,12 @@ Yep, that's it! Now we can access the user's location like the following instead
 ```javascript
 getCurrentPositionPromise()
   .then((position) => {
-    console.log(`User position is at ${position.coords.latitude}, ${position.coords.longitude}`);
+    console.log(
+      `User position is at ${position.coords.latitude}, ${position.coords.longitude}`
+    );
   })
   .catch(() => {
-    console.log("Unable to locate user");
+    console.log('Unable to locate user');
   });
 ```
 
@@ -1230,13 +1242,13 @@ Bringing it back to our previous example of the user that wants to send an email
     const friends = await user.getFriends();
     const settings = await friends[0].getSettings();
     if (settings.notifications === true) {
-      const status = await email.send("You are my first friend!");
+      const status = await email.send('You are my first friend!');
       if (status === 200) {
-        alert("User has been notified via email");
+        alert('User has been notified via email');
       }
     }
   } catch (err) {
-    console.error("An error occured:", err.message);
+    console.error('An error occured:', err.message);
   }
 })();
 ```
@@ -1280,7 +1292,7 @@ export double;
 Using the `import` keyword, we can now use these function elsewhere in our application. To do this, we use `import` followed by the exports that we want to import in curly braces as well as `from` and the path to module.
 
 ```javascript
-import { double, square, divideBy5 } from "./calc.mjs";
+import { double, square, divideBy5 } from './calc.mjs';
 
 const value = 5;
 console.log(double(value)); // 10
@@ -1311,7 +1323,7 @@ export default {
 To use any of the above functionality, our application would only need to import the module itself - meaning the **default export** - and assign it to a variable:
 
 ```javascript
-import Calc from "./calc.mjs";
+import Calc from './calc.mjs';
 
 console.log(Calc.double(value)); // 10
 console.log(Calc.square(value)); // 25
@@ -1352,7 +1364,7 @@ A browser supporting modules would simply load `myApp.mjs` while all other brows
 But that's not all: Node.js has its own, very special mechanism to find and load files. Modules that do not have a relative file path, i.e. not start with `./` or `../`, will be looked for in `node_modules` or `node_libraries` for example. Node.js also loads an `index.js` by default if it finds a directory with the name you specified.
 
 ```javascript
-import MyModule from "myModule";
+import MyModule from 'myModule';
 ```
 
 Node.js would look for an export in a directory such as `./node_modules/myModule` in this case and load an `index.js` that is inside of it. Alternatively, it would look for the file in the `main` field of the `package.json`. The browser on the other hand cannot try a bunch of different file paths to find a file because each and every search would result in an expensive network request and many costly 404 responses.
@@ -1362,7 +1374,7 @@ On top of that the module that you want to import from, also called the **Import
 Imports like this are not possible in browsers to date:
 
 ```javascript
-import React from "react";
+import React from 'react';
 ```
 
 If we want to use JavaScript modules server-side as well as client-side, we will have to keep using module bundlers like Webpack for now. The proposal for **Package Name Maps** which is supposed to solve this problem is only in the early stages of discussion and will thus only land in a later version of ECMAScript.

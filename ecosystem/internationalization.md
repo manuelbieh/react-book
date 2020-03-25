@@ -32,17 +32,17 @@ Let's start by creating two objects containing our translations. One will hold t
 
 ```javascript
 const de = {
-  greeting: "Hallo Welt!",
-  headline: "Heute lernen wir Internationalisierung mit React",
-  messageCount: "{{count}} neue Nachricht",
-  messageCount_plural: "{{count}} neue Nachrichten",
+  greeting: 'Hallo Welt!',
+  headline: 'Heute lernen wir Internationalisierung mit React',
+  messageCount: '{{count}} neue Nachricht',
+  messageCount_plural: '{{count}} neue Nachrichten',
 };
 
 const en = {
-  greeting: "Hello world!",
-  headline: "Today we learn Internationalization with React",
-  messageCount: "{{count}} new message",
-  messageCount_plural: "{{count}} new messages",
+  greeting: 'Hello world!',
+  headline: 'Today we learn Internationalization with React',
+  messageCount: '{{count}} new message',
+  messageCount_plural: '{{count}} new messages',
 };
 ```
 
@@ -51,8 +51,8 @@ To use **i18next** in our application, we have to import it, initialize it and p
 We start by importing the `i18next` package as well as the named export `initReactI18next` from the `react-i18next` package:
 
 ```javascript
-import i18next from "i18next";
-import { initReactI18next } from "react-i18next";
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
 ```
 
 Consequently, we can make use of the `.use()` method to pass the React plugin to **i18next** as well as using the `.init()` method to initialize **i18next**.
@@ -67,8 +67,8 @@ The `init()` function expects a config object which should at least contain a `l
 
 ```javascript
 i18next.use(initReactI18next).init({
-  lng: "en",
-  fallbackLng: "en",
+  lng: 'en',
+  fallbackLng: 'en',
   resources: {
     en: {
       translation: en,
@@ -123,7 +123,7 @@ Once **i18next** is set up correctly and the translations have been set up as we
 The `withTranslation()` function will create a **HOC** which we can pass to the component that is supposed to be translated. The `t` and `i18n` props will be passed to this component. To do this, we import the function as a named export from the `react-i18next` package:
 
 ```javascript
-import { withTranslation } from "react-i18next";
+import { withTranslation } from 'react-i18next';
 ```
 
 Once imported, we call the function and obtain an HOC which we pass the component to in which we want to access the translated values. If we are using **namespaces**, we can also pass the **namespace** we want to use to the `withTranslation()` function:
@@ -133,10 +133,12 @@ Once imported, we call the function and obtain an HOC which we pass the componen
 const TranslatedComponent = withTranslation()(TranslatedComponent);
 
 // Using a single namespace:
-const TranslatedComponent = withTranslation("namespace")(Component);
+const TranslatedComponent = withTranslation('namespace')(Component);
 
 // Using multiple namespaces:
-const TranslatedComponent = withTranslation(["namespace1", "namespace2"])(TranslatedComponent);
+const TranslatedComponent = withTranslation(['namespace1', 'namespace2'])(
+  TranslatedComponent
+);
 ```
 
 For myself it has proven useful, to extract components into their own files and wrap them with the `withTranslation()` HOC when they are exported:
@@ -146,7 +148,7 @@ For myself it has proven useful, to extract components into their own files and 
 class Greeting extends React.Component {
   render() {
     const { t } = this.props;
-    return <h1>{t("greeting")}</h1>;
+    return <h1>{t('greeting')}</h1>;
   }
 }
 
@@ -156,7 +158,7 @@ export default withTranslation()(Greeting);
 We can then immediately import the translated component:
 
 ```javascript
-import Greeting from "./Greeting.js";
+import Greeting from './Greeting.js';
 ```
 
 Not only have we imported the actual component, but we have also gained access the extended props `t`, `i18n` and `tReady` via i18next.
@@ -171,7 +173,7 @@ The `t` function forms the central function for everything related to translatio
 If plurals or placeholders are used in the translations, they can be defined in the second parameter:
 
 ```javascript
-<p>{t("messageCount", { count: 3 })}</p>
+<p>{t('messageCount', { count: 3 })}</p>
 // -> <p>3 new messages</p>
 ```
 
@@ -187,7 +189,7 @@ In order to switch the language from `en` to `de`, one can call `i18n.changeLang
 The use of the `withTranslation()` HOC is not constrained to **class components** but can also be used in **function components**. However, the use of the `useTranslation()` hook often simplifies the component and makes it much more readable. The hook can be imported similarly to the HOC:
 
 ```javascript
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 ```
 
 This **hook** allows us to extract the `t` and `i18n` properties by using **destructuring assignment** from ES2015+.
@@ -197,9 +199,9 @@ const Greeting = () => {
   const { t, i18n } = useTranslation();
   return (
     <div>
-      <h1>{t("greeting")}</h1>
-      <button onClick={() => i18n.changeLanguage("de")}>de</button>
-      <button onClick={() => i18n.changeLanguage("en")}>en</button>
+      <h1>{t('greeting')}</h1>
+      <button onClick={() => i18n.changeLanguage('de')}>de</button>
+      <button onClick={() => i18n.changeLanguage('en')}>en</button>
     </div>
   );
 };
@@ -208,8 +210,8 @@ const Greeting = () => {
 As was already the case in the `withTranslation()` HOC, `t` refers to the function which allows us to display translations based on their **translation key**. `i18n` refers to the respective **i18next** instance. The `useTranslation()` hook offers the same set of functionality as the `withTranslation()` HOC, however it is much more explicit and thus more readable. In order to use different **namespaces**, we can pass a string or an array of strings containing the namespaces to the hook:
 
 ```javascript
-const { t } = useTranslation("namespace");
-const { t } = useTranslation(["namespace1", "namespace2"]);
+const { t } = useTranslation('namespace');
+const { t } = useTranslation(['namespace1', 'namespace2']);
 ```
 
 If no namespace has been provided, the default settings will be set.
@@ -238,11 +240,11 @@ Let's look at the above example using the `Trans` component:
 ```jsx
 // Translations:
 const de = {
-  terms: "Ich akzeptiere die <1>AGB</1>.",
+  terms: 'Ich akzeptiere die <1>AGB</1>.',
 };
 
 const en = {
-  terms: "I accept the <1>Terms and Conditions</1>.",
+  terms: 'I accept the <1>Terms and Conditions</1>.',
 };
 
 // JSX:
@@ -276,7 +278,7 @@ The first option to change is `saveMissing` which should now be set to `true`. A
 i18next.use(initReactI18next).init({
   saveMissing: true,
   missingKeyHandler: (language, namespace, key, fallbackValue) => {
-    console.log("Missing translation:", fallbackValue);
+    console.log('Missing translation:', fallbackValue);
   },
   // other options
 });
@@ -311,8 +313,8 @@ By the way: You can still use the `t()` function as you are used to if you find 
 
 ```jsx
 <Trans i18nKey="terms">
-  I accept the{" "}
-  <Link to="/terms" title={t("termsTitle")}>
+  I accept the{' '}
+  <Link to="/terms" title={t('termsTitle')}>
     Terms and Conditions
   </Link>
   .

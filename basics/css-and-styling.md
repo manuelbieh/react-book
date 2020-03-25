@@ -7,7 +7,7 @@ Styling in React is a topic of its own in React. React does not offer its own in
 The simplest way to style components in React is using the `style` attribute on regular HTML elements. It differs from regular HTML though and React components expect an **object** in the form of `property: value`. The property itself needs to be declared in JavaScript \(not its regular CSS counterpart\) form meaning `zIndex` instead of `z-index`, `backgroundColor` instead of `background-color` or `marginTop` instead of `margin-top`. If the values accept declarations in pixels, it is optional to explicitly define `px` as the corresponding unit:
 
 ```jsx
-<div style={{ border: "1px solid #ccc", marginBottom: 10 }}>
+<div style={{ border: '1px solid #ccc', marginBottom: 10 }}>
   A div with a grey border and a 10 pixel margin at the bottom
 </div>
 ```
@@ -63,7 +63,7 @@ yarn add classnames
 Now, we only need to import the package in those components where we want to use it:
 
 ```javascript
-import classNames from "classnames";
+import classNames from 'classnames';
 ```
 
 This way, we are importing the function and give it the name of `classNames.` The function expects an arbitrary amount of parameters which can be a string or an object in the form of `{ class: true | false }`. It works similar to what you might already expect: if the value in the condition is `true`, `classNames` employs a class with the same property name:
@@ -108,7 +108,7 @@ It's not actually necessary to enforce the file ending of `.module.css` \(just r
 In these CSS files, regular and **standardized CSS** can be found. It can then be imported into a JavaScript module with ease:
 
 ```javascript
-import css from "./ProfileImage.module.css";
+import css from './ProfileImage.module.css';
 ```
 
 We've just entered new territory: the variable `css` now containts an object with properties that relate to the classnames in our CSS modules. If there is a CSS class in the CSS file that has the name `image`, we can now access the property `image` on the CSS object. The resulting value in the rendered markup is a unique string such as `ProfileImage_image_2cvf73`.
@@ -176,9 +176,9 @@ Once installed, we are ready to import it and write our first **styled component
 In order to create a button which is black and yellow, we would need to write the following:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import styled from "styled-components";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import styled from 'styled-components';
 
 const Button = styled.button`
   background: yellow;
@@ -196,7 +196,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 By using the notation `const Button = styled.button` **styled components** creates a new `Button` component and equips it with the CSS properties that we have defined within the **template literals**. Inside of the template literals, regular CSS can be used.
@@ -223,7 +223,7 @@ const Button = styled.button`
   background: yellow;
   border: 2px solid black;
   color: black;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   padding: 8px;
 
   :hover {

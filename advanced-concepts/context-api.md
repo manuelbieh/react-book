@@ -22,24 +22,24 @@ The **context** can now be used in the application by wrapping the contents of t
 
 ```jsx
 // LanguageContext.js
-import React from "react";
-const LanguageContext = React.createContext("de");
+import React from 'react';
+const LanguageContext = React.createContext('de');
 export default LanguageContext;
 ```
 
 ```jsx
 // index.js
-import React from "react";
-import ReactDOM from "react-dom";
-import LanguageContext from "./LanguageContext";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import LanguageContext from './LanguageContext';
 
 const App = () => (
-  <LanguageContext.Provider value={"en"}>
+  <LanguageContext.Provider value={'en'}>
     {/* inside of this tree, the value of 'en' is available to other components  */}
   </LanguageContext.Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById("#root"));
+ReactDOM.render(<App />, document.getElementById('#root'));
 ```
 
 The `SelectedLanguage`component can now be used at any point within the application and the value made available by the **Provider**. If the value within the provider changes, all **consumer components** encompassed within the current provider will render again using the updated value.
@@ -47,10 +47,10 @@ The `SelectedLanguage`component can now be used at any point within the applicat
 A complete if a little artificial example is this:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import LanguageContext from "./LanguageContext";
-import DisplaySelectedLanguage from "./DisplaySelectedLanguage";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import LanguageContext from './LanguageContext';
+import DisplaySelectedLanguage from './DisplaySelectedLanguage';
 
 const App = () => (
   <LanguageContext.Provider value="en">
@@ -65,7 +65,7 @@ const App = () => (
   </LanguageContext.Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById("#root"));
+ReactDOM.render(<App />, document.getElementById('#root'));
 ```
 
 Although no **props** have been passed to the `DisplaySelectedLanguage` component, it still has knowledge of the currently selected language and will also demonstrate this accurately:
@@ -81,29 +81,29 @@ If we extend the example a little bit, we can easily add a little more component
 The following example contains an object with translations to which we pass a rather complex object with multiple data types \(consisting of an array, a string, a function to change the language as well as object with the original translations:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const translationStore = {
   de: {
-    greeting: "Guten Tag!",
-    headline: "Heute lernen wir, wie Context funktioniert."
+    greeting: 'Guten Tag!',
+    headline: 'Heute lernen wir, wie Context funktioniert.',
   },
   en: {
-    greeting: "Good day!",
-    headline: "Today we learn how context works."
-  }
+    greeting: 'Good day!',
+    headline: 'Today we learn how context works.',
+  },
 };
 
-const defaultLanguage = "de";
+const defaultLanguage = 'de';
 
 const defaultLanguageContextValue = {
   availableLanguages: Object.keys(translationStore),
   changeLanguage: () => {
-    console.warn("Funktion changeLanguage() nicht implementiert!");
+    console.warn('Funktion changeLanguage() nicht implementiert!');
   },
   language: defaultLanguage,
-  translations: translationStore[defaultLanguage]
+  translations: translationStore[defaultLanguage],
 };
 
 const LanguageContext = React.createContext(defaultLanguageContextValue);
@@ -112,18 +112,20 @@ class Localized extends React.Component {
   changeLanguage = (newLanguage) => {
     this.setState((state) => ({
       translations: translationStore[newLanguage],
-      language: newLanguage
+      language: newLanguage,
     }));
   };
 
   state = {
     ...defaultLanguageContextValue,
-    changeLanguage: this.changeLanguage
+    changeLanguage: this.changeLanguage,
   };
 
   render() {
     return (
-      <LanguageContext.Provider value={this.state}>{this.props.children}</LanguageContext.Provider>
+      <LanguageContext.Provider value={this.state}>
+        {this.props.children}
+      </LanguageContext.Provider>
     );
   }
 }
@@ -170,7 +172,7 @@ const App = () => (
   </Localized>
 );
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 First of all, we define an object `defaultLanguageContextValue` which holds the default value of the newly generated context object. This consists of:
@@ -231,7 +233,9 @@ It is entirely possible to use multiple context providers within the same compon
 ```jsx
 <MyContext.Provider value="1">
   <MyContext.Provider value="2">
-    <MyContext.Consumer>{(value) => <p>The value is {value}</p>}</MyContext.Consumer>
+    <MyContext.Consumer>
+      {(value) => <p>The value is {value}</p>}
+    </MyContext.Consumer>
   </MyContext.Provider>
 </MyContext.Provider>
 ```
@@ -292,7 +296,7 @@ Here is an example which you should NOT recreate:
 ```jsx
 class App extends React.Component {
   state = {
-    color: "red"
+    color: 'red',
   };
 
   render() {
@@ -310,7 +314,7 @@ However, we can transform the above example to avoid this situation and make sur
 ```jsx
 class App extends React.Component {
   state = {
-    color: "red"
+    color: 'red',
   };
 
   render() {

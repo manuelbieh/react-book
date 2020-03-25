@@ -43,12 +43,12 @@ Here is an example to reiterate this:
 ```jsx
 class Counter extends React.Component {
   state = {
-    counter: 0
+    counter: 0,
   };
 
   increase() {
     this.setState((state) => ({
-      counter: state.counter + 1
+      counter: state.counter + 1,
     }));
   }
 
@@ -92,7 +92,7 @@ class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      counter: 0
+      counter: 0,
     };
     this.increase = this.increase.bind(this);
   }
@@ -161,7 +161,7 @@ class TextRepeater extends React.Component {
 
   handleChange = (e) => {
     this.setState((state) => ({
-      value: e.target.value
+      value: e.target.value,
     }));
   };
 
@@ -191,7 +191,7 @@ The easiest solution for this problem is to define and object literal instead of
 ```jsx
 handleChange = (e) => {
   this.setState({
-    value: e.target.value
+    value: e.target.value,
   });
 };
 ```
@@ -206,7 +206,7 @@ In most situations it is sufficient to write certain values that should later be
 handleChange = (e) => {
   const value = e.target.value;
   this.setState(() => ({
-    value: value
+    value: value,
   }));
 };
 ```
@@ -230,7 +230,7 @@ If you ever come across this situation though, it might be worth to considering 
 handleChange = (e) => {
   e.persist();
   this.setState(() => ({
-    value: e.target.value
+    value: e.target.value,
   }));
 };
 ```

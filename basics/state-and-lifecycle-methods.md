@@ -142,7 +142,7 @@ this.setState(
     time: new Date().toLocaleTimeString(),
   },
   () => {
-    console.log("New Time:", this.state.time);
+    console.log('New Time:', this.state.time);
   }
 );
 ```
@@ -198,8 +198,8 @@ Components which implement `componentDidCatch()` are commonly called **error bou
 Let's have a look at how **lifecycle methods** behave in a simple component. The code implements a component which updates its own state every second and displays the current time. As soon as the component **mounts** an interval is started which updates the state of our component in the `componentDidMount()` method. A re-render is triggered and the current time is shown again.
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 class Clock extends React.Component {
   state = {
@@ -223,7 +223,7 @@ class Clock extends React.Component {
   }
 }
 
-ReactDOM.render(<Clock />, document.getElementById("root"));
+ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
 We see that the **lifecycle methods** `componentDidMount()` and `componentWillUnmount()` are being used in the above example. **Default state** is defined with the property `date` and holds an instance of the date object. When the component **mounts** \(`componentDidMount()`\) the `setInterval()` interval is started and its id is saved within the the instance property `this.intervalId`. As the interval invokes the `setState()` method every second, the component regularly triggers a re-render meaning the `render()` method is called again and shows the current time again.
@@ -281,7 +281,7 @@ class DateTime extends React.Component {
   }
 }
 
-ReactDOM.render(<DateTime />, document.getElementById("root"));
+ReactDOM.render(<DateTime />, document.getElementById('root'));
 ```
 
 Arguably this example is a little bit artificial but it illustrates the point. We can see how multiple components interact with each other. The `DateTime` component is our **logic component \(smart component\)** and takes care of "getting" the time and updating it. The **layout** component on the other hand deals with the actual display of the date \(`showDate`\) and the time \(`ShowTime`\) via the props it has been passed. The layout component is implemented as a simple **function component** as a **class component** would have been unnecessarily complex and produced too much overhead.
@@ -293,8 +293,8 @@ In the beginning I mentioned a few other **lifecycle methods** apart from `compo
 In order to understand these different **lifecycle methods** better, let us create an example component in which we include the **lifecycle method** in debug messages. this will help us to see them in the browser console. To be more precise, the example actually consists of two components - one of them being a parent component, the other being a child component which receives props from its parent component \(which it simply ignores in this case\).
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const log = (method, component) => {
   console.log(`[${component}]`, method);
@@ -305,18 +305,18 @@ class ParentComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    log("constructor", "parent");
+    log('constructor', 'parent');
   }
 
   static getDerivedStateFromProps() {
-    log("getDerivedStateFromProps", "parent");
+    log('getDerivedStateFromProps', 'parent');
     return null;
   }
 
   componentDidMount() {
-    log("componentDidMount", "parent");
+    log('componentDidMount', 'parent');
     this.intervalId = setTimeout(() => {
-      log("state update", "parent");
+      log('state update', 'parent');
       this.setState(() => ({
         time: new Date().toLocaleTimeString(),
       }));
@@ -324,26 +324,26 @@ class ParentComponent extends React.Component {
   }
 
   shouldComponentUpdate() {
-    log("shouldComponentUpdate", "parent");
+    log('shouldComponentUpdate', 'parent');
     return true;
   }
 
   getSnapshotBeforeUpdate() {
-    log("getSnapshotBeforeUpdate", "parent");
+    log('getSnapshotBeforeUpdate', 'parent');
     return null;
   }
 
   componentDidUpdate() {
-    log("componentDidUpdate", "parent");
+    log('componentDidUpdate', 'parent');
   }
 
   componentWillUnmount() {
-    log("componentWillUnmount", "parent");
+    log('componentWillUnmount', 'parent');
     clearInterval(this.intervalId);
   }
 
   render() {
-    log("render", "parent");
+    log('render', 'parent');
     return <ChildComponent time={this.state.time} />;
   }
 }
@@ -353,43 +353,43 @@ class ChildComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    log("constructor", "child");
+    log('constructor', 'child');
   }
 
   static getDerivedStateFromProps() {
-    log("getDerivedStateFromProps", "child");
+    log('getDerivedStateFromProps', 'child');
     return null;
   }
 
   componentDidMount() {
-    log("componentDidMount", "child");
+    log('componentDidMount', 'child');
   }
 
   shouldComponentUpdate() {
-    log("shouldComponentUpdate", "child");
+    log('shouldComponentUpdate', 'child');
     return true;
   }
 
   getSnapshotBeforeUpdate() {
-    log("getSnapshotBeforeUpdate", "child");
+    log('getSnapshotBeforeUpdate', 'child');
     return null;
   }
 
   componentDidUpdate() {
-    log("componentDidUpdate", "child");
+    log('componentDidUpdate', 'child');
   }
 
   componentWillUnmount() {
-    log("componentWillUnmount", "child");
+    log('componentWillUnmount', 'child');
   }
 
   render() {
-    log("render", "child");
+    log('render', 'child');
     return <div>{this.props.time}</div>;
   }
 }
 
-ReactDOM.render(<ParentComponent />, document.getElementById("root"));
+ReactDOM.render(<ParentComponent />, document.getElementById('root'));
 ```
 
 Both of these components reliably lead to the following result:

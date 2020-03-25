@@ -21,15 +21,15 @@ yarn add react-router-dom
 React Router's usage is _declarative_ and can be achieved via the components mentioned above. Routers can be used anywhere in the application as long as the page tree itself is nested in a **Router Context.** In most cases, this context will wrap the entire application and exist only once:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const App = () => {
   return <Router>[...]</Router>;
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 ### Defining routes
@@ -39,9 +39,9 @@ Each component placed inside of the `<Router></Router>` element, can access the 
 The correct implementation of both props can be summarized as the following:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const Example = () => <p>Example Component</p>;
 
@@ -54,7 +54,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 This example would render the `Example` component twice once the `/example` route is hit, as the Route component merely checks whether the path of the current URL is the same as the one provided in the `path` prop. This might sound a little odd at first, but there's a logical explanation.
@@ -94,9 +94,9 @@ In this example, we can see that two different components are rendered in differ
 However, while the above is completely valid code, one could argue that we are creating unnecessary duplication in this example. Thus, many try to avoid this structure and would rewrite the above example as the following:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const Home = () => (
   <>
@@ -121,13 +121,13 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 While we avoided duplication of routing in this case, we have created duplication of the layout code. One should probably abstract this structure in its own layout component.
 
 ```jsx
-import React from "react";
+import React from 'react';
 
 const Layout = (props) => (
   <>
@@ -137,7 +137,9 @@ const Layout = (props) => (
 );
 
 const Home = () => <Layout content="Home Content" sidebar="Home Sidebar" />;
-const Account = () => <Layout content="Account Content" sidebar="Account Sidebar" />;
+const Account = () => (
+  <Layout content="Account Content" sidebar="Account Sidebar" />
+);
 
 const App = () => {
   return (
@@ -148,7 +150,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 If you have tried these code examples on your own, you might have noticed something that strikes you as a little odd. **React Router** intentionally has a rather relaxed approach to path matching. When we hit the `/account` URL, we do not only render the `Account` component, but also the Home component as the `/account` url **also includes** the path of `/` which then renders both components. This is intentional as it allows us to group certain areas of the page under a certain URL prefix and have all components render on these types of routes.
@@ -279,9 +281,9 @@ Each component that was rendered by React Router and has been added as a `compon
 Each of these props can be accessed just like any other props. **Class components** can access these via `this.props` whereas **function components** can access these with `props`:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const Example = (props) => {
   console.log(props);
@@ -294,7 +296,7 @@ const App = () => (
   </Router>
 );
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 Let's have a look at the console output of this component when the route `/users/123` is hit:
@@ -437,8 +439,8 @@ As is the case with most hooks, using React Router's own hooks is a very pleasan
 First, let's have a closer look at the arguably most simple hook in our list. We can import it via the `react-router-dom` package. Once installed, we can access location data by using the return value of the hook:
 
 ```jsx
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 const ShowLocationInfo = () => {
   const location = useLocation();
@@ -484,8 +486,8 @@ This hook is basically a shortcut for accessing parameters which were hidden in 
 The `useParams()` hook allows us to _directly_ access this object:
 
 ```jsx
-import React from "react";
-import { useParams, useLocation } from "react-router-dom";
+import React from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 
 const ShowParams = () => {
   const params = useParams();
@@ -529,7 +531,7 @@ The function can take in a path which will in turn return a `match` object for t
 If the hook is called with a path that does not match with the current route, `null` will be returned from the function:
 
 ```jsx
-useRouteMatch("/orders/:orderid");
+useRouteMatch('/orders/:orderid');
 ```
 
 Calling this function with `/users/:userid` will return a value of `null`.

@@ -79,7 +79,10 @@ While we still pass the same function to `MyComponent`, we create a new function
 The same applies to Objects and Arrays:
 
 ```jsx
-<MyComponent logConfig={{ logLevel: "info" }} logEntries={["Message 1", "Message 2"]} />
+<MyComponent
+  logConfig={{ logLevel: 'info' }}
+  logEntries={['Message 1', 'Message 2']}
+/>
 ```
 
 This would also trigger a re-render as the `logConfig` object or array would be replaced with each new render.
@@ -99,8 +102,8 @@ Using `React.memo()`, the **function component** works similarly to the **class 
 Curious already? Play around with the demo to deepen your understanding:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 class ClassComponent extends React.Component {
   render() {
@@ -124,7 +127,7 @@ const MemoizedFunctionComponent = React.memo(() => {
 
 class App extends React.Component {
   state = {
-    lastRender: new Date().toISOString()
+    lastRender: new Date().toISOString(),
   };
 
   componentDidMount() {
@@ -150,7 +153,7 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 The `App` Component triggers a re-render every 0.2 seconds without new **props** being passed. The question of all questions is: Which components are being re-rendered and which are not?
@@ -175,7 +178,7 @@ function MyApp() {
   );
 }
 
-ReactDOM.render(<MyApp />, document.getElementById("app"));
+ReactDOM.render(<MyApp />, document.getElementById('app'));
 ```
 
 `<MyApp />` returns a `<div>` which contains the `Hello` component which is used to greet both Manuel and Tom. The result:
@@ -234,7 +237,7 @@ Since **React 16.0.0** we are also allowed to return:
 - a simple string
 
 ```javascript
-"Hello Welt";
+'Hello Welt';
 ```
 
 - or a so-called "Fragment" - a special "component" which does not appear in the rendered output and can act as a container if one otherwise violated the rule of only ever returning one root element:
@@ -459,7 +462,7 @@ How do we transform our example into a "pure" function? By ensuring that our val
 var car = { speed: 0 };
 function accelerate(car) {
   return {
-    speed: car.speed + 1
+    speed: car.speed + 1,
   };
 }
 ```
@@ -493,17 +496,17 @@ Outside of the component, it is an entirely different story. We can change value
 ```jsx
 function Example(props) {
   props.number = props.number + 1;
-  props.fullName = [props.firstName, props.lastName].join(" ");
+  props.fullName = [props.firstName, props.lastName].join(' ');
   return (
     <div>
-      ({props.number}) {props.fullName}{" "}
+      ({props.number}) {props.fullName}{' '}
     </div>
   );
 }
 
 ReactDOM.render(
   <Example number={5} firstName="Manuel" lastName="Bieh" />,
-  document.getElementById("app")
+  document.getElementById('app')
 );
 ```
 
@@ -522,20 +525,20 @@ Sometimes, it might still be beneficial to derive a new value from some props th
 If I only want to show the value that can be derived from the props that I have passed in as part of the component I can only change the output based on the props:
 
 ```jsx
-var React = require("react");
-var ReactDOM = require("react-dom");
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 function Example(props) {
   return (
     <div>
-      ({props.number + 1}) {[props.firstName, props.lastName].join(" ")}
+      ({props.number + 1}) {[props.firstName, props.lastName].join(' ')}
     </div>
   );
 }
 
 ReactDOM.render(
   <Example number={5} firstName="Manuel" lastName="Bieh" />,
-  document.getElementById("app")
+  document.getElementById('app')
 );
 ```
 
@@ -554,11 +557,11 @@ But how can we actually change props outside of a component? So far, we have onl
 It is best to explain this with yet another example, even if it is a little abstract in this case:
 
 ```jsx
-var React = require("react");
-var ReactDOM = require("react-dom");
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var renderCounter = 0;
-setInterval(function() {
+setInterval(function () {
   renderCounter++;
   renderApp();
 }, 2000);
@@ -568,7 +571,10 @@ const App = (props) => {
 };
 
 function renderApp() {
-  ReactDOM.render(<App renderCounter={renderCounter} />, document.getElementById("app"));
+  ReactDOM.render(
+    <App renderCounter={renderCounter} />,
+    document.getElementById('app')
+  );
 }
 
 renderApp();
@@ -614,7 +620,7 @@ Put simply, props are actually not very different from our regular function argu
     </svg>
   }
   callMe={() => {
-    console.log("Somebody called me");
+    console.log('Somebody called me');
   }}
 />
 ```
@@ -638,7 +644,7 @@ function User(props) {
 
 ReactDOM.render(
   <User name={user.name} image={user.image} posts={user.posts} />,
-  document.getElementById("app")
+  document.getElementById('app')
 );
 ```
 
