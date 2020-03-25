@@ -36,19 +36,19 @@ While this might seem alienating to use function references as a prop, it offers
 
 ### Scopes in event handlers
 
-Usually the use of ES2015 classes in React mandate that event handlers have to be defined as methods of the current class component. However, class methods **are not automatically bound to the instance**. Let's unpack what this means: initially `this` will be `undefined` in all of our event handlers. 
+Usually the use of ES2015 classes in React mandate that event handlers have to be defined as methods of the current class component. However, class methods **are not automatically bound to the instance**. Let's unpack what this means: initially `this` will be `undefined` in all of our event handlers.
 
 Here is an example to reiterate this:
 
 ```jsx
 class Counter extends React.Component {
   state = {
-    counter: 0,
+    counter: 0
   };
 
   increase() {
     this.setState((state) => ({
-        counter: state.counter + 1,
+      counter: state.counter + 1
     }));
   }
 
@@ -58,7 +58,7 @@ class Counter extends React.Component {
         <p>{this.state.counter}</p>
         <button onClick={this.increase}>+1</button>
       </div>
-    )
+    );
   }
 }
 ```
@@ -66,7 +66,8 @@ class Counter extends React.Component {
 An `onClick` event is added to increment the counter by one each time the user presses a button labelled `+1`. But when the user clicks the button, instead of seeing the actual counter, they will receive an error message:
 
 {% hint style="danger" %}
-**TypeError**  
+**TypeError**
+
 Cannot read property 'setState' of undefined
 {% endhint %}
 
@@ -74,7 +75,7 @@ Why's that? The answer is **scoping!** Whenever we click the button in the `incr
 
 #### Method binding in the render\(\) method
 
-Probably the most trivial solution is to _bind ****_the method inside of the `render()` method. We add a `.bind(this)` to the reference of the class method:
+Probably the most trivial solution is to _bind_ the method inside of the `render()` method. We add a `.bind(this)` to the reference of the class method:
 
 ```jsx
 <button onClick={this.increase.bind(this)}>+1</button>
@@ -91,7 +92,7 @@ class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      counter: 0,
+      counter: 0
     };
     this.increase = this.increase.bind(this);
   }
@@ -144,7 +145,7 @@ While you can certainly also implement native browser events in React, you shoul
 
 From time to time however, it is necessary to define events outside of the component context. Some classic examples are `window.onresize` and `window.onscroll`. React's event system does not support global events outside of the component context but if you want to define native browser events you can do so in the `componentDidMount()` method. You should pay attention though, whenever an event listener is added with `addEventListener()`, these **need to removed** once you're done with them.
 
-The `componentWillUnmount()` method is the perfect place to do this. While it might seem annoying, global events can cause **performance bottlenecks** or even **memory leaks** if not removed properly as they would be added again each time a component is mounted and called multiple times. 
+The `componentWillUnmount()` method is the perfect place to do this. While it might seem annoying, global events can cause **performance bottlenecks** or even **memory leaks** if not removed properly as they would be added again each time a component is mounted and called multiple times.
 
 ### The `SyntheticEvent` Object
 
@@ -160,9 +161,9 @@ class TextRepeater extends React.Component {
 
   handleChange = (e) => {
     this.setState((state) => ({
-      value: e.target.value,
+      value: e.target.value
     }));
-  }
+  };
 
   render() {
     return (
@@ -170,7 +171,7 @@ class TextRepeater extends React.Component {
         <input type="text" onChange={this.handleChange} />
         <p>{this.state.value}</p>
       </div>
-    )
+    );
   }
 }
 ```
@@ -180,7 +181,8 @@ An `onChange` event is registered that is added into a paragraph once the value 
 We are running into a bit of a problem though: `this.setState()` uses an **updater function** or more precisely a callback. However, it happens outside of the event handler scope meaning the `SyntheticEvent` has already been reset or `e.target` does not exist anymore.
 
 {% hint style="danger" %}
-**TypeError**  
+**TypeError**
+
 Cannot read property 'value' of null
 {% endhint %}
 
@@ -189,9 +191,9 @@ The easiest solution for this problem is to define and object literal instead of
 ```jsx
 handleChange = (e) => {
   this.setState({
-    value: e.target.value,
+    value: e.target.value
   });
-}
+};
 ```
 
 While this would certainly solve the problem, it would not help us much. We still encounter the first problem when trying to access the properties of the `SyntheticEvent` object if, for example, it was wrapped within a `setTimeout()` callback. We need to come up with another solution.
@@ -204,9 +206,9 @@ In most situations it is sufficient to write certain values that should later be
 handleChange = (e) => {
   const value = e.target.value;
   this.setState(() => ({
-    value: value,
+    value: value
   }));
-}
+};
 ```
 
 This works! Bonus points for using **object destructuring** and the **object property shorthand**.
@@ -215,7 +217,7 @@ This works! Bonus points for using **object destructuring** and the **object pro
 handleChange = (e) => {
   const { value } = e.target;
   this.setState(() => ({ value }));
-}
+};
 ```
 
 #### Persisting `SyntheticEvents` with `e.persist()`
@@ -228,9 +230,9 @@ If you ever come across this situation though, it might be worth to considering 
 handleChange = (e) => {
   e.persist();
   this.setState(() => ({
-    value: e.target.value,
+    value: e.target.value
   }));
-}
+};
 ```
 
 First, the `e.persist()` method is invoked. Second, the **updater function** can safely access `e.target` and its `value` property.
@@ -238,10 +240,10 @@ First, the `e.persist()` method is invoked. Second, the **updater function** can
 ### Summary
 
 {% hint style="info" %}
-* **Always** use event props in JSX to define events:`onChange`, `onMouseOver`, `onTouchStart`, `onKeyDown`, `onAnimationStart`etc \(even if it seems a little odd at first\)
-* Event handlers have to be explicitly bound to the class instance if other class methods like `this.setState()` are accessed. **Public Class Properties** und **Arrow Functions** are the more elegant ways to do this.
-* Avoid defining your own events with `addEventListener()`API. If at all necessary, do not forget to remove the event when unmounting your component with`removeEventListener()` 
-* `SyntheticEvent`objects are „nullified“. Beware of using callback functions outside of the event handler. The event object might not exist anymore at the time of calling the callback.
-* `event.persist()` can force React to prevent resetting the event object to `null`.
-{% endhint %}
 
+- **Always** use event props in JSX to define events:`onChange`, `onMouseOver`, `onTouchStart`, `onKeyDown`, `onAnimationStart`etc \(even if it seems a little odd at first\)
+- Event handlers have to be explicitly bound to the class instance if other class methods like `this.setState()` are accessed. **Public Class Properties** und **Arrow Functions** are the more elegant ways to do this.
+- Avoid defining your own events with `addEventListener()`API. If at all necessary, do not forget to remove the event when unmounting your component with`removeEventListener()`
+- `SyntheticEvent`objects are „nullified“. Beware of using callback functions outside of the event handler. The event object might not exist anymore at the time of calling the callback.
+- `event.persist()` can force React to prevent resetting the event object to `null`.
+  {% endhint %}

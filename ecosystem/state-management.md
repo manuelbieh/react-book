@@ -40,7 +40,7 @@ While in theory **Redux** could be used as a stand-alone solution, we would then
 
 I've just introduced another set of new terminology to you. Don't be scared if any of these sound unfamiliar to you now. We will look at all of them in turn and hopefully clear up any confusion you might have at the moment.
 
-All data in **Redux** is managed in so-called **stores** which manage the **global state**. Theoretically, applications could have a number of different stores. In fact, **Flux architecture** even encourages the use of multiple stores. However, in most React applications using **Redux** we will only find a single store. This reduces complexity dramatically and also declares this _single_ **store** as the **single source of truth** for all of our data. The store also provides a number of methods which can be used to change \(`dispatch`\) the data currently stored in the store, read \(`getState)` the data from the store and react to changes \(`subscribe`\).  
+All data in **Redux** is managed in so-called **stores** which manage the **global state**. Theoretically, applications could have a number of different stores. In fact, **Flux architecture** even encourages the use of multiple stores. However, in most React applications using **Redux** we will only find a single store. This reduces complexity dramatically and also declares this _single_ **store** as the **single source of truth** for all of our data. The store also provides a number of methods which can be used to change \(`dispatch`\) the data currently stored in the store, read \(`getState)` the data from the store and react to changes \(`subscribe`\).
 
 The only way to change data in a store is to "_dispatch"_ an **action**. Once again, **Redux** has taken its inspiration from **Flux Architecture** and prescribes for these **actions** to be in **Flux Standard Action** \(FSA\) format. **FSAs** consist of a simple JavaScript object which always **has to have** a `type` property and _can_ contain a `payload`, `meta` and `error` properties. We are going to focus mostly on the `payload`. In 9 out of 10 cases, we are going to deal with a `payload` when we are _dispatching_ an **action**.
 
@@ -78,13 +78,13 @@ const reducer = (state, action) => {
 };
 ```
 
-A **store** generally expects only a **single reducer**. **Redux** allows us to split the **reducer** function into many small little parts, making them more digestible and easy to read. A `combineReduers()` function then takes care of merging all these parts into one main **reducer** - the **root reducer**. When an action is _dispatched_, each **reducer** is called with the same parameters: **state** and the **action**. 
+A **store** generally expects only a **single reducer**. **Redux** allows us to split the **reducer** function into many small little parts, making them more digestible and easy to read. A `combineReduers()` function then takes care of merging all these parts into one main **reducer** - the **root reducer**. When an action is _dispatched_, each **reducer** is called with the same parameters: **state** and the **action**.
 
 Each **reducer** reacts to the `type` property of an **action**. Due to this, a convention has emerged to extract all used types into variables with the same name which allow us to avoid typos. Why is that? Typos might be hard to spot \(e.g. `USER_ADDDED`\) without. On top of that, the JavaScript interpreter will throw an error if we tried to access a variable which is not defined, eliminating yet another source of error that's hard to track down. Thus, you often find the following code-blocks at the beginning of a file in **Redux** applications:
 
 ```javascript
-const PLUS = 'PLUS';
-const MINUS = 'MINUS';
+const PLUS = "PLUS";
+const MINUS = "MINUS";
 ```
 
 This allow us to create some sort of coherence among the different **action types**.
@@ -162,7 +162,7 @@ This state remains relatively simple and only consists of a single value. We wil
 
 Those who read articles or the official documentation of **Redux** will have encountered the two terms **action** and **action creators**. The difference is not completely clear in the beginning. I struggled to really understand differences myself and know many others who have felt the same. The situation is furthermore complicated by the fact that some use the terms interchangeably, although they mean different things. Let's quickly dive into how **action creators** and **actions** differ.
 
-**Actions,** which were already introduced earlier, are simple, _serializable ****_**objects** that can be used to describe how exactly **state** should change. They always contain a `type` property and often a `payload`.
+**Actions,** which were already introduced earlier, are simple, _serializable_ **objects** that can be used to describe how exactly **state** should change. They always contain a `type` property and often a `payload`.
 
 An **action creator** however describes a **function** that returns an **action**. One could also say that it is a **factory** which creates **actions** \(thus the name _Creator_\). In most situations, **action creators** are used to **encapsulate logic** that is necessary to create to an **action**. Sometimes they are also used to abstract away complex logic from the **actions** themselves. In those cases, the **action creator** function is called instead of the **action** and passed to the `dispatch` method.
 
@@ -170,19 +170,19 @@ Typical **action creators** might take the following form using the previous exa
 
 ```javascript
 const add = (number) => {
-  return { type: 'PLUS', payload: number };
+  return { type: "PLUS", payload: number };
 };
 
 const subtract = (number) => {
-  return { type: 'MINUS', payload: number };
-}
+  return { type: "MINUS", payload: number };
+};
 ```
 
 Or using **ES2015+ shorthand notation**:
 
 ```javascript
-const add = (payload) => ({ type: 'PLUS', payload });
-const subtract = (payload) => ({ type: 'MINUS', payload });
+const add = (payload) => ({ type: "PLUS", payload });
+const subtract = (payload) => ({ type: "MINUS", payload });
 ```
 
 Consequently, the **action creators** will be called as parameters of the `dispatch` method instead of passing an **action** directly:
@@ -193,7 +193,7 @@ store.dispatch(add(1));
 store.dispatch(subtract(2));
 ```
 
-By following sensible naming conventions, the readability of the overall code is greatly improved. **Action creators** are a powerful piece of functionality in Redux and can allow us to eliminate repetition. Using  **action creators** can also help to avoid common mistakes such as typos in a `type` of an action - for example `PLSU` instead of `PLUS`.
+By following sensible naming conventions, the readability of the overall code is greatly improved. **Action creators** are a powerful piece of functionality in Redux and can allow us to eliminate repetition. Using **action creators** can also help to avoid common mistakes such as typos in a `type` of an action - for example `PLSU` instead of `PLUS`.
 
 ### Complex reducers
 
@@ -267,11 +267,11 @@ I do not want to go into too much detail, however a few things should be properl
 
 Let's start with `SET_USER`: the **state object** being created here changes the `user` object and sets its `name` property to `action.payload.name` as well as the `accessToken` property to `action.payload.accessToken`. One could also set `user` to `action.payload` but this would mean that the complete **payload** of the **action** would be transferred to the `user` object. Moreover, one has to ensure that the `action.payload` is an object as to not change the initial form of the `user` object. This could become problematic if other parts of the **reducer** also access this object and its type had suddenly changed. We have ignored all other properties in our example by explicitly accessing `name` and `accessToken` from the **payload** of the action.
 
-Apart from the modified `user`, we also return a `todos` property which we set to `state.todos`. This indicates that we do not change this value and leave it as is \(initial value\). **This is important** - as the `todos` would have otherwise disappeared from the state. We would have set the user but removed all their todos from state. 
+Apart from the modified `user`, we also return a `todos` property which we set to `state.todos`. This indicates that we do not change this value and leave it as is \(initial value\). **This is important** - as the `todos` would have otherwise disappeared from the state. We would have set the user but removed all their todos from state.
 
 Let's continue with `ADD_TODO`: this works differently from `SET_USER` as the `user` is returned unchanged from the state tree. A new todo is added to the array of todos via the `.concat()` method. It's important to make the distinction between `push()` and `concat()`: `push()` is a _mutating_ method which means that it would change our current state instead of creating a new one. By using `state.todos.concat`, we use the current `todos` array as the basis and create a new array which contains the previous array as well as the newest todo item.
 
-The case of `REMOVE_TODO` works in a similar fashion. The `user` is returned just as was the case in `ADD_TODO`. The `todos` array on the other hand is filtered by the entry to remove. We pass an `id` to the filter which has been provided in terms of an action as part of the  `action.payload`. The filtered array forms the new `todos` state. Again, the choice of `Array.filter()` has been made as it is non _mutating_ and creates a new array as opposed to comparable methods such as `Array.splice()` which mutate the the original array.
+The case of `REMOVE_TODO` works in a similar fashion. The `user` is returned just as was the case in `ADD_TODO`. The `todos` array on the other hand is filtered by the entry to remove. We pass an `id` to the filter which has been provided in terms of an action as part of the `action.payload`. The filtered array forms the new `todos` state. Again, the choice of `Array.filter()` has been made as it is non _mutating_ and creates a new array as opposed to comparable methods such as `Array.splice()` which mutate the the original array.
 
 The last case illustrated in our example is `CHANGE_TODO_STATUS`. It allows us to set the status of our todo element from to do - `false` - to done - `true` or vice-versa. The `user` object remains unchanged and the previous state is returned. To change the status of a todo, we use a map function to iterate over the array of todos. In this map, we check whether the id of the current todo object is equal to the id of the `action.payload`. If this is not the case, we just return the unchanged todo element.
 
@@ -343,12 +343,12 @@ export default (state = initialState, action) => {
 
 This way, we have not only achieved readability by creating two **reducer** functions but the functions themselves could also be simplified. Instead of returning the _unchanged_ parts of the **state tree** as well, we only return those parts of the **reducer** _which are relevant to this reducer_. For the **user reducer** we only return the **user** while in the **todos reducer** we only return **todos**.
 
-In order to combine the _smaller_ **reducers** into a _****big_ **reducer**, we can use the aforementioned `combineReducers()` method which will create a root reducer which can then be passed to the `createStore()` method. The `combineReducers()` function expects an object whose property name matches that of the newly created state tree. The values also have to be _valid_ **reducers**.
+In order to combine the _smaller_ **reducers** into a _\*\*\*\*big_ **reducer**, we can use the aforementioned `combineReducers()` method which will create a root reducer which can then be passed to the `createStore()` method. The `combineReducers()` function expects an object whose property name matches that of the newly created state tree. The values also have to be _valid_ **reducers**.
 
 ```javascript
 import { combineReducers, createStore } from "redux";
-import userReducer from './store/user/reducer';
-import todosReducer from './store/todos/reducer';
+import userReducer from "./store/user/reducer";
+import todosReducer from "./store/todos/reducer";
 
 const rootReducer = combineReducers({
   todos: todosReducer,
@@ -367,11 +367,11 @@ The `combineReducers()` function is used to put together all the reducers from t
 }
 ```
 
- Another piece of advice: by using ES2015+ object shorthand notation in a clever way, we can save even more lines of code by calling the imports by the same as the properties which they will represent in state:
+Another piece of advice: by using ES2015+ object shorthand notation in a clever way, we can save even more lines of code by calling the imports by the same as the properties which they will represent in state:
 
 ```javascript
-import user from './store/user/reducer';
-import todos from './store/todos/reducer';
+import user from "./store/user/reducer";
+import todos from "./store/todos/reducer";
 ```
 
 The object which we have to then pass to `combineReducer()` reduces to the following:
@@ -380,11 +380,11 @@ The object which we have to then pass to `combineReducer()` reduces to the follo
 const rootReducer = combineReducers({ todos, user });
 ```
 
-To use `combineReducers()`, a few formal rules have to be followed. They do not hinder us from developing code effectively but have to be followed. Each reducer function that is passed to  `combineReducers()` has to fulfill the following criteria
+To use `combineReducers()`, a few formal rules have to be followed. They do not hinder us from developing code effectively but have to be followed. Each reducer function that is passed to `combineReducers()` has to fulfill the following criteria
 
-* For each unknown **action** \(so each **action** whose `type` argument we do not react to\) that the **reducer** receives, the first `state` that the **reducer** receives needs to be returned.
-* Reducer functions used in the `combineReducer()` function can never return `undefined`. This is different to the **root reducer** which is allowed to do this. In the case of the former, the `combineReducers()` function will throw an **error** to inform us of this error. We deal with this effectively in our example by including a `default` case in the `switch` block which will simply return the `state`
-* If the `state` passed in the first argument is of `type` `undefined`, the **initial state** has to be returned. It's probably easiest to use the initial state as a default value as we have done in the above example \(`state = initialState`\).
+- For each unknown **action** \(so each **action** whose `type` argument we do not react to\) that the **reducer** receives, the first `state` that the **reducer** receives needs to be returned.
+- Reducer functions used in the `combineReducer()` function can never return `undefined`. This is different to the **root reducer** which is allowed to do this. In the case of the former, the `combineReducers()` function will throw an **error** to inform us of this error. We deal with this effectively in our example by including a `default` case in the `switch` block which will simply return the `state`
+- If the `state` passed in the first argument is of `type` `undefined`, the **initial state** has to be returned. It's probably easiest to use the initial state as a default value as we have done in the above example \(`state = initialState`\).
 
 **An aside**: `combineReducer()` can be nested as many times as you like, The **reducer** functions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning to `combineReducer()` calls\).
 
@@ -392,13 +392,13 @@ To use `combineReducers()`, a few formal rules have to be followed. They do not 
 
 All **actions** in the previous examples were executed **synchronously**. This means that each **action creator** was executed whenever we wanted to modify state without having to wait for the result of an asynchronous process to finish. In many dynamic web applications, this situation is highly unlikely though. Many **React applications** have to deal with **asynchronous data flows**, network requests in particular. _Synchronous_ **action creators** do not really offer a great solution to this problem as the `dispatch` method of a **store** expects an **action** which contains a simple object containing a `type` property.
 
-**Redux middleware** concepts, **Redux Thunk middleware** in particular, can help to deal with this problem. 
+**Redux middleware** concepts, **Redux Thunk middleware** in particular, can help to deal with this problem.
 
 The `createStore()` function from the `redux` package can deal with up to three parameters:
 
-* The **reducer** function: this is only **mandatory** parameter and deals with the executed **actions** of our **state** by returning a **state** for each **action** dispatched
-* **Initial state**: One can pre-populate the store with data by providing a value in the initial state. This initial state is also passed to the **reducer function**.
-* An **enhancer function**: This function can be used to enhance the store's capability with our own functionality: in this case we enhance it with the **middleware** mentioned above.
+- The **reducer** function: this is only **mandatory** parameter and deals with the executed **actions** of our **state** by returning a **state** for each **action** dispatched
+- **Initial state**: One can pre-populate the store with data by providing a value in the initial state. This initial state is also passed to the **reducer function**.
+- An **enhancer function**: This function can be used to enhance the store's capability with our own functionality: in this case we enhance it with the **middleware** mentioned above.
 
 If the `createStore` function receives a **function** as a second parameter, the second parameter will be treated as an **enhancer function**. If the second parameter takes the form of anything different, the second parameter will be treated as **initial state** and passed to the **reducer function** as such.
 
@@ -419,15 +419,12 @@ yarn add redux-thunk
 Once the **thunk middleware** has been installed, it has to be _registered_ via the **Redux** `applyMiddleware()` function in the **enhancer**. We import the **middleware** and import the `applyMiddleware()` function from the `redux` package. The **middleware** we want to use has to be passed to the `applyMiddleware()` function as a parameter. In this case, we are passing `thunk`:
 
 ```javascript
-import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import { applyMiddleware, createStore } from "redux";
+import thunk from "redux-thunk";
 
 // ...
 
-const store = createStore(
-  reducer, 
-  applyMiddleware(thunk)
-);
+const store = createStore(reducer, applyMiddleware(thunk));
 ```
 
 By implementing this piece of **thunk middleware**, we can now easily compose **action creators** that execute _asynchronous_ code and only _dispatch_ the **actions** once we have obtained a result. The **thunk function** is an **action creator** which returns a function whose parameters are also a `dispatch()` and a `getState()` function. We can decide ourselves when we should _dispatch_ an action in the **thunk action creator** function.
@@ -437,18 +434,20 @@ const delayedAdd = (newTodo) => {
   return (dispatch, getState) => {
     setTimeout(() => {
       return dispatch({
-        type: 'ADD_TODO',
+        type: "ADD_TODO",
         payload: newTodo,
       });
     }, 500);
   };
 };
 
-store.dispatch(delayedAction({
-  id: 1,
-  text: 'Explaining thunk actions',
-  done: false,
-}));
+store.dispatch(
+  delayedAction({
+    id: 1,
+    text: "Explaining thunk actions",
+    done: false,
+  })
+);
 ```
 
 In this example we have created a `delayedAdd` **action creator**. It receives a new todo element and then returns a new function in the form of `(dispatch, getState) => {})`. The **thunk middleware** ensures that that this function always receives the `dispatch()` and `getState()` functions. After a delay of 500ms, we call the `dispatch()` function with the `ADD_TODO` **action** and add the new object.
@@ -461,7 +460,7 @@ If you are familiar with **arrow function syntax** of ES2015, you can simplify t
 const delayedAdd = (newTodo) => (dispatch, getState) => {
   setTimeout(() => {
     return dispatch({
-      type: 'ADD_TODO',
+      type: "ADD_TODO",
       payload: newTodo,
     });
   }, 500);
@@ -472,39 +471,39 @@ In this example, we have used a shorter **arrow function** with an **implicit re
 
 ### Typical asynchronous action example
 
-Many applications working with APIs inform the user that data is loading while is is being fetched from the API. Loading Spinners or text such as _"Loading data ..."_  are common ways to convey this information. **Thunk actions** are a great way to cover this case using a **reducer**.
+Many applications working with APIs inform the user that data is loading while is is being fetched from the API. Loading Spinners or text such as _"Loading data ..."_ are common ways to convey this information. **Thunk actions** are a great way to cover this case using a **reducer**.
 
 Let's set up three cases in the **reducer** which react to the following three **actions**:
 
-* `FETCH_REPOS_REQUEST`: will reset any previously failed network requests and initiate a loading status
-* `FETCH_REPOS_SUCCESS`: will be called upon once a successful request has taken place. It will receive the result of the request as well the date of the last update of the data
-* `FETCH_REPOS_FAILURE`: will react to any errors and potentially set an `error` flag to inform the user that the request has failed
+- `FETCH_REPOS_REQUEST`: will reset any previously failed network requests and initiate a loading status
+- `FETCH_REPOS_SUCCESS`: will be called upon once a successful request has taken place. It will receive the result of the request as well the date of the last update of the data
+- `FETCH_REPOS_FAILURE`: will react to any errors and potentially set an `error` flag to inform the user that the request has failed
 
 A possible implementation could look like this:
 
 ```javascript
-import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import axios from 'axios';
+import { applyMiddleware, createStore } from "redux";
+import thunk from "redux-thunk";
+import axios from "axios";
 
 const initialState = Object.freeze({
   error: null,
   items: [],
   isFetching: false,
   lastUpdated: null,
-  selectedAccount: 'manuelbieh',
+  selectedAccount: "manuelbieh",
 });
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'FETCH_REPOS_REQUEST': {
+    case "FETCH_REPOS_REQUEST": {
       return {
         ...state,
         isFetching: true,
         error: null,
       };
     }
-    case 'FETCH_REPOS_SUCCESS': {
+    case "FETCH_REPOS_SUCCESS": {
       return {
         ...state,
         isFetching: false,
@@ -512,7 +511,7 @@ const rootReducer = (state = initialState, action) => {
         lastUpdated: action.payload.lastUpdated,
       };
     }
-    case 'FETCH_REPOS_FAILED': {
+    case "FETCH_REPOS_FAILED": {
       return {
         ...state,
         isFetching: false,
@@ -526,13 +525,13 @@ const rootReducer = (state = initialState, action) => {
 };
 
 const fetchGithubRepos = () => (dispatch, getState) => {
-  dispatch({ type: 'FETCH_REPOS_REQUESTED' });
+  dispatch({ type: "FETCH_REPOS_REQUESTED" });
   const state = getState();
   axios
     .get(`https://api.github.com/users/${state.selectedAccount}/repos`)
     .then((response) => {
       dispatch({
-        type: 'FETCH_REPOS_SUCCESS',
+        type: "FETCH_REPOS_SUCCESS",
         payload: {
           lastUpdated: new Date(),
           items: response.data,
@@ -541,7 +540,7 @@ const fetchGithubRepos = () => (dispatch, getState) => {
     })
     .catch((error) => {
       dispatch({
-        type: 'FETCH_REPOS_FAILURE',
+        type: "FETCH_REPOS_FAILURE",
         error: true,
         payload: error.response.data,
       });
@@ -561,8 +560,8 @@ Inside of the **action creator**, the `FETCH_REPOS_REQUESTED` is _dispatched_. T
 
 The request will access the _current_ **state** via `getState()` from which it will access the `selectedAccount`. Once obtained, we can use this to perform the API request for the `selectedAccount`'s GitHub repositories. The request is performed using Axios \(mainly for simplicity\). We can then react to the following two cases:
 
-* The request was successful: This means that we obtain data from the GitHub API and can _dispatch_ the `FETCH_REPOS_SUCCESS` **action**. The current time \(which can later be used for caching or automated reloads\) as well as the array containing the repos hidden in `response.data` are both passed to the action. We also set `isFetching` to `false` as the request is no longer active.
-* The request fails: Should this occur, the `FETCH_REPOS_FAILURE` **action** is _dispatched_. The error messaged provided by Axios in `error.response.data` will be provided to the **action** as a payload. `isFetching` is set to `false` as the request has been performed already \(even if it was not necessarily the desired result\).
+- The request was successful: This means that we obtain data from the GitHub API and can _dispatch_ the `FETCH_REPOS_SUCCESS` **action**. The current time \(which can later be used for caching or automated reloads\) as well as the array containing the repos hidden in `response.data` are both passed to the action. We also set `isFetching` to `false` as the request is no longer active.
+- The request fails: Should this occur, the `FETCH_REPOS_FAILURE` **action** is _dispatched_. The error messaged provided by Axios in `error.response.data` will be provided to the **action** as a payload. `isFetching` is set to `false` as the request has been performed already \(even if it was not necessarily the desired result\).
 
 The state now either contains a number of GitHub repositories if the request was successful \(for user in`state.selectedAccount`\) or an error if it failed. Both cases have now been dealt with effectively and their results can be used to take appropriate action in the user interface.
 
@@ -574,19 +573,19 @@ We can also manually log these to the console using `console.log(store.getState(
 
 The **Redux Devtools** are another great alternative for debugging purposes. Implemented as a browser extension for Chrome, Firefox and soon Edge as well, the **Redux Devtools** they integrate seamlessly with the existing developer tools. You can find them in the stores here:
 
-* Chrome: [https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)
-* Firefox: [https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
+- Chrome: [https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)
+- Firefox: [https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
-Once installed, the browser developer tools are extended by an extra tab called **"Redux"** now easily accessible for any debugging purposes. In order to use it fully, we have to make a few modifications to our codebase though: another **enhancer** has to be ****added to the **store**.
+Once installed, the browser developer tools are extended by an extra tab called **"Redux"** now easily accessible for any debugging purposes. In order to use it fully, we have to make a few modifications to our codebase though: another **enhancer** has to be \***\*added to the **store\*\*.
 
 ![Browser Devtools including the Redux addon](../.gitbook/assets/redux-devtools.png)
 
-The **Redux Devtools**  can be registered on the `window` object with two global variables: `window.REDUX_DEVTOOLS_EXTENSION` and `WINDOW.REDUX_DEVTOOLS_EXTENSION_COMPOSE`. If no own store enhancer is used \(for example not using `applyMiddleware()` to register middleware such as Thunk\), then things can be solved pretty simply: We check whether the **Redux Devtools** are installed and if they are, we pass a call of `WINDOW.REDUX_DEVTOOLS_EXTENSION` to the `createStore()` function:
+The **Redux Devtools** can be registered on the `window` object with two global variables: `window.REDUX_DEVTOOLS_EXTENSION` and `WINDOW.REDUX_DEVTOOLS_EXTENSION_COMPOSE`. If no own store enhancer is used \(for example not using `applyMiddleware()` to register middleware such as Thunk\), then things can be solved pretty simply: We check whether the **Redux Devtools** are installed and if they are, we pass a call of `WINDOW.REDUX_DEVTOOLS_EXTENSION` to the `createStore()` function:
 
 ```javascript
 createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ &&   window.__REDUX_DEVTOOLS_EXTENSION__()
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 ```
 
@@ -594,28 +593,22 @@ This allows us to automatically supervise any dispatched **action** in the **dev
 
 **Reducers** need to be **pure functions** so that they will always create the same **state**, even if we "travel back" through states in the **store**. Otherwise, we might not be able to reproduce bugs as every call would create a different **state**.
 
-If we are using an enhancer function, the `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE` function will be used instead. This function of type `compose` allows the bundling of _multiple_ **enhancer** functions into a _single_ one, allowing us to call each of them in turn. The principle is similar to that we have talked about in the `combineReducers()` section for **reducers**. 
+If we are using an enhancer function, the `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE` function will be used instead. This function of type `compose` allows the bundling of _multiple_ **enhancer** functions into a _single_ one, allowing us to call each of them in turn. The principle is similar to that we have talked about in the `combineReducers()` section for **reducers**.
 
 Redx offers a `compose` function too which allows us to bundle multiple enhancers into a single one. It can be imported to then be used to create a custom `composeEnhancer()` function. If the Redux Devtools are installed, we will use the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to to add the **devtools** of the **store enhancer**. If they are not installed however, Redux' own `compose()` function can be used instead to create the same signature:
 
 ```javascript
-import { applyMiddleware, compose, createStore } from 'redux';
-import thunk from 'thunk-middleware';
+import { applyMiddleware, compose, createStore } from "redux";
+import thunk from "thunk-middleware";
 
 const composeEnhancers =
-  typeof window === 'object' &&
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ 
-  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) 
-  : compose;
+  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+    : compose;
 
 // ...
 
-const store = createStore(
-  rootReducer, 
-  composeEnhancers(
-    applyMiddleware(thunk),
-  )
-);
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 ```
 
 If you feel a little overwhelmed by the number of different functions and the terminology introduced, I can provide a little reassurance: in most applications, it is not necessary to understand all these moving parts in great detail. I use the **Redux Devtools** in almost all of my projects but still have to check each and every time how I can set them up properly. This text should serve as an introduction as to how **redux stores** can be debugged and provide an opportunity to learn for those that want to learn more.
@@ -633,10 +626,10 @@ The package consists of two components: one component and a function which will 
 As most applications tend to only consist of a single **store**, it is useful to place the `Provider` component up highly in the component tree. In many situations, it might even make sense to use the `Provider` component as the very first component of the component tree. The `Provider` component receives a **Redux store** as a `store` prop and also contains a number of children. All children have access to the `store` prop value given \(the **store** provided\) and can also read it or change it via the _dispatching_ of **actions**.
 
 ```jsx
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
 
 const dummyReducer = (state = {}, action) => {
   return state;
@@ -644,15 +637,13 @@ const dummyReducer = (state = {}, action) => {
 
 const store = createStore(dummyReducer);
 
-const App = () => (
-  <p>We can have access to the Redux store here.</p>
-);
+const App = () => <p>We can have access to the Redux store here.</p>;
 
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 ```
 
@@ -662,12 +653,12 @@ In theory, `Provider` components can be nested inside each other. Components con
 
 #### Connecting components to a store using the connect function
 
-Now onto the harder part of React with Redux: **connecting** a React component to a **Redux store** using a `connect()` function. This function can take up to 4 parameters of which the first 3 are functions which can also take 3 parameters. That sounds like a lot. But be rest assured: in most cases, we only really need 2 out of these 4 parameters and the functions will only take a single argument. But let's go through everything step by step increasing the complexity with each step. 
+Now onto the harder part of React with Redux: **connecting** a React component to a **Redux store** using a `connect()` function. This function can take up to 4 parameters of which the first 3 are functions which can also take 3 parameters. That sounds like a lot. But be rest assured: in most cases, we only really need 2 out of these 4 parameters and the functions will only take a single argument. But let's go through everything step by step increasing the complexity with each step.
 
 The function takes the following form:
 
 ```javascript
-connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
+connect(mapStateToProps, mapDispatchToProps, mergeProps, options);
 ```
 
 Calling the `connect()` function will create a **Higher Order Component**. It can be used to transfer parts of the state of the store to this component. In order to decide which parts of the state should be passed as props, we use the first parameter: `mapStateToProps`.
@@ -696,10 +687,10 @@ const mapStateToProps = (state) => {
 };
 ```
 
-The properties of this object, `openTodos`, `completedTodos` and `totalCount` will be passed to the wrapping component  as **props**. How? By passing `mapStateToProps` to the `connect()` function. This will in turn return an HOC which we can then pass our component to \(in which we access the props from state\):
+The properties of this object, `openTodos`, `completedTodos` and `totalCount` will be passed to the wrapping component as **props**. How? By passing `mapStateToProps` to the `connect()` function. This will in turn return an HOC which we can then pass our component to \(in which we access the props from state\):
 
 ```jsx
-const ConnectedTodoList = connect(mapStateToProps)(TodoList); 
+const ConnectedTodoList = connect(mapStateToProps)(TodoList);
 ```
 
 We've defined a `ConnectedTodoList` which can now be used in **JSX** and be wrapped by a `Provider` component. It will render the `TodoList` with the given props from the global **Redux store:**
@@ -719,8 +710,8 @@ const store = createStore(rootReducer);
 const TodoList = (props) => (
   <div>
     <p>
-      {props.totalCount} Todos. {props.completedTodos.length} completed 
-      and {props.openTodos.length} open.
+      {props.totalCount} Todos. {props.completedTodos.length} completed and {props.openTodos.length}{" "}
+      open.
     </p>
   </div>
 );
@@ -745,7 +736,7 @@ ReactDOM.render(
 
 This will render a very small and spartan `TodoList` component showing us the number of all todos as well as the number of completed and open todos.
 
-If we only wanted to display open _or_ closed todos meaning only parts of the state, we can make use of the second parameter in the `mapStateToProps` function \(`ownProps`\) which will allow us to access the **props** of the component and decide which parts of the state we want to pass to the connected component. 
+If we only wanted to display open _or_ closed todos meaning only parts of the state, we can make use of the second parameter in the `mapStateToProps` function \(`ownProps`\) which will allow us to access the **props** of the component and decide which parts of the state we want to pass to the connected component.
 
 ```jsx
 const mapStateToProps = (state, ownProps) => {
@@ -798,10 +789,7 @@ We want to add the possibility of adding new todos to our `TodoList`, mark them 
 
 ```javascript
 // Helper function to create a (hopefully ;)) unique ID
-const getPseudoRandomId = () =>
-  Math.random()
-    .toString(36)
-    .slice(-6);
+const getPseudoRandomId = () => Math.random().toString(36).slice(-6);
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -833,10 +821,7 @@ const mapDispatchToProps = (dispatch) => {
 A new object with the object properties `addTodo`, `removeTodo` and `changeStatus` is returned. Each of these is passed as **props** to a connected component with the same name. We pass `mapStateToProps()` to the `connect()` function as a second parameter to achieve this:
 
 ```javascript
-const ConnectedTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList);
+const ConnectedTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
 ```
 
 The **actions** which have been passed to `mapDispatchToProps` inline are normally extracted into respective **action creators**. These lead to better readability, are easier to test and often easier to read:
@@ -885,7 +870,7 @@ const mapDispatchToProps = {
   addTodo,
   removeTodo,
   changeStatus,
-}
+};
 ```
 
 Be careful though: This only works when _all_ **action creators** functions are called with the same functions from their connected React components counterparts and when `mapDispatchToProps` is passed in this exact form.
@@ -901,20 +886,17 @@ All the properties returned by `mapStateToProps` as well as `mapDispatchToProps`
 Of we wanted to only pass `mapDispatchToProps()` to the `connect()` call to be able to dispatch **actions** from a component, we can pass `null` as a first parameter. This means that we do not have read access to the component.
 
 ```javascript
-const ConnectedTodoList = connect(
-  null,
-  mapDispatchToProps
-)(TodoList);
+const ConnectedTodoList = connect(null, mapDispatchToProps)(TodoList);
 ```
 
 #### Merging StateProps and DispatchProps using MergeProps
 
-The third parameter, `mergeProps()`, deals with a more special use case that is not really encountered out in the wild. For the sake of completion though, I want to explain it briefly. 
+The third parameter, `mergeProps()`, deals with a more special use case that is not really encountered out in the wild. For the sake of completion though, I want to explain it briefly.
 
 ```javascript
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   // ...
-}
+};
 ```
 
 The function receives the result of `mapStateToProps` as its first parameter, that of `mapDispatchToProps` as a second and `ownProps` as a third. The return value is a new object whose properties are also passed via props to the component connected to the store.
@@ -941,7 +923,7 @@ If you feel like you might need these options \(Spoiler alert: in most cases the
 
 #### Combining the puzzle pieces
 
-We now know how to use the `connect()` method and why we need a `Provider`.  Let's have a look at a more detailed but very complete example that outlines a totally functional TodoList App. It allows us to add new todos, mark them as complete or not and allows us to remove them if we want:
+We now know how to use the `connect()` method and why we need a `Provider`. Let's have a look at a more detailed but very complete example that outlines a totally functional TodoList App. It allows us to add new todos, mark them as complete or not and allows us to remove them if we want:
 
 ```javascript
 // store/todos/reducer.js
@@ -949,13 +931,13 @@ const initialState = Object.freeze([]);
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'ADD_TODO': {
+    case "ADD_TODO": {
       return state.concat(action.payload);
     }
-    case 'REMOVE_TODO': {
+    case "REMOVE_TODO": {
       return state.filter((todo) => todo.id !== action.payload);
     }
-    case 'CHANGE_TODO_STATUS': {
+    case "CHANGE_TODO_STATUS": {
       return state.map((todo) => {
         if (todo.id !== action.payload.id) {
           return todo;
@@ -975,10 +957,7 @@ export default (state = initialState, action) => {
 
 ```javascript
 // store/todos/actions.js
-const getPseudoRandomId = () =>
-  Math.random()
-    .toString(36)
-    .slice(-6);
+const getPseudoRandomId = () => Math.random().toString(36).slice(-6);
 
 export const addTodo = (text) => ({
   type: "ADD_TODO",
@@ -1004,12 +983,12 @@ export const changeStatus = (id, done) => ({
 
 ```jsx
 // TodoList.js
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { addTodo, removeTodo, changeStatus } from './store/todos/actions';
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { addTodo, removeTodo, changeStatus } from "./store/todos/actions";
 
 const TodoList = (props) => {
-  const [todoText, setTodoText] = useState('');
+  const [todoText, setTodoText] = useState("");
 
   return (
     <div>
@@ -1021,11 +1000,11 @@ const TodoList = (props) => {
               type="button"
               onClick={() => {
                 props.removeTodo(todo.id);
-              }}>
+              }}
+            >
               remove
             </button>
-            <label
-              style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>
+            <label style={{ textDecoration: todo.done ? "line-through" : "none" }}>
               <input
                 type="checkbox"
                 name={todo.id}
@@ -1045,8 +1024,9 @@ const TodoList = (props) => {
         type="button"
         onClick={() => {
           props.addTodo(todoText);
-          setTodoText('');
-        }}>
+          setTodoText("");
+        }}
+      >
         add
       </button>
     </div>
@@ -1063,20 +1043,17 @@ const mapDispatchToProps = {
   changeStatus,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
 ```
 
 ```jsx
 // index.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { combineReducers, createStore } from 'redux';
-import { Provider } from 'react-redux';
-import todosReducer from './store/todos/reducer';
-import TodoList from './TodoList';
+import React from "react";
+import ReactDOM from "react-dom";
+import { combineReducers, createStore } from "redux";
+import { Provider } from "react-redux";
+import todosReducer from "./store/todos/reducer";
+import TodoList from "./TodoList";
 
 const rootReducer = combineReducers({
   todos: todosReducer,
@@ -1090,10 +1067,10 @@ const App = () => (
   </Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **action** - all of which should sound familiar from previous examples.  To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
+We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **action** - all of which should sound familiar from previous examples. To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
 
 {% hint style="warning" %}
 There's always heated debate about how folders and files should be structured within an application. I have worked with a number of different structures but have found a separation by domain \(i.e. `todos`, `user`, `repositories` ...\) and according to type \(`actions`, `reducer`\) to be most effective. However, others prefer to place all of the actions in a single `actions` directory and all the reducers in a `reducer` directory. Some even avoid the separation of actions and reducers at all.
@@ -1101,14 +1078,14 @@ There's always heated debate about how folders and files should be structured wi
 There's no _Right_ or _Wrong_ here. While some of this decision will be influenced by personal taste, it will also depend on the size, setup, complexity and users of the application.
 {% endhint %}
 
-Let's now define a file which will contain the `TodoList` component: `./TodoList.js`. This file will display the todos, create todos or remove them as well as enable the user to mark them as complete. In order to to do this, we connect the component to the store via `connect()`. The component also needs to import the **actions** which are passed to the `connect()` function  in `mapDispatchToProps`. **Object shorthand syntax** allows us to keep things concise:
+Let's now define a file which will contain the `TodoList` component: `./TodoList.js`. This file will display the todos, create todos or remove them as well as enable the user to mark them as complete. In order to to do this, we connect the component to the store via `connect()`. The component also needs to import the **actions** which are passed to the `connect()` function in `mapDispatchToProps`. **Object shorthand syntax** allows us to keep things concise:
 
 ```javascript
 const mapDispatchToProps = {
   addTodo,
   removeTodo,
   changeStatus,
-};  
+};
 ```
 
 React Redux will automatically wrap these with a `dispatch` call.
@@ -1116,10 +1093,7 @@ React Redux will automatically wrap these with a `dispatch` call.
 in `mapStateToProps`, we define that the want to pass the `todos` branch of our store to our components. Then, `mapStateToProps` as well as `mapDispatchToProps` will be passed to the `connect()` function:
 
 ```javascript
-connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
+connect(mapStateToProps, mapDispatchToProps);
 ```
 
 But that's not at all: `connect()` creates a new **HOC** which we pass to our `TodoList` component.
@@ -1128,7 +1102,7 @@ But that's not at all: `connect()` creates a new **HOC** which we pass to our `T
 connect(...)(TodoList);
 ```
 
-We've now connected the `TodoList` component  with the **Redux store**. As long as we use this component within a `<Provider>` element, we are good to go! Moreover, `export default` should be used before calling `connect()` so that the component will be exported using connect.
+We've now connected the `TodoList` component with the **Redux store**. As long as we use this component within a `<Provider>` element, we are good to go! Moreover, `export default` should be used before calling `connect()` so that the component will be exported using connect.
 
 Lastly, we will have a look at `index.js` which marks the entry-point of our app. `ReactDOM.render()` is placed here in which we render our application to its respective DOM element. A few steps happen just before that:
 
@@ -1136,7 +1110,7 @@ Lastly, we will have a look at `index.js` which marks the entry-point of our app
 
 Moreover, the `Provider` component is imported from `react-redux` which will receive the created **store**. We also import the connected component from `TodoList.js`. This component can then be used within `App` inside of the `Provider` component.
 
-Once we are set up, we can now create new todos, mark them as complete or remove them completely - all by interacting with the `TodoList` component. 
+Once we are set up, we can now create new todos, mark them as complete or remove them completely - all by interacting with the `TodoList` component.
 
 Go and try changing some actions and interactions and see how the changes affect the store. To see this in action, it would be best to have the Redux Devtools all setup. We change the following line in `index.js` :
 
@@ -1161,7 +1135,7 @@ The most important hooks to remember are `useSelector` and `useDispatch` which c
 These hooks can be imported as named imports from react-redux:
 
 ```javascript
-import { useSelector, useDispatch, useStore } from 'react-redux';
+import { useSelector, useDispatch, useStore } from "react-redux";
 ```
 
 As is the case with other hooks, Redux Hooks can only be used in function components. If you prefer using Class components, you can keep using the `connect()` HOC.
@@ -1171,41 +1145,34 @@ As is the case with other hooks, Redux Hooks can only be used in function compon
 The `useSelector` hook enables us to read values from the store. It expects a so-called selector function as its first parameter. This function receives the complete Redux store and then returns a simple or calculated value \(or even a whole tree\) of data:
 
 ```jsx
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
 
 const TodoList = () => {
-  const openTodos = useSelector(
-    (state) => state.todos.filter((todo) => todo.completed !== true)
-  );
-  const completedTodos = useSelector(
-    (state) => state.todos.filter((todo) => todo.completed === true)
+  const openTodos = useSelector((state) => state.todos.filter((todo) => todo.completed !== true));
+  const completedTodos = useSelector((state) =>
+    state.todos.filter((todo) => todo.completed === true)
   );
   const allTodos = useSelector((state) => state.todos);
 
   return (
     <div>
       <p>
-        {allTodos.length} Todos. {completedTodos.length} complete 
-        and {openTodos.length} open.
+        {allTodos.length} Todos. {completedTodos.length} complete and {openTodos.length} open.
       </p>
     </div>
   );
-}
+};
 ```
 
 The selector function can extracted if you wish to increase reuse and structure:
 
 ```jsx
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
-const selectOpenTodos = (state) => state.todos.filter(
-  (todo) => todo.completed !== true
-);
+const selectOpenTodos = (state) => state.todos.filter((todo) => todo.completed !== true);
 
-const selectCompletedTodos = (state) => state.todos.filter(
-  (todo) => todo.completed === true
-);
+const selectCompletedTodos = (state) => state.todos.filter((todo) => todo.completed === true);
 
 const selectAllTodos = (state) => state.todos;
 
@@ -1217,29 +1184,28 @@ const TodoList = () => {
   return (
     <div>
       <p>
-        {allTodos.length} Todos. {completedTodos.length} complete 
-        and {openTodos.length} open.
+        {allTodos.length} Todos. {completedTodos.length} complete and {openTodos.length} open.
       </p>
     </div>
   );
-}
+};
 ```
 
 Whenever a component is rendered, the selector function is called. It may return a temporary value if the selector function has already been called and the value has not changed since. To determine whether this is the case, Redux uses a _Strict Reference Equality Check_ \(`===`\) to check whether the current render has the same reference as the one before.
 
 If an action has been _dispatched_, `useSelector` will trigger a re-render of the component if the value is not strictly the same as before. Compared to the `connect()` HOC, we might encounter more re-renders. For example, selector functions will also be called if the component has re-rendered without actually receiving new props. If you encounter this issue while using the `useSelector` hook, you have a number of options:
 
-* The component can be wrapped by `React.memo`. This will avoid unnecessary re-renders of components in which the props did not change.
-* The `useSelector` hook can be configured to use a shallowEqual comparison \(`==`\) instead and avoids testing for referential equality \(`===`\). `shallowEqual` can be imported from `react-redux` and be passed to the hook as a second parameter `useSelector(selectorFn, shallowEqual)`
-* [Reselect](https://github.com/reduxjs/reselect) can be useful to use instead as Reselect will always return the same values for as long as nothing has changed in state.
+- The component can be wrapped by `React.memo`. This will avoid unnecessary re-renders of components in which the props did not change.
+- The `useSelector` hook can be configured to use a shallowEqual comparison \(`==`\) instead and avoids testing for referential equality \(`===`\). `shallowEqual` can be imported from `react-redux` and be passed to the hook as a second parameter `useSelector(selectorFn, shallowEqual)`
+- [Reselect](https://github.com/reduxjs/reselect) can be useful to use instead as Reselect will always return the same values for as long as nothing has changed in state.
 
 #### useDispatch\(\)
 
 The `useDispatch()` hook will return a reference to the `dispatch` function of the store. It can be used to _dispatch_ actions in a similar fashion to the `connect()` HOC using `mapDispatchToProps`:
 
 ```javascript
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React from "react";
+import { useDispatch } from "react-redux";
 
 const addTodoAction = (text) => ({
   type: "ADD_TODO",
@@ -1248,9 +1214,9 @@ const addTodoAction = (text) => ({
 
 const TodoApp = () => {
   const dispatch = useDispatch();
-  const addTodo = () => dispatch(addTodoAction('A new todo element'));
-  
-  return <button onClick={addTodo}>Add todo</button>
+  const addTodo = () => dispatch(addTodoAction("A new todo element"));
+
+  return <button onClick={addTodo}>Add todo</button>;
 };
 ```
 
@@ -1263,4 +1229,3 @@ Confession time: I underestimated the complexity of this chapter - by a lot. **R
 However, while writing this chapter I noticed how overwhelming and daunting **Redux** can seem to a beginner. It might be possible that some of the explanations in this chapter do not make sense right away for a beginner. If you feel this might be the case for you, I suggest you open the Redux Devtools to play around with **actions** and **reducers** in the browser. This way, it might become more intuitive how one influences the other and how components, store, state, props and `connect()` as well as **actions** and **reducers** interact with each other.
 
 Should there be any remaining questions after reading this chapter, please feel free to contact me.
-

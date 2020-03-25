@@ -23,31 +23,27 @@ React Router's usage is _declarative_ and can be achieved via the components men
 ```jsx
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 
 const App = () => {
-  return (
-    <Router>
-      [...]
-    </Router>
-  );
-}
+  return <Router>[...]</Router>;
+};
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
 ### Defining routes
 
-Each component placed inside of the `<Router></Router>` element, can access the **Router Context**, react to it or manage it. We create routes, by using the Route component and providing a `path` prop as well as an optional `render` or `component` prop \(the exception being the 404 route\). The value of a `render` prop  has to be a **function** that returns a ****valid **React element** whereas the `component` prop expects a **component** \(not an _element_\).
+Each component placed inside of the `<Router></Router>` element, can access the **Router Context**, react to it or manage it. We create routes, by using the Route component and providing a `path` prop as well as an optional `render` or `component` prop \(the exception being the 404 route\). The value of a `render` prop has to be a **function** that returns a valid **React element** whereas the `component` prop expects a **component** \(not an _element_\).
 
-The correct implementation of both props can be summarized as the following: 
+The correct implementation of both props can be summarized as the following:
 
 ```jsx
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 
-const Example = () => <p>Example Component</p>
+const Example = () => <p>Example Component</p>;
 
 const App = () => {
   return (
@@ -56,12 +52,12 @@ const App = () => {
       <Route path="/example" render={() => <Example />} />
     </Router>
   );
-}
+};
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-This example would render the `Example` component twice once the `/example` route is hit, as the Route component merely checks whether the path of the current URL is the same as the one provided in the `path` prop. This might sound a little odd at first, but there's a logical explanation. 
+This example would render the `Example` component twice once the `/example` route is hit, as the Route component merely checks whether the path of the current URL is the same as the one provided in the `path` prop. This might sound a little odd at first, but there's a logical explanation.
 
 As mentioned previously, React Router works declaratively which means that if we ask for two different routes that we will also receive two components if the URL matches. This can be useful if we want to render different parts of the page independently, based on a URL. Assume that we define an App with a sidebar and a content area. Both of these should react to a URL:
 
@@ -100,19 +96,19 @@ However, while the above is completely valid code, one could argue that we are c
 ```jsx
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const Home = () => (
   <>
-   <main>Home Content</main>
-   <aside>Home Sidebar</aside>
+    <main>Home Content</main>
+    <aside>Home Sidebar</aside>
   </>
 );
 
 const Account = () => (
   <>
-   <main>Account Content</main>
-   <aside>Account Sidebar</aside>
+    <main>Account Content</main>
+    <aside>Account Sidebar</aside>
   </>
 );
 
@@ -123,7 +119,7 @@ const App = () => {
       <Route path="/" component={Home} />
     </Router>
   );
-}
+};
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
@@ -133,7 +129,7 @@ While we avoided duplication of routing in this case, we have created duplicatio
 ```jsx
 import React from "react";
 
-const Layout = props => (
+const Layout = (props) => (
   <>
     <main>{props.content}</main>
     <aside>{props.sidebar}</aside>
@@ -150,7 +146,7 @@ const App = () => {
       <Route path="/" component={Home} />
     </Router>
   );
-}
+};
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
@@ -173,7 +169,7 @@ In order to limit the matching between `path` and the URL, React Router provides
 <Route exact path="/" component={Home} />
 ```
 
-Where exactly you place this prop in **JSX**, is not important. I like to place it just before the path prop to let it speak for itself: "Here is a route that matches an **exact path.**"  If we included the `exact` prop in the Account Sidebar, the sidebar would only be rendered if the URL with `/account` was hit, and would not register the components for `/account/edit`, `/account/images` or `/account/settings`.
+Where exactly you place this prop in **JSX**, is not important. I like to place it just before the path prop to let it speak for itself: "Here is a route that matches an **exact path.**" If we included the `exact` prop in the Account Sidebar, the sidebar would only be rendered if the URL with `/account` was hit, and would not register the components for `/account/edit`, `/account/images` or `/account/settings`.
 
 ### Limiting matching to a single route via Switch component
 
@@ -226,7 +222,7 @@ One can easily restrict which parameters should be detected and can even provide
 <Route path="/products/:order(asc|dec)" />
 ```
 
- The above route would only match, if the URL provided was either `/products/asc` or `/products/desc`.
+The above route would only match, if the URL provided was either `/products/asc` or `/products/desc`.
 
 If we were to only allow numerical values in the ~~`:userid`~~, we would define routes such as `/users/:userid(\d*)` or `/users/:userid([0-9]*)` to limit these. A URL of `/users/123` would lead to a render of the `UserProfile` component, while `/users/abc` would not.
 
@@ -234,7 +230,7 @@ If **React Router** finds such a URL, the value of the parameter is extracted an
 
 ### Controlling redirects of particular routes
 
-Apart from the usual `Route` component to react to particular Routes, **React Router** also offers a `Redirect` component. The Redirect component is initialized with a `to` prop in which we can provide a destination URL that the component should redirect to. It allows us to declaratively decide in **JSX** where to send a particular user in certain situations. Whenever a `Redirect` component is equipped with only a `to` prop, a redirect to the URL provided will take place. 
+Apart from the usual `Route` component to react to particular Routes, **React Router** also offers a `Redirect` component. The Redirect component is initialized with a `to` prop in which we can provide a destination URL that the component should redirect to. It allows us to declaratively decide in **JSX** where to send a particular user in certain situations. Whenever a `Redirect` component is equipped with only a `to` prop, a redirect to the URL provided will take place.
 
 `Redirect` components are a great solution to the common use case of having to redirect users to a login page if they are not logged in. Logged in users will continue to be directed to a Dashboard:
 
@@ -276,9 +272,9 @@ If the URL `/old` is hit \(first example\) or `/users/123` \(second example\), t
 
 Each component that was rendered by React Router and has been added as a `component` prop to a `Route` component, automatically receives three other props:
 
-* `match` 
-* `location` 
-* `history`
+- `match`
+- `location`
+- `history`
 
 Each of these props can be accessed just like any other props. **Class components** can access these via `this.props` whereas **function components** can access these with `props`:
 
@@ -290,7 +286,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 const Example = (props) => {
   console.log(props);
   return <p>Example</p>;
-}
+};
 
 const App = () => (
   <Router>
@@ -322,14 +318,17 @@ Without getting into too much detail for each and every property, we get a feel 
 
 A possible extension of this use case could be the start of an API request in a user profile component. The user id could be used to fetch the particular data for the user `123` and then display their user profile.
 
-**React Router** ensures that each component connected to the Router will have a `match` property which always has its own `params` property. This will either contain the actual parameters or an empty object. `props.match.params` is therefore safe to access without having to fear that the property might be `undefined` and throwing an error. 
+**React Router** ensures that each component connected to the Router will have a `match` property which always has its own `params` property. This will either contain the actual parameters or an empty object. `props.match.params` is therefore safe to access without having to fear that the property might be `undefined` and throwing an error.
 
 The `render` prop on the `Route` component also receives the props of the router:
 
 ```jsx
-<Route path="/users/:userid" render={(props) => {
-  return <p>Profile of ID {props.match.params.userid}</p>;
-}} />
+<Route
+  path="/users/:userid"
+  render={(props) => {
+    return <p>Profile of ID {props.match.params.userid}</p>;
+  }}
+/>
 ```
 
 ### Navigating different routes
@@ -354,7 +353,7 @@ Any other props that are passed to the `<Link />` element, will be passed down t
 
 ### Special case: NavLink
 
-A special form of the `Link` element is the `NavLink` element. Apart from the usual props that can also be received by the `Link` component, `NavLinks` can change based on their state.  `NavLinks` can access information relating to which page they are currently linking to and whether that page is the same as the current page. If this is the case, we can alter it's display using `activeClassName` and `activeStyle`.
+A special form of the `Link` element is the `NavLink` element. Apart from the usual props that can also be received by the `Link` component, `NavLinks` can change based on their state. `NavLinks` can access information relating to which page they are currently linking to and whether that page is the same as the current page. If this is the case, we can alter it's display using `activeClassName` and `activeStyle`.
 
 A classic example for this type of behavior is the overall page navigation. The currently active route in the menu is highlighted in a different color:
 
@@ -401,11 +400,11 @@ Let's look at the `push()` and `replace()` functions in particular. Using `props
 
 We also have access to a so-called `props.history.go()` function which allows us to programmatically switch between entries in the browser's history. The function expects a parameter which indicates how many pages ahead or back should be turned. A negative value informs the function to go back in the entries whereas a positive value informs the function to go forward in the collection of entries. `goBack()` and `goForward()` are shortcuts for going back a step in the browser's history and forward. They are equivalent to calling `go(-1)` and `go(1)`.
 
-The `action` property in `history` confirms how the user has ended up on the current page. Possible values include `POP`,  `PUSH` or `REPLACE`. `POP` can either signify that the user has pressed the back button in the browser or that they have loaded the page for the first time. `PUSH` informs us that the `history.push()` method has been called which is also the case once a `<Link />` has been clicked. If the `action` properties value is `REPLACE`, `history.replace()` has been called or a `<Link />` element has been clicked that contained a `replace` property.
+The `action` property in `history` confirms how the user has ended up on the current page. Possible values include `POP`, `PUSH` or `REPLACE`. `POP` can either signify that the user has pressed the back button in the browser or that they have loaded the page for the first time. `PUSH` informs us that the `history.push()` method has been called which is also the case once a `<Link />` has been clicked. If the `action` properties value is `REPLACE`, `history.replace()` has been called or a `<Link />` element has been clicked that contained a `replace` property.
 
 ### Connecting components with a router using HOC
 
-Each component which is used as a `component` prop in a `Router` element, is automatically passed the router props `history`, `location`, and `match`. Sometimes however, it would prove useful to not only be able to access Router functionality in components which are not using a direct Route. For example: to redirect to another page using `history.push()`. 
+Each component which is used as a `component` prop in a `Router` element, is automatically passed the router props `history`, `location`, and `match`. Sometimes however, it would prove useful to not only be able to access Router functionality in components which are not using a direct Route. For example: to redirect to another page using `history.push()`.
 
 In order to allow for such use cases, **React Router** provides a `withRouter` Higher Order Component. Each component wrapped by this HOC will automatically receive the router's props even though they are not used as a Route component:
 
@@ -429,22 +428,22 @@ Since **React 16.3.0** however and **React Router 5.0.0**, this issue has been s
 
 ### React Router and Hooks
 
-Since React Router **5.1.0**, the library has been enhanced by a number of own hooks that are available to the developer. It is now possible to access Router information in **function components** without using the `withRouter()` HOC provided that these components are not directly used as argument for the `<Route />` element prop component  \(`<Route component={MyComponent} />`\).
+Since React Router **5.1.0**, the library has been enhanced by a number of own hooks that are available to the developer. It is now possible to access Router information in **function components** without using the `withRouter()` HOC provided that these components are not directly used as argument for the `<Route />` element prop component \(`<Route component={MyComponent} />`\).
 
 As is the case with most hooks, using React Router's own hooks is a very pleasant and straightforward experience. Four hooks allow us to access the `location` object, the `history` instance, the Route parameter or the `match` object. Conveniently, these hooks are aptly called `useLocation`, `useHistory`, `useParams` and `useRouteMatch`. In order to use these hooks, the component intended for the hooks implementation needs to be be nested within a `<Router>` tree. However, it is not necessary for the component to follow directly after the Router element or be placed on the most upper layer. These hooks can access the Router context and can thus be used anywhere in your application.
 
-#### useLocation\(\) 
+#### useLocation\(\)
 
 First, let's have a closer look at the arguably most simple hook in our list. We can import it via the `react-router-dom` package. Once installed, we can access location data by using the return value of the hook:
 
 ```jsx
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React from "react";
+import { useLocation } from "react-router-dom";
 
 const ShowLocationInfo = () => {
   const location = useLocation();
   return <pre>{JSON.stringify(location, null, 2)}</pre>;
-}
+};
 ```
 
 In this example, we would obtain the following output for the `showLocationInfo` component:
@@ -467,11 +466,11 @@ import { useHistory } from 'react-router-dom';
 
 const NavigateHomeButton = () => {
   const history = useHistory();
-  
+
   const goHome = () => {
     history.push('/');
   };
-  
+
   return <button onClick={goHome}Take me home</button>;
 }
 ```
@@ -485,8 +484,8 @@ This hook is basically a shortcut for accessing parameters which were hidden in 
 The `useParams()` hook allows us to _directly_ access this object:
 
 ```jsx
-import React from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import React from "react";
+import { useParams, useLocation } from "react-router-dom";
 
 const ShowParams = () => {
   const params = useParams();
@@ -512,7 +511,7 @@ If a route such as `/users/:userid` had been created and a URL such as `/users/1
 
 #### useRouteMatch\(\)
 
-The last hook introduced by React Router **5.1.0** forms the `useRouteMatch()`  hook. It allows us to access the whole `match` object of a Route, meaning we can now obtain information on `params`, `url`, `path` and `isExact`. This means that one can now safely check whether the URL matches the `path` of a route.
+The last hook introduced by React Router **5.1.0** forms the `useRouteMatch()` hook. It allows us to access the whole `match` object of a Route, meaning we can now obtain information on `params`, `url`, `path` and `isExact`. This means that one can now safely check whether the URL matches the `path` of a route.
 
 The function can take in a path which will in turn return a `match` object for the said route. If no particular path is provided to the function, the path of the current route will be used. Using our previous example with the path of `/users/:userid` , the Route `<Route path="/users/:userid">` will return the following `match` object if the URL `/users/123` is provided as an argument:
 
@@ -530,8 +529,7 @@ The function can take in a path which will in turn return a `match` object for t
 If the hook is called with a path that does not match with the current route, `null` will be returned from the function:
 
 ```jsx
-useRouteMatch('/orders/:orderid')
+useRouteMatch("/orders/:orderid");
 ```
 
 Calling this function with `/users/:userid` will return a value of `null`.
-

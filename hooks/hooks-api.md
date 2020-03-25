@@ -4,19 +4,19 @@ In this chapter I want to summarize all the hooks which are available to us inte
 
 The three **basic hooks** which I mentioned briefly beforehand are:
 
-* `useState`
-* `useEffect`
-* `useContext`
+- `useState`
+- `useEffect`
+- `useContext`
 
 The **seven additional hooks** are:
 
-* `useReducer` 
-* `useCallback` 
-* `useMemo` 
-* `useRef` 
-* `useImperativeHandle` 
-* `useLayoutEffect` 
-* `useDebugValue`
+- `useReducer`
+- `useCallback`
+- `useMemo`
+- `useRef`
+- `useImperativeHandle`
+- `useLayoutEffect`
+- `useDebugValue`
 
 ## useState
 
@@ -28,7 +28,7 @@ This Hooks returns a **value** as well as a **function** to us, which we can use
 
 When the update function is called, React ensures that the function always has the same **identity** and does not create a new function whenever the hook is called. This is important as it reduces the number of renders and also means that we do not need to pass any other **dependencies** \(as is the case in `useEffect()` or `useCallback()`\).
 
-`useState()` will return an **array** to us of which the first **value** always denotes the state and the second value is always a **function** which we use to update said **value**. Due to array destructuring, we are not limited in naming this value and function. However, conventions have developed that follow the pattern of `value / setValue`. For example, `user` and `setUser`.  But of course you could also go for something along the lines of this: `changeUser` and `updateUserState`.
+`useState()` will return an **array** to us of which the first **value** always denotes the state and the second value is always a **function** which we use to update said **value**. Due to array destructuring, we are not limited in naming this value and function. However, conventions have developed that follow the pattern of `value / setValue`. For example, `user` and `setUser`. But of course you could also go for something along the lines of this: `changeUser` and `updateUserState`.
 
 The mechanism of actually updating the state is very similar to that of `this.setState()` which we already encountered in the chapter on Class components. The function can either receive a **new value** which is then replacing the current old value or we can pass an **updater function** to the the function. The updater function receives the previous value and uses the **return value** from the function as its new state.
 
@@ -143,21 +143,18 @@ Normally the `useEffect()` Hook or its associated effect function is executed af
 However, this might lead to a lot of unnecessary calls of this function and it might even be executed if no data has actually changed since the last render \(which are relevant for the side effect\). This is why the React allows us to define a **dependency array** as a second parameter in the **effect function**. Only if at least one value in the **dependency array** has changed, the function will be called again. Let's put our previous example into a little code snippet:
 
 ```javascript
-useEffect(
-  () => {
-    const user = api.getUser(props.username);
-    setUser(user);
-  }, 
-  [props.username]
-);
+useEffect(() => {
+  const user = api.getUser(props.username);
+  setUser(user);
+}, [props.username]);
 ```
 
-In this example, we have put the username into the dependency array which we use to request data from the API. 
+In this example, we have put the username into the dependency array which we use to request data from the API.
 
-While creating such a **dependency array**, we should take utmost care to include all values that are present in the function and could change within the lifetime of the component in this dependency array. If the effect function should only be run once and perform a similar task such as `componentDidMount()`, you should leave the **dependency array** empty. 
+While creating such a **dependency array**, we should take utmost care to include all values that are present in the function and could change within the lifetime of the component in this dependency array. If the effect function should only be run once and perform a similar task such as `componentDidMount()`, you should leave the **dependency array** empty.
 
 {% hint style="info" %}
-In order to facilitate or automate the creation of **dependency arrays**, the  `eslint-plugin-react-hooks` offers an `exhaustive-deps` rule which will automatically write dependencies used in the effect function into the **dependency array** or at least warns that they should be included. These could be run on _Format on Save_ or another similar editor configuration.
+In order to facilitate or automate the creation of **dependency arrays**, the `eslint-plugin-react-hooks` offers an `exhaustive-deps` rule which will automatically write dependencies used in the effect function into the **dependency array** or at least warns that they should be included. These could be run on _Format on Save_ or another similar editor configuration.
 
 You can active it by setting `"exhaustive-deps": "warn"` in the`rules` block of the ESLint configuration.
 {% endhint %}
@@ -186,7 +183,7 @@ In the above example, an **incorrect** `useEffect()` Hook could have looked like
 
 ```javascript
 useEffect(async () => {
-  const response = await fetch('https://api.github.com/users/manuelbieh');
+  const response = await fetch("https://api.github.com/users/manuelbieh");
   const accountData = await response.json();
   setGitHubAccount(accountData);
 
@@ -224,10 +221,7 @@ const App = (props) => {
   );
 };
 
-ReactDOM.render(
-  <App username="manuelbieh" />, 
-  document.getElementById("root")
-);
+ReactDOM.render(<App username="manuelbieh" />, document.getElementById("root"));
 ```
 
 In this case, the effect function itself is not asynchronous. The asynchronous functionality has been extracted into its own asynchronous function `fetchGitHubAccount()` which defined **inside** of the `useEffect()` hook.
@@ -273,7 +267,7 @@ const reducerFunction = (state, action) => {
     case "DECREMENT":
       return { count: state.count - 1 };
     default:
-      throw new Error('Unknown action');
+      throw new Error("Unknown action");
   }
 };
 
@@ -326,9 +320,7 @@ const initFunction = (initValue) => {
 };
 
 const Counter = (props) => {
-  const [state, dispatch] = useReducer(
-    reducerFunction, props.startValue, initFunction
-  );
+  const [state, dispatch] = useReducer(reducerFunction, props.startValue, initFunction);
 
   return (
     <div>
@@ -352,9 +344,9 @@ The guiding principle of **reducers** should be known to those in the React comm
 
 A common use case for reducers forms the management of API requests. Common conventions dictate that three actions for each API request should be defined:
 
-* an action which informs the application that the data is loading when the request has started
-* an action which resets the loading state and \(if the request has failed\) can inform the state of an error
-* an action which writes the data received by the API request into state if it was successful
+- an action which informs the application that the data is loading when the request has started
+- an action which resets the loading state and \(if the request has failed\) can inform the state of an error
+- an action which writes the data received by the API request into state if it was successful
 
 Let's have a look at an example using our previous account data example using the GitHub API:
 
@@ -402,9 +394,7 @@ const RepoInfo = (props) => {
         dispatch({
           type: "REQUEST_START",
         });
-        const response = await fetch(
-          `https://api.github.com/users/${username}`
-        );
+        const response = await fetch(`https://api.github.com/users/${username}`);
 
         const accountData = await response.json();
         dispatch({
@@ -444,13 +434,10 @@ const RepoInfo = (props) => {
   );
 };
 
-ReactDOM.render(
-  <RepoInfo username="manuelbieh" />,
-  document.getElementById("root")
-);
+ReactDOM.render(<RepoInfo username="manuelbieh" />, document.getElementById("root"));
 ```
 
-The `useReducer()` hook is used and passed to the `accountReducer` function. In this function, we deal with the three **actions** of **type** `REQUEST_START`, `REQUEST_SUCCESS`, and `REQUEST_ERROR`. 
+The `useReducer()` hook is used and passed to the `accountReducer` function. In this function, we deal with the three **actions** of **type** `REQUEST_START`, `REQUEST_SUCCESS`, and `REQUEST_ERROR`.
 
 The `initialState` consists of an object with an empty `data` property, an `isFetching` and `isError` flag and a `lastUpdated` property. The flags can inform us whether the data has actually loaded or whether an error occurred whilst the `lastUpdated` property will store a timestamp of the last successful request. We can use these later to only use one request per minute or to signal to the user that they might be seeing data but that the interface has not changed for a while.
 
@@ -556,9 +543,7 @@ import ReactDOM from "react-dom";
 
 const FancyInput = React.memo(({ name, onChange }) => {
   console.log("Rendering FancyInput");
-  return (
-    <input type="text" name={name} onChange={onChange} />
-  );
+  return <input type="text" name={name} onChange={onChange} />;
 });
 
 const Form = () => {
@@ -586,9 +571,9 @@ const Form = () => {
 ReactDOM.render(<Form />, document.getElementById("root"));
 ```
 
-We've defined two components here: `FancyInput` and `Form`. The `Form` component renders a `FancyInput` component and not only passes it  a `name` attribute but also a function. It will change the state of the `Form` component whenever changes are made to the input field and subsequently trigger a re-render.
+We've defined two components here: `FancyInput` and `Form`. The `Form` component renders a `FancyInput` component and not only passes it a `name` attribute but also a function. It will change the state of the `Form` component whenever changes are made to the input field and subsequently trigger a re-render.
 
-The `changeHandler`  function is created in the **form component** and thus is generated fresh with every render, meaning **the reference to the function changes**. We are passing the same function but not an identical one.
+The `changeHandler` function is created in the **form component** and thus is generated fresh with every render, meaning **the reference to the function changes**. We are passing the same function but not an identical one.
 
 Thus, we can't make use of the `React.memo()` optimization mechanism in `FancyInput.` `React.memo()` checks **before** each re-render of a component if its **props** changed compared to the previous render and will trigger a re-render if this is the case. As the `changeHandler` function is generated from scratch every time the `Form` component renders, this condition will always be true and the `FancyInput` will always re-render too.
 
@@ -643,13 +628,14 @@ Let us have a look at a non-optimized component:
 import React, { useState, useMemo } from "react";
 import ReactDOM from "react-dom";
 
-const fibonacci = (num) =>
-  num <= 1 ? 1 : fibonacci(num - 1) + fibonacci(num - 2);
+const fibonacci = (num) => (num <= 1 ? 1 : fibonacci(num - 1) + fibonacci(num - 2));
 
 const FibonacciNumber = ({ value }) => {
   const result = fibonacci(value);
   return (
-    <p>{value}: {result}</p>
+    <p>
+      {value}: {result}
+    </p>
   );
 };
 
@@ -661,7 +647,7 @@ const App = () => {
     const { value } = target;
     if (key === "Enter") {
       if (value > 40 || value < 1) {
-        alert('Invalid value');
+        alert("Invalid value");
         return;
       }
       setValues((values) => values.concat(target.value));
@@ -711,7 +697,7 @@ React will calculate this value during the **first render**, **remember** the va
 const ref = useRef(initialValue);
 ```
 
-`useRef()` is used to create **Refs** by using a dedicated hook. 
+`useRef()` is used to create **Refs** by using a dedicated hook.
 
 ```jsx
 import React, { useEffect, useRef } from "react";
@@ -741,25 +727,23 @@ While `useEffect()` is executed with a little bit of delay **after** the **layou
 
 This kind of behavior is similar to what was previously achieved by `componentDidMount()` or `componentDidUpdate()` in class components. Due to performance reasons however, it is advisable to use `useEffect()` in most cases and only use `useLayoutEffect()` if you know exactly what you are doing. `useLayoutEffect()` can also help if you are struggling to migrate **class components** to **function components** due to the different timings of the effects.
 
-But be careful: neither ****`useEffect()` nor `useLayoutEffect()` will be executed server-side. While this does not pose a problem for `useEffect()` as it is only executed after the layout and painting phase of the browser, `useLayoutEffect()` might lead to differences in the server-side rendered markup compared to the initial client-side render. React will usually inform us of these differences and create a warning in the console. In these cases, `useEffect()` should be used instead or components using `useLayoutEffect()` should be mounted after the browser's paint phase.
+But be careful: neither `useEffect()` nor `useLayoutEffect()` will be executed server-side. While this does not pose a problem for `useEffect()` as it is only executed after the layout and painting phase of the browser, `useLayoutEffect()` might lead to differences in the server-side rendered markup compared to the initial client-side render. React will usually inform us of these differences and create a warning in the console. In these cases, `useEffect()` should be used instead or components using `useLayoutEffect()` should be mounted after the browser's paint phase.
 
 ```jsx
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 
 const App = () => {
-  const [ mountLayoutComp, setMountLayoutComp ] = useState(false);
+  const [mountLayoutComp, setMountLayoutComp] = useState(false);
 
   useEffect(() => {
     setMountLayoutComp(true);
   }, []);
 
-  return mountLayoutComp 
-    ? <ComponentWithLayoutEffect /> 
-    : null;
+  return mountLayoutComp ? <ComponentWithLayoutEffect /> : null;
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
 In this example, the component using the `useLayoutEffect()` is only registered after the component as mounted. We achieve this by checking for the `mountLayoutComp` state after the first paint phase.
@@ -807,8 +791,7 @@ If you are looking for a clear if unrealistic example, I can provide another exa
 import React, { useDebugValue, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-const fibonacci = (num) =>
-  num <= 1 ? 1 : fibonacci(num - 1) + fibonacci(num - 2);
+const fibonacci = (num) => (num <= 1 ? 1 : fibonacci(num - 1) + fibonacci(num - 2));
 
 const useNumber = (number) => {
   useDebugValue(number, (number) => fibonacci(number));
@@ -831,7 +814,7 @@ Using `useDebugValue()` without the formatting function does significantly incre
 ## useImperativeHandle
 
 ```javascript
-useImperativeHandle(ref, createHandle, [deps])
+useImperativeHandle(ref, createHandle, [deps]);
 ```
 
 I will be entirely honest with you all: I found it extremely difficult to construct a use case in which `useImperativeHandle()` will post a useful solution. Frustrated, I took to Twitter and crafted a post to ask for help. I was lucky enough to get an answer by Dan Abramov, core developer in the React team at Facebook, who informed me that I must be doing something right. This hook should not be used and has a long name to dissuade people from using it. For matters of completion and for understanding why this hook exists, I want to present it to you anyway.
@@ -849,22 +832,23 @@ import ReactDOM from "react-dom";
 const FancyForm = React.forwardRef((props, forwardedRef) => {
   const formRef = useRef();
 
-  useImperativeHandle(forwardedRef, () => ({
-    focusFirstInput: () => {
-      (formRef.current.querySelector("input") || {}).focus();
-    },
-    getFormValues: () => {
-      return Array.from(new FormData(formRef.current)).reduce(
-        (acc, [value, name]) => {
+  useImperativeHandle(
+    forwardedRef,
+    () => ({
+      focusFirstInput: () => {
+        (formRef.current.querySelector("input") || {}).focus();
+      },
+      getFormValues: () => {
+        return Array.from(new FormData(formRef.current)).reduce((acc, [value, name]) => {
           acc[name] = value;
           return acc;
-        },
-        {}
-      );
-    },
-    reset: () => formRef.current.reset(),
-    submit: () => formRef.current.submit(),
-  }), []);
+        }, {});
+      },
+      reset: () => formRef.current.reset(),
+      submit: () => formRef.current.submit(),
+    }),
+    []
+  );
 
   return <form ref={formRef}>{props.children}</form>;
 });
@@ -896,4 +880,3 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
-

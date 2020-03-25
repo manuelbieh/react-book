@@ -2,7 +2,7 @@
 
 **Functions as a Child** \(FaaC for short\) and **Render Props** are treated separately in the official React documentation. However, **Functions as Children** are already mentioned in the **Render Props** hinting at the fact that they are similar if a little different. Thus, I'd like to discuss them both at the same time. But what even are they?
 
-**Functions as a Child** \(also called **Functions as Children**\) ****and **Render Props** are patterns which allow you to bundle business or application logic in some sort of overarching component - similar to a **Higher Order Component**. In contrast to a HOC though, a function is called which is passed the relevant data as a parameter \(as opposed to returning a new component which receives data as props\). The function takes the form of a child element of the relevant component in the **Function as Children** pattern \(so `this.props.cildren`\). The **Render Props** pattern on the other hand introduces the function as a Prop with the name of `render` \(or any other name\).
+**Functions as a Child** \(also called **Functions as Children**\) and **Render Props** are patterns which allow you to bundle business or application logic in some sort of overarching component - similar to a **Higher Order Component**. In contrast to a HOC though, a function is called which is passed the relevant data as a parameter \(as opposed to returning a new component which receives data as props\). The function takes the form of a child element of the relevant component in the **Function as Children** pattern \(so `this.props.cildren`\). The **Render Props** pattern on the other hand introduces the function as a Prop with the name of `render` \(or any other name\).
 
 We've learned that the value of a prop in JSX can be any valid JavaScript expression. As invoked functions can also return expressions, we can also use the return value of said function as a prop. Strings, Booleans, Arrays, Objects, other React elements and `null` can also be passed as props. `children` are a special form of props, meaning that both of these lines will result in the same output when rendered:
 
@@ -17,21 +17,21 @@ We can use this principle and also pass functions which are invoked during `rend
 
 ```jsx
 const bold = (string) => {
-  return <strong>{string}</strong>
-}
+  return <strong>{string}</strong>;
+};
 
 const italic = (string) => {
-  return <em>{string}</em>
-}
+  return <em>{string}</em>;
+};
 
 const Formatter = (props) => {
-  if (typeof props.children !== 'function') {
-    console.warn('children prop must be a function!');
+  if (typeof props.children !== "function") {
+    console.warn("children prop must be a function!");
     return null;
   }
 
   return props.children({ bold, italic });
-}
+};
 ```
 
 We have defined two functions: the `bold` function and the `italic` function. `props.children` can then be called in a Formatter function after checking whether the `children` props is actually function. The function takes in an object with two properties: `bold` with the `bold` function as its value and `italic` with the `italic` function as its value.The invoked function is returned by the component.
@@ -41,11 +41,7 @@ Using this **Function as Children** component, a function in JSX is passed to th
 ```jsx
 <div>
   <p>This text does not know about the Formatter function</p>
-  <Formatter>
-  {({ bold }) => (
-    <p>This text is {bold('bold though and does')}</p>
-  )}
-  </Formatter>
+  <Formatter>{({ bold }) => <p>This text is {bold("bold though and does")}</p>}</Formatter>
 </div>
 ```
 
@@ -101,9 +97,9 @@ class CryptoPrices extends React.Component {
     }
 
     return children({
-      isLoading, 
-      items, 
-      loadData: this.loadData 
+      isLoading,
+      items,
+      loadData: this.loadData
     });
   }
 }
@@ -111,10 +107,10 @@ class CryptoPrices extends React.Component {
 
 At first glance, the example does not look much different to the one we've introduced in the previous chapter using Higher Order Components. But if you pay attention, you will notice some differences:
 
-* No new component is generated and we can work directly with our current component
-* The `loadData` method can access `this.props` to read the `limit` prop. This can then be used as a parameter in the API call
-* The `render()` method does not return any component that was passed in anymore and calls the `children` function instead which it receives from its own props
-* The `children` function receives the `isLoading` state and returns the items.
+- No new component is generated and we can work directly with our current component
+- The `loadData` method can access `this.props` to read the `limit` prop. This can then be used as a parameter in the API call
+- The `render()` method does not return any component that was passed in anymore and calls the `children` function instead which it receives from its own props
+- The `children` function receives the `isLoading` state and returns the items.
 
 Using this component is similar to that from our previous example, with the exception that we can also pass an optional `limit` prop in this case:
 
@@ -152,9 +148,7 @@ We can now combine the `PriceTable` component which expects three props with the
 Or even more succinct using spread syntax:
 
 ```jsx
-<CryptoPrices limit={5}>
-  {(props) => <PriceTable {...props} />}
-</CryptoPrices>
+<CryptoPrices limit={5}>{(props) => <PriceTable {...props} />}</CryptoPrices>
 ```
 
 We've allowed for a great deal of flexibility in this example and do not explicitly need to tie a component to a HOC to enable logic \(which saves us valuable time and effort\).
@@ -185,16 +179,16 @@ render() {
   // Careful: render() does not have anything to do with the component with
   // the same name and gets injected via this.props.render
   return render({
-    isLoading, 
-    items, 
-    loadData: this.loadData 
-  }); 
+    isLoading,
+    items,
+    loadData: this.loadData
+  });
 }
 ```
 
 It's personal preference to a degree. You do not need to give this prop the name of `render` and could theoretically choose any valid name. Any passed function will eventually turn the component into a "Render Prop".
 
-It's possible to have an arbitrary amount of props in such a component. If you were to implement a component which returns a table which includes a table head and a body, both receiving data from the data component, that would be no problem at all. 
+It's possible to have an arbitrary amount of props in such a component. If you were to implement a component which returns a table which includes a table head and a body, both receiving data from the data component, that would be no problem at all.
 
 ### Render Props and FaaCs in combination with Higher Order Components
 
@@ -206,9 +200,7 @@ function withCryptoPrices(WrappedComponent) {
     render() {
       return (
         <CryptoPrices>
-          {(cryptoPriceProps) => (
-            <WrappedComponent {...this.props} {...cryptoPriceProps} />
-          )}
+          {(cryptoPriceProps) => <WrappedComponent {...this.props} {...cryptoPriceProps} />}
         </CryptoPrices>
       );
     }
@@ -223,6 +215,3 @@ The **Function as a Child** pattern and the **Render-Props** pattern are both us
 
 In contrast to an HOC, they can be easily used within the `render()` method of a component and do not need "linked" with another additional component making them more flexible and readable than **Higher Order Components**.
 {% endhint %}
-
-
-
