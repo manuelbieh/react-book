@@ -81,9 +81,7 @@ const EventOverview = ({ date, description, ticketUrl, title }) => (
   <div>
     <h1>{title}</h1>
     <h2>{date.toLocaleString()}</h2>
-    {description && (
-      <div className="description">{description}</div>
-    )}
+    {description && <div className="description">{description}</div>}
     {ticketsUrl && <a href={ticketsUrl}>Tickets!</a>}
   </div>
 );
@@ -92,8 +90,8 @@ EventOverview.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
   description: PropTypes.string,
   ticketsUrl: PropTypes.string,
-  title: PropTypes.string.isRequired
-}
+  title: PropTypes.string.isRequired,
+};
 ```
 
 And just like that, we have added `propTypes` to our **Stateless Functional Component**.
@@ -101,16 +99,14 @@ And just like that, we have added `propTypes` to our **Stateless Functional Comp
 In some cases, it can be useful to define sensible default values if no specific values have been passed. React allows us to define `defaultProps` which work similar to `propTypes` in that they can also be added as a static property. Here's a quick example:
 
 ```jsx
-const Greeting = ({ name }) => (
-    <h1>Hello {name}!</h1>
-);
+const Greeting = ({ name }) => <h1>Hello {name}!</h1>;
 
 Greeting.propTypes = {
-    name: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 Greeting.defaultProps = {
-    name: 'Guest',
+  name: 'Guest',
 };
 ```
 
@@ -123,10 +119,10 @@ The `name` prop of the `Greeting` component is marked as required by `string.isR
 will result in the following output: **Hello Manuel!**
 
 ```jsx
-<Greeting />
+<Greeting />;
 // or:
 const user = {};
-<Greeting name={user.name} />
+<Greeting name={user.name} />;
 ```
 
 This example however will fall back to the `defaultValue` which we have defined in the `defaultProps` as either no prop is passed at all or if the value is undefined. In this case, **Hello Guest!** will be displayed as we marked **Guest** as our `defaultValue`. React will figure out if a `defaultValue` for a `isRequired` prop exists and only display a warning if the prop is actually missing and no `defaultValue` has been defined.
@@ -139,26 +135,23 @@ You can find the plugin here:
 
 You can install it via the command line with:
 
-
-
 ```bash
 npm install --save-dev babel-plugin-transform-react-remove-prop-types
 ```
 
 Or with yarn:
 
-
-
 ```bash
 yarn add --dev babel-plugin-transform-react-remove-prop-types
 ```
+
 {% endhint %}
 
 ## Flow
 
 In contrast to **React PropTypes**, **Flow** is a **static typechecker** for all **JavaScript** not just for React components. **Flow** is also developed in-house at Facebook and thus integrates nicely with most React setups. Up to version **Babel 6**, it even came pre-installed as part of the `babel-preset-react` and could be used without any further setup.
 
-Since **Babel version7**, **Flow** has been ported to its own **Babel preset**. In order to install you can run `npm install @babel/preset-flow` or `yarn add @babel/preset-flow`. In addition to the installation step, you also have to manually  set the`@babel/preset-flow` as a present in the Babel config. **Presets** allow us to remove non-JavaScript syntax - in this case **Flow syntax** - during the build process so that we won't run into errors in the browser.
+Since **Babel version7**, **Flow** has been ported to its own **Babel preset**. In order to install you can run `npm install @babel/preset-flow` or `yarn add @babel/preset-flow`. In addition to the installation step, you also have to manually set the`@babel/preset-flow` as a present in the Babel config. **Presets** allow us to remove non-JavaScript syntax - in this case **Flow syntax** - during the build process so that we won't run into errors in the browser.
 
 Apart from the Babel Preset, the **Flow executable** needs installed via `npm install flow-bin` \(or `yarn add flow-bin`\) which takes care of the actual **typechecking**.
 
@@ -185,7 +178,7 @@ npm run flow init
 yarn flow init
 ```
 
-Once `flow init` has been executed, a new file called `.flowconfig` should have been created in the project directory. The file itself looks very empty for now but Flow needs it to function correctly.  In the future, you can manage which files should be checked by Flow or which shouldn't based on the options set in these files.
+Once `flow init` has been executed, a new file called `.flowconfig` should have been created in the project directory. The file itself looks very empty for now but Flow needs it to function correctly. In the future, you can manage which files should be checked by Flow or which shouldn't based on the options set in these files.
 
 Did you update your Babel config, install `flow-bin` in your object and created the `.flowconfig`? Awesome. We can now start typechecking with Flow. In order to check that everything has been set up correctly, you can execute `flow.` If you added the entry to the `package.json` as shown above, running `yarn flow` will suffice. When everything has been set up correctly, a message such as this one is displayed to you:
 
@@ -238,13 +231,13 @@ ReactDOM.render(
 );
 ```
 
-As opposed to **PropTypes**, we start off by defining a **Type definition**  with the name of `PropsT`. You can choose freely which names to give to your Type definitions, but it has become some sort of Developer convention to use the suffix of `T` or `Type`. However, it is not enforced or technically necessary. This newly defined type can then be passed to the component using a so-called "generic type".
+As opposed to **PropTypes**, we start off by defining a **Type definition** with the name of `PropsT`. You can choose freely which names to give to your Type definitions, but it has become some sort of Developer convention to use the suffix of `T` or `Type`. However, it is not enforced or technically necessary. This newly defined type can then be passed to the component using a so-called "generic type".
 
 ```jsx
 class EventOverview extends React.Component<PropsT>
 ```
 
-Type definitions can be inlined as well, however the longer the list of the definitions, the harder it becomes to read them in this form. 
+Type definitions can be inlined as well, however the longer the list of the definitions, the harder it becomes to read them in this form.
 
 ```jsx
 class EventOverview extends React.Component<{
@@ -257,9 +250,9 @@ class EventOverview extends React.Component<{
 }
 ```
 
-But let's inspect the **Type definition**  a little further: just as we already learned in the section on **PropTypes**, we define which **props** can be passed to the component and which **type** they have to be. In this case, we have defined a `date` prop which needs to be an instance of `Date`, the optional props `description` and `ticketsUrl` of type `string` which have been marked as optional due to their use of the `?` after their name, and finally the `title` prop which also needs to be passed in the form of a `string`. In contrast to **PropTypes** where one needs to explicitly indicate which props are required by using `isRequired`, Flow syntax describes which fields are optional instead.
+But let's inspect the **Type definition** a little further: just as we already learned in the section on **PropTypes**, we define which **props** can be passed to the component and which **type** they have to be. In this case, we have defined a `date` prop which needs to be an instance of `Date`, the optional props `description` and `ticketsUrl` of type `string` which have been marked as optional due to their use of the `?` after their name, and finally the `title` prop which also needs to be passed in the form of a `string`. In contrast to **PropTypes** where one needs to explicitly indicate which props are required by using `isRequired`, Flow syntax describes which fields are optional instead.
 
-**Function components**  can also be typed using Flow by passing the props and their Type as a function argument:
+**Function components** can also be typed using Flow by passing the props and their Type as a function argument:
 
 ```jsx
 const EventOverview = (props: PropsT) => (/*…*/);
@@ -275,15 +268,15 @@ You can also use inline definitions in Function components:
 
 ```jsx
 const EventOverview = ({
-    date,
-    description,
-    ticketUrl,
-    title
+  date,
+  description,
+  ticketUrl,
+  title,
 }: {
-    date: Date,
-    description?: string,
-    ticketsUrl?: string,
-    title: string
+  date: Date,
+  description?: string,
+  ticketsUrl?: string,
+  title: string,
 }) => {
   /*…*/
 };
@@ -331,11 +324,10 @@ This allows us to also import React's **type definitions** which is necessary if
 
 ## TypeScript
 
-**TypeScript** has been created by Microsoft and is a so-called **typed superset** of JavaScript ****meaning that it cannot be directly executed in the browser but has to be compiled into "real" JavaScript first. Nevertheless, valid JavaScript is always valid **TypeScript**. **TypeScript** might look very similar to **Flow** at first glance, but differs in the sense that it offers a lot more functionality as its a superset of JS. **Flow** is only a typechecker. Before **ES2015** was formally introduced, a lot of functionality such as classes and imports were already readily available in **TypeScript**.
+**TypeScript** has been created by Microsoft and is a so-called **typed superset** of JavaScript meaning that it cannot be directly executed in the browser but has to be compiled into "real" JavaScript first. Nevertheless, valid JavaScript is always valid **TypeScript**. **TypeScript** might look very similar to **Flow** at first glance, but differs in the sense that it offers a lot more functionality as its a superset of JS. **Flow** is only a typechecker. Before **ES2015** was formally introduced, a lot of functionality such as classes and imports were already readily available in **TypeScript**.
 
 **TypeScript** has been gaining momentum and lots of popularity lately and can now be found in many React projects. While I certainly find **TypeScript** worth mentioning in this chapter, **TypeScript** alone could easily fill up a whole book by itself which is why I'd rather not go into more detail at this point.
 
-**TypeScript** files are easy to spot as they usually have the file ending of `.ts` or, if **TypeScript** is used in a React project,  `.tsx`.
+**TypeScript** files are easy to spot as they usually have the file ending of `.ts` or, if **TypeScript** is used in a React project, `.tsx`.
 
 With the release of **Babel 7**, the integration of **TypeScript** in projects has become much easier as one does not have to install the **TypeScript** compiler \(`tsc`\) anymore but can simply use a Babel plugin. This plugin is installed once you install the Babel Preset `@babel/preset-typescript`. If you are looking for more information on how to use **TypeScript** in your React projects, the official **TypeScript** documentation is a great place to start: [https://www.typescriptlang.org/docs](https://www.typescriptlang.org/docs).
-

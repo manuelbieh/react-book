@@ -1,6 +1,6 @@
 # Context API
 
-For a long time, the React **Context API** has been treated as somewhat of an afterthought. First only implemented as a prototype and treated experimentally, but later added to React in version **16.3**. 
+For a long time, the React **Context API** has been treated as somewhat of an afterthought. First only implemented as a prototype and treated experimentally, but later added to React in version **16.3**.
 
 The Context API has been designed to distribute data from a component to so-called data _consumers_ without explicitly passing props through the whole component tree. This is immensely useful for language settings as well as a global styling schema \("Theme"\).
 
@@ -56,7 +56,7 @@ const App = () => (
   <LanguageContext.Provider value="en">
     <header>Welcome!</header>
     <div className="content">
-      <div className="sidebar"></div>
+      <div className="sidebar" />
       <div className="mainContent">
         <DisplaySelectedLanguage />
       </div>
@@ -81,21 +81,21 @@ If we extend the example a little bit, we can easily add a little more component
 The following example contains an object with translations to which we pass a rather complex object with multiple data types \(consisting of an array, a string, a function to change the language as well as object with the original translations:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const translationStore = {
   de: {
-    greeting: "Guten Tag!",
-    headline: "Heute lernen wir, wie Context funktioniert.",
+    greeting: 'Guten Tag!',
+    headline: 'Heute lernen wir, wie Context funktioniert.',
   },
   en: {
-    greeting: "Good day!",
-    headline: "Today we learn how context works.",
+    greeting: 'Good day!',
+    headline: 'Today we learn how context works.',
   },
 };
 
-const defaultLanguage = "de";
+const defaultLanguage = 'de';
 
 const defaultLanguageContextValue = {
   availableLanguages: Object.keys(translationStore),
@@ -138,7 +138,7 @@ const Greeting = () => (
 
 const Headline = () => (
   <LanguageContext.Consumer>
-      {(contextValue) => contextValue.translations.headline}
+    {(contextValue) => contextValue.translations.headline}
   </LanguageContext.Consumer>
 );
 
@@ -163,20 +163,24 @@ const LanguageSelector = () => {
 const App = () => (
   <Localized>
     <LanguageSelector />
-    <p><Greeting /></p>
-    <p><Headline /></p>
+    <p>
+      <Greeting />
+    </p>
+    <p>
+      <Headline />
+    </p>
   </Localized>
 );
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 First of all, we define an object `defaultLanguageContextValue` which holds the default value of the newly generated context object. This consists of:
 
-* an object called `translationStore` which contains all available translations
-* a standard language - German in this case \(`de`\) which is saved to a property called `language`
-* an array named `availableLanguages` that lists all available languages of the `translationStore` object which we dynamically generate with `Object.keys()` - in our case: `["de", "en"]`
-* a placeholder function \(`changeLanguage()`\) which is later replaced with an actual implementation in the `Localized` component. This helps us to avoid the case of incorrectly calling a function which is not yet implemented. Otherwise the warning: _"Function changeLanguage\(\) isn't implemented"_.
+- an object called `translationStore` which contains all available translations
+- a standard language - German in this case \(`de`\) which is saved to a property called `language`
+- an array named `availableLanguages` that lists all available languages of the `translationStore` object which we dynamically generate with `Object.keys()` - in our case: `["de", "en"]`
+- a placeholder function \(`changeLanguage()`\) which is later replaced with an actual implementation in the `Localized` component. This helps us to avoid the case of incorrectly calling a function which is not yet implemented. Otherwise the warning: _"Function changeLanguage\(\) isn't implemented"_.
 
 The `changeLanguage()` function can only be implemented in the component itself as React cannot control the state \(in this case languages and their translations\) anywhere else other than **inside of a component.** We could save the current language settings inside of a global variable, however React would not re-render the component if something changed in this global variable as neither state nor props changed.
 
@@ -193,7 +197,7 @@ const Translated = ({ translationKey }) => (
   <LanguageContext.Consumer>
     {(contextValue) => contextValue.translations[translationKey]}
   </LanguageContext.Consumer>
-)
+);
 ```
 
 Our `App` component will now look like this:
@@ -202,8 +206,12 @@ Our `App` component will now look like this:
 const App = () => (
   <Localized>
     <LanguageSelector />
-    <p><Translated translationKey="greeting" /></p>
-    <p><Translated translationKey="headline" /></p>
+    <p>
+      <Translated translationKey="greeting" />
+    </p>
+    <p>
+      <Translated translationKey="headline" />
+    </p>
   </Localized>
 );
 ```
@@ -248,7 +256,7 @@ While using Class components, we can employ a trick which allows us to avoid bui
 
 In order to do this, we can use `contextType`: it can be assigned to a class component in the form of a static property. The context value can then be accessed within the component via `this.context`. The value of the `contextType` property is created by `React.createContext()` which you need to call beforehand.
 
-But be careful: It is only possible to assign **a single context type** to a class. If we want to access two or more contexts, we have to wrap the respective JSX in a consumer component. By using _Public Class Fields Syntax_ from ES2015+, it is sufficient to define a static class property `contextType` and assigning it a context. 
+But be careful: It is only possible to assign **a single context type** to a class. If we want to access two or more contexts, we have to wrap the respective JSX in a consumer component. By using _Public Class Fields Syntax_ from ES2015+, it is sufficient to define a static class property `contextType` and assigning it a context.
 
 If applied to our previous `Translated` component, the result would be:
 
@@ -281,7 +289,7 @@ The `contextType` would be defined outside of the component and no longer inside
 
 React massively optimizes **Context** under the hood in order to avoid unnecessary re-renders of components or avoid lengthy component hierarchies. Comparing the old value of the context provider with the new one, **consumer components** are only re-rendered if the value in the **Context Provider** has actually changed.
 
-While this sounds easy for a change, it does create a little gotcha which we need to look out for. It concerns the Consumer Provider which value is recreated on-the-fly if we use it within the `render()` method. Thus, it is recommended to create the value of the context outside of the `render()` method and pass a **reference**  to the value instead of a **newly created value**.
+While this sounds easy for a change, it does create a little gotcha which we need to look out for. It concerns the Consumer Provider which value is recreated on-the-fly if we use it within the `render()` method. Thus, it is recommended to create the value of the context outside of the `render()` method and pass a **reference** to the value instead of a **newly created value**.
 
 Here is an example which you should NOT recreate:
 
@@ -292,9 +300,11 @@ class App extends React.Component {
   };
 
   render() {
-    <Provider value={{color: this.state.color}}>
-      <MoreComponents />
-    </Provider>
+    return (
+      <Provider value={{ color: this.state.color }}>
+        <MoreComponents />
+      </Provider>
+    );
   }
 }
 ```
@@ -310,12 +320,13 @@ class App extends React.Component {
   };
 
   render() {
-    <Provider value={this.state}>
-      <MoreComponents />
-    </Provider>
+    return (
+      <Provider value={this.state}>
+        <MoreComponents />
+      </Provider>
+    );
   }
 }
 ```
 
-In this example, we are merely passing a _reference ****_to the `state` object of the component. As this remains intact during the re-renders of the component, it does not trigger a re-render if the content of the state did not change. 
-
+In this example, we are merely passing a _reference_ to the `state` object of the component. As this remains intact during the re-renders of the component, it does not trigger a re-render if the content of the state did not change.

@@ -1,6 +1,6 @@
 # Portals
 
-**Portals** allow us to render components in DOM nodes which are _outside ****_of the parent-node of the current component hierarchy but still have access to the current component environment. A common example \(but of course not the only one\) is an overlay which is rendered in its own `<div>` outside of the actual application.
+**Portals** allow us to render components in DOM nodes which are _outside_ of the parent-node of the current component hierarchy but still have access to the current component environment. A common example \(but of course not the only one\) is an overlay which is rendered in its own `<div>` outside of the actual application.
 
 The portal remains in the context of the component that has created it and thus has access to all data that is also available to the parent component such as its props and state. However, they are placed in entirely different locations in the rendered HTML compared to the rest of the application. Being able to access props and state is crucial for **Portals**, as they allow us to access common Context such as translations.
 
@@ -34,8 +34,8 @@ const App = () => {
     <div>
       <h1>Portals in React</h1>
     </div>
-  )
-}
+  );
+};
 
 ReactDOM.render(<App />, document.querySelector('#root'));
 ```
@@ -64,7 +64,7 @@ const PortalExample = () => {
     <div>Portal says Hello</div>,
     document.querySelector('#portal')
   );
-}
+};
 ```
 
 Here, we can see the `createPortal()` method in action: first, we indicate which type of JSX should be rendered and second, we pass in the type of container where the JSX should be rendered into. Let's place this `PortalExample` component into our App:
@@ -79,8 +79,8 @@ const App = () => {
       <h1>Portals in React</h1>
       <PortalExample />
     </div>
-  )
-}
+  );
+};
 
 ReactDOM.render(<App />, document.querySelector('#root'));
 ```
@@ -113,25 +113,25 @@ During the time in which the value of the state changes from `false` to `true`, 
 In code form, we are left with the following example:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 const ModalPortal = (props) => {
   return ReactDOM.createPortal(
     <div
       style={{
-        background: "rgba(0,0,0,0.7)",
-        height: "100vh",
+        background: 'rgba(0,0,0,0.7)',
+        height: '100vh',
         left: 0,
-        position: "fixed",
+        position: 'fixed',
         top: 0,
-        width: "100vw",
+        width: '100vw',
       }}
     >
-      <div style={{ background: "white", margin: 16, padding: 16 }}>
+      <div style={{ background: 'white', margin: 16, padding: 16 }}>
         {props.children}
       </div>
     </div>,
-    document.getElementById("portal")
+    document.getElementById('portal')
   );
 };
 class App extends React.Component {
@@ -164,4 +164,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 We need to pay special attention to the `this.closeModal()` method. Even though this method is defined in the `App` component, it is called within the `ModalPortal` component in the context of the `App` component once a user has clicked on the button "Close Modal".
 
-This method can also alter the state of component via `modalIsOpen` even though the component is not placed within `<div id="root">` as the rest of the components. Portals allow us to do this as the content is placed within the same component tree  **within React**. The **resulting HTML** however, is different and the code is placed in `<div>` different from the rest of the application.
+This method can also alter the state of component via `modalIsOpen` even though the component is not placed within `<div id="root">` as the rest of the components. Portals allow us to do this as the content is placed within the same component tree **within React**. The **resulting HTML** however, is different and the code is placed in `<div>` different from the rest of the application.

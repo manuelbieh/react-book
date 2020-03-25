@@ -1,14 +1,14 @@
 # Error Boundaries
 
- phase of a component when React compares the current component tree with its previous version and just before the changes are committed to the DOM.Whenever an error occurs and an exception is thrown in a React application, there is the strong possibility that the application display no longer works and that the user will only see a blank page. In order to avoid this behavior, React introduced so-called **Error Boundaries** in version 16.0.
+phase of a component when React compares the current component tree with its previous version and just before the changes are committed to the DOM.Whenever an error occurs and an exception is thrown in a React application, there is the strong possibility that the application display no longer works and that the user will only see a blank page. In order to avoid this behavior, React introduced so-called **Error Boundaries** in version 16.0.
 
 An **Error Boundary** describes a component which can catch certain errors **in its children** and can also render an alternative component tree to protect users from experiencing a blank page. They always serve as a parent component of a component tree. If an exception is thrown in this component tree, the Error Boundary can interject and handle the error. You can think of error boundaries as a special form of a `try / catch` block for component hierarchies.
 
 They can deal with mistakes that result from the handling of the following situations:
 
-* Errors in **lifecycle methods**
-* Errors in the `render()` method anywhere **inside** the Error Boundary
-* Errors in the `constructor()` of a component
+- Errors in **lifecycle methods**
+- Errors in the `render()` method anywhere **inside** the Error Boundary
+- Errors in the `constructor()` of a component
 
 If React encounters an error in a lifecycle method, a `render()` method or in the constructor of a component, the Error Boundary can safely mitigate it. It can display a fallback that can prompt the user to restart their application or inform them that something has went wrong. Similar to Context components, Error Boundaries can be nested inside each other. If an error occurs, the implementation of the higher Error Boundary component takes precedence.
 
@@ -18,10 +18,10 @@ If React encounters an error in a lifecycle method, a `render()` method or in th
 
 There are certain situations in which Error Boundaries would not take effect:
 
-* in event handlers
-* in asynchronous code \(like `setTimeOut()` or `requestAnimationFrame()`\)
-* in server-side rendered components \(SSR\)
-* in errors which occur in the **Error Boundary** itself
+- in event handlers
+- in asynchronous code \(like `setTimeOut()` or `requestAnimationFrame()`\)
+- in server-side rendered components \(SSR\)
+- in errors which occur in the **Error Boundary** itself
 
 **Error Boundaries** will not work in these situations as it is either not necessary or not possible for them to deal with the problem at hand. If an event-handler throws an error, this might not necessarily impact its render and React can continue to show a working interface to the user. The only repercussion would be the missing interaction based on said event.
 
@@ -58,7 +58,7 @@ class ErrorBoundary extends React.Component {
       return <h1>An error has occured.</h1>;
     }
 
-    return this.props.children; 
+    return this.props.children;
   }
 }
 ```
@@ -71,11 +71,11 @@ In the above example we have set up state with a property of `hasError` and its 
 
 Next, let us look at the static `getDerivedStateFromError()` method. Using this method, React is informed that the component in use is supposed to act as an **Error Boundary** and should come into effect if an error occurs in its children. The method itself is passed an `error` object which is the same as the object which is also passed to the `catch` block of the `try / catch` statement.
 
-`getDerivedStateFromError()` works very similar to the `getDerivedStateFromProps()` method we have already encountered in the chapter on lifecycle methods. It can return a new object and thus create new state or leave all as is by returning `null`. In the above example, we have set the `hasError` property to `true` and also save the `error` object in our state. As the method itself is static though, it cannot access other methods in the component. 
+`getDerivedStateFromError()` works very similar to the `getDerivedStateFromProps()` method we have already encountered in the chapter on lifecycle methods. It can return a new object and thus create new state or leave all as is by returning `null`. In the above example, we have set the `hasError` property to `true` and also save the `error` object in our state. As the method itself is static though, it cannot access other methods in the component.
 
 This method is called during the `render()`
 
-The `componentDidCatch()` method has also been implemented. It receives an error object as its first parameter and React-specific info as its second. This info contains the _"Component Stack"_ - crucial information which allows us to trace in which components we have encountered errors and more specifically how which children and children of children were involved. It will display the component tree up until an error will occur. If you want to use an external service to log these errors, this method is a good place to deal with side effects. `componentDidCatch()` is run during the _Commit ****_phase meaning just after React has displayed changes from state in the DOM.
+The `componentDidCatch()` method has also been implemented. It receives an error object as its first parameter and React-specific info as its second. This info contains the _"Component Stack"_ - crucial information which allows us to trace in which components we have encountered errors and more specifically how which children and children of children were involved. It will display the component tree up until an error will occur. If you want to use an external service to log these errors, this method is a good place to deal with side effects. `componentDidCatch()` is run during the _Commit_ phase meaning just after React has displayed changes from state in the DOM.
 
 As `componentDidCatch()` is not a static method, it would be entirely possible to modify its state via `this.setState()`. However, the React Team plans to prohibit this usage in the future which is why I do not recommend it at this state. It is safer to use the static `getDerivedStateFromError()` method instead to create a new state and react to errors once they have occurred.
 
@@ -99,7 +99,7 @@ const App = () => {
         <WeatherWidget />
       </ServiceUnavailableBoundary>
     </ErrorBoundary>
-  )
+  );
 };
 
 ReactDOM.render(<App />, document.querySelector('#root'));
@@ -107,7 +107,7 @@ ReactDOM.render(<App />, document.querySelector('#root'));
 
 Two **Error Boundaries** are used in the above example: `ErrorBoundary` and `ServiceUnavailableBoundary`. While the outer boundary will catch errors that might occur in the `ApplicationLogic` component, the `ServiceUnavailableBoundary` could catch errors in the weather widget and display a more granular error message like _"the service requested cannot be reached at the moment. Please try again later"_.
 
-If the `WeatherWidget` component throws an error, the `ServiceUnavailableBoundary` will catch it and everything that is currently used in the `ApplicationLogic` component will remain intact.  If we didn't include the `WeatherWidget` in its own **Error Boundary**, the outer **Error Boundary** would be used instead and the `ApplicationLogic` component would not be shown.
+If the `WeatherWidget` component throws an error, the `ServiceUnavailableBoundary` will catch it and everything that is currently used in the `ApplicationLogic` component will remain intact. If we didn't include the `WeatherWidget` in its own **Error Boundary**, the outer **Error Boundary** would be used instead and the `ApplicationLogic` component would not be shown.
 
 Generally, it is good practice to have at least one **Error Boundary** as high up as possible in the component hierarchy. This will catch most unexpected errors like a `500 Internal Server Error` page would do and can also log them. If needed, further **Error Boundaries** should be added to encompass useful logic in further component trees. This depends entirely on how error prone a specific area of the tree is \(due to unknown or changing data\) or if a specific area of the tree has been neglected.
 
@@ -116,4 +116,3 @@ Since React version 16, components will be "unmounted" and removed from the tree
 
 In order to deal with these errors and risks properly, **Error Boundaries** were introduced. They allow developers to inform users that the application is currently in an erroneous state. As errors and mistakes can never be fully avoided in an application, using **Error Boundaries** is highly recommended.
 {% endhint %}
-

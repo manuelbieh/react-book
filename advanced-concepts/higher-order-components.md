@@ -6,17 +6,17 @@ Let us look at an example to illustrate this concept better:
 
 ```jsx
 const withFormatting = (WrappedComponent) => {
-    return class extends React.Component {
-        bold = (string) => {
-            return <strong>{string}</strong>
-        }
-        italic = (string) => {
-            return <em>{string}</em>
-        }
-        render() {
-            return <WrappedComponent bold={this.bold} italic={this.italic} />
-        }
+  return class extends React.Component {
+    bold = (string) => {
+      return <strong>{string}</strong>;
+    };
+    italic = (string) => {
+      return <em>{string}</em>;
+    };
+    render() {
+      return <WrappedComponent bold={this.bold} italic={this.italic} />;
     }
+  };
 };
 ```
 
@@ -43,7 +43,7 @@ const withCryptoPrices = (WrappedComponent) => {
   return class extends React.Component {
     state = {
       isLoading: true,
-      items: []
+      items: [],
     };
 
     componentDidMount() {
@@ -63,7 +63,7 @@ const withCryptoPrices = (WrappedComponent) => {
 
         this.setState(() => ({
           isLoading: false,
-          items: this.convertResponseToArray(cryptoTickerResponse)
+          items: this.convertResponseToArray(cryptoTickerResponse),
         }));
       } catch (err) {
         this.setState(() => ({
@@ -110,7 +110,7 @@ const PriceTable = ({ isLoading, items, loadData }) => {
 
   return (
     <table>
-      {items.map(item => (
+      {items.map((item) => (
         <tr key={item.id}>
           <td>
             {item.name} ({item.symbol})
@@ -138,21 +138,18 @@ But how do we combine these two components now? We can simply pass the `PriceTab
 const CryptoPriceTable = withCryptoPrices(PriceTable);
 ```
 
-Whenever an instance of the `CryptoPRiceTablke` is rendered, the **Higher Order Component** will trigger an API request in the `componentDidMount()` lifecycle method and pass its result to the `PriceTable` component. The `PriceTable`  then only needs to concern itself with the display of the data:
+Whenever an instance of the `CryptoPRiceTablke` is rendered, the **Higher Order Component** will trigger an API request in the `componentDidMount()` lifecycle method and pass its result to the `PriceTable` component. The `PriceTable` then only needs to concern itself with the display of the data:
 
 ```jsx
-ReactDOM.render(
-  <CryptoPriceTable />, 
-  document.getElementById("root")
-);
+ReactDOM.render(<CryptoPriceTable />, document.getElementById('root'));
 ```
 
-This opens up a number of opportunities for us. First of all, both components are able to be independently tested. I will provide a bit more information in a later chapter about how exactly we can test layout component with snapshot testing. 
+This opens up a number of opportunities for us. First of all, both components are able to be independently tested. I will provide a bit more information in a later chapter about how exactly we can test layout component with snapshot testing.
 
 We also have the opportunity to combine other layout components with the `withCryptoPrices` HOC. To illustrate this, we are going to display the prices in CSV format. Our HOC will remain the same whereas the layout component can be implemented as such:
 
 ```jsx
-const PriceCSV = ({ isLoading, items, loadData, separator=";" }) => {
+const PriceCSV = ({ isLoading, items, loadData, separator = ';' }) => {
   if (isLoading) {
     return <p>Prices are loaded, please wait.</p>;
   }
@@ -173,7 +170,7 @@ const PriceCSV = ({ isLoading, items, loadData, separator=";" }) => {
       )}
     </pre>
   );
-}
+};
 ```
 
 And just like that we have implemented our very first own CSV Layout component. We check again whether the data is being loaded, then whether `items` are present. This could also be extracted into another HOC component as HOCs can be nested as many times as you like. In the end, they are all just functions which are passed as parameters to yet another function.
@@ -185,10 +182,7 @@ In contrast to the `PriceTable` component, we have introduced another optional p
 ```jsx
 const CryptoCSV = withCryptoPrices(PriceCSV);
 
-ReactDOM.render(
-  <CryptoCSV separator="," />, 
-  document.getElementById("root")
-);
+ReactDOM.render(<CryptoCSV separator="," />, document.getElementById('root'));
 ```
 
 However, by introducing this change in the CSV component, another change needs to made in the `withCryptoPrices` HOC. So far only the `isLoading`, `items` and `loadData` props are passed to the child component \(`WrappedComponent`\):
@@ -223,4 +217,3 @@ return (
 
 **Higher Order Components** are still widely used and there's nothing controversial about their usage. However, newer concepts to achieve same or similar objects objectives have been introduced of which many increase readability. Two of these are **Functions as a Child** and the newer **Context API**, which has been introduced in React in Version 16.3.0. Both of these will be explained in the next two chapters.
 {% endhint %}
-

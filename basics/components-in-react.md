@@ -14,7 +14,7 @@ The simplest way to define a React component is in the way of a **function compo
 
 ```jsx
 function Hello(props) {
-  return <div>Hello {props.name}</div>
+  return <div>Hello {props.name}</div>;
 }
 ```
 
@@ -27,12 +27,12 @@ The second method of defining a **React component** has already been shown to yo
 ```jsx
 class Hello extends React.Component {
   render() {
-    return <div>Hello {this.props.name}</div>
+    return <div>Hello {this.props.name}</div>;
   }
 }
 ```
 
-There is one big pitfall to look out for: **Function components** take in their **props** as function arguments. **Class components** on the other hand cannot take in arguments and can only access its **props** via the instance method `this.props`. 
+There is one big pitfall to look out for: **Function components** take in their **props** as function arguments. **Class components** on the other hand cannot take in arguments and can only access its **props** via the instance method `this.props`.
 
 Both of these components will render the exact same result!
 
@@ -81,7 +81,8 @@ The same applies to Objects and Arrays:
 ```jsx
 <MyComponent
   logConfig={{ logLevel: 'info' }}
-  logEntries={['Message 1', 'Message 2']} />  
+  logEntries={['Message 1', 'Message 2']}
+/>
 ```
 
 This would also trigger a re-render as the `logConfig` object or array would be replaced with each new render.
@@ -101,8 +102,8 @@ Using `React.memo()`, the **function component** works similarly to the **class 
 Curious already? Play around with the demo to deepen your understanding:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 class ClassComponent extends React.Component {
   render() {
@@ -152,7 +153,7 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 The `App` Component triggers a re-render every 0.2 seconds without new **props** being passed. The question of all questions is: Which components are being re-rendered and which are not?
@@ -189,15 +190,15 @@ ReactDOM.render(<MyApp />, document.getElementById('app'));
 </div>
 ```
 
-Important: ****A component can only ever return _one_ **root element**. This can either be:
+Important: A component can only ever return _one_ **root element**. This can either be:
 
-* a single React element:
+- a single React element:
 
 ```jsx
 <Hello name="Manuel />
 ```
 
-* in nested form - as long as only a single element is on the outer layer:
+- in nested form - as long as only a single element is on the outer layer:
 
 ```jsx
 <Parent>
@@ -205,44 +206,41 @@ Important: ****A component can only ever return _one_ **root element**. This can
 </Parent>
 ```
 
-* a DOM element - which in turn can also be nested and include other elements:
+- a DOM element - which in turn can also be nested and include other elements:
 
 ```jsx
 <div>…</div>
 ```
 
-* ... or it can be self--closing:
+- ... or it can be self--closing:
 
 ```jsx
 <img src="logo.jpg" alt="Bild: Logo" />
 ```
 
-* or simply:
+- or simply:
 
 ```javascript
-null
+null;
 ```
 
 ... however **never** `undefined`.
 
 Since **React 16.0.0** we are also allowed to return:
 
-* an array which contains valid return values:
+- an array which contains valid return values:
 
 ```jsx
-[
-  <div key="1">Hello</div>, 
-  <Hello key="2" name="Manuel" />
-]
+[<div key="1">Hello</div>, <Hello key="2" name="Manuel" />];
 ```
 
-* a simple string
+- a simple string
 
 ```javascript
-'Hello Welt'
+'Hello Welt';
 ```
 
-* or a so-called "Fragment" - a special "component" which does not appear in the rendered output and can act as a container if one otherwise violated the rule of only ever returning one root element:
+- or a so-called "Fragment" - a special "component" which does not appear in the rendered output and can act as a container if one otherwise violated the rule of only ever returning one root element:
 
 ```jsx
 <React.Fragment>
@@ -276,19 +274,27 @@ function Header() {
         <img src="logo.jpg" alt="Image: Logo" />
       </div>
       <ul className="navigation">
-        <li><a href="/">Homepage</a></li>
-        <li><a href="/team">Team</a></li>
-        <li><a href="/services">Services</a></li>
-        <li><a href="/contact">Contact</a></li>
+        <li>
+          <a href="/">Homepage</a>
+        </li>
+        <li>
+          <a href="/team">Team</a>
+        </li>
+        <li>
+          <a href="/services">Services</a>
+        </li>
+        <li>
+          <a href="/contact">Contact</a>
+        </li>
       </ul>
       <div className="searchbar">
-          <form method="post" action="/search">
-            <p>
-              <label htmlFor="q">Search:</label>
-              <input type="text" id="q" name="q" />
-            </p>
-            <input type="submit" value="Suchen" />
-          </form>
+        <form method="post" action="/search">
+          <p>
+            <label htmlFor="q">Search:</label>
+            <input type="text" id="q" name="q" />
+          </p>
+          <input type="submit" value="Suchen" />
+        </form>
       </div>
     </header>
   );
@@ -297,7 +303,7 @@ function Header() {
 
 We have just learned that React components can easily be composed of smaller other React components. This way of breaking up components is highly encouraged in React. So what could we do with the above code snippet to make it easier for ourselves? That's right: we can break up our relatively big component into multiple smaller ones which all only do one thing and do it well.
 
-First, the logo can easily be used elsewhere on the page which is a totally valid assumption. Second, the navigation might not only appear in the header but might also be included in the sitemap. Last, the search bar might eventually not only be used in the header but also on its own dedicated search results page. 
+First, the logo can easily be used elsewhere on the page which is a totally valid assumption. Second, the navigation might not only appear in the header but might also be included in the sitemap. Last, the search bar might eventually not only be used in the header but also on its own dedicated search results page.
 
 Transferring this approach to our code, we achieve the following result:
 
@@ -313,10 +319,18 @@ function Logo() {
 function Navigation() {
   return (
     <ul className="navigation">
-      <li><a href="/">Homepage</a></li>
-      <li><a href="/team">Team</a></li>
-      <li><a href="/services">Services</a></li>
-      <li><a href="/contact">Contact</a></li>
+      <li>
+        <a href="/">Homepage</a>
+      </li>
+      <li>
+        <a href="/team">Team</a>
+      </li>
+      <li>
+        <a href="/services">Services</a>
+      </li>
+      <li>
+        <a href="/contact">Contact</a>
+      </li>
     </ul>
   );
 }
@@ -350,7 +364,7 @@ Even if the code has become longer, we have created a number of improvements.
 
 ### Simpler collaboration
 
-All components can and should be saved in their own files so other team members or even complete teams can own one or multiple components. This will spread ownership across teams and make responsibilities clearer. Moreover, it reduces the risk of accidentally overwriting a colleague's file or to continually deal with merge conflicts in Git. Teams become _consumers_ ****of other teams' components which offer a simple interface of their component with possible props.
+All components can and should be saved in their own files so other team members or even complete teams can own one or multiple components. This will spread ownership across teams and make responsibilities clearer. Moreover, it reduces the risk of accidentally overwriting a colleague's file or to continually deal with merge conflicts in Git. Teams become _consumers_ of other teams' components which offer a simple interface of their component with possible props.
 
 ### Single responsibility principle
 
@@ -364,7 +378,7 @@ Last but not least, we have also increased the reusability of our components. If
 
 I have talked about **props** lot already in the book. I think it is about time to reveal the secret and explain what they are.
 
-**Props** enable components to receive any form of data and access it within the **component**. Let us think back to our **function component**. We passed the **props** to our function as a regular argument. **Class components** work in a similar fashion with the difference that the **props** are passed to the component via the class **constructor**. They are only available to it via `this.props` as opposed to a plain function argument as was the case with the function component.  React takes care of this all in the parsing stage of the `createElement()` calls.
+**Props** enable components to receive any form of data and access it within the **component**. Let us think back to our **function component**. We passed the **props** to our function as a regular argument. **Class components** work in a similar fashion with the difference that the **props** are passed to the component via the class **constructor**. They are only available to it via `this.props` as opposed to a plain function argument as was the case with the function component. React takes care of this all in the parsing stage of the `createElement()` calls.
 
 But remember: Whenever a component receives new **props** from the outside, it triggers a re-render of the component! We can explicitly prevent this from happening by using the `shouldComponentUpdate()` **lifecycle method**. We are going to look at **lifecycle methods and state** in the following chapter. For now just keep in mind that if a **component** receives **props** from the outside it will cause the **component** as well as its children to re-render.
 
@@ -380,13 +394,13 @@ Why is this important though? React follows this principle of **pure functions**
 
 ### Pure functions in detail
 
-As **pure functions** form a fundamental principle of ****React, I would like to explain it a little more with the help of some examples. Much of this will sound more theoretical and complex than it will actually be once its used in practice. However, I'd still like to explain them to increase your understanding.
+As **pure functions** form a fundamental principle of React, I would like to explain it a little more with the help of some examples. Much of this will sound more theoretical and complex than it will actually be once its used in practice. However, I'd still like to explain them to increase your understanding.
 
 **Example for a "pure function"**
 
 ```javascript
 function pureDouble(number) {
-  return number * 2; 
+  return number * 2;
 }
 ```
 
@@ -400,7 +414,7 @@ function impureCalculation(number) {
 }
 ```
 
-This second function is no longer _pure ****_ ****as it will not reliably return the same output every time, even if its input is identical to the one before. At the moment, my browser's window size is 1920 pixels wide. If am calling this function with the value `10` as the argument, I will get back `1930` \(`10 + 1920`\). If the window size is decreased to 1280 pixels though and the function is called again with the same argument of `10`  I will receive a different result \(`1290`\). Hence, this is not a **pure function**.
+This second function is no longer _pure_ as it will not reliably return the same output every time, even if its input is identical to the one before. At the moment, my browser's window size is 1920 pixels wide. If am calling this function with the value `10` as the argument, I will get back `1930` \(`10 + 1920`\). If the window size is decreased to 1280 pixels though and the function is called again with the same argument of `10` I will receive a different result \(`1290`\). Hence, this is not a **pure function**.
 
 It is possible to change this function into a "pure" function by passing the window width as another argument:
 
@@ -410,12 +424,12 @@ function pureCalculation(number, outerWidth) {
 }
 ```
 
-The function is still dependent on my window width, however by calling `pureCalculation(10, window.outerWidth)` the result will be "pure" as  if the same input is passed, the same output is generated each and every time. This will become easier to understand once the function is reduced to its fundamental properties:
+The function is still dependent on my window width, however by calling `pureCalculation(10, window.outerWidth)` the result will be "pure" as if the same input is passed, the same output is generated each and every time. This will become easier to understand once the function is reduced to its fundamental properties:
 
 ```javascript
 function pureSum(number1, number2) {
   return number1 + number2;
-};
+}
 ```
 
 **Same Input, same output.**
@@ -425,7 +439,7 @@ function pureSum(number1, number2) {
 Assume that we want to implement a function that receives an object with parameters as its input:
 
 ```javascript
-var car = {speed: 0, seats: 5};
+var car = { speed: 0, seats: 5 };
 function accelerate(car) {
   car.speed += 1;
   return car;
@@ -435,31 +449,31 @@ function accelerate(car) {
 This function is also impure as it modifies its entry value. During the second function call, we already work with a totally different value compared to the previous call.
 
 ```javascript
-console.log(accelerate(car)) 
+console.log(accelerate(car));
 // {speed: 1, seats: 5}
 
-console.log(accelerate(car)) 
+console.log(accelerate(car));
 // {speed: 2, seats: 5}
 ```
 
 How do we transform our example into a "pure" function? By ensuring that our values are not modified and creating a new object based off the entry value which is returned by the function:
 
 ```javascript
-var car = {speed: 0};
+var car = { speed: 0 };
 function accelerate(car) {
   return {
     speed: car.speed + 1,
-  }
+  };
 }
 ```
 
 **New result:**
 
 ```javascript
-console.log(accelerate(car)) 
+console.log(accelerate(car));
 // {speed: 1}
 
-console.log(accelerate(car)) 
+console.log(accelerate(car));
 // {speed: 1}
 ```
 
@@ -471,9 +485,9 @@ React is an extremely liberal library: It does not enforce much and leaves a lot
 
 If you do not pay attention and ignore this guideline, React might behave strangely and we might have to deal with unexpected and undesirable side effects. And trust me, you do not want to deal with such bug fixes. I mean, the desire to develop professional interfaces in a short amount of time is what led you to pick up this book in the first place. You wanted to learn about a tool that can facilitate that, and React can do that, as long as you abide by this one rule.
 
-At the same time though, this principle has a nice side effect. By embracing "pure functions"  React components are easier to test.
+At the same time though, this principle has a nice side effect. By embracing "pure functions" React components are easier to test.
 
-That's nice and all that, but what exactly does "read-only inside of a component" mean? After studying "pure functions", this is explained quickly. It does not matter how our `props` are accessed — if it is via the `props` argument in  a **function component**, via the `constructor()` in a **class component** or at any other point in a **class component** via `this.props`. The most important thing to remember is this: I do not want to and also should not under any circumstances change the value of the **props** I pass in.
+That's nice and all that, but what exactly does "read-only inside of a component" mean? After studying "pure functions", this is explained quickly. It does not matter how our `props` are accessed — if it is via the `props` argument in a **function component**, via the `constructor()` in a **class component** or at any other point in a **class component** via `this.props`. The most important thing to remember is this: I do not want to and also should not under any circumstances change the value of the **props** I pass in.
 
 Outside of the component, it is an entirely different story. We can change values as we please \(provided that we do not use another component to change our current component's props which just had these passed in\).
 
@@ -484,7 +498,9 @@ function Example(props) {
   props.number = props.number + 1;
   props.fullName = [props.firstName, props.lastName].join(' ');
   return (
-    <div>({props.number}) {props.fullName} </div>
+    <div>
+      ({props.number}) {props.fullName}{' '}
+    </div>
   );
 }
 
@@ -497,7 +513,7 @@ ReactDOM.render(
 **Result:**
 
 {% hint style="danger" %}
- TypeError: Cannot add property number, object is not extensible
+TypeError: Cannot add property number, object is not extensible
 {% endhint %}
 
 I try to directly access and change the `number` and `fullName` props inside of my example component. But of course, this does not work as we have just learned that props are always **read-only**.
@@ -514,7 +530,9 @@ var ReactDOM = require('react-dom');
 
 function Example(props) {
   return (
-    <div>({props.number + 1}) {[props.firstName, props.lastName].join(' ')}</div>
+    <div>
+      ({props.number + 1}) {[props.firstName, props.lastName].join(' ')}
+    </div>
   );
 }
 
@@ -534,7 +552,7 @@ In this case, only the output based on the `props` was modified but not the prop
 
 **This is also possible**
 
-But how can we actually change props outside of a component? So far, we have only talked about how components should not be changed _within ****_the component.
+But how can we actually change props outside of a component? So far, we have only talked about how components should not be changed _within_ the component.
 
 It is best to explain this with yet another example, even if it is a little abstract in this case:
 
@@ -549,7 +567,7 @@ setInterval(function () {
 }, 2000);
 
 const App = (props) => {
-  return <div>{props.renderCounter}</div>
+  return <div>{props.renderCounter}</div>;
 };
 
 function renderApp() {
@@ -580,7 +598,7 @@ it will give us this result:
 
 It does not matter how many times the component was actually rendered, the result will be the same. **Same input, same output.**
 
-Inside of the function, we keep embracing "purity". We do not modify the entry value and we do not have any direct external dependencies to the outside which could influence our rendering. The value itself is only changed outside of the component and passed into the component as a new value. We do not actually need to go into much more detail at this point. The only thing that matters is that our component will render the same output given the same inputs. As you can see above, this is true in this case. We do not need to concern ourselves who changes props outside of the component, how often this happens or in which form as long as we do **not** change the props _inside ****_of the component. So far so good.
+Inside of the function, we keep embracing "purity". We do not modify the entry value and we do not have any direct external dependencies to the outside which could influence our rendering. The value itself is only changed outside of the component and passed into the component as a new value. We do not actually need to go into much more detail at this point. The only thing that matters is that our component will render the same output given the same inputs. As you can see above, this is true in this case. We do not need to concern ourselves who changes props outside of the component, how often this happens or in which form as long as we do **not** change the props _inside_ of the component. So far so good.
 
 **Props are an abstracted function argument**
 
@@ -621,7 +639,7 @@ function User(props) {
       <UserImage image={props.image} />
       <ListOfPosts items={props.posts} />
     </div>
-  )
+  );
 }
 
 ReactDOM.render(
@@ -635,11 +653,10 @@ ReactDOM.render(
 {% hint style="info" %}
 Components have to act as **Pure Functions** and return the same result if the same props were passed.
 
-* Props inside a component should be treated as **read-only**
-* Components can receive an **arbitrary number of props**
-* In JSX props are passed similarly to how data is passed in HTML attributes
-* In contrast to HTML, JSX allows for multiple forms of values. If the values are not of type string, they will be surrounded by **curly braces**
-* Props can take in any **JavaScript expressions** as their value
-* Once received, props can be passed down as many levels as required
-{% endhint %}
-
+- Props inside a component should be treated as **read-only**
+- Components can receive an **arbitrary number of props**
+- In JSX props are passed similarly to how data is passed in HTML attributes
+- In contrast to HTML, JSX allows for multiple forms of values. If the values are not of type string, they will be surrounded by **curly braces**
+- Props can take in any **JavaScript expressions** as their value
+- Once received, props can be passed down as many levels as required
+  {% endhint %}

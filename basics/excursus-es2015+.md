@@ -5,7 +5,7 @@
 **ES2015** is a modern, up-to-date version of JavaScript with lots of new functionality and syntax. **ES2015** is the successor to **ECMAScript** version 5 \(or **ES5**\) and is thus often referred to as **ES6** in many articles and blogs. So if you come across **ES6** anywhere in an article or elsewhere, you know now that it applies to **ES2015**. In most of the book, I will refer to **ES2015+** which means any changes in the JavaScript language since 2015. This includes ES2016 \(ES7\), ES2017 \(ES8\), ES2018 \(ES9\).
 
 {% hint style="info" %}
-The **ES** in **ES2015** and **ES6** stands for **ECMAScript**. The organization ECMA International is responsible for the standardization of the **ECMA-262** specification. Since 2015, a new specification has been published each year. Historically, they attributed each version with an increasing number, however to increase clarity and understanding the versions now include the year in which they were published. This way, **ES6** becomes **ES2015**, **ES7** is **ES2016** and so on. 
+The **ES** in **ES2015** and **ES6** stands for **ECMAScript**. The organization ECMA International is responsible for the standardization of the **ECMA-262** specification. Since 2015, a new specification has been published each year. Historically, they attributed each version with an increasing number, however to increase clarity and understanding the versions now include the year in which they were published. This way, **ES6** becomes **ES2015**, **ES7** is **ES2016** and so on.
 {% endhint %}
 
 People that work with React most definitely also use **Babel** as their **transpiler** to change **JSX** into its respective `createElement()`, but this is not the only thing **Babel** can do. Previously named **6to5**, it did exactly what its name suggests: transpile **ES6** syntax JavaScript into **ES5**. This unlocks the ability to use newer, or soon-to-be-supported, features and syntax extensions today whilst still supporting older browsers that do not natively support these features.
@@ -18,11 +18,11 @@ In this chapter I want to show and explain the most important and useful functio
 
 For a long while, one could only use `var` to declare a variable in JavaScript. Since 2015 however, JavaScript has gained two new keywords which we can use to declare variables: `let` and `const`. Using `var` for variable declarations has become somewhat superfluous and in almost all cases `let` and `const` are the better choices. But what's the difference?
 
-As opposed to `var`, the new variable declarations, `let` and  `const`, only exist **inside of the scope in which they were defined**. These scopes can be a function, as was the case with `var`, but it can also be a loop or an `if` statement.
+As opposed to `var`, the new variable declarations, `let` and `const`, only exist **inside of the scope in which they were defined**. These scopes can be a function, as was the case with `var`, but it can also be a loop or an `if` statement.
 
 **Tip:** Whenever you find an open curly bracket in your code, you are opening a new scope. Similarly, a closing curly bracket closes the scope again. Using these new variable declarations, we have encapsulated our variables to a greater degree and limited their usage which is usually considered a good thing.
 
-On the one hand, if you want to override the value of a variable \(e.g. in a loop\), you have to use `let` to achieve this. On the other hand, if the reference of the variable should stay the same, i.e. constant, one should use `const.` 
+On the one hand, if you want to override the value of a variable \(e.g. in a loop\), you have to use `let` to achieve this. On the other hand, if the reference of the variable should stay the same, i.e. constant, one should use `const.`
 
 But be careful: As opposed to other languages, `const` does not disable every mutation on the variable. If you have declared an object or an array with `const`, the actual content of the variable can still be changed. The reference of the variable however is fixed and cannot be changed anymore.
 
@@ -41,7 +41,7 @@ console.log(i);
 10
 {% endhint %}
 
- An now let us look at the same example with `let`
+An now let us look at the same example with `let`
 
 ```
 for (let j = 0; j < 10; j++) { }
@@ -104,7 +104,7 @@ console.log(myObject);
 `{a: 1, b: 2}`
 {% endhint %}
 
-In this instance, we do not encounter any problems as we are changing the object itself but not the reference to `myObject`. Arrays, similarly, follow the same rules. The elements in the array can be changed, but the value of the variable cannot. 
+In this instance, we do not encounter any problems as we are changing the object itself but not the reference to `myObject`. Arrays, similarly, follow the same rules. The elements in the array can be changed, but the value of the variable cannot.
 
 **Allowed:**
 
@@ -148,7 +148,7 @@ function(arg1, arg2) {}
 (arg1, arg2) => {}
 ```
 
-If we only pass one parameter into the function, even the parentheses for the arguments is optional. Our pre-ES2015 function: 
+If we only pass one parameter into the function, even the parentheses for the arguments is optional. Our pre-ES2015 function:
 
 ```
 function(arg) {}
@@ -211,7 +211,7 @@ function TimeButton() {
 
 `self` becomes superfluous in this example. This example is entirely valid as well, however also not very elegant.
 
-Let us look at an example using **arrow functions** which inherit `this` from their **parent scope**, in this case from the `TimeButton`. 
+Let us look at an example using **arrow functions** which inherit `this` from their **parent scope**, in this case from the `TimeButton`.
 
 ```
 function TimeButton() {
@@ -225,13 +225,13 @@ function TimeButton() {
 }
 ```
 
-And just like that we gained access to the outer `this` in the **event listener**. 
+And just like that we gained access to the outer `this` in the **event listener**.
 
 Gone are the days of `var self = this` and `.bind(this)`. We can pretend we are still using the scope of the `TimeButton` scope even though the code is being written inside the **event listener**. This is especially useful for working with complex React components that contain many class properties and methods themselves. It avoids confusion as new scopes are not being opened every time.
 
 ## New String, Array and Object methods
 
-With the introduction of ES2015, a lot of static and prototype methods were added to JavaScript. Even if many of these are not directly relevant for React they still prove very powerful which is why I will explain these in  bit more detail.
+With the introduction of ES2015, a lot of static and prototype methods were added to JavaScript. Even if many of these are not directly relevant for React they still prove very powerful which is why I will explain these in bit more detail.
 
 ### String methods
 
@@ -287,7 +287,7 @@ Array.of(1, 2, 3); // [1, 2 ,3]
 Array.from('Example'); // ['E', 'x', 'a', 'm', 'p', 'l', 'e']
 ```
 
-`Array.of()` creates a new array instance from any given number of parameters. It does not matter if their types are different. `Array.from()` also creates an array instance but from an "array-like" iterable object. The most common examples are probably an `HTMLCollection` or a `NodeList`. These are created by DOM methods such as `getElementsByClassName()` or the more modern `querySelectorAll()`. `HTMLCollection` and `NodeList` do not own methods such as `.map()` or `.filter()`. If you want to iterate over any of the two, you need to convert them to an array first. It's easily done by using `Array.from()` though. 
+`Array.of()` creates a new array instance from any given number of parameters. It does not matter if their types are different. `Array.from()` also creates an array instance but from an "array-like" iterable object. The most common examples are probably an `HTMLCollection` or a `NodeList`. These are created by DOM methods such as `getElementsByClassName()` or the more modern `querySelectorAll()`. `HTMLCollection` and `NodeList` do not own methods such as `.map()` or `.filter()`. If you want to iterate over any of the two, you need to convert them to an array first. It's easily done by using `Array.from()` though.
 
 ```
 const links = Array.from(document.querySelectorAll('a'));
@@ -304,15 +304,15 @@ Array.findIndex(func);
 Array.includes(value);
 ```
 
-`Array.find()` finds the **first** element in an array that fulfills the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value. 
+`Array.find()` finds the **first** element in an array that fulfills the given criteria \(as can be inferred from its name\). It uses a function which is supplied as the first parameter to check for this value.
 
 ```
 const numbers = [1, 2, 5, 9, 13, 24, 27, 39, 50];
 const biggerThan10 = numbers.find((number) => number > 10); // 13
 
 const users = [
-  {id: 1, name: 'Manuel'}, 
-  {id: 2, name: 'Bianca'}, 
+  {id: 1, name: 'Manuel'},
+  {id: 2, name: 'Bianca'},
   {id: 3, name: 'Brian'}
 ];
 
@@ -320,7 +320,7 @@ const userWithId2 = users.find((user) => user.id === 2);
 // { id: 2, name: 'Bianca'}
 ```
 
-The `Array.findIndex()` method follows a similar pattern but returns only the index of element which has been found as opposed of the `Array.find()` method which returned the value. In the above example, the first function would yield `4`, the second `1`. 
+The `Array.findIndex()` method follows a similar pattern but returns only the index of element which has been found as opposed of the `Array.find()` method which returned the value. In the above example, the first function would yield `4`, the second `1`.
 
 `Array.includes()`, added in ES2016, checks whether a value exists within the array it is called upon and returns a boolean. **Finally!** If you tried to reproduce the same functionality in the past, you had to make do with `Array.indexOf()`. `Array.includes()` simplifies this greatly:
 
@@ -350,30 +350,30 @@ In my opinion the most useful addition has been `Object.assign()`. This method e
 ```
 const user = { id: 1, name: 'Manuel' };
 const modifiedUser = Object.assign(user, { role: 'Admin' });
-console.log(user); 
+console.log(user);
 // -> { id: 1, name: 'Manuel', role: 'Admin' }
-console.log(modifiedUser); 
+console.log(modifiedUser);
 // -> { id: 1, name: 'Manuel', role: 'Admin' }
-console.log(user === modifiedUser); 
+console.log(user === modifiedUser);
 // -> true
 ```
 
-The property `role` of the object in the second parameter of the `Object.assign()` function is added to the **existing destination object**. 
+The property `role` of the object in the second parameter of the `Object.assign()` function is added to the **existing destination object**.
 
 React embraces the principle of **pure functions** which denote functions which are encapsulated in themselves and do not modify their entry parameters. Taking this into account, it becomes apparent that such mutations should be avoided if at all possible. We can circumvent this problem by providing an empty object literal as the first argument:
 
 ```
 const user = { id: 1, name: 'Manuel' };
 const modifiedUser = Object.assign({}, user, { role: 'Admin' });
-console.log(user); 
+console.log(user);
 // -> { id: 1, name: 'Manuel' }
-console.log(modifiedUser); 
+console.log(modifiedUser);
 // -> { id: 1, name: 'Manuel', role: 'Admin' }
-console.log(user === modifiedUser); 
+console.log(user === modifiedUser);
 // -> false
 ```
 
-By providing a newly created object as the destination object, the result is also a different object. In few cases, it can be advantageous to mutate the **destination** **object**, in React however this practice is best avoided. 
+By providing a newly created object as the destination object, the result is also a different object. In few cases, it can be advantageous to mutate the **destination** **object**, in React however this practice is best avoided.
 
 The method can process any given objects as parameters. If a property name appears more than once in an object, the properties added later take precedence.
 
@@ -385,22 +385,22 @@ const modifiedUser = Object.assign(
   { role: 'Admin' },
   { name: 'Not Manuel', job: 'Developer' }
 );
-console.log(modifiedUser); 
+console.log(modifiedUser);
 // -> { id: 1, name: 'Not Manuel', role: 'Admin', job: 'Developer' }
 ```
 
-`Object.entries()`, `Object.keys()` and `Object.values()` offer similar functionality. They return the properties \(`keys`\), the values \(`values`\)  or the entries \(`entries()`\) as an **array**. **Entries** however returns a nested array of the following form:
+`Object.entries()`, `Object.keys()` and `Object.values()` offer similar functionality. They return the properties \(`keys`\), the values \(`values`\) or the entries \(`entries()`\) as an **array**. **Entries** however returns a nested array of the following form:
 
 `[[key, value], [key2, values2], …]`
 
 Applying these methods to our example above, we receive the following results:
 
 ```
-Object.keys({ id: 1, name: 'Manuel'}); 
+Object.keys({ id: 1, name: 'Manuel'});
 // -> ['id', 'name']
-Object.values({ id: 1, name: 'Manuel'}); 
+Object.values({ id: 1, name: 'Manuel'});
 // -> [1, 'Manuel']
-Object.entries({id: 1, name: 'Manuel'}); 
+Object.entries({id: 1, name: 'Manuel'});
 // -> [['id', 1], ['name', 'Manuel']]
 ```
 
@@ -445,7 +445,7 @@ console.log(user);
 // -> { name: 'Manuel', german: true };
 ```
 
- So far so good. I have tried to keep the example very simple at this point but its implications are evident. In more complex situations, this technique will allow us to write clean and easily readable code especially with regard to **JSX**.
+So far so good. I have tried to keep the example very simple at this point but its implications are evident. In more complex situations, this technique will allow us to write clean and easily readable code especially with regard to **JSX**.
 
 Another noteworthy addition for objects has been the introduction of **shorthand property names**. Previously, code had to be written in the following form:
 
@@ -596,7 +596,7 @@ const selectedUsers = [...users];
 
 `selectedUsers` is a copy of `users`and all of its values. If we change the `users`array, no complications for `selectedUsers` occur.
 
-Let's shift our focus to objects. Using the spread operator with objects is very similar to using it with arrays. However, instead of using every single value, every property that is enumerable in the object \(roughly those that are used during a `for(… in …)` loop\) will be used. 
+Let's shift our focus to objects. Using the spread operator with objects is very similar to using it with arrays. However, instead of using every single value, every property that is enumerable in the object \(roughly those that are used during a `for(… in …)` loop\) will be used.
 
 The spread operator is a great choice to create objects:
 
@@ -650,7 +650,7 @@ However, it is important to make a distinction here: `Object.assign()` mutates a
 
 **Combining objects with `Object.assign()`**
 
-`Object.assign()`  takes any number of arguments and combines them into a single object:
+`Object.assign()` takes any number of arguments and combines them into a single object:
 
 ```
 const a = { a: 1 };
@@ -665,7 +665,7 @@ console.log(Object.assign(a, b, c));
 {a: 1, b: 2, c: 3}
 ```
 
-The function returns a new object in which all three of the objects that have been passed to `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c`  to the console:
+The function returns a new object in which all three of the objects that have been passed to `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c` to the console:
 
 ```
 console.log(a);
@@ -673,7 +673,7 @@ console.log(b);
 console.log(c);
 ```
 
- **Result:**
+**Result:**
 
 ```
 {a: 1, b: 2, c: 3}
@@ -681,7 +681,7 @@ console.log(c);
 {c: 3}
 ```
 
-As can be seen from the example above, `Object.assign()` did not create a new object for us.  It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should be avoided.
+As can be seen from the example above, `Object.assign()` did not create a new object for us. It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should be avoided.
 
 There's a trick though to ensure that objects can be combined via `Object.assign()` but also be created in a new object. Passing an empty object literal `{}` as the first argument to the function like this:
 
@@ -726,7 +726,7 @@ const [gold, silver, bronze] = athletes;
 
 The array elements at index `0`, `1` and `2` are now all to be found in the variables for `gold`, `silver` and `bronze`. The result is the same as in the previous example, however the second version is much shorter and a lot more succinct.
 
-We can use array destructuring anywhere where the array has been initialized  on the right side, even if it contains a `return` value from the function.
+We can use array destructuring anywhere where the array has been initialized on the right side, even if it contains a `return` value from the function.
 
 ```
 const getAllAthletes = () => {
@@ -739,7 +739,7 @@ const getAllAthletes = () => {
     'LaShawn Merritt',
     'Alonso Edward',
     'Ramil Guliyev',
-  ] 
+  ]
 }
 
 const [gold, silver, bronze] = getAllAthletes()
@@ -763,9 +763,9 @@ const logWinners = (athletes) => {
   const silver = athletes[1];
   const bronze = athletes[2];
   console.log(
-    'Winners of Gold, Silver and Bronze are', 
-    gold, 
-    silver, 
+    'Winners of Gold, Silver and Bronze are',
+    gold,
+    silver,
     bronze
   );
 }
@@ -776,9 +776,9 @@ But this can be simplfied:
 ```
 const logWinners = ([gold, silver, bronze]) => {
   console.log(
-    'Winners of Gold, Silver and Bronze are', 
-    gold, 
-    silver, 
+    'Winners of Gold, Silver and Bronze are',
+    gold,
+    silver,
     bronze
   );
 }
@@ -806,14 +806,15 @@ const { firstName } = user;
 
 Object destructuring is among the most widely used features in React components. It allows for writing single props into new variables and to use them in JSX in an uncomplicated fashion.
 
-Let's look at the following example of a stateless functional component ****\(SFC\):
+Let's look at the following example of a stateless functional component \(SFC\):
 
 ```javascript
 const UserPersona = (props) => {
   return (
     <div>
       <img src={props.image} alt="User Image" />
-      {props.firstName} {props.lastName}<br />
+      {props.firstName} {props.lastName}
+      <br />
       <strong>{props.job}</strong>
     </div>
   );
@@ -828,7 +829,8 @@ const UserPersona = (props) => {
   return (
     <div>
       <img src={image} alt="User Image" />
-      {firstName} {lastName}<br />
+      {firstName} {lastName}
+      <br />
       <strong>{job}</strong>
     </div>
   );
@@ -841,7 +843,8 @@ That already looks tidier and improves readability of the code, but we can simpl
 const UserPersona = ({ firstName, lastName, image, job }) => (
   <div>
     <img src={image} alt="User Image" />
-    {firstName} {lastName}<br />
+    {firstName} {lastName}
+    <br />
     <strong>{job}</strong>
   </div>
 );
@@ -868,7 +871,7 @@ Sometimes it is necessary to rename properties. Either because a variable with t
 const passenger = {
   name: 'Manuel Bieh',
   class: 'economy',
-}
+};
 ```
 
 The above `passenger` object contains a property named class which is a valid property name. However, it is not valid as a variable name. Direct destructuring is not possible in this case and would lead to an error:
@@ -939,7 +942,7 @@ With the addition of `|| {}` we express that if the `passenger` object is **fals
 ```javascript
 const globalSettings = { language: 'en-US' };
 const userSettings = { timezone: 'Berlin/Germany' };
-const { language, timezone } = { ...globalSettings, ...userSettings }
+const { language, timezone } = { ...globalSettings, ...userSettings };
 ```
 
 In this example, the **spread operator** is revolved first and a new object with all the properties of `globalSettings` and `userSettings` is created. Then, using **destructuring** variables are being assigned.
@@ -968,7 +971,7 @@ Example(1, 2, 3, 4, 5);
 ```javascript
 const Example = () => {
   console.log(arguments);
-}
+};
 Example(1, 2, 3, 4, 5);
 ```
 
@@ -983,7 +986,7 @@ The **rest operator** offers a neat solution to this problem: it writes all the 
 ```javascript
 const Example = (...rest) => {
   console.log(rest);
-}
+};
 Example(1, 2, 3, 4, 5);
 ```
 
@@ -1001,17 +1004,14 @@ const Example = (first, second, third, ...rest) => {
   console.log('second:', second);
   console.log('third:', third);
   console.log('rest:', rest);
-}
+};
 Example(1, 2, 3, 4, 5);
 ```
 
 **Result:**
 
 {% hint style="info" %}
-`first: 1    
-second: 2    
-third: 3    
-rest: [4, 5]`
+`first: 1 second: 2 third: 3 rest: [4, 5]`
 {% endhint %}
 
 One could say that the **rest operator** "collects" the remaining elements from a **destructuring** operation and saves them to variable which is indicated just after the three dots. Even though, we have named this variable `rest` in our previous examples, you can give it any valid name.
@@ -1039,18 +1039,20 @@ console.log(competitors);
 **Result:**
 
 {% hint style="info" %}
+
 ```javascript
 'Usain Bolt'
-'Andre De Grasse'    
-'Christophe Lemaitre'`  
-[  
+'Andre De Grasse'
+'Christophe Lemaitre'`
+[
   'Adam Gemili',
   'Churandy Martina',
   'LaShawn Merritt',
   'Alonso Edward',
-  'Ramil Guliyev'  
+  'Ramil Guliyev'
 ]
 ```
+
 {% endhint %}
 
 ... as well as in **object destructuring**:
@@ -1061,7 +1063,7 @@ const user = {
   lastName: 'Bieh',
   job: 'JavaScript Developer',
   hair: 'Brown',
-}
+};
 const { firstName, lastName, ...other } = user;
 console.log(firstName);
 console.log(lastName);
@@ -1080,7 +1082,7 @@ All the values not being explicitly written into a variable during **destructuri
 
 ## Template Strings
 
-**Template strings** in ES2015 offer yet a third alternative to write a string. Strings can already be declared by using either single exclamation marks \(`'Example'`\) or double exclamation marks \(`"Example"`\). Since ES2015, backticks can also be used to declare a string: ```Example```.
+**Template strings** in ES2015 offer yet a third alternative to write a string. Strings can already be declared by using either single exclamation marks \(`'Example'`\) or double exclamation marks \(`"Example"`\). Since ES2015, backticks can also be used to declare a string: `Example`.
 
 There are two variations of **template strings**. There are the usual **template strings** which can contain JavaScript expressions as well as **tagged template literals** in their extended form.
 
@@ -1132,26 +1134,34 @@ const errorHandler = (err) => {
   console.error('An error occured:', err.message);
 };
 
-getUser(id, (user) => {
-  user.getFriends((friends) => {
-    friends[0].getSettings((settings) => {
-      if (settings.notifications === true) {
-        email.send('You are my first friend!', (status) => {
-          if (status === 200) {
-            alert('User has been notified via email!');
-          }
-        }, errorHandler);
-      }
+getUser(
+  id,
+  (user) => {
+    user.getFriends((friends) => {
+      friends[0].getSettings((settings) => {
+        if (settings.notifications === true) {
+          email.send(
+            'You are my first friend!',
+            (status) => {
+              if (status === 200) {
+                alert('User has been notified via email!');
+              }
+            },
+            errorHandler
+          );
+        }
+      }, errorHandler);
     }, errorHandler);
-  }, errorHandler)
-}, errorHandler)
+  },
+  errorHandler
+);
 ```
 
 The asynchronous `getUser()` function is called to obtain information about a user with their `id`. Using its `getFriends()` method, we can obtain a list of all of their friends. To collect the first friend's \(`friends[0]`\) user settings, the `getSettings()` method is called. If this friend has allowed email notifications, an email is sent to him. We react asynchronously to the response of the mail server.
 
 Albeit this example being relatively simple, the code is nested **6 layers** deep - and we are not even taking care of explicit error handling or edge cases. Working with callbacks can become cumbersome and confusing quickly, especially one callback functions will trigger further callback functions, as in our example. It comes as no surprise that this is often called **Callback Hell** or the **Pyramid of Doom**.
 
-Let us rewrite this and assume that our fictional API methods will each return ****a promise:
+Let us rewrite this and assume that our fictional API methods will each return a promise:
 
 ```javascript
 const errorHandler = (err) => {
@@ -1159,31 +1169,36 @@ const errorHandler = (err) => {
 };
 
 getUser(id)
-.then((user) => user.getFriends())
-.then((friends) => friends[0].getSettings())
-.then((settings) => {
-  if (settings.notifications === true) {
-    return email.send('You are my first friend!');
-  }
-})
-.then((status) => {
-  if (status === 200) {
-    alert('User has been notified via email');
-  }
-})
-.catch(errorHandler);
+  .then((user) => user.getFriends())
+  .then((friends) => friends[0].getSettings())
+  .then((settings) => {
+    if (settings.notifications === true) {
+      return email.send('You are my first friend!');
+    }
+  })
+  .then((status) => {
+    if (status === 200) {
+      alert('User has been notified via email');
+    }
+  })
+  .catch(errorHandler);
 ```
 
-Each step is being followed by `then()` to react to the previous promise.  Although the same end result is reached by this piece of code, we are only nesting 2 layers deep and readability is improved immensly.
+Each step is being followed by `then()` to react to the previous promise. Although the same end result is reached by this piece of code, we are only nesting 2 layers deep and readability is improved immensly.
 
-It is relatively simple to refactor code based on callbacks into one that is using promises. In order to demonstrate this, I will show you an example of the Geolocation API and its `getCurrentPosition()` method. For those of you who do not know it: the method exists on the `navigator.geolocation` object and opens a dialog in the browser asking the user for permission to use their current location. The method expects two callbacks as arguments, namely the success callback and the error callback. The first callback, the  success callback, is being passed an object with the user's location if they have previously agreed. The second callback, the error callback, is being passed an error object. This can occur because the user has given permission to use their current location or due to a location not being possible for other reasons.
+It is relatively simple to refactor code based on callbacks into one that is using promises. In order to demonstrate this, I will show you an example of the Geolocation API and its `getCurrentPosition()` method. For those of you who do not know it: the method exists on the `navigator.geolocation` object and opens a dialog in the browser asking the user for permission to use their current location. The method expects two callbacks as arguments, namely the success callback and the error callback. The first callback, the success callback, is being passed an object with the user's location if they have previously agreed. The second callback, the error callback, is being passed an error object. This can occur because the user has given permission to use their current location or due to a location not being possible for other reasons.
 
 ```javascript
-navigator.geolocation.getCurrentPosition((position) => {
-  console.log(`User position is at ${position.coords.latitude}, ${position.coords.longitude}`);
-}, () => {
-  console.log('Unable to locate user');
-});
+navigator.geolocation.getCurrentPosition(
+  (position) => {
+    console.log(
+      `User position is at ${position.coords.latitude}, ${position.coords.longitude}`
+    );
+  },
+  () => {
+    console.log('Unable to locate user');
+  }
+);
 ```
 
 The callback can be transformed into a promise:
@@ -1200,12 +1215,14 @@ Yep, that's it! Now we can access the user's location like the following instead
 
 ```javascript
 getCurrentPositionPromise()
-.then((position) => {
-  console.log(`User position is at ${position.coords.latitude}, ${position.coords.longitude}`);
-})
-.catch(() => {
-  console.log('Unable to locate user');
-});
+  .then((position) => {
+    console.log(
+      `User position is at ${position.coords.latitude}, ${position.coords.longitude}`
+    );
+  })
+  .catch(() => {
+    console.log('Unable to locate user');
+  });
 ```
 
 A few of the newer JavaScript Browser APIs have already followed this new implementation. If you want to learn about promises and how they work in detail, I suggest you to read the [the following article on the MDN web docs](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise). The explanation and reasoning for promises should only serve as an introduction to a much more interesting feature though, namely:
@@ -1227,7 +1244,7 @@ Bringing it back to our previous example of the user that wants to send an email
     if (settings.notifications === true) {
       const status = await email.send('You are my first friend!');
       if (status === 200) {
-          alert('User has been notified via email');
+        alert('User has been notified via email');
       }
     }
   } catch (err) {
@@ -1236,7 +1253,7 @@ Bringing it back to our previous example of the user that wants to send an email
 })();
 ```
 
-For me personally asynchronous functions with `async` and `await` have been one of the most notable changes in JavaScript in the past few years. They facilitate working with asynchronous data greatly especially compared to complex and confusing callbacks. Even promises, which were already a massive improvement over callbacks, look almost complex compared to `async` / `await`. 
+For me personally asynchronous functions with `async` and `await` have been one of the most notable changes in JavaScript in the past few years. They facilitate working with asynchronous data greatly especially compared to complex and confusing callbacks. Even promises, which were already a massive improvement over callbacks, look almost complex compared to `async` / `await`.
 
 ## Import syntax and JavaScript modules
 
@@ -1250,7 +1267,7 @@ We've talked a lot about the history of modules now. But how do imports work and
 
 ### Modules in JavaScript
 
-The primary goal of modules is to encapsulate JavaScript scope for each module. In this case, a module is actually a single **file**. ****As long as you are not explicitly limiting their scope by using an **IIFE** \(_Immediately Invoked Function Expression_\), each function, each variable etc that you declare in JavaScript is available globally. Modules prevent this by only making the code inside it available **in the module itself**. This can avoid complications such as two libraries using the same variable. Moreover, modules encourage reusable code without being scared of using already existing variables or overriding functions that have already been declared.
+The primary goal of modules is to encapsulate JavaScript scope for each module. In this case, a module is actually a single **file**. \***\*As long as you are not explicitly limiting their scope by using an **IIFE** \(_Immediately Invoked Function Expression_\), each function, each variable etc that you declare in JavaScript is available globally. Modules prevent this by only making the code inside it available **in the module itself\*\*. This can avoid complications such as two libraries using the same variable. Moreover, modules encourage reusable code without being scared of using already existing variables or overriding functions that have already been declared.
 
 Modules can **export:** functions, classes or variables that have been declared within them. Other modules can then import these exports if necessary. In order to export these functions and variables, a special `export` keyword is used. To import these, you might recognize a pattern here, there is an `import` keyword. Exporting can take two forms: **named exports** and **default exports**.
 
@@ -1278,16 +1295,16 @@ Using the `import` keyword, we can now use these function elsewhere in our appli
 import { double, square, divideBy5 } from './calc.mjs';
 
 const value = 5;
-console.log(double(value));     // 10
-console.log(square(value));     // 25
-console.log(divideBy5(value));  // 1
+console.log(double(value)); // 10
+console.log(square(value)); // 25
+console.log(divideBy5(value)); // 1
 ```
 
 Theoretically, a file can have **as many exports as you want**. Beware though, they have to have different names and an already exported name **is not allowed to be exported again**.
 
 **Default Export**
 
-In addition to the so-called **named exports** from the example above, there is also the singular `default export`. This is a special form of an export that is only allowed to be used within a module **once** and declared by using `default`. If a variable or function has been marked as `default` it is possible to import it without curly braces. The **default export** can alleviate the need for importing a lot of named exports by bundling them into a single default. 
+In addition to the so-called **named exports** from the example above, there is also the singular `default export`. This is a special form of an export that is only allowed to be used within a module **once** and declared by using `default`. If a variable or function has been marked as `default` it is possible to import it without curly braces. The **default export** can alleviate the need for importing a lot of named exports by bundling them into a single default.
 
 ```javascript
 export const double = (number) => number * 2;
@@ -1296,8 +1313,11 @@ export const divideBy = (number, divisor) => number / divisor;
 export const divideBy5 = (number) => divideBy(number, 5);
 
 export default {
-   double, square, divideBy, divideBy5
-}
+  double,
+  square,
+  divideBy,
+  divideBy5,
+};
 ```
 
 To use any of the above functionality, our application would only need to import the module itself - meaning the **default export** - and assign it to a variable:
@@ -1305,8 +1325,8 @@ To use any of the above functionality, our application would only need to import
 ```javascript
 import Calc from './calc.mjs';
 
-console.log(Calc.double(value));    // 10
-console.log(Calc.square(value));    // 25
+console.log(Calc.double(value)); // 10
+console.log(Calc.square(value)); // 25
 console.log(Calc.divideBy5(value)); // 1
 ```
 
@@ -1320,7 +1340,7 @@ export default class MyComponent extends React.Component {
 
 ### Inconsistencies: Browser vs Node.js
 
-If you paid attention, you might have noticed that we imported a file named `calc.mjs` \(not `calc.js`\) above. This convention has been agreed upon in a lenghty process to ensure that JavaScript modules can be used in Node.js. 
+If you paid attention, you might have noticed that we imported a file named `calc.mjs` \(not `calc.js`\) above. This convention has been agreed upon in a lenghty process to ensure that JavaScript modules can be used in Node.js.
 
 So if you want to write universal JavaScript that can be run on the server with Node.js but also client-side in the browser, you **have to** use the `.mjs` file ending for all your files. Especially, if you want to achieve this without tools such as Babel, Wepback or TypeScript.
 
@@ -1363,11 +1383,10 @@ If we want to use JavaScript modules server-side as well as client-side, we will
 
 ES2015 and the following versions of the ECMAScript standard have given us a lot of new functionality that did not exist in JavaScript before. It's hard to imagine working without these especially in the use with React. The most notable new features are these:
 
-* Variable declarations with `let` and `const`
-* **Arrow functions** - to create functions that do not bind their own `this`
-* **Classes** - they are the basis of **React Class components** and facilitate a multitude of things
-* **Rest and Spread operators** - which increase the readability as well as the writing process of data in arrays and objects immensely
-* **Template strings** - to facilitate working with JavaScript expressions in Strings
-* **Promises** and **Asynchronous functions with `async` / `await`** - which enhance working with asynchronous data and make it much easier
-* **Import** and **Export** for encapsulating reusable JavaScript on a module basis
-
+- Variable declarations with `let` and `const`
+- **Arrow functions** - to create functions that do not bind their own `this`
+- **Classes** - they are the basis of **React Class components** and facilitate a multitude of things
+- **Rest and Spread operators** - which increase the readability as well as the writing process of data in arrays and objects immensely
+- **Template strings** - to facilitate working with JavaScript expressions in Strings
+- **Promises** and **Asynchronous functions with `async` / `await`** - which enhance working with asynchronous data and make it much easier
+- **Import** and **Export** for encapsulating reusable JavaScript on a module basis

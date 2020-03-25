@@ -4,12 +4,10 @@ Styling in React is a topic of its own in React. React does not offer its own in
 
 ### Styling with the style attribute
 
-The simplest way to style components in React is using the `style` attribute on regular HTML elements. It differs from regular HTML though and React components expect an **object** in the form of `property: value`. The property itself needs to be declared in JavaScript \(not its regular CSS counterpart\) form meaning `zIndex` instead of `z-index`,  `backgroundColor` instead of `background-color` or `marginTop` instead of `margin-top`. If the values accept declarations in pixels, it is optional to explicitly define `px` as the corresponding unit:
-
-
+The simplest way to style components in React is using the `style` attribute on regular HTML elements. It differs from regular HTML though and React components expect an **object** in the form of `property: value`. The property itself needs to be declared in JavaScript \(not its regular CSS counterpart\) form meaning `zIndex` instead of `z-index`, `backgroundColor` instead of `background-color` or `marginTop` instead of `margin-top`. If the values accept declarations in pixels, it is optional to explicitly define `px` as the corresponding unit:
 
 ```jsx
-<div style={{border: '1px solid #ccc', marginBottom: 10}}>
+<div style={{ border: '1px solid #ccc', marginBottom: 10 }}>
   A div with a grey border and a 10 pixel margin at the bottom
 </div>
 ```
@@ -107,7 +105,7 @@ If regular CSS classes are used, we should also ensure that the corresponding st
 
 It's not actually necessary to enforce the file ending of `.module.css` \(just regular `.css` would also be okay\) but it has become convention in many well-known tools. **Create React App** also supports this convention out of the box without the need for further configuration by using the previously mentioned `css-loader` in the background \(implemented in Webpack\).
 
- In these CSS files, regular and **standardized CSS** can be found. It can then be imported into a JavaScript module with ease:
+In these CSS files, regular and **standardized CSS** can be found. It can then be imported into a JavaScript module with ease:
 
 ```javascript
 import css from './ProfileImage.module.css';
@@ -157,7 +155,7 @@ const ProfileImage = () => {
 
 ### CSS-in-JS - Moving styles into JavaScript
 
-I've already mentioned in the introduction that **CSS-in-JS** is a bit of a hotly debated topic. Opponents say that users of **CSS-in-JS** do simply not understand the cascade to write scalable CSS. Proponents on the other hand explain that the cascade is not the main reason for choosing **CSS-in-JS** but argue that a safer way is needed to write highly isolated components. I'm a bit more diplomatic myself  and think that there's room and reasons for both. **CSS-in-JS** certainly has reason to exist. But what even is **CSS-in-JS**?
+I've already mentioned in the introduction that **CSS-in-JS** is a bit of a hotly debated topic. Opponents say that users of **CSS-in-JS** do simply not understand the cascade to write scalable CSS. Proponents on the other hand explain that the cascade is not the main reason for choosing **CSS-in-JS** but argue that a safer way is needed to write highly isolated components. I'm a bit more diplomatic myself and think that there's room and reasons for both. **CSS-in-JS** certainly has reason to exist. But what even is **CSS-in-JS**?
 
 The **CSS-in-JS** approach mandates that the styles which are commonly found in CSS files are now moved into JavaScript. As was already the case in **CSS modules**, the primary goal is to create highly isolated components which are free of conflict making them easy to reuse throughout the application. However, as opposed to **CSS modules**, the styling in **CSS-in-JS** happens entirely in JavaScript. The syntax is very similar and it mostly feels like you're writing regular CSS.
 
@@ -201,7 +199,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-By using the notation ```const Button = styled.button````` **styled components** creates a new ****`Button` component and equips it with the CSS properties that we have defined within the **template literals**. Inside of the template literals, regular CSS can be used.
+By using the notation `const Button = styled.button` **styled components** creates a new `Button` component and equips it with the CSS properties that we have defined within the **template literals**. Inside of the template literals, regular CSS can be used.
 
 If we want to use pseudo selectors or elements, we can use these without their previous selector. For a `:hover` status, we can define the following:
 
@@ -211,7 +209,7 @@ const Button = styled.button`
   border: 2px solid black;
   color: black;
   padding: 8px;
-  
+
   :hover {
     background: gold;
   }
@@ -225,30 +223,29 @@ const Button = styled.button`
   background: yellow;
   border: 2px solid black;
   color: black;
-  cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   padding: 8px;
-  
+
   :hover {
     background: gold;
   }
 `;
 ```
 
-The cursor icon would change into a `not-allowed` symbol in this case if the button had a `disabled` property. Moreover, **styled components** offers support for theming, server-side rendering, css animations and much more. For those of you who would like an in-depth explanation and overview, I suggest you check out the [thorough documentation](https://www.styled-components.com/docs/basics). 
+The cursor icon would change into a `not-allowed` symbol in this case if the button had a `disabled` property. Moreover, **styled components** offers support for theming, server-side rendering, css animations and much more. For those of you who would like an in-depth explanation and overview, I suggest you check out the [thorough documentation](https://www.styled-components.com/docs/basics).
 
 The main advantages of **CSS-in-JS** and **styled components** in particular are well summarized in the documentation:
 
-* Critical CSS, so the CSS which is relevant for the current page, is automatically generated as **styled component** knows which components are used on each page and which styles they need
-* By automatically generating classnames, the risk of conflicts is reduced to a minimum
-* As all CSS is tied to a component, it is easy to spot redundant CSS. If a **styled component** is no longer used in the application, the CSS is no longer needed either and the component can be safely deleted.
-* Component logic and component styling \(CSS-in-JS\) are found in the same spot, some times even in the exact same file. Developers do not need to spend a long amount of time anymore to find where exactly a styling change needs to take place.
-* **Styled components** automatically generates CSS that contains vendor prefixes for all browsers.
+- Critical CSS, so the CSS which is relevant for the current page, is automatically generated as **styled component** knows which components are used on each page and which styles they need
+- By automatically generating classnames, the risk of conflicts is reduced to a minimum
+- As all CSS is tied to a component, it is easy to spot redundant CSS. If a **styled component** is no longer used in the application, the CSS is no longer needed either and the component can be safely deleted.
+- Component logic and component styling \(CSS-in-JS\) are found in the same spot, some times even in the exact same file. Developers do not need to spend a long amount of time anymore to find where exactly a styling change needs to take place.
+- **Styled components** automatically generates CSS that contains vendor prefixes for all browsers.
 
 **Styled components** is only one of many CSS-in-JS solutions. While it is probably the most well-known and most widely adopted, there are a number of great alternatives which can help you to find a solution which fits your project's specific needs. Other great and well-known alternatives are:
 
-* [emotion](https://github.com/emotion-js/emotion)
-* [styled-jsx](https://github.com/zeit/styled-jsx)
-* [react-jss](https://github.com/cssinjs/jss/tree/master/packages/react-jss)
-* [radium](https://github.com/FormidableLabs/radium)
-* [linaria](https://github.com/callstack/linaria)
-
+- [emotion](https://github.com/emotion-js/emotion)
+- [styled-jsx](https://github.com/zeit/styled-jsx)
+- [react-jss](https://github.com/cssinjs/jss/tree/master/packages/react-jss)
+- [radium](https://github.com/FormidableLabs/radium)
+- [linaria](https://github.com/callstack/linaria)
