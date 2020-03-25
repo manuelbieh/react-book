@@ -151,7 +151,7 @@ this.setState(
 
 React offers a number of so-called **lifecycle methods** that can be called at different times in a **component's lifecycle**. These can be implemented in React **class components**.
 
-The lifecycle of a component starts as soon as it is **instantiated or mounted**, so when it is found in the `render()` method of a parent component being part of the returned component tree. The component's lifecycle ends if it is removed from the tree of components supposed to be rendered. Additionally, there are **lifecycle methods** that react to **updates** or \*\*\*\*errors as well as being "unmounted".
+The lifecycle of a component starts as soon as it is **instantiated or mounted**, so when it is found in the `render()` method of a parent component being part of the returned component tree. The component's lifecycle ends if it is removed from the tree of components supposed to be rendered. Additionally, there are **lifecycle methods** that react to **updates** or **errors** as well as being "unmounted".
 
 ### **Overview of lifecycle methods**
 

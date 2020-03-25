@@ -394,7 +394,7 @@ Why is this important though? React follows this principle of **pure functions**
 
 ### Pure functions in detail
 
-As **pure functions** form a fundamental principle of \*\*\*\*React, I would like to explain it a little more with the help of some examples. Much of this will sound more theoretical and complex than it will actually be once its used in practice. However, I'd still like to explain them to increase your understanding.
+As **pure functions** form a fundamental principle of React, I would like to explain it a little more with the help of some examples. Much of this will sound more theoretical and complex than it will actually be once its used in practice. However, I'd still like to explain them to increase your understanding.
 
 **Example for a "pure function"**
 
@@ -414,7 +414,7 @@ function impureCalculation(number) {
 }
 ```
 
-This second function is no longer _pure \*\*\*\*_ \***\*as it will not reliably return the same output every time, even if its input is identical to the one before. At the moment, my browser's window size is 1920 pixels wide. If am calling this function with the value `10` as the argument, I will get back `1930` \(`10 + 1920`\). If the window size is decreased to 1280 pixels though and the function is called again with the same argument of `10` I will receive a different result \(`1290`\). Hence, this is not a **pure function\*\*.
+This second function is no longer _pure_ as it will not reliably return the same output every time, even if its input is identical to the one before. At the moment, my browser's window size is 1920 pixels wide. If am calling this function with the value `10` as the argument, I will get back `1930` \(`10 + 1920`\). If the window size is decreased to 1280 pixels though and the function is called again with the same argument of `10` I will receive a different result \(`1290`\). Hence, this is not a **pure function**.
 
 It is possible to change this function into a "pure" function by passing the window width as another argument:
 
@@ -552,7 +552,7 @@ In this case, only the output based on the `props` was modified but not the prop
 
 **This is also possible**
 
-But how can we actually change props outside of a component? So far, we have only talked about how components should not be changed \_within \*\*\*\*\_the component.
+But how can we actually change props outside of a component? So far, we have only talked about how components should not be changed _within_ the component.
 
 It is best to explain this with yet another example, even if it is a little abstract in this case:
 
@@ -598,7 +598,7 @@ it will give us this result:
 
 It does not matter how many times the component was actually rendered, the result will be the same. **Same input, same output.**
 
-Inside of the function, we keep embracing "purity". We do not modify the entry value and we do not have any direct external dependencies to the outside which could influence our rendering. The value itself is only changed outside of the component and passed into the component as a new value. We do not actually need to go into much more detail at this point. The only thing that matters is that our component will render the same output given the same inputs. As you can see above, this is true in this case. We do not need to concern ourselves who changes props outside of the component, how often this happens or in which form as long as we do **not** change the props \_inside \*\*\*\*\_of the component. So far so good.
+Inside of the function, we keep embracing "purity". We do not modify the entry value and we do not have any direct external dependencies to the outside which could influence our rendering. The value itself is only changed outside of the component and passed into the component as a new value. We do not actually need to go into much more detail at this point. The only thing that matters is that our component will render the same output given the same inputs. As you can see above, this is true in this case. We do not need to concern ourselves who changes props outside of the component, how often this happens or in which form as long as we do **not** change the props _inside_ of the component. So far so good.
 
 **Props are an abstracted function argument**
 

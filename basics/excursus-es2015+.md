@@ -1161,7 +1161,7 @@ The asynchronous `getUser()` function is called to obtain information about a us
 
 Albeit this example being relatively simple, the code is nested **6 layers** deep - and we are not even taking care of explicit error handling or edge cases. Working with callbacks can become cumbersome and confusing quickly, especially one callback functions will trigger further callback functions, as in our example. It comes as no surprise that this is often called **Callback Hell** or the **Pyramid of Doom**.
 
-Let us rewrite this and assume that our fictional API methods will each return \*\*\*\*a promise:
+Let us rewrite this and assume that our fictional API methods will each return a promise:
 
 ```javascript
 const errorHandler = (err) => {
