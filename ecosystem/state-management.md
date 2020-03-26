@@ -4,13 +4,13 @@ The more an application grows in the size, the more its complexity and data grow
 
 React has introduced great tooling in the last few years to deal with this increase of complexity in application state. The **Context API** as well as the **useReducer** **hook** have been great additions to the React developer's toolbox and allow us to work more comfortably with complex data. However, in some cases it is still very difficult to keep track of all the different pieces of data and how they transform. To deal with this type of problem, external tools for **global state management** can be a great choice. The React ecosystem has seen a number of players enter this space giving us lots of libraries to choose from.
 
-One of the more commonly known tools is **MobX** which describes itself as a tool _"Simple, scalable state management"_ solution. The other well-known tool in the industry is **Redux**. Redux was in part developed by Dan Abramov and Andrew Clark who are now part of the official React Core Team. It positions itself as _"A predictable state container for JavaScript apps"._ Redux is arguably the more dominating tool boasting with higher usage stats and downloads.
+One of the more commonly known tools is **MobX** which describes itself as a _"Simple, scalable state management"_ solution. The other well-known tool in the industry is **Redux**. Redux was in part developed by Dan Abramov and Andrew Clark who are now part of the official React Core Team. It positions itself as _"A predictable state container for JavaScript apps"._ Redux is arguably the more dominating tool boasting with higher usage stats and downloads.
 
-This chapter will dive deeper into **Redux.** This is due to a number of reasons: first of all, I have experience with **Redux** myself and have used in it a number of different projects. Additionally, my experience with Redux has been very pleasant. But those are not the only reasons. Redux still has around **4 million weekly installations**. Compared to **MobX** which still has a very respectable number of **200.000 installations** per week, Redux is the dominant force in the React ecosystem though.
+This chapter will dive deeper into **Redux**. This is due to a number of reasons: first of all, I have experience with **Redux** myself and have used in it a number of different projects. Additionally, my experience with Redux has been very pleasant. But those are not the only reasons. Redux still has around **4 million weekly installations**. Compared to **MobX** which still has a very respectable number of **200.000 installations** per week, Redux is the dominant force in the React ecosystem though.
 
 Despite a number of voices which keep proclaiming Redux's death, the interest in **Redux** has remained steady over the years and the number of downloads is still growing. When the **Context API** was introduced with **React 16.3.0**, **Redux** was said to be obsolete. Once **React 16.8.0** introduced Hooks, more specifically the **useReducer hook**, the critics' voices were raised again. Despite all this criticism, the number of installations of Redux keep growing.
 
-In fact, **Redux** makes use of **Context** and **Hooks** under the hood and uses these principles to optimize its own performance and simplify its API. Moreover, **Redux** has seen a great increase of custom add-ons and tools for their own ecosystem which is enhanced rather than replaced by the new functionality offered by React.
+In fact, **Redux** makes use of **Context** and **Hooks** under the hood and uses these principles to optimize its own performance and simplify its API. Moreover, **Redux** has seen a great increase of custom add-ons and tools for their own ecosystem which is enhanced, rather than replaced, by the new functionality offered by React.
 
 ### Introduction to Redux
 
@@ -38,7 +38,7 @@ While in theory **Redux** could be used as a stand-alone solution, we would then
 
 ### Store, Actions and Reducers
 
-I've just introduced another set of new terminology to you. Don't be scared if any of these sound unfamiliar to you now. We will look at all of them in turn and hopefully clear up any confusion you might have at the moment.
+I've just introduced another set of new terminology to you. Don't be scared if any of these sound unfamiliar to you now. We will look at all of them in turn and hopefully clear up any confusion you might have.
 
 All data in **Redux** is managed in so-called **stores** which manage the **global state**. Theoretically, applications could have a number of different stores. In fact, **Flux architecture** even encourages the use of multiple stores. However, in most React applications using **Redux** we will only find a single store. This reduces complexity dramatically and also declares this _single_ **store** as the **single source of truth** for all of our data. The store also provides a number of methods which can be used to change \(`dispatch`\) the data currently stored in the store, read \(`getState)` the data from the store and react to changes \(`subscribe`\).
 
@@ -91,7 +91,7 @@ This allow us to create some sort of coherence among the different **action type
 
 ### Creating a store
 
-To create a store which will manage the global state, we habe to import the `createStore` function from the `redux` package. We can call it by passing it a **reducer** function. This function will return a store object to us which will contain all the methods necessary to interact with the store, namely `dispatch`, `getState` and `subscribe`. The latter two are not of the same importance when working with React, but I have mentioned them for the sake of completion. In React and Redux applications, the `react-redux` bindings components take care of the re-rendering of components if they are affected by a change of the **state**.
+To create a store which will manage the global state, we have to import the `createStore` function from the `redux` package. We can call it by passing it a **reducer** function. This function will return a store object to us which will contain all the methods necessary to interact with the store, namely `dispatch`, `getState` and `subscribe`. The latter two are not of the same importance when working with React, but I have mentioned them for the sake of completion. In React and Redux applications, the `react-redux` binding components take care of the re-rendering of components if they are affected by a change of the **state**.
 
 ```javascript
 import { createStore } from 'redux';
@@ -151,18 +151,18 @@ console.log(store.getState()); // 1
 We've _dispatched_ an **action** of `type` `PLUS` twice and of `type` `MINUS` once. A `payload` is also passed that indicates by how many numbers our last state is supposed to be incremented or decremented by. These operations result in the following **state mutations**:
 
 ```javascript
-0 (initialer State) + 2 (payload) = 2 (neuer State)
-2 (alter State)     + 1 (payload) = 3 (neuer State)
-3 (alter State)     - 2 (payload) = 1 (neuer State)
+0 (initialized state) + 2 (payload) = 2 (new state)
+2 (old state)         + 1 (payload) = 3 (new state)
+3 (old State)         - 2 (payload) = 1 (new State)
 ```
 
 This state remains relatively simple and only consists of a single value. We will look at more complex **state** consisting of different objects soon and create a number of different **reducers**.
 
 ### Action Creators vs Actions
 
-Those who read articles or the official documentation of **Redux** will have encountered the two terms **action** and **action creators**. The difference is not completely clear in the beginning. I struggled to really understand differences myself and know many others who have felt the same. The situation is furthermore complicated by the fact that some use the terms interchangeably, although they mean different things. Let's quickly dive into how **action creators** and **actions** differ.
+Those who read articles or the official documentation of **Redux** will have encountered the two terms **action** and **action creators**. The difference is not completely clear in the beginning. I struggled to really understand differences myself and know many others who have felt the same. The situation is further complicated by the fact that some use the terms interchangeably, although they mean different things. Let's quickly dive into how **action creators** and **actions** differ.
 
-**Actions,** which were already introduced earlier, are simple, _serializable_ **objects** that can be used to describe how exactly **state** should change. They always contain a `type` property and often a `payload`.
+**Actions**, which were already introduced earlier, are simple, _serializable_ **objects** that can be used to describe how exactly **state** should change. They always contain a `type` property and often a `payload`.
 
 An **action creator** however describes a **function** that returns an **action**. One could also say that it is a **factory** which creates **actions** \(thus the name _Creator_\). In most situations, **action creators** are used to **encapsulate logic** that is necessary to create to an **action**. Sometimes they are also used to abstract away complex logic from the **actions** themselves. In those cases, the **action creator** function is called instead of the **action** and passed to the `dispatch` method.
 
@@ -197,9 +197,9 @@ By following sensible naming conventions, the readability of the overall code is
 
 ### Complex reducers
 
-The previous examples were intended for us to form an understanding of **actions** and **reducers**. Moreover, they allowed us to understand how **actions** are used in practice and how the **reducer** mutates the **store**. Typically, most React applications will deal with much more **complicated state** than what we have seen in the examples. To understand **Redux** in context of much larger state, we will look at a more realistic example.
+The previous examples were intended for us to form an understanding of **actions** and **reducers**. Moreover, they allowed us to understand how **actions** are used in practice and how the **reducer** mutates the **store**. Typically, most React applications will deal with much more **complex state** than what we have seen in the examples. To understand **Redux** in the context of much larger state, we will look at a more realistic example.
 
-The example will describe a simple **To-Do** app and we will look how the **state management** for said app can be implemented. The to-do app will manage lists of to-dos and also contain a logged-in user area. The state will consist of two top level properties: `todos` \(of type array\) and `user` \(of type object\). This is reflected in our current state:
+The example will describe a simple **To-Do** app and we will look how the **state management** for this app can be implemented. The to-do app will manage lists of to-dos and also contain a logged-in user area. The state will consist of two top level properties: `todos` \(of type array\) and `user` \(of type object\). This is reflected in our current state:
 
 ```javascript
 const initialState = Object.freeze({
@@ -263,7 +263,7 @@ const rootReducer = (state = initialState, action) => {
 const store = createStore(rootReducer);
 ```
 
-I do not want to go into too much detail, however a few things should be properly explained in this instead. Let's look at each `switch` block in turn in which each `case` block returns a new state object.
+I do not want to go into too much detail, however a few things should be properly instead. Let's look at each `switch` block in turn in which each `case` block returns a new state object.
 
 Let's start with `SET_USER`: the **state object** being created here changes the `user` object and sets its `name` property to `action.payload.name` as well as the `accessToken` property to `action.payload.accessToken`. One could also set `user` to `action.payload` but this would mean that the complete **payload** of the **action** would be transferred to the `user` object. Moreover, one has to ensure that the `action.payload` is an object as to not change the initial form of the `user` object. This could become problematic if other parts of the **reducer** also access this object and its type had suddenly changed. We have ignored all other properties in our example by explicitly accessing `name` and `accessToken` from the **payload** of the action.
 
@@ -386,7 +386,7 @@ To use `combineReducers()`, a few formal rules have to be followed. They do not 
 - Reducer functions used in the `combineReducer()` function can never return `undefined`. This is different to the **root reducer** which is allowed to do this. In the case of the former, the `combineReducers()` function will throw an **error** to inform us of this error. We deal with this effectively in our example by including a `default` case in the `switch` block which will simply return the `state`
 - If the `state` passed in the first argument is of `type` `undefined`, the **initial state** has to be returned. It's probably easiest to use the initial state as a default value as we have done in the above example \(`state = initialState`\).
 
-**An aside**: `combineReducer()` can be nested as many times as you like, The **reducer** functions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning to `combineReducer()` calls\).
+**An aside**: `combineReducer()` can be nested as many times as you like, The **reducer** functions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning two `combineReducer()` calls\).
 
 ### Asynchronous actions
 
@@ -442,7 +442,7 @@ const delayedAdd = (newTodo) => {
 };
 
 store.dispatch(
-  delayedAction({
+  delayedAdd({
     id: 1,
     text: 'Explaining thunk actions',
     done: false,
