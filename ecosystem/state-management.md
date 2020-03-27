@@ -471,7 +471,7 @@ In this example, we have used a shorter **arrow function** with an **implicit re
 
 ### Typical asynchronous action example
 
-Many applications working with APIs inform the user that data is loading while is is being fetched from the API. Loading Spinners or text such as _"Loading data ..."_ are common ways to convey this information. **Thunk actions** are a great way to cover this case using a **reducer**.
+Many applications working with APIs inform the user that data is loading while it is being fetched from the API. Loading Spinners or text such as _"Loading data ..."_ are common ways of conveying this information. **Thunk actions** are a great way to cover this case using a **reducer**.
 
 Let's set up three cases in the **reducer** which react to the following three **actions**:
 
@@ -525,7 +525,7 @@ const rootReducer = (state = initialState, action) => {
 };
 
 const fetchGithubRepos = () => (dispatch, getState) => {
-  dispatch({ type: 'FETCH_REPOS_REQUESTED' });
+  dispatch({ type: 'FETCH_REPOS_REQUEST' });
   const state = getState();
   axios
     .get(`https://api.github.com/users/${state.selectedAccount}/repos`)
@@ -556,7 +556,7 @@ Once the `fetchGitHubRepos()` **action creator** has been _dispatched_, a few th
 
 First of all, the **thunk middleware** will register that we do not deal with a simple **action** \(an object\) but a function, meaning that it will execute it it in the form of `Action()(dispatch, getState)`. The **action creator** receives the `dispatch` function to be able to _dispatch_ **actions** from the **action creator** function.
 
-Inside of the **action creator**, the `FETCH_REPOS_REQUESTED` is _dispatched_. The **reducer** will react to the **action**, create a new **state object** by copying the _existing_ **state** into a new object using the **ES2015+ spread operator** and potentially reset any existing `error` to `null`. The state is informed that a request will follow via `isFetching` at the same time. But this is personal taste and I am aware that some people prefer to set the `error` property to `null` only if the subsequent request has been successful.
+Inside of the **action creator**, the `FETCH_REPOS_REQUEST` is _dispatched_. The **reducer** will react to the **action**, create a new **state object** by copying the _existing_ **state** into a new object using the **ES2015+ spread operator** and potentially reset any existing `error` to `null`. The state is informed that a request will follow via `isFetching` at the same time. But this is personal taste and I am aware that some people prefer to set the `error` property to `null` only if the subsequent request has been successful.
 
 The request will access the _current_ **state** via `getState()` from which it will access the `selectedAccount`. Once obtained, we can use this to perform the API request for the `selectedAccount`'s GitHub repositories. The request is performed using Axios \(mainly for simplicity\). We can then react to the following two cases:
 
@@ -571,7 +571,7 @@ We have a number of tools available to inspect what's currently in the **store**
 
 We can also manually log these to the console using `console.log(store.getState())`. However, this can become cumbersome quickly and difficult especially when dealing with asynchronous actions.
 
-The **Redux Devtools** are another great alternative for debugging purposes. Implemented as a browser extension for Chrome, Firefox and soon Edge as well, the **Redux Devtools** they integrate seamlessly with the existing developer tools. You can find them in the stores here:
+The **Redux Devtools** are another great alternative for debugging purposes. Implemented as a browser extension for Chrome, Firefox and soon Edge as well, the **Redux Devtools** integrate seamlessly with the existing developer tools. You can find them in the stores here:
 
 - Chrome: [https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)
 - Firefox: [https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
@@ -595,7 +595,7 @@ This allows us to automatically supervise any dispatched **action** in the **dev
 
 If we are using an enhancer function, the `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE` function will be used instead. This function of type `compose` allows the bundling of _multiple_ **enhancer** functions into a _single_ one, allowing us to call each of them in turn. The principle is similar to that we have talked about in the `combineReducers()` section for **reducers**.
 
-Redx offers a `compose` function too which allows us to bundle multiple enhancers into a single one. It can be imported to then be used to create a custom `composeEnhancer()` function. If the Redux Devtools are installed, we will use the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to to add the **devtools** of the **store enhancer**. If they are not installed however, Redux' own `compose()` function can be used instead to create the same signature:
+Redux offers a `compose` function too, which allows us to bundle multiple enhancers into a single one. It can be imported to be used to create a custom `composeEnhancer()` function. If the Redux Devtools are installed, we will use the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to to add the **devtools** of the **store enhancer**. If they are not installed however, Redux' own `compose()` function can be used instead to create the same signature:
 
 ```javascript
 import { applyMiddleware, compose, createStore } from 'redux';
@@ -626,7 +626,7 @@ The package consists of two components: one component and a function which will 
 
 #### The Provider Component
 
-As most applications tend to only consist of a single **store**, it is useful to place the `Provider` component up highly in the component tree. In many situations, it might even make sense to use the `Provider` component as the very first component of the component tree. The `Provider` component receives a **Redux store** as a `store` prop and also contains a number of children. All children have access to the `store` prop value given \(the **store** provided\) and can also read it or change it via the _dispatching_ of **actions**.
+As most applications tend to only consist of a single **store**, it is useful to place the `Provider` component up high in the component tree. In many situations, it might even make sense to use the `Provider` component as the very first component of the component tree. The `Provider` component receives a **Redux store** as a `store` prop and also contains a number of children. All children have access to the `store` prop value \(the **store** provided\) and can also read it or change it via the _dispatching_ of **actions**.
 
 ```jsx
 import React from 'react';
@@ -879,7 +879,7 @@ const mapDispatchToProps = {
 };
 ```
 
-Be careful though: This only works when _all_ **action creators** functions are called with the same functions from their connected React components counterparts and when `mapDispatchToProps` is passed in this exact form.
+Be careful though: This only works when _all_ **action creators** functions are called with the same functions from their connected React component counterparts and when `mapDispatchToProps` is passed in this exact form.
 
 By combining `mapStateToProps` and `mapDispatchToProps`, we obtain a call which resembles this:
 
@@ -889,7 +889,7 @@ By combining `mapStateToProps` and `mapDispatchToProps`, we obtain a call which 
 
 All the properties returned by `mapStateToProps` as well as `mapDispatchToProps` are passed to the component which is connected to the **store** via the `connect()` function. We can then access these via **props**, _dispatch_ **actions** via `mapDispatchToProps` or read state from the **store** using the properties from `mapStateToProps`.
 
-Of we wanted to only pass `mapDispatchToProps()` to the `connect()` call to be able to dispatch **actions** from a component, we can pass `null` as a first parameter. This means that we do not have read access to the component.
+If we wanted to only pass `mapDispatchToProps()` to the `connect()` call to be able to dispatch **actions** from a component, we can pass `null` as a first parameter. This means that we do not have read access to the component.
 
 ```javascript
 const ConnectedTodoList = connect(null, mapDispatchToProps)(TodoList);
@@ -1078,7 +1078,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **action** - all of which should sound familiar from previous examples. To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
+We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **actions** - all of which should sound familiar from previous examples. To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
 
 {% hint style="warning" %}
 There's always heated debate about how folders and files should be structured within an application. I have worked with a number of different structures but have found a separation by domain \(i.e. `todos`, `user`, `repositories` ...\) and according to type \(`actions`, `reducer`\) to be most effective. However, others prefer to place all of the actions in a single `actions` directory and all the reducers in a `reducer` directory. Some even avoid the separation of actions and reducers at all.
@@ -1136,7 +1136,7 @@ Please ensure that you have the Redux Devtools installed in your browser.
 
 ### Redux with React Hooks
 
-With React-Redux v7.1.0, Hooks have officially landed in the official React bindings for Redux. Hooks increase the usability of Redux in React manyfold. While creating a store is much the same, `connect()` HOC can be avoided completely. Each method of access - reading or writing by dispatching actions - can be achieved by Hooks.
+With React-Redux v7.1.0, Hooks have officially landed in the official React bindings for Redux. Hooks increase the usability of Redux in React manyfold. While creating a store is much the same, the `connect()` HOC can be avoided completely. Each method of access - reading or writing by dispatching actions - can be achieved by Hooks.
 
 The most important hooks to remember are `useSelector` and `useDispatch` which can be loosely compared to `mapStateToProps` and `mapDispatchToProps`. Following this analogy, the `useSelector` hook is used to _read_ data from the store while `useDispatch` is used to _dispatch_ actions to write data to the store. React Redux offers a third hook, `useStore`, which is not really used in the wild. Its usage should be more of a last resort should you really need access to the store object.
 
@@ -1176,7 +1176,7 @@ const TodoList = () => {
 };
 ```
 
-The selector function can extracted if you wish to increase reuse and structure:
+The selector function can be extracted if you wish to increase reuse and structure:
 
 ```jsx
 import { useSelector } from 'react-redux';
@@ -1234,11 +1234,11 @@ const TodoApp = () => {
 };
 ```
 
-The action is triggered by the call od `dispatch()`. However, it does not need to be passed via `mapDispatchToProps` to arrive in the component as was the case in the `connect()` HOC.
+The action is triggered by the call of `dispatch()`. However, it does not need to be passed via `mapDispatchToProps` to arrive in the component, as was the case in the `connect()` HOC.
 
 ### Summary
 
-Confession time: I underestimated the complexity of this chapter - by a lot. **Redux** has become one of the go-to tools for me in the last few years and using it now feels _natural_ to me. In my opinion, **Redux** is a great tool that effectively manages very complex state and deoes so in a predictable and reasonable fashion.
+Confession time: I underestimated the complexity of this chapter - by a lot. **Redux** has become one of the go-to tools for me in the last few years and using it now feels _natural_ to me. In my opinion, **Redux** is a great tool that effectively manages very complex state and does so in a predictable and reasonable fashion.
 
 However, while writing this chapter I noticed how overwhelming and daunting **Redux** can seem to a beginner. It might be possible that some of the explanations in this chapter do not make sense right away for a beginner. If you feel this might be the case for you, I suggest you open the Redux Devtools to play around with **actions** and **reducers** in the browser. This way, it might become more intuitive how one influences the other and how components, store, state, props and `connect()` as well as **actions** and **reducers** interact with each other.
 
