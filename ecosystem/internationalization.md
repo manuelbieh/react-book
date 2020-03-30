@@ -1,14 +1,14 @@
 # Internationalization
 
-Apart from **Routing** and **State Management**, **internalization** is the last important topic left to discuss. Internalization deals aims to solve the problem of effectively displaying different interfaces to users who speak another language. A German user will be prompted to interact with a German interface whereas an English user will be given an English interface to interact with.
+Apart from **Routing** and **State Management**, **internalization** is the last important topic left to discuss. Internalization aims to solve the problem of effectively displaying different interfaces to users who speak another language. A German user will be prompted to interact with a German interface whereas an English user will be given an English interface to interact with.
 
 I do not want to dive deeply into the general topic of **internalization** \(or **i18n** for short\) but rather focus on **internalization** in **React**. I assume that you have a very rough understanding of internalization in user interfaces and thus focus on how internalization can be implemented in **React**.
 
-I have shown you a very simple example on how internalization can be achieved using the **Context API** in the respective chapter for the **Context API**. As complexity of our applications grows though, the complexity of issues regarding internalization grow as well. Using the plural in different languages or meaningful placeholders suddenly become important parts of the applications we're building. In order to be prepared well to deal with such cases, it is recommended to use one of the well-known internalization packages which have been developed to cater specifically to these use cases.
+I have shown you a very simple example on how internalization can be achieved using the **Context API** in the respective chapter for the **Context API**. As the complexity of our applications grows though, the complexity of issues regarding internalization grow as well. Using the plural in different languages or meaningful placeholders suddenly become important parts of the applications we're building. In order to be prepared well to deal with such cases, it is recommended to use one of the well-known internalization packages which have been developed to cater specifically to these use cases.
 
 The **React ecosystem** boasts with a number of options to choose from. The most notable options form **Lingui**, **Polyglot**, **i18next** or **react-intl**. Facebook has developed its own framework for internationalization called **FBT**. In this chapter we will mainly look at `i18next` and its react bindings: `react-i18next`.
 
-You might wonder why. I have worked with both `react-intl` and `react-i18next` extensively in the past and have also evaluated the alternatives I mentioned above. Through these evaluations and my extensive use of `react-intl` and `react-i18next`, I have found **i18next** to be the best package for a number of reasons. It supports a number of different frameworks, libraries and platforms \(apart from **React**\), and offers a very big and active community. Moreover, it works seamlessly client-side as well as server-side in Node.js. Most of the bigger translation services offer **i18next** as one of their export formats.
+You might wonder why we are focusing on `i18next`; I have worked with both `react-intl` and `react-i18next` extensively in the past and have also evaluated the alternatives I mentioned above. Through these evaluations and my extensive use of `react-intl` and `react-i18next`, I have found **i18next** to be the best package for a number of reasons. It supports a number of different frameworks, libraries and platforms \(apart from **React**\), and offers a very big and active community. Moreover, it works seamlessly client-side as well as server-side in Node.js. Most of the bigger translation services offer **i18next** as one of their export formats.
 
 **i18next** was also one of the first packages to implement support and even implement optimizations for React Hooks, without comprising backwards compatibility. The API has remained simple and easy to use in that process and still offers the greatest amount of flexibility. The package is complete and caters to most use cases a developer could possibly imagine making it a very solid choice for us.
 
@@ -26,9 +26,9 @@ Or if you are using yarn:
 yarn add i18next react-i18next
 ```
 
-We install `i18next`, the **internationalization framework**, as well as `react-i18next`, the associated **React bindings**. These offer a number of component and functions which will simplify the work with i18next in React. Similar to the principle which we have already seen in the chapter on state management with `redux` and `react-redux`.
+We install `i18next`, the **internationalization framework**, as well as `react-i18next`, the associated **React bindings**. These offer a number of components and functions which will simplify the work with i18next in React. Similar to the principle which we have already seen in the chapter on state management with `redux` and `react-redux`.
 
-Let's start by creating two objects containing our translations. One will hold texts in German while the other will hold texts in English:
+Let's start by creating two objects containing our translations. One will hold German translations while the other will hold English translations:
 
 ```javascript
 const de = {
@@ -86,11 +86,11 @@ The main language of the application as well as the fallback language is initial
 [Language].[Namespace].[Translation Key] = Translation
 ```
 
-It should be clear what we are referring to with language. This can either be `en` for English, `de` for German or even `de-AT` for German with a focus on the Austrian region. The property has object value which contains at least one up to an indefinite amount of **namespaces**.
+It should be clear what we are referring to with language. This can either be `en` for English, `de` for German or even `de-AT` for German with a focus on the Austrian dialect. The language property has an object which contains from one to an infinite number of **namespaces**.
 
-The **namespace** is a central feature of **i18next** which can be used if we so please. It allows for splitting large translation files into different parts which could be dynamically lazy loaded. While this feature is not necessary for smaller applications, it can be game-changer for larger and more complex applications. It will help us to contain the size of the translations and to aid the readability of the translations, for example by using an own **namespace** for each page. Translation files for these different pages can then be cared for independently and will only be loaded if they are actually needed.
+The **namespace** is a central feature of **i18next**. It allows for splitting large translation files into different parts which can be dynamically lazy loaded. While this feature is not necessary for smaller applications, it can be game-changer for larger and more complex applications. It will help us to contain the size of the translations and to aid the readability of the translations, for example by using a **namespace** for each page. Translation files for these different pages can then be cared for independently and will only be loaded if they are actually needed.
 
-We always have to use at least **one** **namespace** in **i18next**. By default, it will be `translation`, but it can be changed in the `defaultNS` option in the configuration object of the `.init()` method. The **namespace** itself is also an object which contains the translations in the form of `translationKey: value` or `greeting: 'Hello world!'` to be concrete.
+We always have to use at least **one namespace** in **i18next**. By default, it will be `translation`, but it can be changed in the `defaultNS` option in the configuration object of the `.init()` method. The **namespace** itself is also an object which contains the translations in the form of `translationKey: value` — or `greeting: 'Hello world!'` to be concrete.
 
 The value _could_ also be an object:
 
@@ -126,7 +126,7 @@ The `withTranslation()` function will create a **HOC** which we can pass to the 
 import { withTranslation } from 'react-i18next';
 ```
 
-Once imported, we call the function and obtain an HOC which we pass the component to in which we want to access the translated values. If we are using **namespaces**, we can also pass the **namespace** we want to use to the `withTranslation()` function:
+Once imported, we call the function and obtain a HOC which we pass the component to that we want to access the translated values with. If we are using **namespaces**, we can also pass the **namespace** we want to use to the `withTranslation()` function:
 
 ```javascript
 // Without namespaces (using the default value):
@@ -141,7 +141,7 @@ const TranslatedComponent = withTranslation(['namespace1', 'namespace2'])(
 );
 ```
 
-For myself it has proven useful, to extract components into their own files and wrap them with the `withTranslation()` HOC when they are exported:
+For myself, it has proven useful to extract components into their own files and wrap them with the `withTranslation()` HOC when they are exported:
 
 ```jsx
 // Greeting.js
@@ -182,7 +182,7 @@ The `i18n` prop contains the initialized **i18next** instance. It offers a numbe
 - `i18n.language` to read the currently selected language
 - `i18n.changeLanguage()` to switch the currently selected language
 
-In order to switch the language from `en` to `de`, one can call `i18n.changeLanguage('de')`.
+In order to switch the language from `en` to `de`, we can call `i18n.changeLanguage('de')`.
 
 #### Using the useTranslation\(\) hook in function components
 
@@ -214,11 +214,11 @@ const { t } = useTranslation('namespace');
 const { t } = useTranslation(['namespace1', 'namespace2']);
 ```
 
-If no namespace has been provided, the default settings will be set.
+If no namespace has been provided, the default settings will be used.
 
 #### Complex translations using the Trans component
 
-In a few select cases, it might be necessary to use React component in the translations. For example, one might want to use the `Link` component from **React Router** to link to a different URL within a translation. The `t()` function does not support this out of the box. The solution comes in the form of the `Trans` component from `react-18next`. It is not always easy to understand how it should be used but it can be powerful tool.
+In a few select cases, it might be necessary to use a React component in the translations. For example, one might want to use the `Link` component from **React Router** to link to a different URL within a translation. The `t()` function does not support this out of the box. The solution comes in the form of the `Trans` component from `react-18next`. It is not always easy to understand how it should be used but it can be powerful tool.
 
 Let's assume that we want to use a `Link` component inside of our translations. The code might resemble something like this:
 
@@ -231,7 +231,7 @@ Let's assume that we want to use a `Link` component inside of our translations. 
 </p>
 ```
 
-Using the Link component in such a translation would not work as translations are strings and would thus not be able to define that the `<Link>` component does in fact refer to the Link component from the React Router package.
+Using the Link component in such a translation would not work as translations are strings and would thus not be able to define that the `<Link>` component refers to the Link component from the React Router package.
 
 The `Trans` component offers the solution to our problem. Translations using this component can include numbered placeholders. These placeholders will later be replaced with components which will appear in the same place as they are used as in the `Trans` component.
 
@@ -270,9 +270,9 @@ Using the above example, we have the following counting result:
 
 The `<1>Terms and Conditions</1>` will be replaced by the `<Link>` element as it corresponds to the index value of 1 in the array of children.
 
-In complex structures where we might even deal with a number of links, this procedure can become a little bit cumbersome. Luckily, `react-i18next` offers the opportunity to automatically generate placeholders. These can be set as an option when **i18next** is initialized.
+In complex structures where we might even deal with a number of links, this procedure can become a little bit cumbersome. Luckily, `react-i18next` offers the ability to automatically generate placeholders. These can be set as an option when **i18next** is initialized.
 
-The first option to change is `saveMissing` which should now be set to `true`. Additionally, a `missingKeyHandler` function should be set. In the example to follow, a simple `console.log()` is used to log missing translations to the browser console:
+The first option to change is `saveMissing` which should now be set to `true`. Additionally, a `missingKeyHandler` function should be set. In the following example, a simple `console.log()` is used to log missing translations to the browser console:
 
 ```javascript
 i18next.use(initReactI18next).init({
@@ -309,7 +309,7 @@ i18next::translator: missingKey de translation terms I accept the &lt;1&gt;Terms
 
 The output generated by the `debug` option is a little more extensive than the one provided by the `missingKeyHandler` variant. However, it is possible to set this option by only setting its value to `true`.
 
-By the way: You can still use the `t()` function as you are used to if you find yourself in a `<Trans>` element. This means, the example to follow is completely valid:
+By the way: You can still use the `t()` function as you are used to if you find yourself in a `<Trans>` element. This means, the following example is completely valid:
 
 ```jsx
 <Trans i18nKey="terms">
@@ -323,6 +323,6 @@ By the way: You can still use the `t()` function as you are used to if you find 
 
 ### Summary
 
-Using the examples provided in this chapter, it is relatively simple to provide internalization in our applications. For my personal and professional use, i18next has proven itself to be a very universal and complete tool to build international applications. Integrating with different libraries and frameworks has been a breeze. It offers all sorts of functionality that should be supported by a i18n framework and is easy to understand a learn with only a small set of functions: `i18n.changeLanguage()`, `t()`, `<Trans>`.
+Using the examples provided in this chapter, it is relatively simple to provide internalization in our applications. For my personal and professional use, i18next has proven itself to be a universal and complete tool to build international applications. Integrating with different libraries and frameworks has been a breeze. It offers all sorts of functionality that should be supported by a i18n framework and is easy to understand a learn with only a small set of functions: `i18n.changeLanguage()`, `t()`, `<Trans>`.
 
 Once set up correctly \(I would advise you to check out the [complete options of i18next](https://www.i18next.com/overview/configuration-options)\), internalization in React applications is easy to achieve without having to deal with a great deal of effort. One could even integrate with online services such as [Locize.com](https://locize.com/) or [Lokalise.co](https://www.lokalise.co) \(to name a few\) which help to create and manage translations or even outsource them automatically.
