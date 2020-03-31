@@ -1,12 +1,12 @@
-# Sources of Information
+# Keeping up to Date
 
-Most information that you will find on React is written in or created in English. Even developers that do not speak English as their native language often write articles or blogs in English in order to reach a higher target audience. At the same time, it is very important to provide materials for those who cannot speak or understand English quite as well as their native language. So if you do speak another language, give it a try and provide information in your native language too! For me, that was the primary driver to publish this book in German as I could make it more accessible to German developers.
+Most information that you will find on React is written or created in English. Even developers that do not speak English as their native language often write articles or blogs in English in order to reach a broader audience. At the same time, it is very important to provide materials for those who cannot speak or understand English quite as well as their native language. So if you do speak another language, give it a try and provide information in your native language too! For me, that was the primary driver to publish this book in German as I could make it more accessible to German developers.
 
 Most of the material that I will mention in the course of this section will be in English though.
 
 ### Twitter
 
-Twitter is a great source of information for current trends in the tech community. The React Team even announces their changes publicly on Twitter very shortly after releasing them. If you do not have an account yet but like to stay up to date, you should think about creating an account for yourself and checking in every now and then to make sure you are getting access to relevant content.
+Twitter is a great source of information for current trends in the tech community. The React Team even announces their changes publicly on Twitter very shortly after releasing them. If you do not have an account yet, but like to stay up to date, you should think about creating an account for yourself and checking in every now and then to make sure you are getting the most relevant content.
 
 I will try and name a few accounts that I have found invaluable when it comes to working with React and who generally tweet on the topic. This list is not exhaustive by any means though and I know that there are a great number of other people who also do great work in the React space. I do however follow these people myself and can therefore wholeheartedly recommend them:
 
@@ -14,7 +14,7 @@ I will try and name a few accounts that I have found invaluable when it comes to
 
 ### Newsletters
 
-Don't worry - I'm not referring to those kind of newsletters that constantly try to sell stuff to us. Luckily, the React community has a number of very interesting, cared for and nicely designed newsletters which are well worth subscribing to. Most of these newsletters are sent out on a weekly basis and contain a great overview of what has happened in React World in the last week. A great choice for all those who find Twitter a little bit too fast-paced or stressful:
+Don't worry, I'm not referring to those kind of newsletters that constantly try to sell stuff to us. Luckily, the React community has a number of very interesting, cared for and nicely designed newsletters which are well worth subscribing to. Most of these newsletters are sent out on a weekly basis and contain a great overview of what has happened in the React World in the previous week. A great choice for all those who find Twitter a little bit too fast-paced or stressful:
 
 - [React Status](https://react.statuscode.com/) \(Peter Cooper / Cooperpress\)
 - [This Week in React](https://this-week-in-react.org/) \(Philipp Spiess\)
