@@ -1,6 +1,6 @@
 # Tools and Frameworks
 
-As React has been around for a little while, an ecosystem has grown around it that boasts with an abundance of tools. Ranging from static site generators (in order to realize simple to medium-sized and complex static website on the basis of React) to prototyping tools to tools which allow us to display our components in some sort of styleguide, the React ecosystem has much to offer. In this small sub-chapter I want to provide a _short_ overview of the most commonly known tools and frameworks.
+As React has been around for a while, an ecosystem has grown around it that boasts an abundance of tools. Ranging from static site generators (in order to realize simple to medium-sized and complex static website on the basis of React) to prototyping tools to tools which allow us to display our components in some sort of styleguide, the React ecosystem has much to offer. In this small sub-chapter I want to provide a _short_ overview of the most commonly used tools and frameworks.
 
 ### Storybook
 
@@ -36,7 +36,7 @@ As React has been around for a little while, an ecosystem has grown around it th
 
 > Dev tool for creating reusable React components
 
-**React Cosmos** takes things a little bit further and allows us to include external dependencies such as React Router or Redux in our component overview by using the concepts of _fixtures_ and _proxies._ This allows us to display and test such components which would otherwise be a bit harder to do. React Cosmos knowingly breaks up the encapsulation of components which we found in the three previously mentioned tools and allows us to move beyond just UI components.
+**React Cosmos** takes things a little bit further and allows us to include external dependencies, such as React Router or Redux in our component overview, by using the concepts of _fixtures_ and _proxies_. This allows us to display and test such components more simply. React Cosmos knowingly breaks up the encapsulation of components which we found in the three previously mentioned tools and allows us to move beyond _just_ UI components.
 
 **License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/react-cosmos/react-cosmos](https://github.com/react-cosmos/react-cosmos)
@@ -62,7 +62,7 @@ As React has been around for a little while, an ecosystem has grown around it th
 
 ### Next.js
 
-Next.js describes itself as "The React Framework" for a number of different use cases, ranging from static to dynamic websites, small to large companies, and mobile to classic websites. Next.js lives up to its claim as 36000 stars on GitHub indicate — it is extremely popular within the community. For many, Next.js is a serious alternative to Create React App. As opposed to CRA, Next.js supports server-side rendering out of the box which is especially important for developers optimizing for SEO.
+Next.js describes itself as "The React Framework" for a number of different use cases, ranging from static to dynamic websites, small to large companies, and mobile to classic websites. Next.js lives up to its claim, as 36,000 stars on GitHub indicate; it is extremely popular within the community. For many, Next.js is a serious alternative to Create React App. As opposed to CRA, Next.js supports server-side rendering out of the box, which is especially important for developers optimizing for SEO.
 
 **License:** MIT \(Open Source\)  
 **URL:** [https://nextjs.org/](https://nextjs.org/)  
