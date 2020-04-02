@@ -1,6 +1,6 @@
 # Principles and Rules of Hooks
 
-If we want to use **Hooks** and implement them in your application, we need to follow a few rules that prevent us from running into unexpected errors or behavior. **ESLint** and the `eslint-plugin-react-hooks` package which has been developed by the React Team itself help us to follow these rules and indicate when you might be breaching one.  I have advocated for the use of **ESLint** in the chapter on **Tools and Setup** already and recommend you to use it if you have not done so already.
+If we want to use **Hooks** and implement them in our applications, we need to follow a few rules that prevent us from running into unexpected errors or behavior. **ESLint** and the `eslint-plugin-react-hooks` package, which has been developed by the React Team itself, help us to follow these rules and indicate when you might be breaching one.  I have advocated for the use of **ESLint** in the chapter on **Tools and Setup** already and recommend that you use it if you have not done so already.
 
 To install the plugin, you can execute the following command on the command line:
 
