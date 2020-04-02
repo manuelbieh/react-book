@@ -1,10 +1,10 @@
 # Implement your own Hooks
 
-Apart from the **internal Hooks** such as `useState` or `useEffect`, it is also possible to create your own **custom Hooks**. These in turn can then again use **internal Hooks** or other **custom Hooks** and encapsulate logic in any reusable form. Creating **custom Hooks** can be really useful if you want to use the same logic in multiple components. Even if the complexity of the component's logic grows, it can be useful to **divide** it and break it up into **custom Hooks** with meaningful names in order to keep the current **function component** more manageable and readable.
+Apart from the **internal Hooks** such as `useState` or `useEffect`, it is also possible to create our own **custom Hooks**. These in turn can use **internal Hooks** or other **custom Hooks**, and encapsulate logic in a reusable form. Creating **custom Hooks** can be really useful if you want to use the same logic in multiple components. Even if the complexity of the component's logic grows, it can be useful to **divide** it and break it up into **custom Hooks** with meaningful names in order to keep the current **function component** more manageable and readable.
 
 ### Your first custom Hook
 
-Let's start with a relatively simple example and assume that we want to create a **custom Hook** with which we can invoke Side Effects and change the background-color of a component whenever it is mounted. A typical name for such a **custom** **Hook** would be `useBackgroundColor()` - remember that Hooks always need to start with `use`. This Hook expects a valid CSS color and then applies the color as the current background color. It is applied as soon as a component using it is mounted or passes a  new value to the **custom Hook**.
+Let's start with a relatively simple example and assume that we want to create a **custom Hook** with which we can invoke Side Effects and change the background-color of a component whenever it is mounted. A typical name for such a **custom Hook** would be `useBackgroundColor()` — remember that Hooks always need to start with `use`. This Hook expects a valid CSS color and then applies the color as the current background color. It is applied as soon as a component using it is mounted or passes a  new value to the **custom Hook**.
 
 As we might want to use this logic in other components and do not want to repeat ourselves every time and implement the same functionality with `useEffect` again and again, it is worth extracting our **first custom Hook**:
 
@@ -73,15 +73,15 @@ ReactDOM.render(<Tabs/>, document.getElementById("root"));
 
 We've implemented three basic components in this example which help us to display our content: `DefaultContent`, `SpecialContent` and `OtherSpecialContent`. Two of these components already use our **custom hook** `useBackgroundColor()` to change the global background color in a `useEffect()` once the component has mounted.
 
-Alternatively, we could have implemented the `useEffect()` Hook manually in each component that needs to change its background color. However, this would have led to a lot of code duplication. Instead, we're much better off by extracting this logic into its own custom Hook and making it configurable by passing the required color in. This can then be used in as many **function components** as you wish.
+Alternatively, we could have implemented the `useEffect()` Hook manually in each component that needs to change its background color. However, this would have led to a lot of code duplication. Instead, we're much better off extracting this logic into its own custom Hook and making it configurable by passing the required color as an argument. This can then be used in as many **function components** as you wish.
 
-While JSX allows us to create reusable components on the user interface layer, Hooks offer us the opportunity to reuse logic across components without having to make any compromises.
+While JSX allows us to create reusable components for the user interface, Hooks offer us the opportunity to reuse logic across components without having to make any compromises.
 
 ### Working with data in Hooks
 
-Passing data via **Custom Hooks** is no one-way street. In our first custom Hook example we've seen that we can pass data into a **Custom Hook** as a function parameter. The Hook can also _return_ data though that can then be used in component. The form in which this data is returned from the **Hook** is entirely at the discretion of the developer. You can easily return strings, tuples but also entire React components or elements or even a combination of all of them. You're free to choose so to say.
+Passing data via **Custom Hooks** is no one-way street. In our first custom Hook example we've seen that we can pass data into a **Custom Hook** as a function parameter. The Hook can also _return_ data that can then be used in component. The form in which this data is returned from the **Hook** is entirely at the discretion of the developer. You can easily return strings, tuples but also entire React components or elements or even a combination of all of them. You're free to choose so to say.
 
-Let's assume that we want to access data from an API. We should parameterize the data that we want to access to make it easier to work with said data. Hooks can help us in this case to access this data \(it does not matter in which component it ends up being used\) and then return it to the component that needs it. In our next example, we will deal with user data from GitHub. Thus, a good name for our next **Custom Hook** would be `useGitHubUserData`.
+Let's assume that we want to access data from an API. We should parameterize the data that we want to access to make it easier to work with. Hooks can help us to access this data in this case \(it does not matter in which component it ends up being used\) and then return it to the component that needs it. In our next example, we will deal with user data from GitHub. Thus, a good name for our next **Custom Hook** would be `useGitHubUserData`.
 
 We pass a GitHub username to this Hook and obtain an object with all the relevant information from the user. The Hook itself deals with requesting the data from the GitHub API and will pass it to the component:
 
