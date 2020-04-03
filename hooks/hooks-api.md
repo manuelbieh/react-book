@@ -1,6 +1,6 @@
 # Hooks API
 
-In this chapter I want to summarize all the hooks which are available to us internally and describe how they can be used and when. The official React documentation differentiates between three basic Hooks and seven additional hooks. These additional hooks are often used for very specific use cases \(such as performance optimizations\) or they are extensions of the basic hooks.
+In this chapter I want to summarize all the hooks which are available to us internally and describe how and when they can be used. The official React documentation differentiates between three basic Hooks and seven additional hooks. These additional hooks are often used for very specific use cases \(such as performance optimizations\) or they are extensions of the basic hooks.
 
 The three **basic hooks** which I mentioned briefly beforehand are:
 
@@ -24,7 +24,7 @@ The **seven additional hooks** are:
 const [state, setState] = useState(initialState);
 ```
 
-This Hooks returns a **value** as well as a **function** to us, which we can use to update the **value** itself. During the first rendering of a component that uses this hook, this value is equal to the `initialState` which you have passed to the state. If the parameter that has been passed in is a function, it will use the return value of the function as its initial value.
+This Hooks returns a **value** as well as a **function** to us, which we can use to update the **value**. During the first rendering of a component that uses this hook, this value is equal to the `initialState` which you pass to the state. If the parameter that has been passed in is a function, it will use the return value of the function as its initial value.
 
 When the update function is called, React ensures that the function always has the same **identity** and does not create a new function whenever the hook is called. This is important as it reduces the number of renders and also means that we do not need to pass any other **dependencies** \(as is the case in `useEffect()` or `useCallback()`\).
 
@@ -96,7 +96,7 @@ This **Hook** is intended for **imperative side effects** such as API requests, 
 
 The `useEffect()` **Hook** combats this problem and allows for a _safe_ mechanism to use side effects within **function components**.
 
-The **Hook** expects a **function** as its first parameter and a **dependency array** as its second. The function is called **after** the component has rendered. If we have passed an **optional dependency array** to this Hook, the function we passed in will only be executed if at least one of the values in the **dependency array** has changed. If an **empty dependency array** has been passed, the function will only be run on the **first render** of the component - similar to `componentDidMount()` lifecycle method which we learned about in class components.
+The **Hook** expects a **function** as its first parameter and a **dependency array** as its second. The function is called **after** the component has rendered. If we have passed an **optional dependency array** to this Hook, the function we pass will only be executed if at least one of the values in the **dependency array** has changed. If an **empty dependency array** is passed, the function will only be run on the **first render** of the component - similar to the `componentDidMount()` lifecycle method which we learned about in class components.
 
 ### Cleaning up side effects
 
@@ -131,7 +131,7 @@ ReactDOM.render(<Clock />, document.getElementById("root"));
 In the above example we have set up an interval that starts once the component **mounts**. Once the component **unmounts** we stop the timer as we would otherwise change the state of the component which is not part of the component tree anymore. If we tried to do this, React would inform us with a warning and suggest to **clean up** asynchronous tasks and subscriptions in a **cleanup function**:
 
 {% hint style="danger" %}
-Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+Warning: We can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
 {% endhint %}
 
 By returning a cleanup function from the **effect function** we can stop the interval with a call of `clearInterval()`. This happens before each call of the effect function, but at the very latest it would happen during Unmounting.
@@ -140,7 +140,7 @@ By returning a cleanup function from the **effect function** we can stop the int
 
 Normally the `useEffect()` Hook or its associated effect function is executed after each render of a component. This way, we ensure that the effect is executed each time once of its dependencies have changed. If we access state or props of a component within the effect function, the side effect should also be executed if one of the dependencies change. If we wanted to display profile data of a particular user and requested this data from an API, the API request should also be initiated if the user's profile that we want to look at changes while the component is already mounted.
 
-However, this might lead to a lot of unnecessary calls of this function and it might even be executed if no data has actually changed since the last render \(which are relevant for the side effect\). This is why the React allows us to define a **dependency array** as a second parameter in the **effect function**. Only if at least one value in the **dependency array** has changed, the function will be called again. Let's put our previous example into a little code snippet:
+However, this might lead to a lot of unnecessary calls of this function and it might even be executed if no data has actually changed since the last render \(which are relevant for the side effect\). This is why the React allows us to define a **dependency array** as a second parameter in the **effect function**. Only if one or more values in the **dependency array** have changed, the function will be called again. Let's put our previous example into a little code snippet:
 
 ```javascript
 useEffect(() => {
@@ -151,7 +151,7 @@ useEffect(() => {
 
 In this example, we have put the username into the dependency array which we use to request data from the API.
 
-While creating such a **dependency array**, we should take utmost care to include all values that are present in the function and could change within the lifetime of the component in this dependency array. If the effect function should only be run once and perform a similar task such as `componentDidMount()`, you should leave the **dependency array** empty.
+While creating such a **dependency array**, we should take the utmost care to include all values that are present in the function and could change within the lifetime of the component. If the effect function should only be run once and perform a similar task such as `componentDidMount()`, you should leave the **dependency array** empty.
 
 {% hint style="info" %}
 In order to facilitate or automate the creation of **dependency arrays**, the `eslint-plugin-react-hooks` offers an `exhaustive-deps` rule which will automatically write dependencies used in the effect function into the **dependency array** or at least warns that they should be included. These could be run on _Format on Save_ or another similar editor configuration.
@@ -163,13 +163,13 @@ You can active it by setting `"exhaustive-deps": "warn"` in the`rules` block of 
 
 The **effect function** is called **asynchronously** with a little bit of delay after the **layout and paint phase** of the browser. For most side effects this should be sufficient. You might run into situations though in which it is necessary to to **synchronously** run side effects. For example, you might need to perform DOM mutations and a delay in execution would lead to an inconsistent user interface or jarring content on the screen.
 
-To deal with these problems, React introduced the `useLayoutEffect()` Hook. It works almost identical to the `useEffect()` hook: it expects an **effect function** which can also return a **cleanup function** and also contains a dependency array. This dependency array is identical to that in the regular `useEffect()` Hook. The difference in the two Hooks is that the `useLayoutEffect()` hook is executed synchronously and run just after all DOM mutations have finished as opposed to asynchronously as is the case in the regular `useEffect()` hook.
+To deal with these problems, React introduced the `useLayoutEffect()` Hook. It works almost identical to the `useEffect()` hook: it expects an **effect function** which can also return a **cleanup function** and also contains a dependency array. This dependency array is identical to that of the regular `useEffect()` Hook. The difference in the two Hooks is that the `useLayoutEffect()` hook is executed synchronously and run just after all DOM mutations have finished, as opposed to asynchronously as is the case in the regular `useEffect()` hook.
 
 `useLayoutEffect()` can read from the DOM and can also synchronously modify it **before** the browser will display these changes in its **paint phase**.
 
 ### Asynchronous effect functions
 
-Even if **effect functions** can be run with delay, they are not allowed to be asynchronously by definition and are not allowed to return a promise. If we tried to perform such an operation, React would give us the following warning:
+Even if **effect functions** can be run with delay, they are not allowed to be asynchronous by definition, and are not allowed to return a promise. If we tried to perform such an operation, React would give us the following warning:
 
 {% hint style="danger" %}
 Warning: An Effect function must not return anything besides a function, which is used for clean-up.
@@ -236,11 +236,11 @@ The asynchronous function does not necessarily need to be defined **inside** of 
 const myContextValue = useContext(MyContext);
 ```
 
-This Hook only expects one parameter: a context type which we create by calling `React.createContext()`. It will then return the value of the next higher context provider in the component hierarchy.
+This Hook only expects one parameter: a context type which we create by calling `React.createContext()`. It will then return the value of the next highest context provider in the component hierarchy.
 
 The `useContext()` Hook acts like a context consumer component and causes a re-render of the **function component** as soon as the value of the context in the provider element changes.
 
-Using this hook is optional and it is still possible to create Context consumers in **JSX** of **function components**. However, the Hook is much more convenient and easier to read as no new hierarchical layer is created in the component tree.
+Using this hook is optional and it is still possible to create Context consumers in **JSX** using **function components**. However, the Hook is much more convenient and easier to read as no new hierarchical layer is created in the component tree.
 
 ## useReducer
 
@@ -290,7 +290,7 @@ ReactDOM.render(<Counter />, document.getElementById('root'));
 
 We have defined the initial State `initialState` and the reducer function `reducerFunction`. The initial state only consists of an object which holds a `count` property which is `0` initially. The reducer function on the other hand expects a `state` and an `action` which are later passed to the reducer function by calling the `dispatch` function. These two parameters will then create the **new** state. **But beware**: instead of mutating an existing state, we always have to create a new state! Otherwise mutations of the existing state will lead to side effects which are not intended and cause incorrect display of components. A **reducer** function should always be a **pure** function.
 
-The **reducer function** as well as the initial state are then passed to the `useReducer()` Hook which will in turn return a tuple. The tuple consists of two values: the first element will portray the **current state** in this particular rendering phase and the second value will be the so-called **dispatch** function.
+The **reducer function**, as well as the initial state, are then passed to the `useReducer()` Hook which will return a tuple. The tuple consists of two values: the first element will portray the **current state** in this particular rendering phase and the second value will be the so-called **dispatch** function.
 
 If we want to change our current state, we call the `dispatch` function and pass this function an **action**. In our current example, we achieve this by clicking one of the two buttons which will either dispatch the `{ type: "INCREMENT" }` \(to increase the counter\) action or `{ type: "DECREMENT" }` \(to decrease the counter\) action/
 
@@ -340,11 +340,11 @@ const Counter = (props) => {
 ReactDOM.render(<Counter startValue={3} />, document.getElementById('root'));
 ```
 
-In this example, the `useReducer()` hook has been extended to include a third and optional parameter: the **init** function. The `initialState` is now an argument for the **init** function. The value for this argument is passed to the component via **props**, `startValue` in particular.
+In this example, the `useReducer()` hook has been extended to include a third and optional parameter: the **init** function. The `initialState` is now an argument for the **init** function. The value for this argument is passed to the component via **props** — `startValue` in our case.
 
 ### Reducers in practice
 
-The guiding principle of **reducers** should be known to those in the React community who have had exposure to **Redux**. **Redux** is a library that allows us to manage complex state in a comfortable manner and was the first point of call whenever handling local state became hard to read and cumbersome. It also created a solution for the so-called "prop drilling" which meant that previously props needed to be passed through multiple hierarchical layers.
+The guiding principle of **reducers** should be known to those in the React community who have had exposure to **Redux**. **Redux** is a library that allows us to manage complex state in a comfortable manner and was the first point of call whenever handling local state became hard to read and cumbersome. It also created a solution for the so-called "prop drilling" which meant that previous props needed to be passed through multiple hierarchical layers.
 
 **Redux** manages reducer functions and makes state and their dispatch functions available to those components which should read or modify the global state. The `useReducer()` hook is React's custom solution to realize complex state management using reducer functions.
 
@@ -452,7 +452,7 @@ The `useReducer()` hook is used and passed to the `accountReducer` function. In 
 
 The `initialState` consists of an object with an empty `data` property, an `isFetching` and `isError` flag and a `lastUpdated` property. The flags can inform us whether the data has actually loaded or whether an error occurred whilst the `lastUpdated` property will store a timestamp of the last successful request. We can use these later to only use one request per minute or to signal to the user that they might be seeing data but that the interface has not changed for a while.
 
-In addition, we use an `useEffect()` hook to initiate loading the data once the GitHub username in the **props** changes. Once this has happened, we dispatch the `REQUEST_START` **action**. The reducer will then create the new state:
+In addition, we use a `useEffect()` hook to initiate loading the data once the GitHub username in the **props** changes. Once this has happened, we dispatch the `REQUEST_START` **action**. The reducer will then create the new state:
 
 ```diff
 {
@@ -474,7 +474,7 @@ if (state.isLoading) {
 
 This is a clear signal for the user that data is currently being loaded.
 
-After this state, we can be left with one of the following cases: the request either fails or data is successfully obtained from the API.
+After this state, we can be left with one of the following cases: the request either fails, or data is successfully obtained from the API.
 
 If the requests failed, the `REQUEST_ERROR` **action** would be dispatched. The state would be reflected as such:
 
@@ -520,7 +520,7 @@ The **new state** which is created by the **reducer** differs from the previous 
 }
 ```
 
-The `data` property contains the data which we have received from the API. The state of `isLoading` is set back to `false` and`lastUpdated` is updated to reflect the point of time when the data was successfully written to state. Based on this information, we can now display to the user:
+The `data` property contains the data which we have received from the API. The state of `isLoading` is set back to `false` and`lastUpdated` is updated to reflect the point in time when the data was successfully written to state. Based on this information, we can now display to the user:
 
 ```jsx
 return (
@@ -532,7 +532,7 @@ return (
 
 Apart from writing our first more complex reducer, we have also successfully learned about how `useEffect()` and `useReducer()` can be used together.
 
-As an aside: Similarly to the `useState()` hook, the `useReducer()` hook will not trigger another re-render if the reducer function returns the exact same state as before.
+As an aside: Similar to the `useState()` hook, the `useReducer()` hook will not trigger another re-render if the reducer function returns the exact same state as before.
 
 ## useCallback
 
@@ -540,7 +540,7 @@ As an aside: Similarly to the `useState()` hook, the `useReducer()` hook will no
 const memoizedFunction = useCallback(callbackFunction, dependencyArray);
 ```
 
-the `useCallback()` hook can be used to optimize the performance of an application. It receives a function and then creates an **unique identity** of that function, which will remain active until the **dependencies** of the hook itself change.
+the `useCallback()` hook can be used to optimize the performance of an application. It receives a function and then creates a **unique identity** of that function, which will remain active until the **dependencies** of the hook itself change.
 
 This is important as we need to provide the same reference to a function, when dealing with `PureComponents`, when functions implement their own `shouldComponentUpdate()` method or if they are wrapped by `React.memo()`.
 
@@ -588,7 +588,7 @@ The `changeHandler` function is created in the **form component** and thus is ge
 
 Thus, we can't make use of the `React.memo()` optimization mechanism in `FancyInput.` `React.memo()` checks **before** each re-render of a component if its **props** changed compared to the previous render and will trigger a re-render if this is the case. As the `changeHandler` function is generated from scratch every time the `Form` component renders, this condition will always be true and the `FancyInput` will always re-render too.
 
-We can use `useCallback()` to combat this. By wrapping our `changehandler()` function in this hook, React can create a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
+We can use `useCallback()` to combat this. By wrapping our `changeHandler()` function in this hook, React can create a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
 
 ```jsx
 const changeHandler = useCallback((e) => {
@@ -679,7 +679,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-This app consists of an input field for numbers. If a number is entered and submitted with the **enter** key, the number is written into state within the `values` field. In this case, this state corresponds to an array which will hold all the numbers we have entered. The component will then iterate through all of the numbers entered and then renders a `FibonacciNumber` component which will receive each of this values.
+This app consists of an input field for numbers. If a number is entered and submitted with the **enter** key, the number is written into state within the `values` field. In this case, this state corresponds to an array which will hold all the numbers we have entered. The component will then iterate through all of the numbers entered and then renders a `FibonacciNumber` component which will receive each of these values.
 
 The `FibonacciNumber` component will then calculate the corresponding Fibonacci number for the entered number and display it to the user. Depending on the number and computational power, it might take some time to calculate this number \(on my PC it took about 2-3 seconds for the 40th Fibonacci number\).
 
@@ -699,7 +699,7 @@ const result = useMemo(() => fibonacci(value), [value]);
 
 ... we have created a _memoized_ value.
 
-React will calculate this value during the **first render**, **remember** the value and only re-calculates if the value of the `value` prop changes for this component. If the value / the **dependencies** do not change between the two renders, React will use the value of the previous calculation without actually performing the computation.
+React will calculate this value during the **first render**, **remember** the value and only re-calculates if the value of the `value` prop changes for this component. If the value or the **dependencies** do not change between the two renders, React will use the value of the previous calculation without actually performing the computation.
 
 **But be careful**: This is all happening due to a **single** call of the `useMemo()` hook. If I called the same function twice in two different `useMemo()` hooks, the calculation would still be performed twice even if both functions use the same parameters. The second hook will **not** use the result of the previous calculation.
 
@@ -758,7 +758,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-In this example, the component using the `useLayoutEffect()` is only registered after the component as mounted. We achieve this by checking for the `mountLayoutComp` state after the first paint phase.
+In this example, the component using the `useLayoutEffect()` is only registered after the component is mounted. We achieve this by checking for the `mountLayoutComp` state after the first paint phase.
 
 ## useDebugValue
 
@@ -797,7 +797,7 @@ useDebugValue(value, (value) => formattedValue);
 
 The hook is passed a **debug value** as its first argument just as we have provided before. However, as the second argument it will not receive a function that will executed the formatting of the debug value. This function will receive the **value** from the **hook** and will return the formatted value.
 
-If you are looking for a clear if unrealistic example, I can provide another example using the Fibonacci function we have already seen in the `useMemo()` example. We are going to display the debug value once with and once without the formatting function and inspect how the time to display the app changes:
+If you are looking for a clear if unrealistic example, I can provide another example using the Fibonacci function we have already seen in the `useMemo()` example. We are going to display the debug value once with, and once without the formatting function and inspect how the time to display the app changes:
 
 ```jsx
 import React, { useDebugValue, useEffect } from 'react';
@@ -830,13 +830,13 @@ Using `useDebugValue()` without the formatting function does significantly incre
 useImperativeHandle(ref, createHandle, [deps]);
 ```
 
-I will be entirely honest with you all: I found it extremely difficult to construct a use case in which `useImperativeHandle()` will post a useful solution. Frustrated, I took to Twitter and crafted a post to ask for help. I was lucky enough to get an answer by Dan Abramov, core developer in the React team at Facebook, who informed me that I must be doing something right. This hook should not be used and has a long name to dissuade people from using it. For matters of completion and for understanding why this hook exists, I want to present it to you anyway.
+I will be entirely honest with you all: I found it extremely difficult to construct a use case in which `useImperativeHandle()` will pose a useful solution. Frustrated, I took to Twitter and crafted a post to ask for help. I was lucky enough to get an answer by Dan Abramov, core developer in the React team at Facebook, who informed me that I must be doing something right. This hook should not be used and has a long name to dissuade people from using it. For matters of completion and for understanding why this hook exists, I want to present it to you anyway.
 
 ![Dan Abramov advising me that useImperativeHandle should not really be used in the wild ](../.gitbook/assets/useimperativehandle.png)
 
 I've spent a lot of time thinking about use cases worth of using the `useImperativeHandle()`. In most cases you should indeed explore other ways to express logic without the use of this hook. The official React documentation also discourages anyone from using this hook. As the name might suggest, this hook caters to imperative code and does not work well with the mostly declarative style that React openly advocates. However, there are situations in which one might need to work with classes and objects, especially when working with external libraries.
 
-But be careful examining the following example which illustrates the use of this **hook**. We have created a `FancyForm` component which displays its **children** and offers a couple of methods which can be called in the parent component consuming them. In this example, we have implemented a method called `focusFirstInput` to be able to focus onto the first input in our `FancyForm` form. We furthermore extend the form with another method called `getFormValues` which allows us to return our data that we entered in JSON format. The form can be sent off programmatically and reset by passing the forwarded **forwardRef** the imperative methods `reset()` and `submit()` from the HTML `<form>` element.
+But be careful, examine the following example which illustrates the use of this **hook**. We have created a `FancyForm` component which displays its **children** and offers a couple of methods which, can be called in the parent component consuming them. In this example, we have implemented a method called `focusFirstInput` to be able to focus onto the first input in our `FancyForm` form. We furthermore extend the form with another method called `getFormValues` which allows us to return our data that we entered in JSON format. The form can be sent off programmatically and reset by passing the forwarded **forwardRef** the imperative methods `reset()` and `submit()` from the HTML `<form>` element.
 
 ```jsx
 import React, { useImperativeHandle, useEffect, useRef } from 'react';
