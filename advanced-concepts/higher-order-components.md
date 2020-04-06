@@ -1,6 +1,6 @@
 # Higher Order Components
 
-**Higher Order Components** \(or **HOC** or **HOCs** for short\) were and are a central concept in React. They allow you to implement components with reusable logic and are loosely tied to **Higher Order Functions** from functional programming. These kind of functions take a function as a parameter and return another function. In terms of React, the principle is applied to components. **Higher Order Components** derive their name from those **Higher Order Functions**.
+**Higher Order Components** \(or **HOC** or **HOCs** for short\) were, and still are, a central concept in React. They allow you to implement components with reusable logic and are loosely tied to **Higher Order Functions** from functional programming. These kind of functions take a function as a parameter and return another function. In terms of React, the principle is applied to components. **Higher Order Components** derive their name from those **Higher Order Functions**.
 
 Let us look at an example to illustrate this concept better:
 
@@ -32,11 +32,11 @@ const FormattedComponent = withFormatting(({ bold, italic }) => (
 
 Typically, **Higher Order Components** can be used to encapsulate logic. They relate closely to the concept of **smart** and **dumb** components. Smart components \(which also encompass **Higher Order Components**\) are used to display business logic, deal with API communication or behavioral logic. _Dumb components_ in contrast mostly get passed static props and keep logic to a minimum which is only used to for display-logic. For example, it might decide whether to show a profile image or, if it is not present, show a placeholder image instead. Sometimes, we also refer to **Container Components** \(for _Smart_ components\) and **Layout Components** \(for _Dumb_ components\).
 
-But why categorize components as such? This strict divide into business logic and display logic enables component based development. It allows us to create layout components which do not know of possible API connections and only display data which is passed to them, no matter where they come from. It also enables the business logic components to only concern themselves with business logic without caring about how the data is displayed in the end.
+But why do we categorize components this way? This strict divide into business logic and display logic enables component based development. It allows us to create layout components which do not know of possible API connections and only display data which is passed to them, no matter where they come from. It also enables the business logic components to only concern themselves with business logic without caring about how the data is displayed in the end.
 
 Assume we want to switch between a **list** and **map** view in a user interface. A **container component** will be in charge of gathering the data which is needed for the user and will pass them to the configurable **layout component**.As long as both components keep to the interface the developer has set up \(think **PropTypes**\), both components are easily interchangeable and can be tested and developed independently.
 
-But enough of the theory. Let us look at an example. Let's load a list of the 10 biggest cryptocurrencies and their current price. In order to obtain the data from the Coinmarketcap API, we create a **Higher Order Component** which loads the data and passes it to the Layout component:
+But enough of the theory. Let us look at an example. Let's load a list of the 10 biggest cryptocurrencies and their current price. In order to obtain the data from the Coinmarketcap API, we create a **Higher Order Component** which loads the data and passes it to the layout component:
 
 ```jsx
 const withCryptoPrices = (WrappedComponent) => {
@@ -130,7 +130,7 @@ const PriceTable = ({ isLoading, items, loadData }) => {
 
 This component knows about three props: `isLoading`, to inform it which data is still being loaded, `items`, which represents an array of articles with their corresponding prices and `loadData`, a function which allows us to start another API request to obtain new data.
 
-Both components act completely independent of each other, The `PriceTable` can not only show cryptocurrency prices and the `withCryptoPrices` component does not necessarily need to display its data in a `PriceTable` component. We managed to write two completely encapsulated and reusable components.
+Both components act independently of one another. The `PriceTable` is not limited to showing cryptocurrency prices, and the `withCryptoPrices` component does not necessarily need to display its data in a `PriceTable` component. We managed to write two completely encapsulated and reusable components.
 
 But how do we combine these two components now? We can simply pass the `PriceTable` component as a parameter to the `withCryptoPrices` HOC component. This will look like this:
 
@@ -138,13 +138,13 @@ But how do we combine these two components now? We can simply pass the `PriceTab
 const CryptoPriceTable = withCryptoPrices(PriceTable);
 ```
 
-Whenever an instance of the `CryptoPRiceTablke` is rendered, the **Higher Order Component** will trigger an API request in the `componentDidMount()` lifecycle method and pass its result to the `PriceTable` component. The `PriceTable` then only needs to concern itself with the display of the data:
+Whenever an instance of the `CryptoPriceTable` is rendered, the **Higher Order Component** will trigger an API request in the `componentDidMount()` lifecycle method and pass its result to the `PriceTable` component. The `PriceTable` then only needs to concern itself with displaying the data:
 
 ```jsx
 ReactDOM.render(<CryptoPriceTable />, document.getElementById('root'));
 ```
 
-This opens up a number of opportunities for us. First of all, both components are able to be independently tested. I will provide a bit more information in a later chapter about how exactly we can test layout component with snapshot testing.
+This opens up a number of opportunities for us. First of all, both components are able to be independently tested. I will provide a bit more information in a later chapter about how exactly we can test layout components with snapshot testing.
 
 We also have the opportunity to combine other layout components with the `withCryptoPrices` HOC. To illustrate this, we are going to display the prices in CSV format. Our HOC will remain the same whereas the layout component can be implemented as such:
 
@@ -173,7 +173,7 @@ const PriceCSV = ({ isLoading, items, loadData, separator = ';' }) => {
 };
 ```
 
-And just like that we have implemented our very first own CSV Layout component. We check again whether the data is being loaded, then whether `items` are present. This could also be extracted into another HOC component as HOCs can be nested as many times as you like. In the end, they are all just functions which are passed as parameters to yet another function.
+And just like that we have implemented our very first own CSV layout component. We check again whether the data is being loaded, then whether `items` are present. This could also be extracted into another HOC component as HOCs can be nested as many times as you like. In the end, they are all just functions which are passed as parameters to yet another function.
 
 At last, we can render the output: we iterate through the list of `items`, pick the relevant properties `name`, `symbol` and `quotes` via **Object Destructuring** and then wrap the individual lines with a `pre` element to correctly display the end of the line.
 
@@ -213,7 +213,7 @@ return (
 `{...this.props}`can be used to pass the remaining props to the child component using Spread Syntax from ES2015+.
 
 {% hint style="info" %}
-**Higher Order Components** are a great way to „centralize“ logic and structure applications better. Logic can be easily extracted from Layout components and would further complicate such components. Even though they have been a fairly new concept in React, the concept itself is a very old one.
+**Higher Order Components** are a great way to "centralize" logic and structure applications better. Logic can be easily extracted from layout components which would further complicate such components. Even though they have been a fairly new concept in React, the concept itself is a very old one.
 
-**Higher Order Components** are still widely used and there's nothing controversial about their usage. However, newer concepts to achieve same or similar objects objectives have been introduced of which many increase readability. Two of these are **Functions as a Child** and the newer **Context API**, which has been introduced in React in Version 16.3.0. Both of these will be explained in the next two chapters.
+**Higher Order Components** are still widely used and there's nothing controversial about their usage. However, newer concepts to achieve the same or similar objectives have been introduced, of which many increase readability. Two of these are **Functions as a Child** and the newer **Context API** — which has been introduced in React in Version 16.3.0. Both of these will be explained in the next two chapters.
 {% endhint %}
