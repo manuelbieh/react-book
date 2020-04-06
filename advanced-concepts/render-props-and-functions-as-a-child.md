@@ -1,10 +1,10 @@
 # Functions as a Child and Render Props
 
-**Functions as a Child** \(FaaC for short\) and **Render Props** are treated separately in the official React documentation. However, **Functions as Children** are already mentioned in the **Render Props** hinting at the fact that they are similar if a little different. Thus, I'd like to discuss them both at the same time. But what even are they?
+**Functions as a Child** \(FaaC for short\) and **Render Props** are treated separately in the official React documentation. However, **Functions as Children** are already mentioned in the **Render Props** hinting at the fact that they are similar — if a little different. Thus, I'd like to discuss them both at the same time. But what are they even?
 
-**Functions as a Child** \(also called **Functions as Children**\) and **Render Props** are patterns which allow you to bundle business or application logic in some sort of overarching component - similar to a **Higher Order Component**. In contrast to a HOC though, a function is called which is passed the relevant data as a parameter \(as opposed to returning a new component which receives data as props\). The function takes the form of a child element of the relevant component in the **Function as Children** pattern \(so `this.props.cildren`\). The **Render Props** pattern on the other hand introduces the function as a Prop with the name of `render` \(or any other name\).
+**Functions as a Child** \(also called **Functions as Children**\) and **Render Props** are patterns which allow you to bundle business or application logic in some sort of overarching component - similar to a **Higher Order Component**. In contrast to a HOC though, a function is called which is passed the relevant data as a parameter \(as opposed to returning a new component which receives data as props\). The function takes the form of a child element of the relevant component in the **Function as Children** pattern \(so `this.props.children`\). The **Render Props** pattern on the other hand introduces the function as a Prop with the name of `render` \(or any other name\).
 
-We've learned that the value of a prop in JSX can be any valid JavaScript expression. As invoked functions can also return expressions, we can also use the return value of said function as a prop. Strings, Booleans, Arrays, Objects, other React elements and `null` can also be passed as props. `children` are a special form of props, meaning that both of these lines will result in the same output when rendered:
+We've learned that the value of a prop in JSX can be any valid JavaScript expression. As invoked functions can also return expressions, we can also use the return value of this function as a prop. Strings, Booleans, Arrays, Objects, other React elements and `null` can also be passed as props. `children` are a special form of props, meaning that both of these lines will result in the same output when rendered:
 
 ```jsx
 <MyComponent>I am a child element</MyComponent>
@@ -13,7 +13,7 @@ We've learned that the value of a prop in JSX can be any valid JavaScript expres
 
 `props.children` can be used to access _I am a child element_ in `MyComponent`.
 
-We can use this principle and also pass functions which are invoked during `render()` within a component. This way, data can be passed from one component into the next. The principle is similar to that in **Higher Order Components**, but offers a little more flexibility. We do not need to connect our component with a Higher Order Component but can simply be included within JSX in our current component. Thinking back to our `withFormatting` HOC from the previous chapter, a similar approach could look like the following using **Function as a Child \(FaaC\)**:
+We can use this principle and also pass functions which are invoked during `render()` within a component. This way, data can be passed from one component into the next. The principle is similar to that of **Higher Order Components**, but offers a little more flexibility. We do not need to connect our component with a Higher Order Component but can simply be included within JSX in our current component. Thinking back to our `withFormatting` HOC from the previous chapter, a similar approach could look like the following using **Function as a Child \(FaaC\)**:
 
 ```jsx
 const bold = (string) => {
@@ -47,7 +47,7 @@ Using this **Function as Children** component, a function in JSX is passed to th
 
 This increases flexibility as components no longer need wrapped by a Higher Order Function just to reuse functionality. In contrast to Higher Order Components, it is also possible to pass parameters directly from JSX into a function as a Child component and communicate with it.
 
-Let us look at our second example again which we talked about in the chapter on Higher Order Components. This is what the rendered list pf cryptocurrencies looks like as Function as a Child:
+Let us look at our second example again which we talked about in the chapter on Higher Order Components. This is what the rendered list of cryptocurrencies looks like as Function as a Child:
 
 ```jsx
 class CryptoPrices extends React.Component {
@@ -153,11 +153,11 @@ Or even more succinct using spread syntax:
 
 We've allowed for a great deal of flexibility in this example and do not explicitly need to tie a component to a HOC to enable logic \(which saves us valuable time and effort\).
 
-But be careful: **Functions as a Child Components do also have limitiations that Higher Order Components do not have**. The data that is received by a **FaaC** component can also be used **within JSX**. If we wanted to include highly abstract methods in logic components higher up in the component hierarchy, it would not be possible using **FaaCs**.
+But be careful: **Functions as a Child Components have limitiations that Higher Order Components do not have**. The data that is received by a **FaaC** component can also be used **within JSX**. If we wanted to include highly abstract methods in logic components higher up in the component hierarchy, it would not be possible using **FaaCs**.
 
 ### Render Props
 
-But wait - what are **Render Props** and how to they differ from **Function as Children** components?
+But wait — what are **Render Props** and how to they differ from **Function as Children** components?
 
 Put simply, they differ in the name of the prop. Some popular libraries eventually started using `render` as a name for a prop which expects functions as their values. In our `CryptoPrices` component, we would then use `render` instead of `children`:
 
@@ -188,7 +188,7 @@ render() {
 
 It's personal preference to a degree. You do not need to give this prop the name of `render` and could theoretically choose any valid name. Any passed function will eventually turn the component into a "Render Prop".
 
-It's possible to have an arbitrary amount of props in such a component. If you were to implement a component which returns a table which includes a table head and a body, both receiving data from the data component, that would be no problem at all.
+It's possible to have an arbitrary number of props in such a component. If you were to implement a component which returns a table which includes a table head and a body, both receiving data from the data component, that would be no problem at all.
 
 ### Render Props and FaaCs in combination with Higher Order Components
 
