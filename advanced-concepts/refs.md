@@ -40,11 +40,11 @@ ReactDOM.render(
 );
 ```
 
-We can access the surrounding div using `this.ref.wrapper` and use `this.refs.username` to gain access to the input field. The latter can then be focused by `this.refs.username.focus()`.
+We can use `this.refs.username` to gain access to the input field, and then focus it by calling `this.refs.username.focus()`.
 
 ### Callback Refs
 
-A more flexible alternative to **string refs** are the so-called c**allback refs**. While being more flexible, their handling is slightly more cumbersome and needs managed explicitly. Using **callback refs**, it is possible to pass refs to their **child components** and access the corresponding DOM elements within these.
+A more flexible alternative to **string refs** are the so-called **callback refs**. While being more flexible, their handling is slightly more cumbersome and needs to be managed explicitly. Using **callback refs**, it is possible to pass refs to a component's **child components** and access their corresponding DOM elements.
 
 As the name might suggest, **callback refs** are declared using **callback form**. During **Mounting**, they only receive a single parameter: the DOM element or, if applied to a React component, its instance. We call the callback again during **Unmounting** but with `null` as a single parameter.
 
@@ -129,7 +129,7 @@ However, if forwarding refs to child components is something you are trying to a
 
 With React 16.3, we've seen the introduction of the top-level API method `React.createRef()`. It resembles the usage of **callback refs** but differs in a few cases. As was the case with **callback refs**, you also need to take of ref handling yourself and it is still common practice to assign the **ref** to an **instance property**.
 
-Instead of passing an almost identical method in the form of `(el) => { this.property = el }` each time, the reference is already created during the instantiation of the component which is then gibven to the `ref` prop of the element.
+Instead of passing an almost identical method in the form of `(el) => { this.property = el }` each time, the reference is already created during the instantiation of the component which is then given to the `ref` prop of the element.
 
 ```jsx
 import React from 'react';
@@ -159,7 +159,7 @@ While this looks very similar to **callback refs**, there is an apparent differe
 
 The reference to the element is not saved in the instance property which you assign the ref to, but in its `.current()` property. Apart from this, the behavior of `createRef()` is similar to that of callback refs. They can still be passed to child components via props and the DOM element can be accessed in the parent component.
 
-To have a direct comparison - this was the use case with **callback refs**:
+To have a direct comparison — this was the use case with **callback refs**:
 
 ```jsx
 class MyComponent extends React.Component {
@@ -248,7 +248,7 @@ Careful consideration and care needs to be taken with **refs** while implementin
 
 Let's extend our example from above and assume that we want to create a **HOC** to show all of our form elements in a unified layout. Thus, a **HOC** `withInputStyles` is created which can wrap `input` elements in which it is possible to assign them a ref. 
 
-This procedure is a little complicated and I have found it a little complicated to explain this properly in written form without confusing the reader further. Instead, I invite you to inspect the following code closely and read its associated comments. As soon the idea of **Higher Order Components**  and **forwardRefs** has manifested in your head, the example should be sufficient to understand the actual explanation. And if it is not clear from the get go: this case is so incredibly rare that you will not need it much in practice.
+This procedure is a little complicated and I have found it a little complicated to explain this properly in written form without confusing the reader further. Instead, I invite you to inspect the following code closely and read its associated comments. As soon the idea of **Higher Order Components**  and **forwardRefs** begins to make sense, the example should be sufficient to understand the actual explanation. And if it is not clear from the get go: this case is so incredibly rare that you will not need it much in practice.
 
 So let's look at the example of **forwardRef** and **Higher Order Components**: 
 
@@ -275,7 +275,7 @@ const withInputStyles = (InputComponent) => {
   
   // We return a forwardRef from the HOC
   return React.forwardRef((props, ref) => (
-    // Wir geben die Ref als temporäre Prop `forwardedRef` weiter
+    // We pass the ref as the temporary prop "forwardRef"
     <WithInputStyles {...props} forwardedRef={ref} />
   ));
 };
