@@ -104,17 +104,18 @@ The Portal is rendered into the `#portal` node instead of the `#root` node where
 
 ### Portals and their relationship to their parent component
 
-In order to further our understanding of portals, we are going to build - surprise surprise - a modal portal. The basis is formed by the same HTML which we have used in the introduction of portals before. There are two divs in the example: one in which our application is rendered and another in which we render the portal.
+In order to further our understanding of portals, we are going to build — surprise surprise — a modal portal. The basis is formed by the same HTML which we have used in the introduction of portals before. There are two divs in the example: one in which our application is rendered and another in which we render the portal.
 
-This time however, the modal will only open once a user has clicked a button. The portal will contain a button which allows the user to close the window. A state variable called `modalIsOpen` is used to alternate between the two states and is either true or false. The `ModalPortal` component will be rendered via a `&&` conditional in JSX, thus it is only shown if this.state.modalIsOpen is actually true.
+This time however, the modal will only open once a user has clicked a button. The portal will contain a button which allows the user to close the window. A state variable called `modalIsOpen` is used to alternate between the two states and is either true or false. The `ModalPortal` component will be rendered via an `&&` conditional in JSX, thus it is only shown if this.state.modalIsOpen is true.
 
-During the time in which the value of the state changes from `false` to `true`, the `ModalPortal` component is mounted and the ModalPopup is rendered into the `<div id="portal"`&gt; with a slightly transparent background. Once the value changes from `true` to `false` again, the `ModalPortal` is removed from the App component in the component tree. React takes care to ensure that the `ModalPortal` component and its contents are not found on the page anymore.
+During the time in which the value of the state changes from `false` to `true`, the `ModalPortal` component is mounted and the ModalPopup is rendered into the `<div id="portal">` with a slightly transparent background. Once the value changes from `true` to `false` again, the `ModalPortal` is removed from the App component in the component tree. React takes care to ensure that the `ModalPortal` component and its contents are not found on the page anymore.
 
 In code form, we are left with the following example:
 
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 const ModalPortal = (props) => {
   return ReactDOM.createPortal(
     <div
@@ -134,16 +135,20 @@ const ModalPortal = (props) => {
     document.getElementById('portal')
   );
 };
+
 class App extends React.Component {
   state = {
     modalIsOpen: false,
   };
+  
   openModal = () => {
     this.setState({ modalIsOpen: true });
   };
+  
   closeModal = () => {
     this.setState({ modalIsOpen: false });
   };
+  
   render() {
     return (
       <div>
@@ -164,4 +169,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 We need to pay special attention to the `this.closeModal()` method. Even though this method is defined in the `App` component, it is called within the `ModalPortal` component in the context of the `App` component once a user has clicked on the button "Close Modal".
 
-This method can also alter the state of component via `modalIsOpen` even though the component is not placed within `<div id="root">` as the rest of the components. Portals allow us to do this as the content is placed within the same component tree **within React**. The **resulting HTML** however, is different and the code is placed in `<div>` different from the rest of the application.
+This method can also alter the state of component via `modalIsOpen` even though the component is not placed within `<div id="root">` as the rest of the components. Portals allow us to do this as the content is placed within the same component tree **within React**. The **resulting HTML** however, is different and the code is placed in a different `<div>` to the rest of the application.
