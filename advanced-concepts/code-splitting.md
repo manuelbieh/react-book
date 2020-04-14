@@ -2,7 +2,7 @@
 
 
 
-When developing projects with React, most people tend to also use a **bundler** such as **Webpack**, **Browserify** or **Rollup**. These tools ensure that all files and all imports are later bundled into a single big file which can be deployed in a relatively simple fashion without having to worry about relative links. This process itself is called **Bundling**. A **Bundle** can easily grow and reach a size of a megabyte or more especially if many third party libraries are used. Large Bundles are a big performance problem as bigger bundles take longer to be processed and downloaded by the browser as well as executing.
+When developing projects with React, most people tend to also use a **bundler** such as **Webpack**, **Browserify** or **Rollup**. These tools ensure that all files and all imports are later bundled into a single big file which can be deployed in a relatively simple fashion without having to worry about relative links between files. This process is referred to as **bundling**. A **bundle** can easily grow and reach a size of a megabyte or more especially if many third party libraries are used. Large Bundles are a big performance problem as bigger bundles take longer to be processed and downloaded by the browser as well as executing.
 
 To combat large bundles, a technique called **Code Splitting** is used to counteract it. **Code Splitting** defines the process in which we separate our application into many smaller bundles which are all able to run on their own and load further bundles if necessary. A common separation is either splitting by dependencies \(React, ReactDOM, ...\) or having a bundle per route.
 
@@ -63,7 +63,7 @@ This method allows us to easily optimize for the size of our JavaScript bundle a
 
 Back in the day, the Suspense component on the React object was named **Placeholder**. This is a very accurate description of the task it fulfills: acting as a placeholder for components which have not yet been rendered and displaying alternative content in the meantime. These fallbacks can take many forms: they can be a message that parts of the application are still being loaded or take the form of a loading animation. The placeholder to display is passed to **Suspense** in the `fallback` prop and _has_ to be defined. Any valid React Element can be used and passed as a prop. Strings such as `<Suspense fallback="Loading ...">[…]</Suspense>` are also a valid.
 
-As long as the component which you want to lazy load has not fully loaded, all children of the Suspense element will be replaced with the indicated fallback. No limit concerning the number of React.lazy\(\) component imports have been enforced. The fallback placeholder will be shown until all components have loaded and can be displayed.
+As long as the component which you want to lazy load has not fully loaded, all children of the Suspense element will be replaced with the indicated fallback. Additionally, no limits on the number of React.lazy\(\) component imports have been enforced. The fallback placeholder will be shown until all components have loaded and can be displayed.
 
 Nesting components is also possible and can be great idea in certain scenarios. When there are parts of the site which are slightly less important and might interfere with the rendering of the primary user interface, it is recommended to wrap these parts of the application / the component tree in their own `Suspense` element. This will boost performance and drive the important parts of the application to load first.
 
@@ -94,7 +94,7 @@ In this example we have defined two main components: `ImageCanvas` which display
 
 If this happens **before** the `ImageToolbar` has loaded, the second inner `Suspense` element will take effect and show a message that _"Image editing tools are being loaded."_  until it has been fully loaded.
 
-If however, the `ImageCanvas` component is only loaded **after** the `ImageToolbar` has completed loading, the outer `Suspense` will prevent the `ImageToolbar` from being displayed until the `ImageCanvas` has also loaded. It will display the outer fallback message and render the components to the screen as soon as the `ImageCanvas` has completed loading.
+If, however, the `ImageCanvas` component is only loaded **after** the `ImageToolbar` has completed loading, the outer `Suspense` will prevent the `ImageToolbar` from being displayed until the `ImageCanvas` has also loaded. It will display the outer fallback message and render the components to the screen as soon as the `ImageCanvas` has completed loading.
 
 Thus, our user interface can take three different forms:
 
@@ -104,9 +104,9 @@ Thus, our user interface can take three different forms:
 
 This way we explicitly prevent the image editing tools from being displayed to the user without having a fully loaded image to display alongside it. Nesting `Suspense` fallbacks allow for a greater degree of flexibility and granular decision making of which components should be shown at any time.
 
-**Suspense** and their associated fallbacks are only supported in conjunction with `React.lazy()` at the moment. However, in the future loading asynchronous data such as API calls shall also be supported by **Suspense**.
+**Suspense** and their associated fallbacks are only supported in conjunction with `React.lazy()` at the moment. However, in the future loading asynchronous data such as API calls should also be supported by **Suspense**.
 
 {% hint style="warning" %}
-**Be careful:** **Lazy** and **Suspense** are only supported in **client-side** applications for now. Currently, there is no support for this feature for **server-side** rendering but is in active development.
+**Be careful:** **Lazy** and **Suspense** are only supported in **client-side** applications for now. Currently, there is no support for this feature for **server-side** rendering but it is in active development.
 {% endhint %}
 
