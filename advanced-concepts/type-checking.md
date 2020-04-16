@@ -74,7 +74,7 @@ If any of these conditions have not been met, React will gracefully inform us wi
 Warning: Failed prop type: Invalid prop \`title\` of type \`number\` supplied to \`EventOverview\`, expected \`string\`.
 {% endhint %}
 
-**Stateless Functional Components** do not have classes, thus we cannot defined a `static propTypes` property. However, we can easily add a `propTypes` property to the function, which will result in the following:
+**Stateless Functional Components** do not have classes, thus we cannot define a `static propTypes` property. However, we can easily add a `propTypes` property to the function, which will result in the following:
 
 ```jsx
 const EventOverview = ({ date, description, ticketUrl, title }) => (
@@ -125,7 +125,7 @@ const user = {};
 <Greeting name={user.name} />;
 ```
 
-This example however will fall back to the `defaultValue` which we have defined in the `defaultProps` as either no prop is passed at all or if the value is undefined. In this case, **Hello Guest!** will be displayed as we marked **Guest** as our `defaultValue`. React will figure out if a `defaultValue` for a `isRequired` prop exists and only display a warning if the prop is actually missing and no `defaultValue` has been defined.
+This example however will fall back to the `defaultValue` which we have defined in the `defaultProps` as either no prop is passed at all or if the value is undefined. In this case, **Hello Guest!** will be displayed as we set **Guest** as our `defaultValue`. React will figure out if a `defaultValue` for a `isRequired` prop exists and only display a warning if the prop is actually missing and no `defaultValue` has been defined.
 
 {% hint style="info" %}
 When **Deploying to production** it's worth installing **Babel-Plugin-Transform-React-Remove-Prop-Types**. This will save us a couple of bytes, as `propType`definitions are removed from the build and are only really taken into account in **Development Mode**.
@@ -151,9 +151,9 @@ yarn add --dev babel-plugin-transform-react-remove-prop-types
 
 In contrast to **React PropTypes**, **Flow** is a **static typechecker** for all **JavaScript** not just for React components. **Flow** is also developed in-house at Facebook and thus integrates nicely with most React setups. Up to version **Babel 6**, it even came pre-installed as part of the `babel-preset-react` and could be used without any further setup.
 
-Since **Babel version7**, **Flow** has been ported to its own **Babel preset**. In order to install you can run `npm install @babel/preset-flow` or `yarn add @babel/preset-flow`. In addition to the installation step, you also have to manually set the`@babel/preset-flow` as a present in the Babel config. **Presets** allow us to remove non-JavaScript syntax - in this case **Flow syntax** - during the build process so that we won't run into errors in the browser.
+Since **Babel version7**, **Flow** has been ported to its own **Babel preset**. In order to install you can run `npm install @babel/preset-flow` or `yarn add @babel/preset-flow`. In addition to the installation step, you also have to manually set the`@babel/preset-flow` as a present in the Babel config. **Presets** allow us to remove non-JavaScript syntax — in this case **Flow syntax** — during the build process so that we won't run into errors in the browser.
 
-Apart from the Babel Preset, the **Flow executable** needs installed via `npm install flow-bin` \(or `yarn add flow-bin`\) which takes care of the actual **typechecking**.
+Apart from the Babel Preset, the **Flow executable** needs to be installed via `npm install flow-bin` \(or `yarn add flow-bin`\) which takes care of the actual **typechecking**.
 
 Once **Flow** has been installed and the Babel Preset has been set up, you have to create a **Flow config** by executing `./node_modules/flow init` in the terminal in your current project directory.
 
@@ -201,7 +201,7 @@ Let us look at our previous example, but this time using **Flow** instead of **P
 // @flow
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-​
+
 type PropsT = {
   date: Date,
   description?: string,
@@ -224,7 +224,7 @@ class EventOverview extends React.Component<PropsT> {
     );
   }
 }
-​
+
 ReactDOM.render(
   <EventOverview date={new Date()} title="Learning React" />,
   document.getElementById('root')
