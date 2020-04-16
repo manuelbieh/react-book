@@ -1,6 +1,6 @@
 # CSS and Styling
 
-Styling in React is a topic of its own in React. React does not offer its own in-house solution to make styling easier, however the introduction of CSS-in-JS has shaken up the scene a little bit. Adopted widely and loved by some but hotly debated by others. With CSS-in-JS, the styling of components also moves into JavaScript to not break with the paradigm of component-based development. But let's start with the basics and explore the topic bit by bit.
+Styling is a topic of its own in React. React does not offer its own in-house solution to make styling easier, however the introduction of CSS-in-JS has shaken up the scene a little bit. Adopted widely and loved by some but hotly debated by others. With CSS-in-JS, the styling of components also moves into JavaScript to not break with the paradigm of component-based development. But let's start with the basics and explore the topic bit by bit.
 
 ### Styling with the style attribute
 
@@ -50,7 +50,7 @@ render() {
 
 In this example the value for `className` is `item` in each case. If the selected item is the current item, it also gets the class `item item--selected`.
 
-The package `classnames` has become the de-facto standard to let classes be defined based on a condition. It can be installed via the CLI:
+The package `classnames` has become the de-facto standard to defined classes based on a condition. It can be installed via the CLI:
 
 ```bash
 npm install classnames
@@ -99,7 +99,7 @@ If regular CSS classes are used, we should also ensure that the corresponding st
 
 ### Modular CSS with CSS Modules
 
-**CSS Modules** are some sort of predecessor to **CSS-in-JS** and combine a number of properties from CSS and JavaScript modules. As the name already suggests, the CSS is found in their own importable **modules**, which however contain pure CSS and are tied to one particular component. If we were to develop a component to display a profile picture in a file called `ProfileImage.js`, the **CSS Modules** approach often introduces another file with the name `ProfileImage.module.css`.When these CSS modules are imported, a cryptic classname is generated to ensure that the classname is only given one and is only used in the single component. This aims to prevent that classnames are accidentally used by two different components.
+**CSS Modules** are some sort of predecessor to **CSS-in-JS** and combine a number of properties from CSS and JavaScript modules. As the name already suggests, the CSS is found in their own importable **modules**, which however contain pure CSS and are tied to one particular component. If we were to develop a component to display a profile picture in a file called `ProfileImage.js`, the **CSS Modules** approach often introduces another file with the name `ProfileImage.module.css`.When these CSS modules are imported, a cryptic classname is generated to ensure that the classname is only used in the single component. This aims to prevent that classnames are accidentally used by two different components.
 
 **CSS Modules** are only a concept first of all, and do not dictate a particular approach or implementation. The implementation is achieved by tools such as `css-loader` for Webpack.
 
@@ -125,7 +125,7 @@ This code would result in the following rendered markup:
 <img src="..." className="ProfileImage_image_2cvf73" />
 ```
 
-If we used the class `image` in another component and also imported the css file with an `image` class, we'd not run into conflict as we'd usually do in regular CSS. The _generated_ classname would be different.
+If we used the class `image` in another component and also imported the css file with an `image` class, we wouldn't run into conflict as we'd usually do in regular CSS. The _generated_ classname would be different.
 
 Everything that's allowed in regular CSS is also allowed in CSS Modules. The Cascade will remain intact:
 
@@ -159,7 +159,7 @@ I've already mentioned in the introduction that **CSS-in-JS** is a bit of a hotl
 
 The **CSS-in-JS** approach mandates that the styles which are commonly found in CSS files are now moved into JavaScript. As was already the case in **CSS modules**, the primary goal is to create highly isolated components which are free of conflict making them easy to reuse throughout the application. However, as opposed to **CSS modules**, the styling in **CSS-in-JS** happens entirely in JavaScript. The syntax is very similar and it mostly feels like you're writing regular CSS.
 
-**CSS-in-JS** is the umbrella term for the concept as such whereas the actual implementation is achieved by a number of different libraries. If you are looking for a great overview, I suggest you checkout out [http://michelebertoli.github.io/css-in-js/](https://michelebertoli.github.io/css-in-js/) - this site covers over 60 different libraries that can help you to implement your own **CSS-in-JS** solution.
+**CSS-in-JS** is the umbrella term for the concept as such whereas the actual implementation is achieved by a number of different libraries. If you are looking for a great overview, I suggest you checkout out [http://michelebertoli.github.io/css-in-js/](https://michelebertoli.github.io/css-in-js/) — this site covers over 60 different libraries that can help you to implement your own **CSS-in-JS** solution.
 
 In the remaining parts of the chapter, I want to focus on **styled components** which is the most popular library with around 23,000 starts on GitHub. In order to use it, we need to first install it via the command line:
 
@@ -232,7 +232,7 @@ const Button = styled.button`
 `;
 ```
 
-The cursor icon would change into a `not-allowed` symbol in this case if the button had a `disabled` property. Moreover, **styled components** offers support for theming, server-side rendering, css animations and much more. For those of you who would like an in-depth explanation and overview, I suggest you check out the [thorough documentation](https://www.styled-components.com/docs/basics).
+The cursor icon would change into a `not-allowed` symbol if the button had a `disabled` property. Moreover, **styled components** offers support for theming, server-side rendering, css animations and much more. For those of you who would like an in-depth explanation and overview, I suggest you check out the [thorough documentation](https://www.styled-components.com/docs/basics).
 
 The main advantages of **CSS-in-JS** and **styled components** in particular are well summarized in the documentation:
 
