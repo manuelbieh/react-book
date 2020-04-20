@@ -1,8 +1,8 @@
 # Lists, Fragments, and Conditional Rendering
 
-You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**, you've learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that's being rendered and how you can leverage **lifecycle methods** to react to changes in our data. All of these lay the groundwork for simple React applications.
+You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**. You've learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that's being rendered and how you can leverage **lifecycle methods** to react to changes in our data. All of these lay the groundwork for simple React applications.
 
-But there a few details that we have not examined yet and which have not been mentioned so far \(or not explained in detail\). However, these details will become more relevant the more complex our applications get.
+But there are a few details that we have not yet examined \(or not explained in detail\). However, these details will become more relevant the more complex our applications get.
 
 **Lists** \(as in working with data arrays\), so-called **Refs** \(which are references to the DOM representation of a React element\), **Fragments** \(a special component that does not leave traces or elements in the output\) and **Conditional Rendering** based on props and state are part of these details and will thus be examined in this section.
 
@@ -10,13 +10,13 @@ They are too important to not mention them in the Basics section of the book but
 
 ## Lists
 
-Lists refer to plain JavaScript arrays in this instance: **simple** data that can be iterated over. They are essential for React, even plain JavaScript development and it's hard to imagine developing without them. **ES2015+** offers many nice declarative methods such as `Array.map()`, `Array.filter()` or `Array.find()` that can even be used as expressions in JSX \(if surrounded by curly braces `{}`\).
+Lists refer to plain JavaScript arrays — in this instance: **simple** data that can be iterated over. They are essential for React, even plain JavaScript development, and it's hard to imagine developing without them. **ES2015+** offers many nice declarative methods such as `Array.map()`, `Array.filter()` or `Array.find()` that can even be used as expressions in JSX \(if surrounded by curly braces `{}`\).
 
-I've mentioned expressions in JSX and how to use them already in the chapter on JSX. But let's recap briefly: Arrays can be used as an expression in JavaScript and therefore also be included in JSX. If surrounded by curly braces, they will be treated as child nodes  during the transpilation step.
+I've mentioned expressions in JSX and how to use them already in the chapter on JSX. But let's recap briefly: Arrays can be used as an expression in JavaScript and therefore also be included in JSX. If surrounded by curly braces, they will be treated as child nodes during the transpilation step.
 
 But there's more: `Array.map()` enables us to not only work with data but it can return modified item which in turn can also contain JSX. This adds further flexibility and allows us to transform data sets into React elements.
 
-Let's assume that we want to show  list of cryptocurrencies. The array containing the data has the following form:
+Let's assume that we want to show list of cryptocurrencies. The array containing the data has the following form:
 
 ```jsx
 const cryptos = [
@@ -173,9 +173,9 @@ render() {
 }
 ```
 
-In this example, multiple elements are being returned in the `render()` method without a surrounding element leading to an error. We do not always want to create new elements though, especially if the surrounding element is found in a parent component and the child element is found in its own component. 
+In this example, multiple elements are being returned in the `render()` method without a surrounding element, leading to an error. We do not always want to create new elements though, especially if the surrounding element is found in a parent component and the child element is found in its own component. 
 
-On top of that, many elements \(such as `table`, `ul`, `ol`, `dl`, ...\) do not allow for `div` elements to be used as an intermediary wrapper \(ignoring the fact that we would also litter the markup by using `divs`  everywhere for now\). As we are only permitted to ever return a single root element from a component, **Fragments** can be incredibly useful. We could transform our example from above into the following:
+On top of that, many elements \(such as `table`, `ul`, `ol`, `dl`, ...\) do not allow for `div` elements to be used as an intermediary wrapper \(ignoring the fact that we would also litter the markup by using `divs`\). As we are only permitted to ever return a single root element from a component, **Fragments** can be incredibly useful. We could transform our example from above into the following:
 
 ```jsx
 render() {
@@ -263,18 +263,18 @@ Now, the notation of `<Fragment>` instead of `<React.Fragment>` can be used savi
 Using Babel 7 for transpilitation, we can shorten the notation even further. An _empty_ element can created using:
 
 ```jsx
-<>Fragment in Kurzform-Syntax</>
+<>Fragment in shorthand syntax</>
 ```
 
 This is a neat and tidy method to reduce the amount of fragments we need to explicitly define by name. But be careful: using the shorthand is not possible in loops as empty elements cannot contain any props. Elements in a loop require us to define a `key` prop thus forcing us to use `<React.Fragment>` instead in this case.
 
 ## Conditional rendering
 
-Rendering components based on different conditions, **conditional rendering** for short, is a central concept in React. As React components are composed of JavaScript functions, objects and classes under the hood, conditions function and behave just as in regular JavaScript.
+Rendering components based on different conditions, **conditional rendering** for short, is a central concept in React. As React components are composed of JavaScript functions, objects and classes under the hood, conditions behave just as they would in regular JavaScript.
 
 A React component renders a **state** of a **user interface** based on its **props** and its current **state**. In an ideal situation, free from **side effects**. To correctly deal with these different and changing parameters, using the render function to react to different conditions is a powerful feature. If my parameter is A, render this; if my parameter is B, render that. If I have incoming data in a list, show this data as an HTML list. If I do not have any data, show a placeholder instead.
 
-If this sounds relatively simple, I can assure you, it is. But one should still be aware of knowing how to do conditional rendering in JSX. The `render()` function of **class components** as well as **stateless functional** **components** can return a **React element** \(also in form of JSX\), a **string**, a **number,** `null` \(if nothing should be rendered\) or an **array** of these types.
+If this sounds relatively simple, I can assure you, it is. But one should still be aware of knowing how to do conditional rendering in JSX. The `render()` function of **class components** as well as **stateless functional components** can return a **React element** \(also in form of JSX\), a **string**, a **number,** `null` \(if nothing should be rendered\) or an **array** of these types.
 
 There are a few methods of keeping the `render()` method nice and clean which I will explain now.
 
@@ -297,9 +297,9 @@ const NotificationList = ({ items }) => {
 };
 ```
 
-Relatively simple use case. The `NotificationList` component receives a list of items in the form of props. If the list contains any entries at all, they are rendered as a list item of an unordered list. If however the list is empty, a message is returned informing the user that no new notifications are available.
+This is a relatively simple use case. The `NotificationList` component receives a list of items in the form of props. If the list contains any entries at all, they are rendered as a list item of an unordered list. If however the list is empty, a message is returned informing the user that no new notifications are available.
 
-Another more complex example. Let's imagine we are working with a value that we want to make editable. Our component differentiates between the different modes of `edit` and `view`. Depending on which mode we are currently in, we either want to simply show text \(**View mode**\) or be able to see a text field containing the previously entered value \(**edit mode**\).
+In another more complex example: let's imagine we are working with a value that we want to make editable. Our component differentiates between the different modes of `edit` and `view`. Depending on which mode we are currently in, we either want to simply show text \(**View mode**\) or be able to see a text field containing the previously entered value \(**edit mode**\).
 
 ```jsx
 import React from 'react';
@@ -363,9 +363,9 @@ render(
 
 ```
 
-The relevant part can be found in the `render()` method of the component. The state is tested against its property value in `mode`: if `edit` is currently the value in state, we directly return the input field with an "early return". If this is not the case, we assume that the "standard case" is taking place meaning that the current mode is `view`. The `else` part of this condition is not actually necessary here and would only add unnecessary complexity. Both times, the text is rendered with the difference that it is an editable `value` of an `input` field in one case, and a simple text node in the other. A button is included to switch between the different modes of `view` and `edit`.
+The relevant part can be found in the `render()` method of the component. The state is tested against its property value in `mode`. If `edit` is currently the value in state, we directly return the input field with an "early return". If this is not the case, we assume that the "standard case" is taking place meaning that the current mode is `view`. The `else` part of this condition is not actually necessary here and would only add unnecessary complexity. Both times, the text is rendered with the difference that it is an editable `value` of an `input` field in one case, and a simple text node in the other. A button is included to switch between the different modes of `view` and `edit`.
 
- Such `if`, `if`/`else` or `if`/`else if`/`else`**state** and **props** within a component. I will explain them in more detail in just a moment.
+Such `if`, `if`/`else` or `if`/`else if`/`else` constructs are common if you want to create output based on **state** and **props** within a component. I will explain them in more detail in just a moment.
 
 ### null
 
@@ -387,7 +387,7 @@ Using this form of a conditional check, we test whether the state contains an er
 
 ### Ternary Operator
 
-Using the conditions that we have just seen, are often used to deal with relatively big changes in a component. In many situations, we only want to differentiate between minor differences, for example setting a CSS class if a certain state is set. The ternary operator helps us to do just that. Let's refresh our knowledge. A ternary operator takes the following form: `condition ? met : not met`. For example: `isLoggedIn ? ' Logout' : ' Login';`
+The conditions that we have just seen are often used to deal with relatively big changes in a component. In many situations, we only want to differentiate between minor differences, for example setting a CSS class if a certain state is set. The ternary operator helps us to do just that. Let's refresh our knowledge. A ternary operator takes the following form: `condition ? met : not met`. For example: `isLoggedIn ? ' Logout' : ' Login';`
 
 That's our first example for a ternary operator in JSX! It can be used within props but also in conditions to differentiate between different forms of output to render based on conditions. To make the example more concrete, we could use the info from above to include it in a button:
 
@@ -400,7 +400,7 @@ render() {
 }
 ```
 
-We will always return a button, but based on its `isLoggedIn` prop it can either include **Logout** or **Login**.
+We will always return a button, but based on its `isLoggedIn` prop it can either include the message: **Logout** or **Login**.
 
 Equally, the **ternary operator** can be used in props. Let's assume that we want to render a list of users in which some users have been deactivated. In this case, we want to be able to set a class to mark it using CSS. Markup that deals with this problem could look like this:
 
@@ -439,11 +439,11 @@ render() {
 }
 ```
 
-A select list containing all German counties is rendered if we previously selected `de` \(for **Germany**\). In all other cases a simple text input is shown to user in which they can enter their county freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
+A select list containing all German states is rendered if we previously selected `de` \(for **Germany**\) as our country. In all other cases a simple text input is shown to user in which they can enter their state freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
 
 ### Logical AND \(`&&`\) and Logical OR \(`||`\)
 
-The **Logical Operator** seems to resemble the **Ternary Operator** at first glance, but it is even shorter and more precise. As opposed to the **Ternary operator**, a second "else" case is not needed and can be skipped. If the condition of the **Logical AND Operator** is not met, the expression simply returns `undefined` resulting in no visible markup for the user interface:
+The **Logical Operator** seems to resemble the **Ternary Operator** at first glance, but it is even shorter and more precise. As opposed to the **Ternary operator**, a second "else" case is not needed. If the condition of the **Logical AND Operator** is not met, the expression simply returns `undefined` resulting in no visible markup for the user interface:
 
 ```jsx
 render() {
@@ -473,7 +473,7 @@ The button will be labelled **Logout** if the `isLoggedIn` **prop** is `true`, o
 
 ### Custom `render()` methods
 
-Another way to increase the readability during complex **conditional rendering** is to move parts from the regular `render()` method to separate `renderXY()` methods. The regular `render()` method still forms the core of the component and decides which oarts of the user interface to show to the use. Thus, this method should not become overly complex or contain an unnecessary amount of logic.
+Another way to increase the readability during complex **conditional rendering** is to move parts from the regular `render()` method to separate `renderXY()` methods. The regular `render()` method still forms the core of the component and decides which parts of the user interface to show to the user. Thus, this method should not become overly complex or contain any unnecessary logic.
 
 It is not uncommon to move parts of long and complex `render()` methods into much smaller, more digestible chunks and implement these as custom class methods. If proper naming is used, this technique usually aids readability and understanding. Often these custom `render()` blocks are combined with `if` blocks:
 
@@ -507,13 +507,13 @@ As soon as you begin to consider moving parts of your code into custom `render()
 
 ### Custom Components with complex conditions
 
-Instead of using multiple `render()` methods, we can create new **function components**. These will receive **props** from their parent component and then take care of their own data display as an independent, self-managed and testable component.
+Instead of using multiple `render()` methods, we can create new **function components**. These will receive **props** from their parent component and then take care of displaying their own data as an independent, self-governing and testable component.
 
-Careful consideration should be given as to how and which data actually needs passed down to the new child component\(s\) and should not contain too much logic or state. 
+Careful consideration should be given as to what data actually needs passed down to the new child component\(s\), and how to pass this data, as the component\(s\) should not contain too much logic or state. 
 
 Using custom components becomes useful once the `render()` method in one component has become too complex or if the same elements are used repetitively within a component.
 
-Let's look at a form which consists of many similar text fields. Each of these text fields is embraced by its own paragraph, contains a label and a `type` attribute. The label also needs to be equipped with an id that needs uniquely set for each field.
+Let's look at a form which consists of many similar text fields. Each of these text fields is embraced by its own paragraph, and contains a label and a `type` attribute. The label also needs to be equipped with an id that is unique to each field that it represents.
 
 ```jsx
 render() {
@@ -571,5 +571,5 @@ render() {
 }
 ```
 
-We have just transformed long and potentially hard to read markup into a clean and precise `render()` method which only consists of very few components. If we ever wanted to add a change which should affect all of our text fields \(for example adding a class\), this can be added with ease by only changing data in one place - in the new `TextField` component.
+We have just transformed long and potentially hard to read markup into a clean and precise `render()` method which only consists of very few components. If we ever wanted to add a change which should affect all of our text fields \(for example adding a class\), this can be added with ease by only changing data in one place — in the new `TextField` component.
 
