@@ -1,10 +1,10 @@
 # Internationalization
 
-Apart from **Routing** and **State Management**, **internalization** is the last important topic left to discuss. Internalization aims to solve the problem of effectively displaying different interfaces to users who speak another language. A German user will be prompted to interact with a German interface whereas an English user will be given an English interface to interact with.
+Apart from **Routing** and **State Management**, **internationalization** is the last important topic left to discuss. Internationalization aims to solve the problem of effectively displaying different interfaces to users who speak another language. A German user will be prompted to interact with a German interface whereas an English user will be given an English interface to interact with.
 
-I do not want to dive deeply into the general topic of **internalization** \(or **i18n** for short\) but rather focus on **internalization** in **React**. I assume that you have a very rough understanding of internalization in user interfaces and thus focus on how internalization can be implemented in **React**.
+I do not want to dive deeply into the general topic of **internationalization** \(or **i18n** for short\) but rather focus on **internationalization** in **React**. I assume that you have a very rough understanding of internationalization in user interfaces and thus focus on how internationalization can be implemented in **React**.
 
-I have shown you a very simple example on how internalization can be achieved using the **Context API** in the respective chapter for the **Context API**. As the complexity of our applications grows though, the complexity of issues regarding internalization grow as well. Using the plural in different languages or meaningful placeholders suddenly become important parts of the applications we're building. In order to be prepared well to deal with such cases, it is recommended to use one of the well-known internalization packages which have been developed to cater specifically to these use cases.
+I provided a very simple example on how internationalization can be achieved using the **Context API** in the respective chapter for the **Context API** already. As the complexity of our applications grows though, the complexity of issues regarding internationalization grow as well. Using the plural in different languages or meaningful placeholders suddenly become important parts of the applications we're building. In order to be prepared well to deal with such cases, it is recommended to use one of the well-known internationalization packages which have been developed to cater specifically to these use cases.
 
 The **React ecosystem** boasts with a number of options to choose from. The most notable options form **Lingui**, **Polyglot**, **i18next** or **react-intl**. Facebook has developed its own framework for internationalization called **FBT**. In this chapter we will mainly look at `i18next` and its react bindings: `react-i18next`.
 
@@ -86,11 +86,11 @@ The main language of the application as well as the fallback language is initial
 [Language].[Namespace].[Translation Key] = Translation
 ```
 
-It should be clear what we are referring to with language. This can either be `en` for English, `de` for German or even `de-AT` for German with a focus on the Austrian dialect. The language property has an object which contains from one to an infinite number of **namespaces**.
+It should be clear enough what exactly we are referring to with language. This can either be `en` for English, `de` for German or even `de-AT` for German with a focus on the Austrian dialect. The language property has an object which contains from one to an infinite number of **namespaces**.
 
-The **namespace** is a central feature of **i18next**. It allows for splitting large translation files into different parts which can be dynamically lazy loaded. While this feature is not necessary for smaller applications, it can be game-changer for larger and more complex applications. It will help us to contain the size of the translations and to aid the readability of the translations, for example by using a **namespace** for each page. Translation files for these different pages can then be cared for independently and will only be loaded if they are actually needed.
+The **namespace** is a central feature of **i18next**. It allows for splitting large translation files into different parts which can be dynamically lazy loaded. While this feature is not necessary for smaller applications, it can be a game-changer for larger and more complex applications. It will help us to contain the size of the translations and to aid the readability of the translations, for example by using a **namespace** for each page. Translation files for these different pages can then be cared for independently and will only be loaded if they are actually needed.
 
-We always have to use at least **one namespace** in **i18next**. By default, it will be `translation`, but it can be changed in the `defaultNS` option in the configuration object of the `.init()` method. The **namespace** itself is also an object which contains the translations in the form of `translationKey: value` — or `greeting: 'Hello world!'` to be concrete.
+We always have to use at least **one namespace** in **i18next**. By default, it will be `translation`, but it can be changed in the `defaultNS` option in the configuration object of the `.init()` method. The **namespace** itself is also an object which contains the translations in the form of `translationKey: value` — or `greeting: 'Hello world!'` to be precise.
 
 The value _could_ also be an object:
 
@@ -161,7 +161,7 @@ We can then immediately import the translated component:
 import Greeting from './Greeting.js';
 ```
 
-Not only have we imported the actual component, but we have also gained access the extended props `t`, `i18n` and `tReady` via i18next.
+Not only have we imported the actual component, but we have also gained access to the extended props `t`, `i18n` and `tReady` via i18next.
 
 The `t` function forms the central function for everything related to translations. It is passed a **translation** **key** and will return the translated value to us, based on the chosen language.
 
@@ -218,7 +218,7 @@ If no namespace has been provided, the default settings will be used.
 
 #### Complex translations using the Trans component
 
-In a few select cases, it might be necessary to use a React component in the translations. For example, one might want to use the `Link` component from **React Router** to link to a different URL within a translation. The `t()` function does not support this out of the box. The solution comes in the form of the `Trans` component from `react-18next`. It is not always easy to understand how it should be used but it can be powerful tool.
+In a few select cases, it might be necessary to use a React component in the translations. For example, one might want to use the `Link` component from **React Router** to link to a different URL within a translation. The `t()` function does not support this out of the box. The solution to this problem comes in the form of the `Trans` component from `react-18next`. It is not always easy to understand how it should be used but it can be powerful tool.
 
 Let's assume that we want to use a `Link` component inside of our translations. The code might resemble something like this:
 
@@ -292,7 +292,7 @@ Missing translation: I accept the &lt;1&gt;Terms and Conditions&lt;/1&gt;.
 
 We can now set up a translation for this case. **React Router's** `Link` has already been replaced by the corresponding placeholder \(**1**\) in the output.
 
-As a second option, we could also replace the `missingKeyJandler` function with a `debug` option set to `true`.
+As a second option, we could also replace the `missingKeyHandler` function with a `debug` option set to `true`.
 
 ```javascript
 i18next.use(initReactI18next).init({
@@ -323,6 +323,6 @@ By the way: You can still use the `t()` function as you are used to if you find 
 
 ### Summary
 
-Using the examples provided in this chapter, it is relatively simple to provide internalization in our applications. For my personal and professional use, i18next has proven itself to be a universal and complete tool to build international applications. Integrating with different libraries and frameworks has been a breeze. It offers all sorts of functionality that should be supported by a i18n framework and is easy to understand a learn with only a small set of functions: `i18n.changeLanguage()`, `t()`, `<Trans>`.
+Using the examples provided in this chapter, it is relatively simple to provide internationalization in our applications. For my personal and professional use, i18next has proven to be a universal and complete tool to build international applications. Integrating with different libraries and frameworks has been a breeze. It offers all sorts of functionality that should be supported by a i18n framework and is easy to understand and learn with only a small set of functions: `i18n.changeLanguage()`, `t()`, `<Trans>`.
 
-Once set up correctly \(I would advise you to check out the [complete options of i18next](https://www.i18next.com/overview/configuration-options)\), internalization in React applications is easy to achieve without having to deal with a great deal of effort. One could even integrate with online services such as [Locize.com](https://locize.com/) or [Lokalise.co](https://www.lokalise.co) \(to name a few\) which help to create and manage translations or even outsource them automatically.
+Once set up correctly \(I would advise you to check out the [complete options of i18next](https://www.i18next.com/overview/configuration-options)\), internationalization in React applications is easy to achieve without having to deal with a great deal of effort. One could even integrate with online services such as [Locize.com](https://locize.com/) or [Lokalise.co](https://www.lokalise.co) \(to name a few\) which help to create and manage translations or even outsource them automatically.
