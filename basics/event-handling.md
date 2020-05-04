@@ -1,24 +1,24 @@
 # Event Handling
 
-The interaction between a user and the interface is foundational part of developing applications with complex user interfaces - especially with regard to **events**.
+The interaction between a user and the interface is a fundamental part of developing applications with complex user interfaces — especially with regard to **events**.
 
-I click a button and something happens. I write text into an input field and something happens. I select an element from a list and something happens. In vanilla JavaScript, the browser provides us with the `addEventListener()` and `removeEventListener()` methods. In React however, you can safely ignore them in most use cases. React provides its own system to define user interaction and does so \(don't be scared now\) with **inline events**.
+I click a button and something happens. I write text into an input field and something happens. I select an element from a list and something happens. In vanilla JavaScript, the browser provides us with the `addEventListener()` and `removeEventListener()` methods. In React however, you can safely ignore them in most use cases. React provides its own system to define user interaction and does so with \(don't be scared now\) **inline events**.
 
-These **inline events** resemble HTML attributes \(for example `<button onclick="myFunction" />`\) but work entirely different.
+These **inline events** resemble HTML attributes \(for example `<button onclick="myFunction" />`\) but work entirely differently.
 
 I know this is a little frustrating. For years, web developers have labored away and learned that event listeners should be neatly separated from the markup - **separation of concerns** anyone? But React introduces a very different way of dealing with events.
 
-Behind the scenes, React facilitates a lot of the hard work and also enables to us to safely and easily stay in the component context by allowing the definition of event handlers as **class methods**. Layout logic as well as behavioral logic is encapsulated in a single component meaning we do not have to jump between many different controllers or views.
+Behind the scenes, React handles a lot of the hard work and also enables to us to safely and easily stay in the component context by allowing the definition of event handlers as **class methods**. Layout logic as well as behavioral logic is encapsulated in a single component meaning we do not have to jump between many different controllers or views.
 
 ### Differences between The React event handlers and the native Event API
 
-As mentioned previously, React and JSX events resemble HTML attribute definitions. But there are differences: events in React are defined with **camelCase** instead of **Lowercase** meaning `onclick` is changed to `onClick` in React, `onmouseover` is now defined by `onMouseOver` and `ontouchstart` would be written as `onTouchStart` - you get the picture.
+As mentioned previously, React and JSX events resemble HTML attribute definitions. But there are differences: events in React are defined with **camelCase** instead of **Lowercase** meaning `onclick` is changed to `onClick` in React, `onmouseover` is now defined by `onMouseOver` and `ontouchstart` would be written as `onTouchStart` — you get the picture.
 
-The first parameter that is passed to the event handler is not an object of type `Event` as could be assumed. Instead, React supplies its own wrapper for the native event object, named a `SyntheticEvent`. The wrapper is part of React's event system and also works as some sort of normalizing layer to ensure cross-browser compatibility and, as opposed to some other browsers, it strictly follows the [event specifications of W3C](https://www.w3.org/TR/DOM-Level-3-Events/).
+The first parameter that is passed to the event handler is not an object of type `Event` as could be assumed. Instead, React supplies its own wrapper for the native event object, named a `SyntheticEvent`. The wrapper is part of React's event system and also works as a sort of normalizing layer to ensure cross-browser compatibility and, as opposed to some other browsers, it strictly follows the [event specifications of W3C](https://www.w3.org/TR/DOM-Level-3-Events/).
 
 In order to prevent the standard behavior of the browser during an event, we cannot simply return `false` from the event handler. React forces us to explicitly call `preventDefault()` - another fundamental difference to usage in the native Browser API.
 
-Last but not least, let us look at the event attribute or in React's case the event **prop**. React uses a **function reference** instead of a plain string \(which would be the standard in HTML\) which mandates the use of curly braces to inform JSX that a JavaScript expression is used.
+Last but not least, let us look at the event attribute or, in React's case, the event **prop**. React uses a **function reference** instead of a plain string \(which would be the standard in HTML\) which mandates the use of curly braces to inform JSX that a JavaScript expression is used.
 
 This would look similar to:
 
@@ -26,7 +26,7 @@ This would look similar to:
 <button onClick={validateInput}>Validate</button>
 ```
 
-For comparison purposes, this is how a similar event would look in HTML:
+For comparison, this is how a similar event would look in HTML:
 
 ```text
 <button onclick="validateInput">Validate</button>
@@ -102,7 +102,7 @@ class Counter extends React.Component {
 
 This way, the method is only bound to the instance **once** and possible checks to compare the method's likeness would always yield `true`. Thus, expensive `shouldComponentUpdate()` calls can easily be avoided. However, using this method of binding the method to the class instance is not without problems either: if the component in question does not yet use a constructor, it will now certainly have to. In order to to this, we need to call the `super(props)` method to pass the **props** of the component to the `React.Component` parent class. In the end, we end up writing the name of the method twice. Once on its own, and once to define and bind its `this`.
 
-Using this method allows us to avoid potential performance bottlenecks, even if a little bit more verbose. But it could still be considered a little bit messy and cumbersome. We will now look at an even easier way to bind a method to a class instance.
+Using this method allows us to avoid potential performance bottlenecks, even if it is a little bit more verbose, but it could still be considered somewhat messy and cumbersome. We will now look at an even easier way to bind a method to a class instance.
 
 #### **Class properties**
 
@@ -141,7 +141,7 @@ As mentioned earlier, we define a **real class method** within our first example
 
 ### Events outside of the component context
 
-While you can certainly also implement native browser events in React, you should try to use React's own event system whenever possible. It offers cross-browser compatibility, follows the W3C standard for browser events and also optimises when possible.
+While you can certainly also implement native browser events in React, you should try to use React's own event system whenever possible. It offers cross-browser compatibility, follows the W3C standard for browser events and also optimizes when possible.
 
 From time to time however, it is necessary to define events outside of the component context. Some classic examples are `window.onresize` and `window.onscroll`. React's event system does not support global events outside of the component context but if you want to define native browser events you can do so in the `componentDidMount()` method. You should pay attention though, whenever an event listener is added with `addEventListener()`, these **need to removed** once you're done with them.
 
@@ -151,7 +151,7 @@ The `componentWillUnmount()` method is the perfect place to do this. While it mi
 
 React does not pass a native object to its event handlers but an object of type `SyntheticEvent`. Its primary purpose is to ensure cross-browser compatibility. If you ever feel an urge to access the original event though \(I actually never felt the need to\), React provides it to you via the object property `nativeEvent`.
 
-But that is not the only way how the `SyntheticEvent` object and native event object differ: the `SyntheticEvent` object is **short-lived** and **nullified** shortly after the event callback has been called \(mainly for performance reasons\). Accessing properties of the event object is not possible anymore once outside the original event handler.
+But that is not the only way the `SyntheticEvent` object and native event object differ: the `SyntheticEvent` object is **short-lived** and **nullified** shortly after the event callback has been called \(mainly for performance reasons\). Accessing properties of the event object is not possible anymore once outside the original event handler.
 
 What does that mean in detail? Let's look at another example:
 
@@ -200,7 +200,7 @@ While this would certainly solve the problem, it would not help us much. We stil
 
 #### Writing values into variables
 
-In most situations it is sufficient to write certain values that should later be accessed in a callback into their own variable. The callback does not try to acccess the `SyntheticEvent` anymore but only the variable which has been assigned a value from the `SyntheticEvent`.
+In most situations it is sufficient to write certain values that should later be accessed in a callback into their own variable. The callback does not try to access the `SyntheticEvent` anymore but only the variable which has been assigned a value from the `SyntheticEvent`.
 
 ```jsx
 handleChange = (e) => {
@@ -222,7 +222,7 @@ handleChange = (e) => {
 
 #### Persisting `SyntheticEvents` with `e.persist()`
 
-While it is not used much in practice, it is theoretically possible to use the `SyntheticEvent` object's `persist()` method to keep a reference to the event in question. This could possibly be useful when trzing to pass a `SyntheticEvent` object to a callback function **outside** of the event handler.
+While it is not used much in practice, it is theoretically possible to use the `SyntheticEvent` object's `persist()` method to keep a reference to the event in question. This could possibly be useful when trying to pass a `SyntheticEvent` object to a callback function **outside** of the event handler.
 
 If you ever come across this situation though, it might be worth to considering whether that code of the callback function should actually live in the event handler itself. Our example function would look like this:
 
@@ -242,7 +242,7 @@ First, the `e.persist()` method is invoked. Second, the **updater function** can
 {% hint style="info" %}
 
 - **Always** use event props in JSX to define events:`onChange`, `onMouseOver`, `onTouchStart`, `onKeyDown`, `onAnimationStart`etc \(even if it seems a little odd at first\)
-- Event handlers have to be explicitly bound to the class instance if other class methods like `this.setState()` are accessed. **Public Class Properties** und **Arrow Functions** are the more elegant ways to do this.
+- Event handlers have to be explicitly bound to the class instance if other class methods like `this.setState()` are accessed. **Public Class Properties** and **Arrow Functions** are the more elegant ways to do this.
 - Avoid defining your own events with `addEventListener()`API. If at all necessary, do not forget to remove the event when unmounting your component with`removeEventListener()`
 - `SyntheticEvent`objects are „nullified“. Beware of using callback functions outside of the event handler. The event object might not exist anymore at the time of calling the callback.
 - `event.persist()` can force React to prevent resetting the event object to `null`.
