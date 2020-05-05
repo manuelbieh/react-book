@@ -2,7 +2,7 @@
 
 * [Learning React](README.md)
 * [Foreword](foreword.md)
-* [About the Author](about-the-autor.md)
+* [About the Author](about-the-author.md)
 * [I – Introduction](introduction/README.md)
   * [General](introduction/general.md)
   * [Into to the deep end](introduction/off-to-the-deep-end.md)
