@@ -2,9 +2,9 @@
 
 We've mentioned it in places and now we are finally going to look at it in greater detail — **state** and the so-called **lifecycle methods**.
 
-As mentioned in the previous chapter, components can hold their own **state**, manage and change it. But **If the state within a component changes, it always triggers a re-render of the component**. This behavior _can_ be avoided by opting for `PureComponent` as we've learned in the previous chapter which might be useful in some cases. The foundational logic remains though. A state change leads to a re-render of a component and all of its children, except from those cases in which the children are actually a `PureComponent` or its call is surrounded by a `React.memo()` call.
+As mentioned in the previous chapter, components can: hold, manage, and change their own **state**. But **If the state within a component changes, it always triggers a re-render of the component**. This behavior _can_ be avoided by opting for a `PureComponent` as we've learned in the previous chapter, which might be useful in some cases. The foundational logic remains though. A state change leads to a re-render of a component and all of its children, except from those cases in which the children are actually a `PureComponent` or its call is surrounded by a `React.memo()` call.
 
-Relying on state to change our interface is extremely useful. It means that we do not need to rely on manually calling `ReactDOM.render()` to update our interface and that components manage their re-renders independently.
+Relying on state to change our interface is extremely useful. It means that we do not need to rely on manually calling `ReactDOM.render()` to update our interface, and that components manage their own re-renders independently.
 
 State is tightly connected to the so-called **lifecycle methods.** These comprise a number of optional methods which can be called at different times and for different uses cases in **class components**. For example, there are **lifecycle methods** for when a component is first mounted, if a component receives new props or if the state within a component changes.
 
@@ -60,7 +60,7 @@ Whenever state is supposed to change within the component, `this.setState()` sho
 
 The `this.setState()` method might look a little complex at the start. This is also due to the fact that old state is not simply replaced by new state, triggering a re-render, but because many other things take place behind the scenes. Let's take a look at it step by step.
 
-The function itself can take **two different types of arguments**. The first being an **object** containing the new or updated state properties and the second being an **updater function** which again returns an object or `null` if nothing should change. If you happen to have the same property name in your object it will be **overridden** while all other properties will **remain the same**. To reset properties in state, their values need to be explicitly set to `null` or `undefined`. The new state that is being passed is thus **never replaced** but **merged together** with the existing state.
+The function itself can take **two different types of arguments**. The first being an **object** containing the new or updated state properties and the second being an **updater function** which again returns an object or `null` if nothing should change. If you happen to have the same property name in your object as you do in state, the state value will be **overwritten** while all other properties will **remain the same**. To reset properties in state, their values need to be explicitly set to `null` or `undefined`. The new state that is being passed is thus **never replaced** but **merged together** with the existing state.
 
 Let us have another look at our example above in which we defined state with a `counter` property whose initial value was `0`. Assuming that we want to change this state and add another `date` property to pass the current date, we can construct the new object like so:
 
@@ -122,7 +122,7 @@ this.state = Object.assign(
 );
 ```
 
-The `counter` property overrides itself after each batch update but always uses `this.state.counter` as its base reference for incrementing by 1. After all state calls having executed, React calls the `render()` method again.
+The `counter` property overwrites itself after each batch update but always uses `this.state.counter` as its base reference for incrementing by 1. After all state calls having executed, React calls the `render()` method again.
 
 If an **updater function** is used instead, the current state is passed as a parameter and access is given to the state when the function is actually called:
 
