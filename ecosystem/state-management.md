@@ -199,7 +199,7 @@ By following sensible naming conventions, the readability of the overall code is
 
 The previous examples were intended for us to form an understanding of **actions** and **reducers**. Moreover, they allowed us to understand how **actions** are used in practice and how the **reducer** mutates the **store**. Typically, most React applications will deal with much more **complex state** than what we have seen in the examples. To understand **Redux** in the context of much larger state, we will look at a more realistic example.
 
-The example will describe a simple **To-Do** app and we will look how the **state management** for this app can be implemented. The to-do app will manage lists of to-dos and also contain a logged-in user area. The state will consist of two top level properties: `todos` \(of type array\) and `user` \(of type object\). This is reflected in our current state:
+The example will describe a simple **To-Do** app and we will have a look at how the **state management** for this app can be implemented. The to-do app will manage lists of todos and also contain a logged-in user area. The state will consist of two top level properties: `todos` \(of type array\) and `user` \(of type object\). This is reflected in our current state:
 
 ```javascript
 const initialState = Object.freeze({
@@ -263,7 +263,7 @@ const rootReducer = (state = initialState, action) => {
 const store = createStore(rootReducer);
 ```
 
-I do not want to go into too much detail, however a few things should be properly instead. Let's look at each `switch` block in turn in which each `case` block returns a new state object.
+I do not want to go into too much detail, however a few things should be explained properly. Let's look at each `switch` block in turn in which each `case` block returns a new state object.
 
 Let's start with `SET_USER`: the **state object** being created here changes the `user` object and sets its `name` property to `action.payload.name` as well as the `accessToken` property to `action.payload.accessToken`. One could also set `user` to `action.payload` but this would mean that the complete **payload** of the **action** would be transferred to the `user` object. Moreover, one has to ensure that the `action.payload` is an object as to not change the initial form of the `user` object. This could become problematic if other parts of the **reducer** also access this object and its type had suddenly changed. We have ignored all other properties in our example by explicitly accessing `name` and `accessToken` from the **payload** of the action.
 
@@ -367,7 +367,7 @@ The `combineReducers()` function is used to put together all the reducers from t
 }
 ```
 
-Another piece of advice: by using ES2015+ object shorthand notation in a clever way, we can save even more lines of code by calling the imports by the same as the properties which they will represent in state:
+Another piece of advice: by using ES2015+ object shorthand notation in a clever way, we can save even more lines of code by calling the imports by the same name as the properties which they will represent in state:
 
 ```javascript
 import user from './store/user/reducer';
@@ -386,7 +386,7 @@ To use `combineReducers()`, a few formal rules have to be followed. They do not 
 - Reducer functions used in the `combineReducer()` function can never return `undefined`. This is different to the **root reducer** which is allowed to do this. In the case of the former, the `combineReducers()` function will throw an **error** to inform us of this error. We deal with this effectively in our example by including a `default` case in the `switch` block which will simply return the `state`
 - If the `state` passed in the first argument is of `type` `undefined`, the **initial state** has to be returned. It's probably easiest to use the initial state as a default value as we have done in the above example \(`state = initialState`\).
 
-**An aside**: `combineReducer()` can be nested as many times as you like, The **reducer** functions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning two `combineReducer()` calls\).
+**An aside**: `combineReducer()` can be nested as many times as you like. The **reducer** functions that have been passed to `combineReducer()` can be created by other `combineReducer()` calls. While this might help to an extent, you should be cautious to not provide unnecessary granularity which will make your code harder to read when your state branches are hard to find. In my own experience, nesting is only really useful up to a _single_ layer \(meaning two `combineReducer()` calls\).
 
 ### Asynchronous actions
 
@@ -396,7 +396,7 @@ All **actions** in the previous examples were executed **synchronously**. This m
 
 The `createStore()` function from the `redux` package can deal with up to three parameters:
 
-- The **reducer** function: this is only **mandatory** parameter and deals with the executed **actions** of our **state** by returning a **state** for each **action** dispatched
+- The **reducer** function: this is the only **mandatory** parameter and deals with the executed **actions** of our **state** by returning a **state** for each **action** dispatched
 - **Initial state**: One can pre-populate the store with data by providing a value in the initial state. This initial state is also passed to the **reducer function**.
 - An **enhancer function**: This function can be used to enhance the store's capability with our own functionality: in this case we enhance it with the **middleware** mentioned above.
 
@@ -561,7 +561,7 @@ Inside of the **action creator**, the `FETCH_REPOS_REQUEST` is _dispatched_. The
 The request will access the _current_ **state** via `getState()` from which it will access the `selectedAccount`. Once obtained, we can use this to perform the API request for the `selectedAccount`'s GitHub repositories. The request is performed using Axios \(mainly for simplicity\). We can then react to the following two cases:
 
 - The request was successful: This means that we obtain data from the GitHub API and can _dispatch_ the `FETCH_REPOS_SUCCESS` **action**. The current time \(which can later be used for caching or automated reloads\) as well as the array containing the repos hidden in `response.data` are both passed to the action. We also set `isFetching` to `false` as the request is no longer active.
-- The request fails: Should this occur, the `FETCH_REPOS_FAILURE` **action** is _dispatched_. The error messaged provided by Axios in `error.response.data` will be provided to the **action** as a payload. `isFetching` is set to `false` as the request has been performed already \(even if it was not necessarily the desired result\).
+- The request fails: Should this occur, the `FETCH_REPOS_FAILURE` **action** is _dispatched_. The error messages provided by Axios in `error.response.data` will be provided to the **action** as a payload. `isFetching` is set to `false` as the request has been performed already \(even if it was not necessarily the desired result\).
 
 The state now either contains a number of GitHub repositories if the request was successful \(for user in`state.selectedAccount`\) or an error if it failed. Both cases have now been dealt with effectively and their results can be used to take appropriate action in the user interface.
 
