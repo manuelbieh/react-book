@@ -243,7 +243,7 @@ As opposed to previous examples, we only call `ReactDOM.render()` once. The comp
 
 ### The combination of state and props
 
-We have seen a number of examples for components which process props as well **stateful** components and manage their own local state. But there is a lot more to discover. Only the combination of lots of different components make React as powerful as it is when it comes to user interface development. A component can have its own **state** and also pass it to child components via **props**. This not only enables us to strictly separate business and layout logic but also allows us to develop components which are ultimately task-based and only represent a small part of our application.
+We have seen a number of examples of components which process props, as well as **stateful** components which manage their own local state, but there is a lot more to discover. Only the combination of lots of different components make React as powerful as it is when it comes to user interface development. A component can have its own **state** and also pass it to child components via **props**. This not only enables us to strictly separate business and layout logic but also allows us to develop components which are ultimately task-based and only represent a small part of our application.
 
 The separation of business and layout components is often referred to by two different terms: **smart** components \(business logic\) and **dumb** components \(layout\). As you can guess, **smart components** should not be tied to the layout of the user interface at all, whereas **dumb components** should be free of any logic or side effects. Dumb components should only focus on the plain display of static values.
 
@@ -288,9 +288,9 @@ Arguably this example is a little bit artificial but it illustrates the point. W
 
 ### The role of lifecycle methods in combination with components
 
-In the beginning I mentioned a few other **lifecycle methods** apart from `componentDidMount()` and `componentWillMount()`. React also recognises these if they have been implemented within a **class component**.
+In the beginning I mentioned a few other **lifecycle methods** apart from `componentDidMount()` and `componentWillMount()`. React also recognizes these if they have been implemented within a **class component**.
 
-In order to understand these different **lifecycle methods** better, let us create an example component in which we include the **lifecycle method** in debug messages. this will help us to see them in the browser console. To be more precise, the example actually consists of two components - one of them being a parent component, the other being a child component which receives props from its parent component \(which it simply ignores in this case\).
+In order to understand these different **lifecycle methods** better, let us create an example component in which we include the **lifecycle method** in debug messages. this will help us to see them in the browser console. To be more precise, the example actually consists of two component: one of them being a parent component, the other being a child component which receives props from its parent component \(which it simply ignores in this case\).
 
 ```jsx
 import React from 'react';
@@ -417,15 +417,15 @@ Both of these components reliably lead to the following result:
 [child] componentWillUnmount
 ```
 
-Wow! There is a lot happening here right now. Let us go through this one by one, starting with the mounting phase.
+Wow! There is a lot happening here. Let us go through this one by one, starting with the mounting phase.
 
 #### **`constructor(props)`**
 
-The first method to be called is the `constructor` of the `ParentComponent` component. React processes components in the tree from "the outside to the inside". The further up the component is in the component hierarchy, the earlier it will be instanciated. Afterwards, its `render()` method is called. This is necessary as React would not know otherwise which child components actually need processed and included in the component tree. React only runs the **lifecycle methods** for those components which have actually been included in the `render()` method of their parent component.
+The first method to be called is the `constructor` of the `ParentComponent` component. React processes components in the tree from "the outside to the inside". The further up the component is in the component hierarchy, the earlier it will be instantiated. Afterwards, its `render()` method is called. This is necessary as React would not know otherwise which child components actually need processed and included in the component tree. React only runs the **lifecycle methods** for those components which have actually been included in the `render()` method of their parent component.
 
 The constructor is passed the **props** of the component as a parameter and can transmit them to its parent component \(mostly `React.Component` or `React.PureComponent`\) via `super(props)`. If omitted, `this.props` in the constructor would be undefined leading to unexpected bugs and behavior.
 
-In most cases today, it is not necessary anymore to declare the constructor. The Babel plugin **"Class properties"** can be used instead to implement instance methods as well as state as their own class properties. If it's not, the constructor is the place to define the intial state \(for example `this.state = { }`\) and bind the instance methods to their respective class instances with `.bind()` \(for example `this.handleClick = this.handleClick.bind(this)`\). This is necessary as instance methods would otherwise lose their context within the component as their event listeners are used inside JSX and `this` would not point to the instance of the component anymore.
+In most cases today, it is not necessary anymore to declare the constructor. The Babel plugin **"Class properties"** can be used instead to implement instance methods as well as state as their own class properties. If it's not, the constructor is the place to define the initial state \(for example `this.state = { }`\) and bind the instance methods to their respective class instances with `.bind()` \(for example `this.handleClick = this.handleClick.bind(this)`\). This is necessary as instance methods would otherwise lose their context within the component as their event listeners are used inside JSX and `this` would not point to the instance of the component anymore.
 
 #### `static getDerivedStateFromProps(nextProps, prevState)`
 
@@ -437,7 +437,7 @@ The method itself has been a controversial topic, succeeding the now **deprecate
 
 #### `render()`
 
-Once a component has been created and its state has been derived, React calls the `render()` method which describes our user interface and the child components to render. The above example only contains one child component - the `ChildComponent`.
+Once a component has been created and its state has been derived, React calls the `render()` method which describes our user interface and the child components to render. The above example only contains one child component: the `ChildComponent`.
 
 We now rinse and repeat. The `constructor()`, `getDerivedStateFromProps()` and then the `render()` method of our child component is called just the same as was the case in the `ParentComponent`. The Child component in our example does not have any other children implying that no other elements are rendered. If it did, their lifecycle methods would also be run until React would find a component which does not return any other React components anymore. It would simply contain DOM elements like `div`, `p`, `section` and `span` etc \(and of course any combination of these\), `null` or an array which in turn would not contain any other components.
 
@@ -453,15 +453,15 @@ In the above example, we started a `setTimeOut()` within the `ParentComponent`wh
 
 Whenever a component updates, whether that is due to state change within the component or because it receives new props from the outside, `shouldComponentUpdate()` is called. But beware: there is a difference depending on whether the props or the state changed: if a component receives new props from the outside, `getDerivedStateFromProps()` is called shortly beforehand.
 
-The `shouldComponentUpdate()` method enables us to inform if a costly re-render is actually necessary. The method receives the **next props** and the **next state** as a parameter and can determine based on those whether a re-render should take place. The method either has to return `true` to trigger the re-render or `false` which will prohibit the calls of `componentDidUpdate()`, `getSnapshotBeforeUpdate()` as well as `render()`.
+The `shouldComponentUpdate()` method enables us to inform if a costly re-render is actually necessary. The method receives the **next props** and the **next state** as a parameter and can determine, based on those, whether a re-render should take place. The method either has to return `true` to trigger the re-render or `false` which will prohibit the calls of `componentDidUpdate()`, `getSnapshotBeforeUpdate()` as well as `render()`.
 
 In many more complex applications, the update cycle is only triggered because a change has happened somewhere in the parent component which however is irrelevant for the child components. In these cases, `shouldComponentUpdate()` can be helpful as to optimize the rendering performance by preventing further re-renders.
 
-If we were to return `false` from our `ParentComponent`'s `shouldComponent()` method, our logging output would be much shorter. Lines 14-18 would simply be missing. The component itself would not re-render, the `render()` method would not be called and the `ChildComponent` would also not re-render as well as update itself.
+If we were to return `false` from our `ParentComponent`'s `shouldComponentUpdate()` method, our logging output would be much shorter. Lines 14-18 would simply be missing. The component itself would not re-render, the `render()` method would not be called and the `ChildComponent` would also not re-render as well as update itself.
 
 However, in our code example `true` is returned which in turn calls the `render()` method of the `ParentComponent`. This triggers another re-render of the `ChildComponent` which receives new props which mirror the `ParentComponent` updated state. And just like that we find ourselves in the update cycle of the `ChildComponent`.
 
-Similar as already happened in the mount cycle, `getDerivedStateFromProps()` derives a new state based on the new props. Afterwards `shouldComponentUpdate()` is called. This is where we can check whether the component's relevant props have actually changed and if they did not, we could prohibit the re-render by returning `false` from `shouldComponentUpdate()`. If we did not do that, the obligatory call of the `render()` method would follow. Let's look at the next **lifecycle method** that would occur next in our component lifecycle.
+Similar to what has already happened in the mount cycle, `getDerivedStateFromProps()` derives a new state based on the new props. Afterwards `shouldComponentUpdate()` is called. This is where we can check whether the component's relevant props have actually changed and if they did not, we could prohibit the re-render by returning `false` from `shouldComponentUpdate()`. If we did not do that, the obligatory call of the `render()` method would follow. Let's look at the next **lifecycle method** that would occur next in our component lifecycle.
 
 #### `getSnapshotBeforeUpdate(prevProps, prevState)`
 
@@ -475,13 +475,13 @@ In my experience, `getSnapshotBeforeUpdate()` is rarely used. It might even be t
 
 `componentDidUpdate()` forms the last method of the update cycle. It is called after `getDerivedStateFromProps()` has derived the new props, `shouldComponentUpdate()` has returned `true` and after `getSnapshotBeforeUpdate()` has created the last snapshot of the latest condition of the DOM.
 
-The method receives the **last props** as well as the **last state** - meaning the last props and last state just before the component was updated. If the component contains a `getSnapshotBeforeUpdate()` method, its return value will be passed as a third parameter.
+The method receives the **last props** as well as the **last state** — meaning the last props and last state just before the component was updated. If the component contains a `getSnapshotBeforeUpdate()` method, its return value will be passed as a third parameter.
 
-Similarly to `componentDidMount()`, `componentDidUpdate()` is also resolved from the "inside to the outside". First, the `componentDidMount()` methods of the child components are called, then those of the parents. `componentDidUpdate()` is the perfect place to trigger side effects, for example starting XHRs if certain properties of the components have changed. This can easily be checked with a simple comparison between the current props and the last props \(which we have received as a parameter\) or the current state and the last state.
+Similar to `componentDidMount()`, `componentDidUpdate()` is also resolved from the "inside to the outside". First, the `componentDidMount()` methods of the child components are called, then those of the parents. `componentDidUpdate()` is the perfect place to trigger side effects, for example starting XHRs if certain properties of the components have changed. This can easily be checked with a simple comparison between the current props and the last props \(which we have received as a parameter\) or the current state and the last state.
 
 It is safe to access the **current DOM** during this method as React will have applied all the changes resulting from modified JSX in the `render()` method.
 
-And with `componentDidUpdate()` the **update cycle** has also come to a finish. While the **mounting cycle** is only ever run once, namely when the component **first** renders, the update cycle can be triggered an infinite amount times: as soon as the component changes its state or receives new props.
+And with `componentDidUpdate()` the **update cycle** has also come to a finish. While the **mounting cycle** is only ever run once, namely when the component **first** renders, the update cycle can be triggered an infinite number of times: as soon as the component changes its state or receives new props.
 
 #### `componentWillUnmount()`
 
