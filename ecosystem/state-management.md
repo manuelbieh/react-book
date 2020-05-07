@@ -589,13 +589,13 @@ createStore(
 );
 ```
 
-This allows us to automatically supervise any dispatched **action** in the **devtools**, see which **action** was _dispatched_ with which **payload**, or even manually _dispatch_ **actions**. Another cool feature that can be used with the **devtools** is **Time Traveling** - the ability to "travel back" and inspect previous states of the store which can be a very powerful debugging technique.
+This allows us to automatically supervise any dispatched **action** in the **devtools**, see which **action** was _dispatched_ with which **payload**, or even manually _dispatch_ **actions**. Another cool feature that can be used with the **devtools** is **Time Traveling** - the ability to "travel back" and inspect previous states of the store. This can be a very powerful debugging technique.
 
 **Reducers** need to be **pure functions** so that they will always create the same **state**, even if we "travel back" through states in the **store**. Otherwise, we might not be able to reproduce bugs as every call would create a different **state**.
 
 If we are using an enhancer function, the `window.REDUX_DEVTOOLS_EXTENSION_COMPOSE` function will be used instead. This function of type `compose` allows the bundling of _multiple_ **enhancer** functions into a _single_ one, allowing us to call each of them in turn. The principle is similar to that we have talked about in the `combineReducers()` section for **reducers**.
 
-Redux offers a `compose` function too, which allows us to bundle multiple enhancers into a single one. It can be imported to be used to create a custom `composeEnhancer()` function. If the Redux Devtools are installed, we will use the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to to add the **devtools** of the **store enhancer**. If they are not installed however, Redux' own `compose()` function can be used instead to create the same signature:
+Redux offers a `compose` function too, which allows us to bundle multiple enhancers into a single one. It can be imported to be used to create a custom `composeEnhancer()` function. If the Redux Devtools are installed, we will use the `REDUX_DEVTOOLS_EXTENSION_COMPOSE` function to add the **devtools** of the **store enhancer**. If they are not installed however, Redux' own `compose()` function can be used instead to create the same signature:
 
 ```javascript
 import { applyMiddleware, compose, createStore } from 'redux';
@@ -652,7 +652,7 @@ ReactDOM.render(
 
 In most previous examples, only the `<App />` component was passed to `ReactDOM.render()`. Here however, we place a `<Provider />` component around the App and also pass a dummy store to it.
 
-In theory, `Provider` components can be nested inside each other. Components connected to a store, will always the **store** of the next `Provider` component up. However, this is not common practice and leads to more confusion that necessary. When two stores exist in parallel, reducers of both stores should be combined via `combineReducer()` into one big store. This will allow the `Provider` to wrap around the rest of the elements using only a single store.
+In theory, `Provider` components can be nested inside each other. Components connected to a store, will always the **store** of the next `Provider` component up. However, this is not common practice and leads to more confusion than necessary. When two stores exist in parallel, reducers of both stores should be combined via `combineReducer()` into one big store. This will allow the `Provider` to wrap around the rest of the elements using only a single store.
 
 #### Connecting components to a store using the connect function
 
@@ -676,7 +676,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 ```
 
-The function will always expect an **object** return value. The properties of this object will then be passed to the component as `stateProps`. Let's remember our previous Todo Store example. We would now like to pass pre-filtered todos a based on their status as well as the number of todos to the component.
+The function will always expect an **object** return value. The properties of this object will then be passed to the component as `stateProps`. Let's remember our previous Todo Store example. We would now like to pass pre-filtered todos based on their status as well as the overall number of todos to the component.
 
 This would result in a `mapStateProps` function which looks like this:
 
@@ -1078,10 +1078,10 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-We've defined the `todosReducer` as well as an `addTodo`, `removeTodo` and `changeStatus` **actions** - all of which should sound familiar from previous examples. To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
+We've defined the `todosReducer` as well as `addTodo`, `removeTodo` and `changeStatus` **actions** - all of which should sound familiar from previous examples. To aid readability, both **reducers** and **actions** have been extracted into their own files within the `./store/todos` directory.
 
 {% hint style="warning" %}
-There's always heated debate about how folders and files should be structured within an application. I have worked with a number of different structures but have found a separation by domain \(i.e. `todos`, `user`, `repositories` ...\) and according to type \(`actions`, `reducer`\) to be most effective. However, others prefer to place all of the actions in a single `actions` directory and all the reducers in a `reducer` directory. Some even avoid the separation of actions and reducers at all.
+There's always heated debate about how folders and files should be structured within an application. I have worked with a number of different structures but have found a separation by domain \(i.e. `todos`, `user`, `repositories` ...\) and according to type \(`actions`, `reducer`\) to be most effective. However, others prefer to place all of the actions in a single `actions` directory and all the reducers in a `reducer` directory. Some even avoid the separation of actions and reducers entirely.
 
 There's no _Right_ or _Wrong_ here. While some of this decision will be influenced by personal taste, it will also depend on the size, setup, complexity and users of the application.
 {% endhint %}
@@ -1118,7 +1118,7 @@ Lastly, we will have a look at `index.js` which marks the entry-point of our app
 
 Moreover, the `Provider` component is imported from `react-redux` which will receive the created **store**. We also import the connected component from `TodoList.js`. This component can then be used within `App` inside of the `Provider` component.
 
-Once we are set up, we can now create new todos, mark them as complete or remove them completely - all by interacting with the `TodoList` component.
+Once we are set up, we can create new todos, mark them as complete or remove them completely - all by interacting with the `TodoList` component.
 
 Go and try changing some actions and interactions and see how the changes affect the store. To see this in action, it would be best to have the Redux Devtools all setup. We change the following line in `index.js` :
 
