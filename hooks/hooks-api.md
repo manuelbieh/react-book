@@ -1,14 +1,14 @@
 # Hooks API
 
-In this chapter I want to summarize all the hooks which are available to us internally and describe how and when they can be used. The official React documentation differentiates between three basic Hooks and seven additional hooks. These additional hooks are often used for very specific use cases \(such as performance optimizations\) or they are extensions of the basic hooks.
+In this chapter I want to summarize all the Hooks which are available to us internally and describe how and when they can be used. The official React documentation differentiates between three basic Hooks and seven additional Hooks. These additional Hooks are often used for very specific use cases \(such as performance optimizations\) or they are extensions of the basic Hooks.
 
-The three **basic hooks** which I mentioned briefly beforehand are:
+The three **basic Hooks** which I mentioned briefly beforehand are:
 
 - `useState`
 - `useEffect`
 - `useContext`
 
-The **seven additional hooks** are:
+The **seven additional Hooks** are:
 
 - `useReducer`
 - `useCallback`
@@ -24,13 +24,13 @@ The **seven additional hooks** are:
 const [state, setState] = useState(initialState);
 ```
 
-This Hooks returns a **value** as well as a **function** to us, which we can use to update the **value**. During the first rendering of a component that uses this hook, this value is equal to the `initialState` which you pass to the state. If the parameter that has been passed in is a function, it will use the return value of the function as its initial value.
+This Hook returns a **value** as well as a **function** to us, which we can use to update the **value**. During the first rendering of a component that uses this Hook, this value is equal to the `initialState` which you pass to the state. If the parameter that has been passed in is a function, it will use the return value of the function as its initial value.
 
-When the update function is called, React ensures that the function always has the same **identity** and does not create a new function whenever the hook is called. This is important as it reduces the number of renders and also means that we do not need to pass any other **dependencies** \(as is the case in `useEffect()` or `useCallback()`\).
+When the update function is called, React ensures that the function always has the same **identity** and does not create a new function whenever the Hook is called. This is important as it reduces the number of renders and also means that we do not need to pass any other **dependencies** \(as is the case in `useEffect()` or `useCallback()`\).
 
 `useState()` will return an **array** to us of which the first **value** always denotes the state and the second value is always a **function** which we use to update said **value**. Due to array destructuring, we are not limited in naming this value and function. However, conventions have developed that follow the pattern of `value / setValue`. For example, `user` and `setUser`. But of course you could also go for something along the lines of this: `changeUser` and `updateUserState`.
 
-The mechanism of actually updating the state is very similar to that of `this.setState()` which we already encountered in the chapter on Class components. The function can either receive a **new value** which is then replacing the current old value or we can pass an **updater function** to the the function. The updater function receives the previous value and uses the **return value** from the function as its new state.
+The mechanism of actually updating the state is very similar to that of `this.setState()` which we already encountered in the chapter on Class components. The function can either receive a **new value** which then replaces the current old value or we can pass an **updater function** to the the function. The updater function receives the previous value and uses the **return value** from the function as its new state.
 
 But be careful: in contrast to `this.setState()`, objects are **not merged** with their previous state but the old state is completely **replaced** by the new state.
 
@@ -82,7 +82,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-While `StateClass` collects and merges the data of all calls of `this.setState()`, the `setState()` function in the `StateHook` completely replaces the the old value with the new one. In the **class component,** the output returned to us will be `{a: 1, b: 2, c: 3, d: 4}` whereas the **function component** containing the hook will only return `{d: 4}` as this has been written into state last.
+While `StateClass` collects and merges the data of all calls of `this.setState()`, the `setState()` function in the `StateHook` completely replaces the old value with the new one. In the **Class component,** the output returned to us will be `{a: 1, b: 2, c: 3, d: 4}` whereas the **Function component** containing the Hook will only return `{d: 4}` as this has been written into state last.
 
 If the updater function returns the **exact same value** as the value currently in state, the state update is cancelled and no re-render or side-effects are triggered.
 
@@ -92,11 +92,11 @@ If the updater function returns the **exact same value** as the value currently 
 useEffect(effectFunction, dependenciesArray);
 ```
 
-This **Hook** is intended for **imperative side effects** such as API requests, timers or global event listeners. Normally, these **side effects** should be avoided in **function components** as they can lead to unexpected behaviour or bugs that might be hard to solve for.
+This **Hook** is intended for **imperative side effects** such as API requests, timers or global event listeners. Normally, these **side effects** should be avoided in **Function components** as they can lead to unexpected behaviour or bugs that might be hard to solve for.
 
-The `useEffect()` **Hook** combats this problem and allows for a _safe_ mechanism to use side effects within **function components**.
+The `useEffect()` **Hook** combats this problem and allows for a _safe_ mechanism to use side effects within **Function components**.
 
-The **Hook** expects a **function** as its first parameter and a **dependency array** as its second. The function is called **after** the component has rendered. If we have passed an **optional dependency array** to this Hook, the function we pass will only be executed if at least one of the values in the **dependency array** has changed. If an **empty dependency array** is passed, the function will only be run on the **first render** of the component - similar to the `componentDidMount()` lifecycle method which we learned about in class components.
+The **Hook** expects a **function** as its first parameter and a **dependency array** as its second. The function is called **after** the component has rendered. If we have passed an **optional dependency array** to this Hook, the function we pass will only be executed if at least one of the values in the **dependency array** has changed. If an **empty dependency array** is passed, the function will only be run on the **first render** of the component - similar to the `componentDidMount()` lifecycle method which we learned about with Class components.
 
 ### Cleaning up side effects
 
@@ -134,7 +134,7 @@ In the above example we have set up an interval that starts once the component *
 Warning: We can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
 {% endhint %}
 
-By returning a cleanup function from the **effect function** we can stop the interval with a call of `clearInterval()`. This happens before each call of the effect function, but at the very latest it would happen during Unmounting.
+By returning a cleanup function from the **effect function** we can stop the interval with a call of `clearInterval()`. This happens before each call of the effect function, but at the very latest it would happen during unmounting.
 
 ### Conditional calls of the effect function
 
@@ -151,10 +151,10 @@ useEffect(() => {
 
 In this example, we have put the username into the dependency array which we use to request data from the API.
 
-While creating such a **dependency array**, we should take the utmost care to include all values that are present in the function and could change within the lifetime of the component. If the effect function should only be run once and perform a similar task such as `componentDidMount()`, you should leave the **dependency array** empty.
+While creating such a **dependency array**, we should take the utmost care to include all values that are present in the function and could change within the lifetime of the component. If the effect function should only be run once and perform a similar task such as `componentDidMount()`, we leave the **dependency array** empty.
 
 {% hint style="info" %}
-In order to facilitate or automate the creation of **dependency arrays**, the `eslint-plugin-react-hooks` offers an `exhaustive-deps` rule which will automatically write dependencies used in the effect function into the **dependency array** or at least warns that they should be included. These could be run on _Format on Save_ or another similar editor configuration.
+In order to facilitate or automate the creation of **dependency arrays**, the `eslint-plugin-react-hooks` offers an `exhaustive-deps` rule which will automatically write dependencies used in the effect function into the **dependency array** or at least warn that they should be included. These could be run on _Format on Save_ or another similar editor configuration.
 
 You can active it by setting `"exhaustive-deps": "warn"` in the`rules` block of the ESLint configuration.
 {% endhint %}
@@ -163,7 +163,7 @@ You can active it by setting `"exhaustive-deps": "warn"` in the`rules` block of 
 
 The **effect function** is called **asynchronously** with a little bit of delay after the **layout and paint phase** of the browser. For most side effects this should be sufficient. You might run into situations though in which it is necessary to to **synchronously** run side effects. For example, you might need to perform DOM mutations and a delay in execution would lead to an inconsistent user interface or jarring content on the screen.
 
-To deal with these problems, React introduced the `useLayoutEffect()` Hook. It works almost identical to the `useEffect()` hook: it expects an **effect function** which can also return a **cleanup function** and also contains a dependency array. This dependency array is identical to that of the regular `useEffect()` Hook. The difference in the two Hooks is that the `useLayoutEffect()` hook is executed synchronously and run just after all DOM mutations have finished, as opposed to asynchronously as is the case in the regular `useEffect()` hook.
+To deal with these problems, React introduced the `useLayoutEffect()` Hook. It works almost identical to the `useEffect()` hook: it expects an **effect function** which can also return a **cleanup function** and also contains a dependency array. This dependency array is identical to that of the regular `useEffect()` Hook. The difference in the two Hooks is that the `useLayoutEffect()` Hook is executed synchronously and run just after all DOM mutations have finished, as opposed to asynchronously as is the case in the regular `useEffect()` Hook.
 
 `useLayoutEffect()` can read from the DOM and can also synchronously modify it **before** the browser will display these changes in its **paint phase**.
 
@@ -226,7 +226,7 @@ const App = (props) => {
 ReactDOM.render(<App username="manuelbieh" />, document.getElementById('root'));
 ```
 
-In this case, the effect function itself is not asynchronous. The asynchronous functionality has been extracted into its own asynchronous function `fetchGitHubAccount()` which defined **inside** of the `useEffect()` hook.
+In this case, the effect function itself is not asynchronous. The asynchronous functionality has been extracted into its own asynchronous function `fetchGitHubAccount()` which is defined **inside** of the `useEffect()` Hook.
 
 The asynchronous function does not necessarily need to be defined **inside** of the effect function. But the effect function itself is not allowed to be asynchronous.
 
@@ -238,9 +238,9 @@ const myContextValue = useContext(MyContext);
 
 This Hook only expects one parameter: a context type which we create by calling `React.createContext()`. It will then return the value of the next highest context provider in the component hierarchy.
 
-The `useContext()` Hook acts like a context consumer component and causes a re-render of the **function component** as soon as the value of the context in the provider element changes.
+The `useContext()` Hook acts like a context consumer component and causes a re-render of the **Function component** as soon as the value of the context in the provider element changes.
 
-Using this hook is optional and it is still possible to create Context consumers in **JSX** using **function components**. However, the Hook is much more convenient and easier to read as no new hierarchical layer is created in the component tree.
+Using this Hook is optional and it is still possible to create Context consumers in **JSX** using **Function components**. However, the Hook is much more convenient and easier to read as no new hierarchical layer is created in the component tree.
 
 ## useReducer
 
@@ -248,11 +248,11 @@ Using this hook is optional and it is still possible to create Context consumers
 const [state, dispatch] = useReducer(reducerFunc, initialState, initFunc);
 ```
 
-The `useReducer()` Hook is an alternative solution for `useState()` and allows us to manage more complex states. It is based on flux architecture in which a **reducer function** creates a new state by being passed the **last state** and a so called **action**.
+The `useReducer()` Hook is an alternative solution for `useState()` and allows us to manage more complex states. It is based on flux architecture in which a **reducer function** creates a new state by being passed the **last state** and a so-called **action**.
 
-The **reducer function** is called by executing a **dispatch function** which in turn receives an **action**. The **action** is an object which always has a `type` property and often a `payload` property. From this **action** and the **previous state**, the **reducer function** can then create the **new state**. One could summarize this in the following form: `(oldState, action) => newState`.
+The **reducer function** is called by executing a **dispatch function** which in turn receives an **action**. The **action** is an object which always has a `type` property and often a `payload` property attached. From this **action** and the **previous state**, the **reducer function** can then create the **new state**. One could summarize this in the following form: `(oldState, action) => newState`.
 
-Let us have a look at a simple example. We have developed a `Counter` component which can increment or decrement a counter by pressing a + and - button respectively:
+Let us have a look at a simple example. We have developed a `Counter` component which can increment or decrement a counter by pressing a + and - button:
 
 ```jsx
 import React, { useReducer } from 'react';
@@ -288,7 +288,7 @@ const Counter = () => {
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
 
-We have defined the initial State `initialState` and the reducer function `reducerFunction`. The initial state only consists of an object which holds a `count` property which is `0` initially. The reducer function on the other hand expects a `state` and an `action` which are later passed to the reducer function by calling the `dispatch` function. These two parameters will then create the **new** state. **But beware**: instead of mutating an existing state, we always have to create a new state! Otherwise mutations of the existing state will lead to side effects which are not intended and cause incorrect display of components. A **reducer** function should always be a **pure** function.
+We have defined the initial State `initialState` and the reducer function `reducerFunction`. The initial state only consists of an object which holds a `count` property which is initially `0`. The reducer function on the other hand expects a `state` and an `action` which are later passed to the reducer function by calling the `dispatch` function. These two parameters will then create the **new** state. **But beware**: instead of mutating an existing state, we always have to create a new state! Otherwise mutations of the existing state will lead to side effects which are not intended and cause incorrect display of components. A **reducer** function should always be a **pure** function.
 
 The **reducer function**, as well as the initial state, are then passed to the `useReducer()` Hook which will return a tuple. The tuple consists of two values: the first element will portray the **current state** in this particular rendering phase and the second value will be the so-called **dispatch** function.
 
@@ -340,13 +340,13 @@ const Counter = (props) => {
 ReactDOM.render(<Counter startValue={3} />, document.getElementById('root'));
 ```
 
-In this example, the `useReducer()` hook has been extended to include a third and optional parameter: the **init** function. The `initialState` is now an argument for the **init** function. The value for this argument is passed to the component via **props** — `startValue` in our case.
+In this example, the `useReducer()` Hook has been extended to include a third and optional parameter: the **init** function. The `initialState` is now an argument for the **init** function. The value for this argument is passed to the component via **props** — `startValue` in our case.
 
 ### Reducers in practice
 
 The guiding principle of **reducers** should be known to those in the React community who have had exposure to **Redux**. **Redux** is a library that allows us to manage complex state in a comfortable manner and was the first point of call whenever handling local state became hard to read and cumbersome. It also created a solution for the so-called "prop drilling" which meant that previous props needed to be passed through multiple hierarchical layers.
 
-**Redux** manages reducer functions and makes state and their dispatch functions available to those components which should read or modify the global state. The `useReducer()` hook is React's custom solution to realize complex state management using reducer functions.
+**Redux** manages reducer functions and makes state and their dispatch functions available to those components which should read or modify the global state. The `useReducer()` Hook is React's custom solution to realize complex state management using reducer functions.
 
 A common use case for reducers forms the management of API requests. Common conventions dictate that three actions for each API request should be defined:
 
@@ -448,11 +448,11 @@ ReactDOM.render(
 );
 ```
 
-The `useReducer()` hook is used and passed to the `accountReducer` function. In this function, we deal with the three **actions** of **type** `REQUEST_START`, `REQUEST_SUCCESS`, and `REQUEST_ERROR`.
+The `useReducer()` Hook is used and passed to the `accountReducer` function. In this function, we deal with the three **actions** of **type** `REQUEST_START`, `REQUEST_SUCCESS`, and `REQUEST_ERROR`.
 
-The `initialState` consists of an object with an empty `data` property, an `isFetching` and `isError` flag and a `lastUpdated` property. The flags can inform us whether the data has actually loaded or whether an error occurred whilst the `lastUpdated` property will store a timestamp of the last successful request. We can use these later to only use one request per minute or to signal to the user that they might be seeing data but that the interface has not changed for a while.
+The `initialState` consists of an object with an empty `data` property, an `isFetching` and `isError` flag and a `lastUpdated` property. The flags inform us whether the data has actually loaded or whether an error occurred whilst the `lastUpdated` property will store a timestamp of the last successful request. We can use these later to only use one request per minute or to signal to the user that they might be seeing data but that the interface has not changed for a while.
 
-In addition, we use a `useEffect()` hook to initiate loading the data once the GitHub username in the **props** changes. Once this has happened, we dispatch the `REQUEST_START` **action**. The reducer will then create the new state:
+In addition, we use a `useEffect()` Hook to initiate loading the data once the GitHub username in the **props** changes. Once this has happened, we dispatch the `REQUEST_START` **action**. The reducer will then create the new state:
 
 ```diff
 {
@@ -489,7 +489,7 @@ If the requests failed, the `REQUEST_ERROR` **action** would be dispatched. The 
 };
 ```
 
-As no further request will be fired, the `isLoading` flag will be reset from `true` to `false` so as to not signal to the user that data might still be loading. As an error has occurred, the state of `isError` is set from `false` to `true`. As the code snippet above also contained a condition to handle the state of an error, we can display a message to the user:
+As no further request will be fired, the `isLoading` flag will be reset from `true` to `false` so as to not signal to the user that data might still be loading. When an error has occurred, the state of `isError` is set from `false` to `true`. The code snippet above also contains a condition to handle the state of an error, so we can display a message to the user:
 
 ```jsx
 if (state.isError) {
@@ -497,7 +497,7 @@ if (state.isError) {
 }
 ```
 
-It might be a good idea to tell the user which operation has failed and how they might be able to recover from the error. Maybe the provided username did not exist and we could offer an opportunity to the user to re-enter the username and correct their mistake. Another possibility could be that the API might not be available at the moment which could inform the user to try again at a later point of time.
+It might be a good idea to tell the user which operation has failed and how they might be able to recover from the error. Maybe the provided username did not exist and we could offer an opportunity to the user to re-enter their username and correct their mistake. Another possibility could be that the API might not be available at the moment which could inform the user to try again at a later point of time.
 
 If however the request was dealt with successfully and we could obtain data from the API, we dispatch the `REQUEST_SUCCESS` **action**. This not only contains a `payload` but also a `meta` property which includes the timestamp of the request.
 
@@ -532,7 +532,7 @@ return (
 
 Apart from writing our first more complex reducer, we have also successfully learned about how `useEffect()` and `useReducer()` can be used together.
 
-As an aside: Similar to the `useState()` hook, the `useReducer()` hook will not trigger another re-render if the reducer function returns the exact same state as before.
+As an aside: Similar to the `useState()` Hook, the `useReducer()` Hook will not trigger another re-render if the reducer function returns the exact same state as before.
 
 ## useCallback
 
