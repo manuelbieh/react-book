@@ -2,11 +2,11 @@
 
 ### JSX as an important building block in React development
 
-Before diving deeper into the development of components, I want to first talk about **JSX**. As mentioned earlier, JSX makes up a large portion of the code written in most React components and thus a large amount in React in general. In my opinion, JSX is one of the reasons why React has been so widely and readily adopted by the developer community. Nowadays, even other frameworks or libraries like Vue.js offer the possibility to use JSX to supercharge their components.
+Before diving deeper into the development of components, I want to first talk about **JSX**. As mentioned earlier, JSX makes up a large portion of the code written in most React components and thus a large amount of React in general. In my opinion, JSX is one of the reasons why React has been so widely and readily adopted by the developer community. Nowadays, even other frameworks or libraries like Vue.js offer the possibility to use JSX to supercharge their components.
 
 At first glance JSX does not look very different from HTML or XML. As in XML or in XHTML, every opening element also needs to have a matching closing element `</div>` or has to be self-closing \(`<img/>`\). In contrast to XML and XTHML though, JSX can include **JavaScript expressions** making it extremely powerful.
 
-JSX elements are transformed into nested `React.createElement()` calls at a later step in your build process. Remember that I mentioned in the introduction that React creates a tree-like structure of elements - this happens here.
+JSX elements are transformed into nested `React.createElement()` calls at a later step in your build process. Remember that I mentioned in the introduction that React creates a tree-like structure of elements — this happens here.
 
 This all sounds a lot more complicated than it actually is though. Let us look at an example with the following HTML snippet:
 
@@ -34,7 +34,7 @@ The second argument of the `createElement()` call are the **props** of an elemen
 
 All other arguments are the so-called _"children"_ of the element. In our example above, the `div` contains two children: two paragraphs \(`<p>`\) . These in turn do not have any other props though \(`null`\)  and only contain a text string \(`A paragraph in JSX`  and `Another paragraph`\) as their children.
 
-If anyone is a little confused at this point or finds JSX a little intimidating, I can assure you that writing JSX will become second nature to you in no time. It will feel like writing HTML markup. I still deem it very important to understand how JSX works under the hood though especially to grasp slightly more complex examples in the future.
+If anyone is a little confused at this point or finds JSX a little intimidating, I can assure you that writing JSX will become second nature to you in no time. It will feel like writing HTML markup. I still deem it very important to understand how JSX works under the hood, especially to grasp slightly more complex examples in the future.
 
 ## Expressions in JavaScript
 
@@ -97,7 +97,7 @@ The ternary operator \( ? : \) is also an expression:
 Condition ? true : false;
 ```
 
-Expressions are not limited to boolean values, numbers or strings but can also include objects, arrays or even function and arrow function calls. You will certainly see them again in the future.
+Expressions are not limited to boolean values, numbers or strings but can also include objects, arrays or even functions and arrow function calls. You will certainly see them again in the future.
 
 Example for an arrow function:
 
@@ -107,7 +107,7 @@ Example for an arrow function:
 };
 ```
 
-All of this will become important very soon. To put the cherry on top, I will tell you now that expressions can in turn include other JSX. You can play this game until infinity.
+All of this will become important very soon. To put the cherry on top, I will tell you now that expressions can in turn include other JSX — you can play this game forever.
 
 Let's look at a few other examples of JSX that contain valid JavaScript expressions to really drive home these concepts:
 
@@ -125,7 +125,7 @@ Let's look at a few other examples of JSX that contain valid JavaScript expressi
 
 ### Ternary operator as a value of a prop
 
-```text
+```jsx
 <div className={user.isAdmin ? 'is-admin' : null}>…</div>
 ```
 
@@ -134,7 +134,7 @@ Let's look at a few other examples of JSX that contain valid JavaScript expressi
 ```jsx
 <ul>
   {['Tintin', 'Milou'].map((name) => (
-    <li>{name})</li>
+    <li>{name}</li>
   ))}
 </ul>
 ```
@@ -153,14 +153,14 @@ For those of you who have paid close attention, you may have noticed a few thing
 
 You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi-line JSX actually requires parentheses.
 
-If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly braces \("{" and "}"\). These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
+If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use braces \("{" and "}"\). These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
 
 {% hint style="warning" %}
-For each object, **two** opening and closing curly braces need to be used. The outer braces introduce the expression whereas the inner ones represent the curly braces of the object contained within.
+For each object, **two** opening and closing braces need to be used. The outer braces introduce the expression whereas the inner ones represent the braces of the object contained within.
 
 `<User data={{ name: 'Manuel', location: 'Berlin' }} />`
 
-Similarly, array literals also need to be included within a set of curly braces. The outer one representing the expression and the inner brackets denoting the array.
+Similarly, array literals also need to be included within a set of braces. The outer one representing the expression and the inner brackets denoting the array.
 
 `<List items={[1, 2, 3, 4, 5]} />`
 {% endhint %}
@@ -210,13 +210,13 @@ Events form another exception. Events are an extensive topic and thus will be de
 
 ## Comments in JSX
 
-JSX also allows the use of comments if however they look a bit different from their HTML counterparts:
+JSX also allows the use of comments, albeit with a different look to their HTML counterparts:
 
 ```markup
 <!-- This is an example for an HTML comment -->
 ```
 
-Instead the comments are contained within curly braces and will be opened in the form of a JavaScript multi-line comment:
+Instead the comments are contained within braces and will be opened in the form of a JavaScript multi-line comment:
 
 ```jsx
 {
@@ -226,15 +226,15 @@ Instead the comments are contained within curly braces and will be opened in the
 
 Comments can easily span multiple lines of course. In contrast, the usual one-liner JavaScript comments introduced with the double slash \(`//`\) cannot be used in JSX meaning even short one-line comments need to be written with the above \(`/* */`\). 
 
-And this is it! All these examples and explanations should have laid the groundwork for understanding and working with JSX enabling you to follow along in the following chapters.
+And this is it! All these examples and explanations should have laid the groundwork for understanding and working with JSX, enabling you to follow along in the upcoming chapters.
 
 ## Summary
 
 {% hint style="info" %}
 * Multi-line JSX has to be surrounded by parentheses
-* JSX include JavaScript expressions. These have to be contained in curly braces and can then be used in props
+* JSX include JavaScript expressions. These have to be contained in braces and can then be used in props
 * To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
 * CSS inline styles have to be written as a JavaScript object
-* Comments are put within curly braces and use multi-line comment Syntax: `{/* */}`
+* Comments are put within braces and use multi-line comment Syntax: `{/* */}`
 {% endhint %}
 
