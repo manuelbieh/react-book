@@ -2,15 +2,15 @@
 
 In the previous chapters I have used them a few times without explaining them: what actually are **React elements**? 
 
-**React elements** are the smallest building blocks in a **React application**.They describe what is going to be rendered on the screen. Although they sound similar to DOM elements, they differ regarding an important point: React elements are only simple objects and thus easy to create and performant. Calling `React.createElement()` to create a **React element** does not trigger a DOM operation.
+**React elements** are the smallest building blocks in a **React application**.They describe what is going to be rendered on the screen. Although they sound similar to DOM elements, they differ in one important point: React elements are only simple objects — thus they are easy to create and performant. Calling `React.createElement()` to create a **React element** does not trigger a DOM operation.
 
 {% hint style="info" %}
 React **elements** are often confused with React **components** and used interchangeably. This is not correct though. **Elements** make up the building blocks of **components**. We are going to talk about **components** in great depths in the following chapters, but you should read and understand this chapter about **elements** first.
 {% endhint %}
 
-We already learned how we can create a **React element. JSX** allows us to save many lines of code by avoiding lengthy `React.createElement()` calls. But how do we render an element to the screen, i.e. show it in the browser?
+We have already learned how we can create a **React element**. **JSX** allows us to save many lines of code by avoiding lengthy `React.createElement()` calls. But how do we render an element to the screen, i.e. show it in the browser?
 
-In order to achieve this, we are making use of the `render()` method of `ReactDOM`. Additionally, we need a **root node** or a **mount node** to render a **React element**. This node works as a placeholder and informs React where the element should be rendered to. Theoretically, there can be many different root nodes in the HTML document. React controls these independently and keeps track of the different mount nodes. So instead of having one large **React application**, you could easily choose to have many smaller \(or larger\) **apps** in a single HTML document. It is most common though to only have a **single root node** for your **React application**. 
+In order to achieve this, we are making use of the `render()` method of `ReactDOM`. Additionally, we need a **root node** or a **mount node** to render a **React element**. This node works as a placeholder and informs React where the element should be rendered to. Theoretically, there can be many different root nodes in the HTML document. React controls these independently and keeps track of the different mount nodes. So instead of having one large **React application**, you could easily choose to have many smaller \(or larger\) **apps** in a single HTML document. In most situations, you are likely to only have a **single root node** for your **React application**. 
 
 But let's get to the important parts: how to render a **React element**. Pass the **element** you want to render as the first argument to `ReactDOM.render()` and then pass the **root node** as the second argument, which is the DOM node that the **element** will be rendered into. 
 
@@ -62,7 +62,7 @@ Inspecting the elements in the **Chrome Dev Tools** reveals: which each `ReactDO
 
 ![React only updates the time, nothing else.](../.gitbook/assets/react-update.png)
 
-We've just met one of the most foundational principles of React in practice: React's **declarative** way of creating user interfaces. Instead of telling our app in an **imperative** fashion to update itself every second, we **declaratively** define in the **React element** that we want to see the current time in a particular place at each re-render.
+We've just met one of the most fundamental principles of React in practice: React's **declarative** way of creating user interfaces. Instead of telling our app in an **imperative** fashion to update itself every second, we **declaratively** define in the **React element** that we want to see the current time in a particular place at each re-render.
 
 Implementing this said functionality without React might look something like the following:
 
@@ -75,14 +75,14 @@ function changeTime() {
 setInterval(changeTime, 1000);
 ```
 
-The main advantage of **declarative** programming is that we only **describe states** and mention how something should render instead of deciding on each and every step and how to reach our final state. Especially complex applications benefit greatly from declarative approaches and readability and simplicity are drastically improved, thus making it less error prone.
+The main advantage of **declarative** programming is that we only **describe states** and mention how something should render instead of deciding on each and every step and how to reach our final state. Especially complex applications benefit greatly from declarative approaches, as both readability and simplicity are drastically improved it makes applications less error prone.
 
 
 
 {% hint style="info" %}
 In practice, `ReactDOM.render()` is only called once. Mostly when opening a page. We have only used `render()` repeatedly in the examples to illustrate how **ReactDOM** and **React elements** work together
 
-**Components** \(instead of elements\) trigger a re-render if their state changes or if they have been passed new props. But let's look at components in the next chapter!
+**Components** \(instead of elements\) trigger a re-render if their state changes or if they have been passed new props, but let's look at components in the next chapter!
 {% endhint %}
 
 
