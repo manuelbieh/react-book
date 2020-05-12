@@ -2,10 +2,10 @@
 
 ### The "new" JavaScript
 
-**ES2015** is a modern, up-to-date version of JavaScript with lots of new functionality and syntax. **ES2015** is the successor to **ECMAScript** version 5 \(or **ES5**\) and is thus often referred to as **ES6** in many articles and blogs. So if you come across **ES6** anywhere in an article or elsewhere, you know now that it applies to **ES2015**. In most of the book, I will refer to **ES2015+** which means any changes in the JavaScript language since 2015. This includes ES2016 \(ES7\), ES2017 \(ES8\), ES2018 \(ES9\).
+**ES2015** is a modern, up-to-date version of JavaScript with lots of new functionality and syntax. **ES2015** is the successor to **ECMAScript** version 5 \(or **ES5**\) and is thus often referred to as **ES6** in many articles and blogs. So if you come across **ES6** anywhere in an article or elsewhere, you know now that it applies to **ES2015**. In most of the book, I will refer to **ES2015+** which means any changes in the JavaScript language since 2015 will be marked accordingly. This includes ES2016 \(ES7\), ES2017 \(ES8\), ES2018 \(ES9\).
 
 {% hint style="info" %}
-The **ES** in **ES2015** and **ES6** stands for **ECMAScript**. The organization ECMA International is responsible for the standardization of the **ECMA-262** specification. Since 2015, a new specification has been published each year. Historically, they attributed each version with an increasing number, however to increase clarity and understanding the versions now include the year in which they were published. This way, **ES6** becomes **ES2015**, **ES7** is **ES2016** and so on.
+The **ES** in **ES2015** and **ES6** stands for **ECMAScript**. The organization ECMA International is responsible for the standardization of the **ECMA-262** specification. Since 2015, a new specification has been published every year. Historically, they attributed each version with an increasing number, however to increase clarity and understanding the versions now include the year in which they were published. This way, **ES6** becomes **ES2015**, **ES7** is **ES2016** and so on.
 {% endhint %}
 
 People that work with React most definitely also use **Babel** as their **transpiler** to change **JSX** into its respective `createElement()`, but this is not the only thing **Babel** can do. Previously named **6to5**, it did exactly what its name suggests: transpile **ES6** syntax JavaScript into **ES5**. This unlocks the ability to use newer, or soon-to-be-supported, features and syntax extensions today whilst still supporting older browsers that do not natively support these features.
@@ -16,11 +16,11 @@ In this chapter I want to show and explain the most important and useful functio
 
 ## **Variable declarations with `let` and `const`**
 
-For a long while, one could only use `var` to declare a variable in JavaScript. Since 2015 however, JavaScript has gained two new keywords which we can use to declare variables: `let` and `const`. Using `var` for variable declarations has become somewhat superfluous and in almost all cases `let` and `const` are the better choices. But what's the difference?
+For a long time, one could only use `var` to declare a variable in JavaScript. Since 2015 however, JavaScript has gained two new keywords which we can use to declare variables: `let` and `const`. Using `var` for variable declarations has become somewhat superfluous and in almost all cases `let` and `const` are the better choices. But what's the difference?
 
 As opposed to `var`, the new variable declarations, `let` and `const`, only exist **inside of the scope in which they were defined**. These scopes can be a function, as was the case with `var`, but it can also be a loop or an `if` statement.
 
-**Tip:** Whenever you find an open curly bracket in your code, you are opening a new scope. Similarly, a closing curly bracket closes the scope again. Using these new variable declarations, we have encapsulated our variables to a greater degree and limited their usage which is usually considered a good thing.
+**Tip:** Whenever you find an open curly bracket in your code, you are opening a new scope. Similarly, a closing curly bracket closes the scope again. Using these new variable declarations, we have encapsulated our variables to a greater degree and limited their usage — which is usually considered a good thing.
 
 On the one hand, if you want to override the value of a variable \(e.g. in a loop\), you have to use `let` to achieve this. On the other hand, if the reference of the variable should stay the same, i.e. constant, one should use `const.`
 
@@ -28,7 +28,7 @@ But be careful: As opposed to other languages, `const` does not disable every mu
 
 ### The difference between `let/const` and `var`
 
-Let us look at an example to further demonstrate the differences between `let` and `const` versus `var` and see how the former are only visible in the scope which they are defined in:
+Let us look at an example to further demonstrate the differences between `let` and `const` versus `var`, and see how the former are only visible in the scope which they are defined in:
 
 ```
 for (var i = 0; i < 10; i++) { }
@@ -176,7 +176,7 @@ function double(number) {
 const double = number => number * 2;
 ```
 
-In both cases, the declared functions yields the same result. For example, if we called the function with `double(5)` , the result would be `10`.
+In both cases, the declared functions yield the same result. For example, if we called the functions with `double(5)`, the results would be `10` in both cases.
 
 But there is another even greater advantage when it comes to arrow functions. This will be especially useful once we fully start to work with React. Arrow functions do not have their own constructor meaning they cannot be instantiated using the `new MyArrowFunction()` form. On top of this, they do not bind their own `this` but inherit `this` from their **parent scope**. The latter will become useful in the future.
 
@@ -231,7 +231,7 @@ Gone are the days of `var self = this` and `.bind(this)`. We can pretend we are 
 
 ## New String, Array and Object methods
 
-With the introduction of ES2015, a lot of static and prototype methods were added to JavaScript. Even if many of these are not directly relevant for React they still prove very powerful which is why I will explain these in bit more detail.
+With the introduction of ES2015, a lot of static and prototype methods were added to JavaScript. Even if many of these are not directly relevant to React, they are still very powerful,  which is why I will explain these in bit more detail.
 
 ### String methods
 
@@ -243,7 +243,7 @@ string.startsWith(value);
 string.endsWith(value);
 ```
 
-In each of these a boolean value is returned by the function, meaning either `true` or `false`. If I want to test whether the string `Example` contains the word `egg`, I can check for it like this:
+In each of these, a boolean value is returned by the function — meaning either `true` or `false`. If I want to test whether the string `Example` contains the word `egg`, I can check for it like this:
 
 ```
 'Example'.includes('egg')
@@ -335,7 +335,7 @@ But be careful: `.includes()` is case sensitive. If you try to check for `['a', 
 
 **Static object methods**
 
-Arrays and strings are not the only data structures which have gained new functionality. Objects have received a lot of new methods and improvements. Let's look at the most important ones briefly and one after the other:
+Arrays and strings are not the only data structures which have gained new functionality. Objects have received a lot of new methods and improvements. Let's look at the most important ones briefly:
 
 ```
 Object.assign(target, source[, source[,...]]);
@@ -373,7 +373,7 @@ console.log(user === modifiedUser);
 // -> false
 ```
 
-By providing a newly created object as the destination object, the result is also a different object. In few cases, it can be advantageous to mutate the **destination** **object**, in React however this practice is best avoided.
+By providing a newly created object as the destination object, the result is also a different object. In few cases, it can be advantageous to mutate the **destination object**, in React however this practice is best avoided.
 
 The method can process any given objects as parameters. If a property name appears more than once in an object, the properties added later take precedence.
 
@@ -445,7 +445,7 @@ console.log(user);
 // -> { name: 'Manuel', german: true };
 ```
 
-So far so good. I have tried to keep the example very simple at this point but its implications are evident. In more complex situations, this technique will allow us to write clean and easily readable code especially with regard to **JSX**.
+So far so good. I have tried to keep the examples very simple at this point but its implications are evident. In more complex situations, this technique will allow us to write clean and easily readable code especially with regard to **JSX**.
 
 Another noteworthy addition for objects has been the introduction of **shorthand property names**. Previously, code had to be written in the following form:
 
@@ -473,7 +473,7 @@ const user = {
 };
 ```
 
-Yep, since **ES2015** both of these methods of defining an object will lead to the same result. Of course, shorthand property syntax can be mixed with the previous syntax all the same:
+Yep, since **ES2015** both of these methods of defining an object will lead to the same result. Of course, shorthand property syntax can be mixed with standard property syntax:
 
 ```
 const name = 'Manuel';
@@ -528,7 +528,7 @@ Or:
 class MyComponent extends React.Component {}
 ```
 
-Using the inbuilt `super()` function the component can call the **constructor** of its parent class. In terms of React, the use of `super()` is only necessary if new and own classes have been added and if a constructor is present. If this is the case, `super()` is called and its `props` are passed to the constructor of the `React.Component`.
+Using the inbuilt `super()` function the component can call the **constructor** of its parent class. In terms of React, the use of `super()` is only necessary if new classes have been added and if a constructor is present. If this is the case, `super()` is called and its `props` are passed to the constructor of the `React.Component`.
 
 ```
 class MyComponent extends React.Component {
@@ -646,7 +646,7 @@ console.log(allSettings);
 
 The `userSettings` object which has been declared after the `globalSettings` object overrides the `language` property by providing a key which is identical to that in the `globalSettings`object. The spread operator works in a similar fashion to the newly introduced `Object.assign()` method in ES2015 which is also used in in ES2015+ applications from time to time.
 
-However, it is important to make a distinction here: `Object.assign()` mutates an existing object whereas the spread operator creates a new object. In terms of writing React components and their props, we want to avoid creating mutations. But for the sake of completion, let us look at a brief example anyway.
+However, it is important to make a distinction here: `Object.assign()` mutates an existing object whereas the spread operator creates a new object. In terms of writing React components and their props, we want to avoid creating mutations, but for the sake of completion, let us look at a brief example anyway.
 
 **Combining objects with `Object.assign()`**
 
@@ -665,7 +665,7 @@ console.log(Object.assign(a, b, c));
 {a: 1, b: 2, c: 3}
 ```
 
-The function returns a new object in which all three of the objects that have been passed to `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c` to the console:
+The function returns an object in which all three of the objects that have been passed to `Object.assign()` have been combined. But is this really a new object? **No!** In order to prove this, let's print `a`, `b`, and `c` to the console:
 
 ```
 console.log(a);
@@ -681,15 +681,15 @@ console.log(c);
 {c: 3}
 ```
 
-As can be seen from the example above, `Object.assign()` did not create a new object for us. It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable** **objects** this is far from ideal and should be avoided.
+As can be seen from the example above, `Object.assign()` did not create a new object for us. It merely added the properties of the second and the third object to the first. In terms of **pure functions** and **immutable objects** this is far from ideal and should be avoided.
 
-There's a trick though to ensure that objects can be combined via `Object.assign()` but also be created in a new object. Passing an empty object literal `{}` as the first argument to the function like this:
+There's a trick to ensure that objects can be combined via `Object.assign()` but also be created in a new object. Passing an empty object literal `{}` as the first argument to the function like this:
 
 ```
 Object.assign({}, a, b, c);
 ```
 
-... will achieve just what we want. It passes all the object properties of `a`, `b` and `c` while keeping the previous objects `a`, `b` and `c` intact.
+... will achieve exactly what we want. It passes all the object properties of `a`, `b` and `c` while keeping the previous objects `a`, `b` and `c` intact.
 
 ### Destructuring assignments
 
