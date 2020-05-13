@@ -726,7 +726,7 @@ const [gold, silver, bronze] = athletes;
 
 The array elements at index `0`, `1` and `2` are now all to be found in the variables for `gold`, `silver` and `bronze`. The result is the same as in the previous example, however the second version is much shorter and a lot more succinct.
 
-We can use array destructuring anywhere where the array has been initialized on the right side, even if it contains a `return` value from the function.
+We can use array destructuring anywhere where the array has been initialized on the right side, even if it is contained in the `return` value of a function.
 
 ```
 const getAllAthletes = () => {
@@ -790,7 +790,7 @@ We are passing the array to our `logWinners()` function and instead of defining 
 
 The concept of destructuring is not only limited to arrays. Objects can also be assigned to variables if they share the same naming.
 
-The semantics are very similar to those of arrays, with the difference that values are not being assigned based on position but based on their property name. Moreover, curly braces are used instead of brackets.
+The semantics are very similar to those of arrays, with the difference that values are not being assigned based on position but based on their property name. Moreover, curly brackets are used instead of square brackets.
 
 ```javascript
 const user = {
@@ -850,7 +850,7 @@ const UserPersona = ({ firstName, lastName, image, job }) => (
 );
 ```
 
-As a nice side effect, we can simplify this further as the implicit return from the **arrow function** allows us to omit the curly braces and the explicit `return`. We are left with just 5 lines of **JSX.**
+As a nice side effect, we can simplify this further as the implicit return from the **arrow function** allows us to omit the curly brackets and the explicit `return`. We are left with just 5 lines of **JSX.**
 
 This syntax is very common in SFCs but you can find a similar destructuring assignments in the beginning of the `render()` method of **class components**:
 
@@ -890,11 +890,11 @@ In order to rename the variable, the invalid property name needs to be followed 
 const { name, class: ticketClass } = passenger;
 ```
 
-The value of the `class` property is written into the new variable `ticketClass` which, as opposed to `class`, is a valid name for a variable. The name of the passenger can easly be destructured into a variable with the name `name`.
+The value of the `class` property is written into the new variable `ticketClass` which, as opposed to `class`, is a valid name for a variable. The name of the passenger can easily be destructured into a variable with the name `name`.
 
 **Defaults in destructuring assignments**
 
-It is also possible to use defaults with **destructuring**. If you are trying to destructure a property in an object in which it does not exist, you can define a default to use instead. Instead of using a colon as we did for reserved names, we use the equality sign followed by the default value we want to pass:
+It is also possible to use defaults with **destructuring**. If you are trying to destructure a property of an object in which it does not exist, you can define a default to use instead. Instead of using a colon as we did for reserved names, we use the equals sign followed by the default value we want to pass:
 
 ```javascript
 const { name = 'Unknown passenger' } = passenger;
@@ -904,7 +904,7 @@ If no property called `name` was present in the object or its value was `undefin
 
 **Combining renames and defaults**
 
-Now it's getting interesting because combining renaming and default naming is possible. It might not be the simplest code to follow first but syntactically it is correct. Let use our previous `passenger` object again to illustrate this point. First, we define that the `name` property to be renamed to `passengerName` and then pass it the default value of `Unknown passenger` if no property `name` is found on the object. We also want to keep using `ticketClass` instead of the reserved `class` and assign the value `Economy` to it should it not exist as a property on the object.
+Now it's getting interesting because combining renaming and default naming is possible. It might not be the simplest code to follow first but syntactically it is correct. Let use our previous `passenger` object again to illustrate this point. First, we define that the `name` property to be renamed to `passengerName` and then pass it the default value of `Unknown passenger` if no property `name` is found on the object. We also want to keep using `ticketClass` instead of the reserved `class` and assign the value `economy` to it, should it not exist as a property on the object.
 
 ```javascript
 const {
@@ -913,7 +913,7 @@ const {
 } = passenger;
 ```
 
-If the newly named variables `passengerName` and `ticketClass` are not present in the object to be destructured, the values `Unknown passenger` and `Economy` are assigned. We do however need to ensure that the object itself is not null, otherwise the JavaScript interpreter will throw an error:
+If the newly named variables `passengerName` and `ticketClass` are not present in the object to be destructured, the values `Unknown passenger` and `economy` are assigned. We do however need to ensure that the object itself is not null, otherwise the JavaScript interpreter will throw an error:
 
 ```javascript
 const {
@@ -926,7 +926,7 @@ const {
 Uncaught TypeError: Cannot destructure property \`name\` of 'undefined' or 'null'.
 {% endhint %}
 
-There is an untidy yet highly practical trick to ensure that the object we're working with is not `null` or `undefined`. The **logical OR operator** can be used to declare a fallback object of our actual object is `null` or `undefined.`
+There is an untidy yet highly practical trick to ensure that the object we're working with is not `null` or `undefined`. The **logical OR operator** can be used to declare a fallback object if our actual object is `null` or `undefined.`
 
 ```javascript
 const {
@@ -945,13 +945,13 @@ const userSettings = { timezone: 'Berlin/Germany' };
 const { language, timezone } = { ...globalSettings, ...userSettings };
 ```
 
-In this example, the **spread operator** is revolved first and a new object with all the properties of `globalSettings` and `userSettings` is created. Then, using **destructuring** variables are being assigned.
+In this example, the **spread operator** is resolved first and a new object with all the properties of `globalSettings` and `userSettings` is created. Then, using **destructuring** variables are being assigned.
 
 ### Rest operator
 
-The rest operator takes care of the remaining elements in an array or object after **destructuring** or the remaining arguments of **function arguments**. Its name is pretty self-explanatory - it deals with the **"rest"** of the elements. Similarly to the **spread operator**, the **rest** **operator** is preceded by three dots `…`. However, it will not be found on right side of an assignment but on the **left**. Moreover, only **one** rest operator can be used in each expression \(also in stark contrast to the **spread operator**\).
+The rest operator takes care of the remaining elements in an array or object after **destructuring** or the remaining arguments of **function arguments**. Its name is pretty self-explanatory — it deals with the **"rest"** of the elements. Similar to the **spread operator**, the **rest operator** is preceded by three dots `…`. However, it will not be found on right side of an assignment but on the **left**. Moreover, only **one** rest operator can be used in each expression \(also in stark contrast to the **spread operator**\).
 
-Let's investigate the **rest operator** in function arguments. Assume, that we want to write a function that can take any number of arguments - it doesn't matter whether 2, 5 or 25 arguments are being passed. ES5 offers the keyword `arguments` to us with which we can access an array of all the function arguments within our function:
+Let's investigate the **rest operator** in function arguments. Assume, that we want to write a function that can take any number of arguments — it doesn't matter whether 2, 5 or 25 arguments are being passed. ES5 offers the keyword `arguments` to us with which we can access an array of all the function arguments within our function:
 
 ```javascript
 function Example() {
@@ -1082,11 +1082,11 @@ All the values not being explicitly written into a variable during **destructuri
 
 ## Template Strings
 
-**Template strings** in ES2015 offer yet a third alternative to write a string. Strings can already be declared by using either single exclamation marks \(`'Example'`\) or double exclamation marks \(`"Example"`\). Since ES2015, backticks can also be used to declare a string: `Example`.
+**Template strings** in ES2015 offer yet a third alternative to write a string. Strings can already be declared by using either single exclamation marks \(`'Example'`\) or double exclamation marks \(`"Example"`\). Since ES2015, backticks can also be used to declare a string: \`Example\`.
 
 There are two variations of **template strings**. There are the usual **template strings** which can contain JavaScript expressions as well as **tagged template literals** in their extended form.
 
-**Tagged template literals** are much more powerful than regular **template strings** as their output can be modified with the help of a special function.However, for our usual work with React this is not our primary concern.
+**Tagged template literals** are much more powerful than regular **template strings** as their output can be modified with the help of a special function. However, for our usual work with React this is not our primary concern.
 
 If you wanted to mix them with JavaScript expressions or values, you would normally use plain old **string concatenation** pre-ES6 times.
 
@@ -1114,7 +1114,7 @@ const lastName = 'Bieh';
 const fullName = `${firstName} ${lastName}`;
 ```
 
-It's important to note that one is not limited to using variables as shown above. Equally, you can use any JavaScript expressions \(i.e. function calls\) - in this case:
+It's important to note that one is not limited to using variables as shown above. Equally, you can use any JavaScript expressions \(i.e. function calls\), in this case:
 
 ```javascript
 console.log(`Today's date is: ${new Date().toISOString()}`);
@@ -1159,7 +1159,7 @@ getUser(
 
 The asynchronous `getUser()` function is called to obtain information about a user with their `id`. Using its `getFriends()` method, we can obtain a list of all of their friends. To collect the first friend's \(`friends[0]`\) user settings, the `getSettings()` method is called. If this friend has allowed email notifications, an email is sent to him. We react asynchronously to the response of the mail server.
 
-Albeit this example being relatively simple, the code is nested **6 layers** deep - and we are not even taking care of explicit error handling or edge cases. Working with callbacks can become cumbersome and confusing quickly, especially one callback functions will trigger further callback functions, as in our example. It comes as no surprise that this is often called **Callback Hell** or the **Pyramid of Doom**.
+Despite this example being relatively simple, the code is nested **6 layers** deep — and we are not even taking care of explicit error handling or edge cases. Working with callbacks can become cumbersome and confusing quickly, especially one callback functions will trigger further callback functions, as in our example. It comes as no surprise that this is often called **Callback Hell** or the **Pyramid of Doom**.
 
 Let us rewrite this and assume that our fictional API methods will each return a promise:
 
@@ -1184,9 +1184,9 @@ getUser(id)
   .catch(errorHandler);
 ```
 
-Each step is being followed by `then()` to react to the previous promise. Although the same end result is reached by this piece of code, we are only nesting 2 layers deep and readability is improved immensly.
+Each step is being followed by `then()` to react to the previous promise. Although the same end result is reached by this piece of code, we are only nesting 2 layers deep and readability is improved immensely.
 
-It is relatively simple to refactor code based on callbacks into one that is using promises. In order to demonstrate this, I will show you an example of the Geolocation API and its `getCurrentPosition()` method. For those of you who do not know it: the method exists on the `navigator.geolocation` object and opens a dialog in the browser asking the user for permission to use their current location. The method expects two callbacks as arguments, namely the success callback and the error callback. The first callback, the success callback, is being passed an object with the user's location if they have previously agreed. The second callback, the error callback, is being passed an error object. This can occur because the user has given permission to use their current location or due to a location not being possible for other reasons.
+It is relatively simple to refactor code based on callbacks into one that is using promises. In order to demonstrate this, I will show you an example of the Geolocation API and its `getCurrentPosition()` method. For those of you who do not know it: the method exists on the `navigator.geolocation` object and opens a dialog in the browser asking the user for permission to use their current location. The method expects two callbacks as arguments, namely the success callback and the error callback. The first callback, the success callback, is being passed an object with the user's location if they have previously agreed. The second callback, the error callback, is being passed an error object. This can occur because the user has not given permission to use their current location or due to a location not being possible for other reasons.
 
 ```javascript
 navigator.geolocation.getCurrentPosition(
@@ -1253,7 +1253,7 @@ Bringing it back to our previous example of the user that wants to send an email
 })();
 ```
 
-For me personally asynchronous functions with `async` and `await` have been one of the most notable changes in JavaScript in the past few years. They facilitate working with asynchronous data greatly especially compared to complex and confusing callbacks. Even promises, which were already a massive improvement over callbacks, look almost complex compared to `async` / `await`.
+For me personally asynchronous functions with `async` and `await` have been one of the most notable changes in JavaScript in the past few years. They facilitate working with asynchronous data greatly, especially compared to complex and confusing callbacks. Even promises, which were already a massive improvement over callbacks, look almost complex compared to `async` / `await`.
 
 ## Import syntax and JavaScript modules
 
@@ -1320,7 +1320,7 @@ export default {
 };
 ```
 
-To use any of the above functionality, our application would only need to import the module itself - meaning the **default export** - and assign it to a variable:
+To use any of the above functionality, our application would only need to import the module itself — meaning the **default export** — and assign it to a variable:
 
 ```javascript
 import Calc from './calc.mjs';
@@ -1340,7 +1340,7 @@ export default class MyComponent extends React.Component {
 
 ### Inconsistencies: Browser vs Node.js
 
-If you paid attention, you might have noticed that we imported a file named `calc.mjs` \(not `calc.js`\) above. This convention has been agreed upon in a lenghty process to ensure that JavaScript modules can be used in Node.js.
+If you paid attention, you might have noticed that we imported a file named `calc.mjs` \(not `calc.js`\) above. This convention has been agreed upon in a lengthy process to ensure that JavaScript modules can be used in Node.js.
 
 So if you want to write universal JavaScript that can be run on the server with Node.js but also client-side in the browser, you **have to** use the `.mjs` file ending for all your files. Especially, if you want to achieve this without tools such as Babel, Wepback or TypeScript.
 
@@ -1377,16 +1377,16 @@ Imports like this are not possible in browsers to date:
 import React from 'react';
 ```
 
-If we want to use JavaScript modules server-side as well as client-side, we will have to keep using module bundlers like Webpack for now. The proposal for **Package Name Maps** which is supposed to solve this problem is only in the early stages of discussion and will thus only land in a later version of ECMAScript.
+If we want to use JavaScript modules server-side as well as client-side, we will have to keep using module bundlers like Webpack for now. The proposal for **Package Name Maps** which is supposed to solve this problem is only in the early stages of discussion and will probably appear in a later version of ECMAScript.
 
 ## Summary
 
-ES2015 and the following versions of the ECMAScript standard have given us a lot of new functionality that did not exist in JavaScript before. It's hard to imagine working without these especially in the use with React. The most notable new features are these:
+ES2015 and the following versions of the ECMAScript standard have given us a lot of new functionality that did not exist in JavaScript before. It's hard to imagine working without these — especially when using React. The most notable new features are:
 
 - Variable declarations with `let` and `const`
-- **Arrow functions** - to create functions that do not bind their own `this`
-- **Classes** - they are the basis of **React Class components** and facilitate a multitude of things
-- **Rest and Spread operators** - which increase the readability as well as the writing process of data in arrays and objects immensely
-- **Template strings** - to facilitate working with JavaScript expressions in Strings
-- **Promises** and **Asynchronous functions with `async` / `await`** - which enhance working with asynchronous data and make it much easier
-- **Import** and **Export** for encapsulating reusable JavaScript on a module basis
+- **Arrow functions** — to create functions that do not bind their own `this`
+- **Classes** — they are the basis of **React Class components** and facilitate a multitude of things
+- **Rest and Spread operators** — which increases the read- and writability of data in arrays and objects immensely
+- **Template strings** — to facilitate working with JavaScript expressions in Strings
+- **Promises** and **Asynchronous functions with `async` / `await`** — which enhance working with asynchronous data and make it much easier
+- **Import** and **Export** — for encapsulating reusable JavaScript on a module basis
