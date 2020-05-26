@@ -25,10 +25,10 @@ Let's have a look at a very minimalist setup to get started with React:
 We build up the bare bones set up for a regular HTML document and load in **React** and **ReactDOM** in their latest _stable_ version from unpkg-CDN. We can now use React and ReactDOM as a global variable in the window object as `window.React` and `window.ReactDOM`. Apart from that we only see a an empty page here with an empty `<div id="root"></div>`. This div is going to be used as our **mount node** to show our first React component. 
 
 {% hint style="info" %}
-If you have a number of React components, you normally refer to an **app**, **web app** or **single page app**. The boundaries of when you call a component an app are fluid though. A few developers talk of an **app** if we only have a single component in our code. A clear definition of this does not exist though.
+If we deal with a number of React components, we normally refer to this as an **app**, **web app** or **single page app**. The boundaries of when we call a component an app are fluid though. A few developers talk of an **app** if we only have a single component in our code. A clear definition of this does not exist though.
 {% endhint %}
 
-Let's start with a classic "Hello-World" example and include the script where we've put the placeholder earlier.
+Let's start with a classic "Hello-World" example and include the script where we put the placeholder earlier.
 
 ```javascript
 class HelloWorld extends React.Component {
@@ -47,7 +47,7 @@ ReactDOM.render(
 );
 ```
 
-And just like that we have just implemented our first React component. If we include this snippet where we have put the placeholder earlier, we can see the following in the browser:
+And just like that we have implemented our first React component. If we include this snippet where we have put the placeholder earlier, we can see the following in the browser:
 
 ![Our first React component in the browser](../.gitbook/assets/first-component.png)
 
@@ -57,15 +57,15 @@ That does not look that complicated, does it? Let's go through the code one step
 class HelloWorld 
 ```
 
-Here, we are giving a name to a child component. We have named our first component **HelloWorld.** You can name your components anything you like, but there is one rule to keep in mind: React components start with a capital letter. Using helloWorld as your component name would not be valid, HELLOWORLD, however, would be — albeit very rarely seen in the wild. 
+Here, we are giving a name to a child component. We have named our first component **HelloWorld.** We can name our components anything we like, but there is one rule to keep in mind: React components start with a capital letter. Using helloWorld as a component name would not be valid, HELLOWORLD, however, would be — albeit very rarely seen in the wild. 
 
-Naming your components follows the **UpperCamelCase** convention. It is not unusual to have long, self-explanatory names for your components — **UserNotificationView** is an entirely normal name, for example.
+Naming components follows the **UpperCamelCase** convention. It is not unusual to have long, self-explanatory names for our components — **UserNotificationView** is an entirely normal name, for example.
 
 ```jsx
 extends React.Component
 ```
 
-With this snippet, we're extending the internal React class `React.Component`. This transforms our own class into a component that we can use in React. Apart from `React.Component` there is also a `React.PureComponent` and a so-called _Functional component_. This is simply a JavaScript function that follows a particular pattern. We are going to look at both of these at a later stage, for now we can neglect them.   
+With this snippet, we are extending the internal React class `React.Component`. This transforms our own class into a component that we can use in React. Apart from `React.Component` there is also a `React.PureComponent` and a so-called _Functional component_. This is simply a JavaScript function that follows a particular pattern. We are going to look at both of these at a later stage, for now we can neglect them.   
 
 ```jsx
 render()
@@ -75,7 +75,7 @@ So far, our component only contains the obligatory `render()` method. This metho
 
 In terms of an array, the array can include strings, numbers, React elements or `null` as values. The `render()` method **declaratively** describes the current state of our user interface. Everything that is included in our render method right after `return` is what the browser will display after rendering. 
 
-Even if it is entirely up to you how to structure your JavaScript classes, a common pattern has evolved to put your `render()` method at the end of all your methods. This is not mandatory of course but it aids readability. Thus many renowned engineers in the React scene advocate for this guideline too. The code guidelines by AirBnB also include this rule. Speaking from my own experience here, I can say that it does help to follow this guideline to make your day-to-day React work easier.
+Even if it is entirely up to us how to structure our JavaScript classes, a common pattern has evolved to put our `render()` method at the end of all our methods. This is not mandatory of course but it aids readability. Many renowned engineers in the React scene advocate for this guideline too. The code guidelines by AirBnB also include this rule. Speaking from my own experience here, I can say that it does help to follow this guideline to make your day-to-day React work easier.
 
 ![Error message for missing render\(\) method](../.gitbook/assets/react-no-render-error.png)
 
@@ -93,13 +93,13 @@ The `createElement()` method expects 1-n parameters:
 2. So-called "Props" - these are read-only "property objects" of a component.  The name is derived from - you guessed it - properties. 
 3. As many child elements as you wish to put in. These can be React elements themselves, or arrays, functions or simply plain text. However, a component does not necessarily need to contain other child elements.
 
-At the end of the day, **React elements** are nothing more than a never changing \(immutable\) JavaScript objects that contain properties to tell React how and what exactly needs displayed. This description of properties is used by React to construct a virtual blueprint of the component hierarchy. It resembles the representation of the HTML tree in the form of a JavaScript object. You often hear it being referred to as the VirtualDOM however the term is losing popularity with the React team and they have distanced themselves from using it. This tree is used by React to only refresh the parts of the tree that have actually changed, e.g. when a user interacts with an app and changes data or fires an event. To do this, the previous tree is compared to the current tree.
+At the end of the day, **React elements** are nothing more than a never changing \(immutable\) JavaScript objects that contain properties to tell React how and what exactly needs displayed. This description of properties is used by React to construct a virtual blueprint of the component hierarchy. It resembles the representation of the HTML tree in the form of a JavaScript object. You often hear it being referred to as the VirtualDOM, however the term is losing popularity with the React team and they have distanced themselves from using it. This tree is used by React to only refresh the parts of the tree that have actually changed, e.g. when a user interacts with an app and changes data or fires an event. To do this, the previous tree is compared to the current tree.
 
 As React does not refresh the entire application at once, or writes it to the DOM in its entirety once any state changes, it is a lot more performant than other frameworks or libraries. Other libraries or frameworks can often lead to unnecessarily many DOM mutations at the cost of performance. Using a special **reconciliation** algorithm that compares previous state with current state, React processes what exactly has changed, and can reduce the number of writes to a minimum.
 
-However, in your day-to-day development you will hardly ever call `React.createElement()` in this form. Facebook has developed its own syntax extension for JavaScript called **JSX**. JSX reduces a great amount of work and simplifies a lot of work with React. Nevertheless, I am of the opinion that it is good to know of `React.createElement()`'s existence to understand how JSX works behind the scenes and to reduce the number of errors when debugging.
+However, in our day-to-day development we will hardly ever call `React.createElement()` in this form. Facebook has developed its own syntax extension for JavaScript called **JSX**. JSX reduces a great amount of work and simplifies a lot of work with React. Nevertheless, I am of the opinion that it is good to know of `React.createElement()`'s existence to understand how JSX works behind the scenes and to reduce the number of errors when debugging.
 
-**JSX** resembles HTML or XML/XHTML in parts, however it is a lot more powerful as you can include JavaScript expressions within it. JSX is an abstraction that makes it a lot **easier** for the developer to create React elements. Our previous example
+**JSX** resembles HTML or XML/XHTML in parts, however it is a lot more powerful as we can include JavaScript expressions within it. JSX is an abstraction that makes it a lot **easier** for the developer to create React elements. Our previous example
 
 ```jsx
 React.createElement('div', {id: 'hello-world'}, 'Hello World');
@@ -128,8 +128,8 @@ Although the naming might suggest otherwise, **ReactDOM**'s internal `render()` 
 {% hint style="info" %}
 Calling the `ReactDOM.render()` function for the first time, any possibly existing content in the destination container is being replaced. With every subsequent call, React uses an internal comparison algorithm for best performance and to avoid re-rendering the entire application.
 
-While this is good to know in the theory, you normally do not call `ReactDOM.render()` more than once and only use it to initialize your Single Page App to load the page. React never changes the root node itself, only its contents. This means that if your container element has classes, ids or a data-attribute, these will remain intact after calling `ReactDOM.render()`.
+While this is good to know in theory, we normally do not call `ReactDOM.render()` more than once and only use it to initialize our Single Page App to load the page. React never changes the root node itself, only its contents. This means that if our container element has classes, ids or a data-attribute, these will remain intact after calling `ReactDOM.render()`.
 {% endhint %}
 
-And just like that, we have discussed the basics of how React works under the hood, implemented our first component and finally displayed it in the browser.
+And just like that, we have discussed the basics of how React works under the hood, implemented our first component and finally displayed it in the browser. Congrats!
 
