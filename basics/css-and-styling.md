@@ -4,7 +4,7 @@ Styling is a topic of its own in React. React does not offer its own in-house so
 
 ### Styling with the style attribute
 
-The simplest way to style components in React is using the `style` attribute on regular HTML elements. It differs from regular HTML though and React components expect an **object** in the form of `property: value`. The property itself needs to be declared in JavaScript \(not its regular CSS counterpart\) form meaning `zIndex` instead of `z-index`, `backgroundColor` instead of `background-color` or `marginTop` instead of `margin-top`. If the values accept declarations in pixels, it is optional to explicitly define `px` as the corresponding unit:
+The simplest way to style components in React is using the `style` attribute on regular HTML elements. It differs from regular HTML though. React components expect an **object** in the form of `property: value`. The property itself needs to be declared in JavaScript \(not its regular CSS counterpart\) form meaning `zIndex` instead of `z-index`, `backgroundColor` instead of `background-color` or `marginTop` instead of `margin-top`. If the values accept declarations in pixels, it is optional to explicitly define `px` as the corresponding unit:
 
 ```jsx
 <div style={{ border: '1px solid #ccc', marginBottom: 10 }}>
@@ -50,7 +50,7 @@ render() {
 
 In this example the value for `className` is `item` in each case. If the selected item is the current item, it also gets the class `item item--selected`.
 
-The package `classnames` has become the de-facto standard to defined classes based on a condition. It can be installed via the CLI:
+The package `classnames` has become the de-facto standard to define classes based on a condition. It can be installed via the CLI:
 
 ```bash
 npm install classnames
@@ -125,9 +125,9 @@ This code would result in the following rendered markup:
 <img src="..." className="ProfileImage_image_2cvf73" />
 ```
 
-If we used the class `image` in another component and also imported the css file with an `image` class, we wouldn't run into conflict as we'd usually do in regular CSS. The _generated_ classname would be different.
+If we used the class `image` in another component and also imported the css file with an `image` class, we wouldn not run into conflict as we would usually do in regular CSS. The _generated_ classname would be different.
 
-Everything that's allowed in regular CSS is also allowed in CSS Modules. The Cascade will remain intact:
+Everything that is allowed in regular CSS is also allowed in CSS Modules. The Cascade will remain intact:
 
 ```css
 .imageWrapper img {
@@ -159,9 +159,9 @@ I've already mentioned in the introduction that **CSS-in-JS** is a bit of a hotl
 
 The **CSS-in-JS** approach mandates that the styles which are commonly found in CSS files are now moved into JavaScript. As was already the case in **CSS modules**, the primary goal is to create highly isolated components which are free of conflict making them easy to reuse throughout the application. However, as opposed to **CSS modules**, the styling in **CSS-in-JS** happens entirely in JavaScript. The syntax is very similar and it mostly feels like you're writing regular CSS.
 
-**CSS-in-JS** is the umbrella term for the concept as such whereas the actual implementation is achieved by a number of different libraries. If you are looking for a great overview, I suggest you checkout out [http://michelebertoli.github.io/css-in-js/](https://michelebertoli.github.io/css-in-js/) — this site covers over 60 different libraries that can help you to implement your own **CSS-in-JS** solution.
+**CSS-in-JS** is the umbrella term for the concept whereas the actual implementation is achieved by a number of different libraries. If you are looking for a great overview, I suggest you checkout out [http://michelebertoli.github.io/css-in-js/](https://michelebertoli.github.io/css-in-js/) — this site covers over 60 different libraries that can help you to implement your own **CSS-in-JS** solution.
 
-In the remaining parts of the chapter, I want to focus on **styled components** which is the most popular library with around 23,000 starts on GitHub. In order to use it, we need to first install it via the command line:
+In the remaining parts of the chapter, I want to focus on **styled components** which is the most popular library with around 23,000 stars on GitHub. In order to use it, we need to first install it via the command line:
 
 ```bash
 npm install styled-components
@@ -236,10 +236,10 @@ The cursor icon would change into a `not-allowed` symbol if the button had a `di
 
 The main advantages of **CSS-in-JS** and **styled components** in particular are well summarized in the documentation:
 
-- Critical CSS, so the CSS which is relevant for the current page, is automatically generated as **styled component** knows which components are used on each page and which styles they need
+- Critical CSS (meaning the CSS which is relevant for the current page) is automatically generated as **styled components** knows which components are used on each page and which styles they need
 - By automatically generating classnames, the risk of conflicts is reduced to a minimum
 - As all CSS is tied to a component, it is easy to spot redundant CSS. If a **styled component** is no longer used in the application, the CSS is no longer needed either and the component can be safely deleted.
-- Component logic and component styling \(CSS-in-JS\) are found in the same spot, some times even in the exact same file. Developers do not need to spend a long amount of time anymore to find where exactly a styling change needs to take place.
+- Component logic and component styling \(CSS-in-JS\) are found in the same spot, sometimes even in the exact same file. Developers do not need to spend a long amount of time anymore to find where exactly a styling change needs to take place.
 - **Styled components** automatically generates CSS that contains vendor prefixes for all browsers.
 
 **Styled components** is only one of many CSS-in-JS solutions. While it is probably the most well-known and most widely adopted, there are a number of great alternatives which can help you to find a solution which fits your project's specific needs. Other great and well-known alternatives are:
