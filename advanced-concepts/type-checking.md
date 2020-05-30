@@ -1,6 +1,6 @@
 # Typechecking with PropTypes, Flow and TypeScript
 
-**Typechecking** is a simple method to avoid potential errors in an application. We have talked about basic principles to avoid potential errors, one of the most important being the existence of "pure" components meaning that components do not have side effects. The non-existence of side effects describe the situation in which the **same input parameters** \(in the case of React we are talking about **props** and **state**\) should always render the **same output**.
+**Typechecking** is a simple method to avoid potential errors in an application. We have talked about basic principles to avoid potential errors, one of the most important being the existence of "Pure" components meaning that components do not have side effects. The non-existence of side effects describe the situation in which the **same input parameters** \(in the case of React we are talking about **props** and **state**\) should always render the **same output**.
 
 We should be able to foresee and be clear about which props are passed into a component and how they are being processed. In order to achieve this, we can employ **typechecking** to make this process easier. JavaScript is slightly unusual in the sense that a variable which used to be **String** can easily be converted into a **Number** or even an **Object** without the JavaScript interpreter even complaining.
 
@@ -28,9 +28,9 @@ yarn add --dev prop-types
 
 **PropTypes** can be seen as some kind of interface and define which types the props can take and whether they are required or optional. If **PropTypes** encounter discrepancies, **React** will inform us of these as long as we find ourselves in **Development mode**. When applications have been built correctly and use either the production build of React or an environment variable `process.env.NODE_ENV=production`, this warning will not be shown anymore.
 
-But how do **PropTypes** work? To answer this question, one needs to differentiate between **Class Components** and **Stateless Functional Components**.
+But how do **PropTypes** work? To answer this question, one needs to differentiate between **Class components** and **Function components**.
 
-**Class Components** implement **PropTypes** as a static property of the component in question:
+**Class components** implement **PropTypes** as a static property of the component in question:
 
 ```jsx
 import React from 'react';
@@ -74,7 +74,7 @@ If any of these conditions have not been met, React will gracefully inform us wi
 Warning: Failed prop type: Invalid prop \`title\` of type \`number\` supplied to \`EventOverview\`, expected \`string\`.
 {% endhint %}
 
-**Stateless Functional Components** do not have classes, thus we cannot define a `static propTypes` property. However, we can easily add a `propTypes` property to the function, which will result in the following:
+**Function Components** do not have classes, thus we cannot define a `static propTypes` property. However, we can easily add a `propTypes` property to the function, which will result in the following:
 
 ```jsx
 const EventOverview = ({ date, description, ticketUrl, title }) => (
@@ -94,7 +94,7 @@ EventOverview.propTypes = {
 };
 ```
 
-And just like that, we have added `propTypes` to our **Stateless Functional Component**.
+And just like that, we have added `propTypes` to our **Function Component**.
 
 In some cases, it can be useful to define sensible default values if no specific values have been passed. React allows us to define `defaultProps` which work similar to `propTypes` in that they can also be added as a static property. Here's a quick example:
 
@@ -128,7 +128,7 @@ const user = {};
 This example however will fall back to the `defaultValue` which we have defined in the `defaultProps` as either no prop is passed at all or if the value is undefined. In this case, **Hello Guest!** will be displayed as we set **Guest** as our `defaultValue`. React will figure out if a `defaultValue` for a `isRequired` prop exists and only display a warning if the prop is actually missing and no `defaultValue` has been defined.
 
 {% hint style="info" %}
-When **Deploying to production** it's worth installing **Babel-Plugin-Transform-React-Remove-Prop-Types**. This will save us a couple of bytes, as `propType`definitions are removed from the build and are only really taken into account in **Development Mode**.
+When **Deploying to production** it is worth installing **Babel-Plugin-Transform-React-Remove-Prop-Types**. This will save us a couple of bytes, as `propType` definitions are removed from the build and are only really taken into account in **Development Mode**.
 
 You can find the plugin here:  
 [https://github.com/oliviertassinari/babel-plugin-transform-react-remove-prop-types](https://github.com/oliviertassinari/babel-plugin-transform-react-remove-prop-types)
@@ -149,9 +149,9 @@ yarn add --dev babel-plugin-transform-react-remove-prop-types
 
 ## Flow
 
-In contrast to **React PropTypes**, **Flow** is a **static typechecker** for all **JavaScript** not just for React components. **Flow** is also developed in-house at Facebook and thus integrates nicely with most React setups. Up to version **Babel 6**, it even came pre-installed as part of the `babel-preset-react` and could be used without any further setup.
+In contrast to **React PropTypes**, **Flow** is a **static typechecker** for **JavaScript** not just for React components. **Flow** is also developed in-house at Facebook and thus integrates nicely with most React setups. Up to version **Babel 6**, it even came pre-installed as part of the `babel-preset-react` and could be used without any further setup.
 
-Since **Babel version7**, **Flow** has been ported to its own **Babel preset**. In order to install you can run `npm install @babel/preset-flow` or `yarn add @babel/preset-flow`. In addition to the installation step, you also have to manually set the`@babel/preset-flow` as a present in the Babel config. **Presets** allow us to remove non-JavaScript syntax — in this case **Flow syntax** — during the build process so that we won't run into errors in the browser.
+Since **Babel version7**, **Flow** has been ported to its own **Babel preset**. In order to install it you can run `npm install @babel/preset-flow` or `yarn add @babel/preset-flow`. In addition to the installation step, you also have to manually set the`@babel/preset-flow` as a present in the Babel config. **Presets** allow us to remove non-JavaScript syntax — in this case **Flow syntax** — during the build process so that we will not run into errors in the browser.
 
 Apart from the Babel Preset, the **Flow executable** needs to be installed via `npm install flow-bin` \(or `yarn add flow-bin`\) which takes care of the actual **typechecking**.
 
@@ -178,7 +178,7 @@ npm run flow init
 yarn flow init
 ```
 
-Once `flow init` has been executed, a new file called `.flowconfig` should have been created in the project directory. The file itself looks very empty for now but Flow needs it to function correctly. In the future, you can manage which files should be checked by Flow or which shouldn't based on the options set in these files.
+Once `flow init` has been executed, a new file called `.flowconfig` should have been created in the project directory. The file itself looks very empty for now but Flow needs it to function correctly. In the future, you can manage which files should be checked by Flow or which should not based on the options set in these files.
 
 Did you update your Babel config, install `flow-bin` in your object and created the `.flowconfig`? Awesome. We can now start typechecking with Flow. In order to check that everything has been set up correctly, you can execute `flow.` If you added the entry to the `package.json` as shown above, running `yarn flow` will suffice. When everything has been set up correctly, a message such as this one is displayed to you:
 
@@ -324,9 +324,9 @@ This allows us to also import React's **type definitions** which is necessary if
 
 ## TypeScript
 
-**TypeScript** has been created by Microsoft and is a so-called **typed superset** of JavaScript meaning that it cannot be directly executed in the browser but has to be compiled into "real" JavaScript first. Nevertheless, valid JavaScript is always valid **TypeScript**. **TypeScript** might look very similar to **Flow** at first glance, but differs in the sense that it offers a lot more functionality as its a superset of JS. **Flow** is only a typechecker. Before **ES2015** was formally introduced, a lot of functionality such as classes and imports were already readily available in **TypeScript**.
+**TypeScript** has been created by Microsoft and is a so-called **typed superset** of JavaScript meaning that it cannot be directly executed in the browser but has to be compiled into "real" JavaScript first. Nevertheless, valid JavaScript is always valid **TypeScript**. **TypeScript** might look very similar to **Flow** at first glance, but differs in the sense that it offers a lot more functionality as it is a superset of JS. **Flow** is only a typechecker. Before **ES2015** was formally introduced, a lot of functionality such as classes and imports were already readily available in **TypeScript**.
 
-**TypeScript** has been gaining momentum and lots of popularity lately and can now be found in many React projects. While I certainly find **TypeScript** worth mentioning in this chapter, **TypeScript** alone could easily fill up a whole book by itself which is why I'd rather not go into more detail at this point.
+**TypeScript** has been gaining momentum and lots of popularity lately and can now be found in many React projects. While I certainly find **TypeScript** worth mentioning in this chapter, **TypeScript** alone could easily fill up a whole book by itself which is why I would rather not go into more detail at this point.
 
 **TypeScript** files are easy to spot as they usually have the file ending of `.ts` or, if **TypeScript** is used in a React project, `.tsx`.
 
