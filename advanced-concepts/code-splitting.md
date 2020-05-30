@@ -2,11 +2,11 @@
 
 
 
-When developing projects with React, most people tend to also use a **bundler** such as **Webpack**, **Browserify** or **Rollup**. These tools ensure that all files and all imports are later bundled into a single big file which can be deployed in a relatively simple fashion without having to worry about relative links between files. This process is referred to as **bundling**. A **bundle** can easily grow and reach a size of a megabyte or more especially if many third party libraries are used. Large Bundles are a big performance problem as bigger bundles take longer to be processed and downloaded by the browser as well as executing.
+When developing projects with React, most people tend to also use a **bundler** such as **Webpack**, **Browserify** or **Rollup**. These tools ensure that all files and all imports are later bundled into a single big file which can be deployed in a relatively simple fashion without having to worry about relative links between files. This process is referred to as **bundling**. A **bundle** can easily grow and reach a size of a megabyte or more especially if many third party libraries are used. Large bundles are a big performance problem as bigger bundles take longer to be processed and downloaded by the browser as well as executing.
 
 To combat large bundles, a technique called **Code Splitting** is used to counteract it. **Code Splitting** defines the process in which we separate our application into many smaller bundles which are all able to run on their own and load further bundles if necessary. A common separation is either splitting by dependencies \(React, ReactDOM, ...\) or having a bundle per route.
 
-One of the simplest ways to make use of code splitting is to use **Dynamic Import Syntax**. It's currently in discussion at **TC39** and thus in the process of being standardized. But **Babel** and **Webpack** enable us to make use of Code Splitting today. It's necessary to install the babel plugin `@babel/plugin-syntax-dynamic-import` to make use of code splitting. **Create React App** as well as **next.js** and **Gatsby** support **Code Splitting** out of the box and do not need to be configured to allow it.
+One of the simplest ways to make use of code splitting is to use **Dynamic Import Syntax**. It's currently in discussion at **TC39** and thus in the process of being standardized. But **Babel** and **Webpack** enable us to make use of Code Splitting today. It is necessary to install the babel plugin `@babel/plugin-syntax-dynamic-import` to make use of code splitting. **Create React App** as well as **next.js** and **Gatsby** support **Code Splitting** out of the box and do not need to be configured to allow it.
 
 ### Using dynamic imports
 
@@ -65,7 +65,7 @@ Back in the day, the Suspense component on the React object was named **Placehol
 
 As long as the component which you want to lazy load has not fully loaded, all children of the Suspense element will be replaced with the indicated fallback. Additionally, no limits on the number of React.lazy\(\) component imports have been enforced. The fallback placeholder will be shown until all components have loaded and can be displayed.
 
-Nesting components is also possible and can be great idea in certain scenarios. When there are parts of the site which are slightly less important and might interfere with the rendering of the primary user interface, it is recommended to wrap these parts of the application / the component tree in their own `Suspense` element. This will boost performance and drive the important parts of the application to load first.
+Nesting components is also possible and can be a great idea in certain scenarios. When there are parts of the site which are slightly less important and might interfere with the rendering of the primary user interface, it is recommended to wrap these parts of the application / the component tree in their own `Suspense` element. This will boost performance and drive the important parts of the application to load first.
 
 A possible scenario to use `Suspense` in practice is image editing. In these type of cases, it can be useful to display the image to edit to the user already to give visual clues. The rest of the user interface containing the actual editing functionality will be loaded in a further step if loading the actual component is taking longer.
 
