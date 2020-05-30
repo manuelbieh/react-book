@@ -430,13 +430,13 @@ Since **React 16.3.0** however and **React Router 5.0.0**, this issue has been s
 
 ## React Router and Hooks
 
-Since React Router **5.1.0**, the library has been enhanced by a number of own hooks that are available to the developer. It is now possible to access Router information in **function components** without using the `withRouter()` HOC provided that these components are not directly used as argument for the `<Route />` element prop component \(`<Route component={MyComponent} />`\).
+Since React Router **5.1.0**, the library has been enhanced by a number of own Hooks that are available to the developer. It is now possible to access Router information in **function components** without using the `withRouter()` HOC provided that these components are not directly used as argument for the `<Route />` element prop component \(`<Route component={MyComponent} />`\).
 
-As is the case with most hooks, using React Router's own hooks is a very pleasant and straightforward experience. Four hooks allow us to access the `location` object, the `history` instance, the Route parameter or the `match` object. Conveniently, these hooks are aptly called `useLocation`, `useHistory`, `useParams` and `useRouteMatch`. In order to use these hooks, the component intended for the hooks implementation needs to be be nested within a `<Router>` tree. However, it is not necessary for the component to follow directly after the Router element or be placed on the most upper layer. These hooks can access the Router context and can thus be used anywhere in your application.
+As is the case with most Hooks, using React Router's own Hooks is a very pleasant and straightforward experience. Four Hooks allow us to access the `location` object, the `history` instance, the Route parameter or the `match` object. Conveniently, these Hooks are aptly called `useLocation`, `useHistory`, `useParams` and `useRouteMatch`. In order to use these Hooks, the component intended for the Hooks implementation needs to be be nested within a `<Router>` tree. However, it is not necessary for the component to follow directly after the Router element or be placed on the most upper layer. These Hooks can access the Router context and can thus be used anywhere in your application.
 
 ### useLocation\(\)
 
-First, let's have a closer look at the arguably simplest hook in our list. We can import it via the `react-router-dom` package. Once installed, we can access location data by using the return value of the hook:
+First, let's have a closer look at the arguably simplest Hook in our list. We can import it via the `react-router-dom` package. Once installed, we can access location data by using the return value of the Hook:
 
 ```jsx
 import React from 'react';
@@ -460,7 +460,7 @@ In this example, we would obtain the following output for the `showLocationInfo`
 
 ### useHistory\(\)
 
-This hook allows us to use the `history` instance of React Router. It can access and change the URL via the `push()` and `replace()` methods and thus trigger a re-render of the application. `goBack()`, `goForward()` as well as the more general `go()` can be used to navigate the browser's history.
+This Hook allows us to use the `history` instance of React Router. It can access and change the URL via the `push()` and `replace()` methods and thus trigger a re-render of the application. `goBack()`, `goForward()` as well as the more general `go()` can be used to navigate the browser's history.
 
 ```jsx
 import React from 'react';
@@ -477,13 +477,13 @@ const NavigateHomeButton = () => {
 }
 ```
 
-This example demonstrates how we can implement a button which will direct us to the home page once it's clicked using the `useHistory()` hook.
+This example demonstrates how we can implement a button which will direct us to the home page once it's clicked using the `useHistory()` Hook.
 
 ### useParams\(\)
 
-This hook is basically a shortcut for accessing parameters which were hidden in `match.params`. If a route has been implemented using placeholders, such as `/users/:userid` , and then a URL such as `/users/123` has been called, the `params` object will contain a key/value pair in the form of `{ "userid": "123" }.`
+This Hook is basically a shortcut for accessing parameters which were hidden in `match.params`. If a route has been implemented using placeholders, such as `/users/:userid` , and then a URL such as `/users/123` has been called, the `params` object will contain a key/value pair in the form of `{ "userid": "123" }.`
 
-The `useParams()` hook allows us to _directly_ access this object:
+The `useParams()` Hook allows us to _directly_ access this object:
 
 ```jsx
 import React from 'react';
@@ -513,7 +513,7 @@ If a route such as `/users/:userid` had been created and a URL such as `/users/1
 
 ### useRouteMatch\(\)
 
-The last hook introduced by React Router **5.1.0** forms the `useRouteMatch()` hook. It allows us to access the whole `match` object of a Route, meaning we can now obtain information on `params`, `url`, `path` and `isExact`. We can now safely check whether the URL matches the `path` of a route.
+The last Hook introduced by React Router **5.1.0** forms the `useRouteMatch()` Hook. It allows us to access the whole `match` object of a Route, meaning we can now obtain information on `params`, `url`, `path` and `isExact`. We can now safely check whether the URL matches the `path` of a route.
 
 The function can take in a path which will in turn return a `match` object for the route. If no particular path is provided to the function, the path of the current route will be used. Using our previous example with the path of `/users/:userid` , the Route `<Route path="/users/:userid">` will return the following `match` object if the URL `/users/123` is provided as an argument:
 
@@ -528,7 +528,7 @@ The function can take in a path which will in turn return a `match` object for t
 }
 ```
 
-If the hook is called with a path that does not match with the current route, `null` will be returned from the function:
+If the Hook is called with a path that does not match with the current route, `null` will be returned from the function:
 
 ```jsx
 useRouteMatch('/orders/:orderid');
