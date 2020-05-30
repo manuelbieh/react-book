@@ -1,20 +1,20 @@
 # Lists, Fragments, and Conditional Rendering
 
-You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**. You've learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that's being rendered and how you can leverage **lifecycle methods** to react to changes in our data. All of these lay the groundwork for simple React applications.
+You have learned a lot about React so far. You now know why we need **props**, what **state** is and how it differs from **props**. You have learned how to implement a React component as well as to differentiate between a React **component** and a React **element**. You also learned how to use **JSX** to accurately depict the tree of elements that is being rendered and how you can leverage **lifecycle methods** to react to changes in your data. All of these lay the groundwork for simple React applications.
 
 But there are a few details that we have not yet examined \(or not explained in detail\). However, these details will become more relevant the more complex our applications get.
 
-**Lists** \(as in working with data arrays\), so-called **Refs** \(which are references to the DOM representation of a React element\), **Fragments** \(a special component that does not leave traces or elements in the output\) and **Conditional Rendering** based on props and state are part of these details and will thus be examined in this section.
+**Lists** \(as in working with data arrays\), so-called **Refs** \(which are references to the DOM representation of a React element\), **Fragments** \(a special component that does not leave traces or elements in the output\) and **Conditional Rendering** based on props and state are part of these details and will be examined in this section.
 
 They are too important to not mention them in the Basics section of the book but each topic on its own does not quite warrant its own chapter. Let's look at them now.
 
 ## Lists
 
-Lists refer to plain JavaScript arrays — in this instance: **simple** data that can be iterated over. They are essential for React, even plain JavaScript development, and it's hard to imagine developing without them. **ES2015+** offers many nice declarative methods such as `Array.map()`, `Array.filter()` or `Array.find()` that can even be used as expressions in JSX \(if surrounded by curly braces `{}`\).
+Lists refer to plain JavaScript arrays — in this instance: **simple** data that can be iterated over. They are essential for React, even plain JavaScript development, and it is hard to imagine developing without them. **ES2015+** offers many nice declarative methods such as `Array.map()`, `Array.filter()` or `Array.find()` that can even be used as expressions in JSX \(if surrounded by curly brackets `{}`\).
 
-I've mentioned expressions in JSX and how to use them already in the chapter on JSX. But let's recap briefly: Arrays can be used as an expression in JavaScript and therefore also be included in JSX. If surrounded by curly braces, they will be treated as child nodes during the transpilation step.
+I have mentioned expressions in JSX and how to use them already in the chapter on JSX. But let's recap briefly: Arrays can be used as an expression in JavaScript and therefore also be included in JSX. If surrounded by curly brackets, they will be treated as child nodes during the transpilation step.
 
-But there's more: `Array.map()` enables us to not only work with data but it can return modified item which in turn can also contain JSX. This adds further flexibility and allows us to transform data sets into React elements.
+But there's more: `Array.map()` enables us to not only work with data but it can return modified items which in turn can also contain JSX. This adds further flexibility and allows us to transform data sets into React elements.
 
 Let's assume that we want to show list of cryptocurrencies. The array containing the data has the following form:
 
@@ -66,7 +66,7 @@ The result is an unordered list with list items containing the crypto currency a
 
 ![](../.gitbook/assets/react-missing-key.png)
 
-React expects a `key` prop for all of the values returned by arrays or iterators. The primary reasoning behind this rule is to make it easier for React's **Reconciler** \(the React Comparison algorithm\) to identify and compare list elements. The **Reconciler** can spot whether an array element was added, removed or modified if the `key` prop has been given. This prop needs to be a unique identifier which only appears **once in the array**. Normally, the id of a data set is used in practice.
+React expects a `key` prop for all of the values returned by arrays or iterators. The primary reasoning behind this rule is to make it easier for React's **Reconciler** \(the React Comparison algorithm\) to identify and compare list elements. The **Reconciler** can spot whether an array element was added, removed or modified if the `key` prop has been given. This prop needs to be a unique identifier which only appears **once in the array**. Normally, the id of a data set is used for this.
 
 In our example, we can take the id of each item. Amended, the example now looks like this:
 
@@ -87,7 +87,7 @@ The key only has to be unique **within the iterator compared to its sibling elem
 
 If your data set does not contain an easily distinguishable id, the **index** of the array can be used as a **last resort.** This is not recommended though and can lead to unexpected behavior in the rendering of user interfaces and also impact performance.
 
-It's important that the `key` prop is always **present in the top-level component or array element within the iterator** but not in the JSX returned by the component. 
+It is important that the `key` prop is always **present in the top-level component or array element within the iterator** but not in the JSX returned by the component. 
 
 To illustrate this point further, I'm going to transform the above list item into its own `CryptoListItem` component.
 
@@ -119,7 +119,7 @@ const CryptoList = ({ currencies }) => (
 
 Although we actually render a `<li></li>` element under the hood, the `<CryptoListItem />` needs to contain the `key` prop as it is the top level component within our `Array.map()` call in this JSX snippet.
 
-A little bit off-topic: We could even simplify the `CryptoList` component by using the **Object spread syntax**:
+A little bit off-topic: We could even simplify the `CryptoList` component by using **Object spread syntax**:
 
 ```jsx
 const CryptoList = ({ currencies }) => (
@@ -250,7 +250,7 @@ It would simply not be possible to wrap a `div` or `span` or another element aro
 </dl>
 ```
 
-... and is invalid HTML! A `dl` element only permits `dt` and `dd` as its child element. The **Fragment** helps us to alleviate these situations and create valid JSX without creating invalid markup. It was only introduced in React 16.3 and meant that some React components were unnecessarily complex to deal with this problem and avoid violating JSX or HTML rules. 
+... and is invalid HTML! A `dl` element only permits `dt` and `dd` as its child element. The **Fragment** helps us to alleviate these situations and creates valid JSX without creating invalid markup. It was only introduced in React 16.3 and meant that some React components were unnecessarily complex to deal with this problem to avoid violating JSX or HTML rules. 
 
 **Fragment** components can also be imported directly from React using a named import:
 
@@ -260,21 +260,21 @@ import React, { Fragment } from 'react';
 
 Now, the notation of `<Fragment>` instead of `<React.Fragment>` can be used saving us multiple key strokes.
 
-Using Babel 7 for transpilitation, we can shorten the notation even further. An _empty_ element can created using:
+Using Babel 7 for transpilation, we can shorten the notation even further. An _empty_ element can created using:
 
 ```jsx
 <>Fragment in shorthand syntax</>
 ```
 
-This is a neat and tidy method to reduce the amount of fragments we need to explicitly define by name. But be careful: using the shorthand is not possible in loops as empty elements cannot contain any props. Elements in a loop require us to define a `key` prop thus forcing us to use `<React.Fragment>` instead in this case.
+This is a neat and tidy method to reduce the amount of fragments we need to explicitly define by name. But be careful: using the shorthand is not possible in loops as empty elements cannot contain any props. Elements in a loop require us to define a `key` prop thus forcing us to use `<React.Fragment>` instead.
 
 ## Conditional rendering
 
 Rendering components based on different conditions, **conditional rendering** for short, is a central concept in React. As React components are composed of JavaScript functions, objects and classes under the hood, conditions behave just as they would in regular JavaScript.
 
-A React component renders a **state** of a **user interface** based on its **props** and its current **state**. In an ideal situation, free from **side effects**. To correctly deal with these different and changing parameters, using the render function to react to different conditions is a powerful feature. If my parameter is A, render this; if my parameter is B, render that. If I have incoming data in a list, show this data as an HTML list. If I do not have any data, show a placeholder instead.
+A React component renders a **state** of a **user interface** based on its **props** and its current **state**. In an ideal situation, this means that the component is free from **side effects**. To correctly deal with these different and changing parameters, using the render function to react to different conditions is a powerful feature. If my parameter is A, render this; if my parameter is B, render that. If I have incoming data in a list, show this data as an HTML list. If I do not have any data, show a placeholder instead.
 
-If this sounds relatively simple, I can assure you, it is. But one should still be aware of knowing how to do conditional rendering in JSX. The `render()` function of **class components** as well as **stateless functional components** can return a **React element** \(also in form of JSX\), a **string**, a **number,** `null` \(if nothing should be rendered\) or an **array** of these types.
+If this sounds relatively simple, I can assure you, it is. But one should still be aware of knowing how to do conditional rendering in JSX. The `render()` function of **Class components** as well as **Functional components** can return a **React element** \(also in form of JSX\), a **string**, a **number,** `null` \(if nothing should be rendered\) or an **array** of these types.
 
 There are a few methods of keeping the `render()` method nice and clean which I will explain now.
 
@@ -299,7 +299,7 @@ const NotificationList = ({ items }) => {
 
 This is a relatively simple use case. The `NotificationList` component receives a list of items in the form of props. If the list contains any entries at all, they are rendered as a list item of an unordered list. If however the list is empty, a message is returned informing the user that no new notifications are available.
 
-In another more complex example: let's imagine we are working with a value that we want to make editable. Our component differentiates between the different modes of `edit` and `view`. Depending on which mode we are currently in, we either want to simply show text \(**View mode**\) or be able to see a text field containing the previously entered value \(**edit mode**\).
+Another more complex example: let's imagine we are working with a value that we want to make editable. Our component differentiates between the different modes of `edit` and `view`. Depending on which mode we are currently in, we either want to simply show text \(**View mode**\) or be able to see a text field containing the previously entered value \(**edit mode**\).
 
 ```jsx
 import React from 'react';
@@ -363,7 +363,7 @@ render(
 
 ```
 
-The relevant part can be found in the `render()` method of the component. The state is tested against its property value in `mode`. If `edit` is currently the value in state, we directly return the input field with an "early return". If this is not the case, we assume that the "standard case" is taking place meaning that the current mode is `view`. The `else` part of this condition is not actually necessary here and would only add unnecessary complexity. Both times, the text is rendered with the difference that it is an editable `value` of an `input` field in one case, and a simple text node in the other. A button is included to switch between the different modes of `view` and `edit`.
+The relevant part can be found in the `render()` method of the component. The state is tested against its property value in `mode`. If `edit` is the current value in state, we directly return the input field with an "early return". If this is not the case, we assume that the "standard case" is taking place meaning that the current mode is `view`. The `else` part of this condition is not actually necessary here and would only add unnecessary complexity. Both times, the text is rendered with the difference that it is an editable `value` of an `input` field in one case, and a simple text node in the other. A button is included to switch between the different modes of `view` and `edit`.
 
 Such `if`, `if`/`else` or `if`/`else if`/`else` constructs are common if you want to create output based on **state** and **props** within a component. I will explain them in more detail in just a moment.
 
@@ -383,11 +383,11 @@ render() {
 }
 ```
 
-Using this form of a conditional check, we test whether the state contains an error property. If this isn't the case, `null` is being returned. Otherwise, an error message containing the error in state is returned in a `div`. We achieve this by using a simple `if` condition similar to what we have used above.
+Using this form of a conditional check, we test whether the state contains an error property. If this is not the case, `null` is being returned. Otherwise, an error message containing the error in state is returned in a `div`. We achieve this by using a simple `if` condition similar to what we have used above.
 
 ### Ternary Operator
 
-The conditions that we have just seen are often used to deal with relatively big changes in a component. In many situations, we only want to differentiate between minor differences, for example setting a CSS class if a certain state is set. The ternary operator helps us to do just that. Let's refresh our knowledge. A ternary operator takes the following form: `condition ? met : not met`. For example: `isLoggedIn ? ' Logout' : ' Login';`
+The conditions that we have just seen are often used to deal with relatively big changes in a component. In many situations, we only want to differentiate between minor differences, for example setting a CSS class if a certain state is set. The ternary operator helps us to do just that. Let's refresh our knowledge. A ternary operator takes the following form: `condition ? met : not met`. For example: `isLoggedIn ? 'Logout' : 'Login';`
 
 That's our first example for a ternary operator in JSX! It can be used within props but also in conditions to differentiate between different forms of output to render based on conditions. To make the example more concrete, we could use the info from above to include it in a button:
 
@@ -439,11 +439,11 @@ render() {
 }
 ```
 
-A select list containing all German states is rendered if we previously selected `de` \(for **Germany**\) as our country. In all other cases a simple text input is shown to user in which they can enter their state freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
+In this example, a select list containing all German states is rendered if we previously selected `de` \(for **Germany**\) as our country. In all other cases a simple text input is shown to user in which they can enter their state freely. However, careful consideration should be given when to use the **ternary operator**: it can become a little hard to read quickly if complex JSX is used.
 
 ### Logical AND \(`&&`\) and Logical OR \(`||`\)
 
-The **Logical Operator** seems to resemble the **Ternary Operator** at first glance, but it is even shorter and more precise. As opposed to the **Ternary operator**, a second "else" case is not needed. If the condition of the **Logical AND Operator** is not met, the expression simply returns `undefined` resulting in no visible markup for the user interface:
+The **logical operator** seems to resemble the **ternary operator** at first glance, but it is even shorter and more precise. As opposed to the **ternary operator**, a second "else" case is not needed. If the condition of the **logical AND operator** is not met, the expression simply returns `undefined` resulting in no visible markup for the user interface:
 
 ```jsx
 render() {
@@ -456,9 +456,9 @@ render() {
 }
 ```
 
-In this example, we test against the value of the `isMenuVisible` prop and check if it is `true`, if that **is** the case, it will return the `Menu` component. If the result is `false`, `undefined` is returned and nothing else will be rendered to the screen.
+In this example, we test against the value of the `isMenuVisible` prop and check if it is `true`. If that **is** the case, it will return the `Menu` component. If the result is `false`, `undefined` is returned and nothing else will be rendered to the screen.
 
-In combination with the **Logical OR Operator**, we can emulate the behavior of the **Ternary Operator**:
+In combination with the **logical OR operator**, we can emulate the behavior of the **ternary operator**:
 
 ```jsx
 render() {
@@ -499,15 +499,15 @@ class Countdown extends React.Component {
 }
 ```
 
-This **can** improve readability of the `render()` method but also increases the complexity of the component slightly. Many people recommend to move parts of the code into their own **function components** instead though \(myself included\).
+This **can** improve readability of the `render()` method but also increases the complexity of the component slightly. Many people recommend to move parts of the code into their own **Function components** instead though \(myself included\).
 
 {% hint style="info" %}
-As soon as you begin to consider moving parts of your code into custom `render()` methods within your component, you should think about moving these into their own separate **function components**.
+As soon as you begin to consider moving parts of your code into custom `render()` methods within your component, you should think about moving these into their own separate **Function components**.
 {% endhint %}
 
 ### Custom Components with complex conditions
 
-Instead of using multiple `render()` methods, we can create new **function components**. These will receive **props** from their parent component and then take care of displaying their own data as an independent, self-governing and testable component.
+Instead of using multiple `render()` methods, we can create new **Function components**. These will receive **props** from their parent component and then take care of displaying their own data as an independent, self-governing and testable component.
 
 Careful consideration should be given as to what data actually needs passed down to the new child component\(s\), and how to pass this data, as the component\(s\) should not contain too much logic or state. 
 
