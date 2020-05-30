@@ -2,7 +2,7 @@
 
 **Portals** allow us to render components in DOM nodes which are _outside_ of the parent-node of the current component hierarchy but still have access to the current component environment. A common example \(but of course not the only one\) is an overlay which is rendered in its own `<div>` outside of the actual application.
 
-The portal remains in the context of the component that has created it and thus has access to all data that is also available to the parent component such as its props and state. However, they are placed in entirely different locations in the rendered HTML compared to the rest of the application. Being able to access props and state is crucial for **Portals**, as they allow us to access common Context such as translations.
+The portal remains in the context of the component that has created it and thus has access to all data that is also available to the parent component such as its props and state. However, they are placed in entirely different locations in the rendered HTML compared to the rest of the application. Being able to access props and state is crucial for **Portals**, as they allow us to access common context such as translations.
 
 ### Creating portals
 
@@ -40,7 +40,7 @@ const App = () => {
 ReactDOM.render(<App />, document.querySelector('#root'));
 ```
 
-As our `<App />` is placed into the the `div` with the id of `root`, the `<body>` of the app would now result in this HTML snippet:
+As our `<App />` is placed into the `div` with the id of `root`, the `<body>` of the app would now result in this HTML snippet:
 
 ```markup
 <body>
@@ -100,7 +100,7 @@ The resulting `<body>` in the HTML document will look like this:
 </body>
 ```
 
-The Portal is rendered into the `#portal` node instead of the `#root` node where all other content including the component itself is placed. A Portal is rendered once the component mounts and is removed from the DOM if we the component containing the portal is removed from the component tree.
+The Portal is rendered into the `#portal` node instead of the `#root` node where all other content including the component itself is placed. A Portal is rendered once the component mounts and is removed from the DOM if the component containing the portal is removed from the component tree.
 
 ### Portals and their relationship to their parent component
 
