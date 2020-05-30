@@ -2,7 +2,7 @@
 
 In the previous chapters I have used them a few times without explaining them: what actually are **React elements**? 
 
-**React elements** are the smallest building blocks in a **React application**.They describe what is going to be rendered on the screen. Although they sound similar to DOM elements, they differ in one important point: React elements are only simple objects — thus they are easy to create and performant. Calling `React.createElement()` to create a **React element** does not trigger a DOM operation.
+**React elements** are the smallest building blocks in a **React application**. They describe what is going to be rendered on the screen. Although they sound similar to DOM elements, they differ in one important point: React elements are only simple objects — thus they are easy to create and performant. Calling `React.createElement()` to create a **React element** does not trigger a DOM operation.
 
 {% hint style="info" %}
 React **elements** are often confused with React **components** and used interchangeably. This is not correct though. **Elements** make up the building blocks of **components**. We are going to talk about **components** in great depths in the following chapters, but you should read and understand this chapter about **elements** first.
@@ -35,11 +35,11 @@ const myFirstElement = <div>My first React Element</div>;
 ReactDOM.render(myFirstElement, document.getElementById('root'));
 ```
 
-If you execute the code in the browser, you will see `<div>My first React element</div`  **inside** of the `root` div.
+If you execute this code in the browser, you will see `<div>My first React element</div` **inside** of the `root` div.
 
-**React elements** are **immutable** meaning that they do not change. Once the element has been created, it represents a particular state in the user interface. The official React documentation metaphorically speaks of a single frame in a film. If we wanted to update the user interface of our application, we would need to create a **new React element** with the updated and changed data — don't be afraid,  it sounds more complex than it actually is!
+**React elements** are **immutable** meaning that they do not change. Once the element has been created, it represents a particular state in the user interface. The official React documentation metaphorically speaks of a single frame in a film. If we wanted to update the user interface of our application, we would need to create a **new React element** with the updated and changed data — don't be afraid, it sounds more complex than it actually is!
 
-React is clever enough to figure out which parts of an application have changed and will only update those parts that have actually been updated, thanks to a clever comparison algorithm. **React elements** and their children will be compared to the previous version and only invoke a DOM operation if a change is present. If used correctly, React's **reconciliation process** can drastically improve the performance of your application as regular DOM updates are very costly and negatively impact performance. Depending on the changes in the **React element**, you might not even need to update a full DOM element every time and often only a few attributes need to change.
+React is clever enough to figure out which parts of an application have changed and will only update those parts that have actually been updated, thanks to a clever comparison algorithm. **React elements** and their children will be compared to the previous version and only invoke a DOM operation if a change is present. If used correctly, React's **reconciliation process** can drastically improve the performance of our application as regular DOM updates are very costly and negatively impact performance. Depending on the changes in the specific **React element**, you might not even need to update a full DOM element every time and often only a few attributes need to change.
 
 But let's look at that in practice:
 
@@ -58,7 +58,7 @@ setInterval(showTime, 1000);
 
 Once again a **React element** was created. Once it is invoked in `ReactDOM.render()`, it will tell us the time. Because we only care about punctuality, we pass the element and the  `ReactDOM.render()` call into a function which is called every 1000ms.
 
-Inspecting the elements in the **Chrome Dev Tools** reveals: which each `ReactDOM.render()` call only the time itself is updated. The remaining elements as well as the DOM nodes or even parts not impacted of the shown text remain the same:
+Inspecting the elements in the **Chrome Dev Tools** reveals: with each `ReactDOM.render()` call only the time itself is updated. The remaining elements as well as the DOM nodes or even parts not impacted of the shown text remain the same:
 
 ![React only updates the time, nothing else.](../.gitbook/assets/react-update.png)
 
@@ -75,7 +75,7 @@ function changeTime() {
 setInterval(changeTime, 1000);
 ```
 
-The main advantage of **declarative** programming is that we only **describe states** and mention how something should render instead of deciding on each and every step and how to reach our final state. Especially complex applications benefit greatly from declarative approaches, as both readability and simplicity are drastically improved it makes applications less error prone.
+The main advantage of **declarative** programming is that we only **describe states** and mention how something should render instead of deciding on each and every step and how to reach our final state. Especially complex applications benefit greatly from declarative approaches, as both readability and simplicity are drastically improved and makes applications less error prone.
 
 
 
