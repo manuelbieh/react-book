@@ -116,7 +116,7 @@ It is entirely up to you which form you like best.
 
 ### Using translations in React components
 
-Once **i18next** is set up correctly and the translations have been set up as well, we can start to translate our components. **i18next** offers full flexibility: we can work with a `withTranslation` HOC in **class components** or a `useTranslation` hook in **function components**. In the rare case of having to use components inside of translations, `react-i18next` boasts with a so-called `Trans` component.
+Once **i18next** is set up correctly and the translations have been set up as well, we can start to translate our components. **i18next** offers full flexibility: we can work with a `withTranslation` HOC in **class components** or a `useTranslation` Hook in **function components**. In the rare case of having to use components inside of translations, `react-i18next` boasts with a so-called `Trans` component.
 
 #### Using the withTranslation\(\) HOC in class components
 
@@ -184,15 +184,15 @@ The `i18n` prop contains the initialized **i18next** instance. It offers a numbe
 
 In order to switch the language from `en` to `de`, we can call `i18n.changeLanguage('de')`.
 
-#### Using the useTranslation\(\) hook in function components
+#### Using the useTranslation\(\) Hook in function components
 
-The use of the `withTranslation()` HOC is not constrained to **class components** but can also be used in **function components**. However, the use of the `useTranslation()` hook often simplifies the component and makes it much more readable. The hook can be imported similarly to the HOC:
+The use of the `withTranslation()` HOC is not constrained to **class components** but can also be used in **function components**. However, the use of the `useTranslation()` Hook often simplifies the component and makes it much more readable. The Hook can be imported similarly to the HOC:
 
 ```javascript
 import { useTranslation } from 'react-i18next';
 ```
 
-This **hook** allows us to extract the `t` and `i18n` properties by using **destructuring assignment** from ES2015+.
+This **Hook** allows us to extract the `t` and `i18n` properties by using **destructuring assignment** from ES2015+.
 
 ```jsx
 const Greeting = () => {
@@ -207,7 +207,7 @@ const Greeting = () => {
 };
 ```
 
-As was already the case in the `withTranslation()` HOC, `t` refers to the function which allows us to display translations based on their **translation key**. `i18n` refers to the respective **i18next** instance. The `useTranslation()` hook offers the same set of functionality as the `withTranslation()` HOC, however it is much more explicit and thus more readable. In order to use different **namespaces**, we can pass a string or an array of strings containing the namespaces to the hook:
+As was already the case in the `withTranslation()` HOC, `t` refers to the function which allows us to display translations based on their **translation key**. `i18n` refers to the respective **i18next** instance. The `useTranslation()` Hook offers the same set of functionality as the `withTranslation()` HOC, however it is much more explicit and thus more readable. In order to use different **namespaces**, we can pass a string or an array of strings containing the namespaces to the Hook:
 
 ```javascript
 const { t } = useTranslation('namespace');
