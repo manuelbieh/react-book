@@ -6,9 +6,9 @@ Before diving deeper into the development of components, I want to first talk ab
 
 At first glance JSX does not look very different from HTML or XML. As in XML or in XHTML, every opening element also needs to have a matching closing element `</div>` or has to be self-closing \(`<img/>`\). In contrast to XML and XTHML though, JSX can include **JavaScript expressions** making it extremely powerful.
 
-JSX elements are transformed into nested `React.createElement()` calls at a later step in your build process. Remember that I mentioned in the introduction that React creates a tree-like structure of elements — this happens here.
+JSX elements are transformed into nested `React.createElement()` calls at a later step in our build process. Remember that I mentioned in the introduction that React creates a tree-like structure of elements — this happens here.
 
-This all sounds a lot more complicated than it actually is though. Let us look at an example with the following HTML snippet:
+This all sounds a lot more complicated than it actually is though. Let's look at an example with the following HTML snippet:
 
 ```jsx
 <div id="app">
@@ -153,7 +153,7 @@ For those of you who have paid close attention, you may have noticed a few thing
 
 You can usually just put your JSX in parentheses without problem. Many people actually prefer this practice as all JSX is uniformly treated the same way, but only multi-line JSX actually requires parentheses.
 
-If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use braces \("{" and "}"\). These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
+If an **expression** instead of a **string** should be used inside our props \(as in the example "Ternary Operator as a value of a prop"\), we should use curly brackets \("{" and "}"\). These indicate to React that an expression is contained within them as opposed to a plain string which would be indicated by single or double quotes.
 
 {% hint style="warning" %}
 For each object, **two** opening and closing braces need to be used. The outer braces introduce the expression whereas the inner ones represent the braces of the object contained within.
@@ -232,7 +232,7 @@ And this is it! All these examples and explanations should have laid the groundw
 
 {% hint style="info" %}
 * Multi-line JSX has to be surrounded by parentheses
-* JSX include JavaScript expressions. These have to be contained in braces and can then be used in props
+* JSX includes JavaScript expressions. These have to be contained in braces and can then be used in props
 * To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
 * CSS inline styles have to be written as a JavaScript object
 * Comments are put within braces and use multi-line comment Syntax: `{/* */}`
