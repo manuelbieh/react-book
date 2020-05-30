@@ -14,9 +14,9 @@ However, there are a few cases in which using Refs is acceptable or even necessa
 
 ### String Refs
 
-The simplest and oldest form of refs are **string refs**. Nowadays, it is not recommended to use them anymore as they can impact performance and might be deprecated in the future. I wanted to mention them for matters of completeness though as they are currently still part of the official API and as you might come across them during your work with React \(especially if you are working with legacy code\).
+The simplest and oldest form of refs are **string refs**. Nowadays, it is not recommended to use them anymore as they can impact performance and might be deprecated in the future. I wanted to mention them for the sake of completeness though as they are currently still part of the official API and as you might come across them during your work with React \(especially if you are working with legacy code\).
 
-In order to define a **string ref**, you pass prop named `ref` to a DOM element and pass value to that prop in **string** form. The corresponding DOM element is now accessible to us using the instance method `this.ref` **inside of the component**.
+In order to define a **string ref**, you pass prop named `ref` to a DOM element and pass a value to that prop in **string** form. The corresponding DOM element is now accessible to us using the instance method `this.ref` **inside of the component**.
 
 ```jsx
 import React from 'react';
@@ -121,13 +121,13 @@ ReactDOM.render(
 );
 ```
 
-If you were to name the prop `ref`, leaving us with `<UsernameInput ref={this.setUsernameRef} />`, you would end up with a reference to the `UsernameInput` **instance** instead of its input element. If we used a **Function Component**, `UsernameInput` would have been `null` as SFC cannot be instantiated.
+If you were to name the prop `ref`, leaving us with `<UsernameInput ref={this.setUsernameRef} />`, you would end up with a reference to the `UsernameInput` **instance** instead of its input element. If we used a **Function component**, `UsernameInput` would have been `null` as Function components cannot be instantiated.
 
 However, if forwarding refs to child components is something you are trying to achieve, you are better off using the `forwardRef()` method. I will explain it at the end of this chapter.
 
 ### Refs via createRef\(\)
 
-With React 16.3, we've seen the introduction of the top-level API method `React.createRef()`. It resembles the usage of **callback refs** but differs in a few cases. As was the case with **callback refs**, you also need to take of ref handling yourself and it is still common practice to assign the **ref** to an **instance property**.
+With React 16.3, we have seen the introduction of the top-level API method `React.createRef()`. It resembles the usage of **callback refs** but differs in a few cases. As was the case with **callback refs**, you also need to take care of ref handling yourself and it is still common practice to assign the **ref** to an **instance property**.
 
 Instead of passing an almost identical method in the form of `(el) => { this.property = el }` each time, the reference is already created during the instantiation of the component which is then given to the `ref` prop of the element.
 
@@ -187,13 +187,13 @@ class MyComponent extends React.Component {
 }
 ```
 
-We're accessing the element via `this.usernameEl.current`.
+We are accessing the element via `this.usernameEl.current`.
 
 ### Ref forwarding
 
 **Ref forwarding** \(references to a component or a DOM element\) enables passing a reference through a component to a child component. In most cases, this will not be necessary but it can become of interest if you are creating reusable component libraries.
 
-A **ref** is forwarded via `React.forwardRef()` and is passed a function as a parameter during this process. The ref itself passes props as well as well as the **ref** to it.
+A **ref** is forwarded via `React.forwardRef()` and is passed a function as a parameter during this process. The ref itself passes props as well as the **ref** to it.
 
 This sounds incredibly cumbersome, so let us look at an example instead. Let us first implement an Input component without a forwardRef:
 
@@ -226,7 +226,7 @@ class App extends React.Component {
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-In this case, `componentDidMount()` does not have access to our input field from the `UsernameField` component. Instead, the instance of the component would actually be the **ref** itself. As `UsernameField` is a **Function Component**, we do not even have an instance of the component. The associated`console.log` result would be: `{ current: null }` - not exactly ideal if we want to gain access to the input element in order to focus on it.
+In this case, `componentDidMount()` does not have access to our input field from the `UsernameField` component. Instead, the instance of the component would actually be the **ref** itself. As `UsernameField` is a **Function component**, we do not even have an instance of the component. The associated`console.log` result would be: `{ current: null }` - not exactly ideal if we want to gain access to the input element in order to focus on it.
 
 It is sufficient in this case to wrap the `UsernameField` component with a `React.forwardRef()` call. We can now amend the code of the `UsernameField` in the above example:
 
@@ -248,7 +248,7 @@ Careful consideration and care needs to be taken with **refs** while implementin
 
 Let's extend our example from above and assume that we want to create a **HOC** to show all of our form elements in a unified layout. Thus, a **HOC** `withInputStyles` is created which can wrap `input` elements in which it is possible to assign them a ref. 
 
-This procedure is a little complicated and I have found it a little complicated to explain this properly in written form without confusing the reader further. Instead, I invite you to inspect the following code closely and read its associated comments. As soon the idea of **Higher Order Components**  and **forwardRefs** begins to make sense, the example should be sufficient to understand the actual explanation. And if it is not clear from the get go: this case is so incredibly rare that you will not need it much in practice.
+This procedure is a little complicated and I have found it a little complicated to explain this properly in written form without confusing the reader further. Instead, I invite you to inspect the following code closely and read its associated comments. As soon as the idea of **Higher Order Components**  and **forwardRefs** begins to make sense, the example should be sufficient to understand the actual explanation. And if it is not clear from the get go: this case is so incredibly rare that you will not need it much in practice.
 
 So let's look at the example of **forwardRef** and **Higher Order Components**: 
 
