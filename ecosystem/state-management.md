@@ -2,13 +2,13 @@
 
 The more an application grows in size, the more its complexity and data grows. Managing **application state** becomes increasingly difficult and cumbersome to do. When do I pass props to which component and how? How do the props influence the state of my components and what happens if I change the state of a component?
 
-React has introduced great tooling in the last few years to deal with this increase of complexity in application state. The **Context API** as well as the **useReducer** **hook** have been great additions to the React developer's toolbox and allow us to work more comfortably with complex data. However, in some cases it is still very difficult to keep track of all the different pieces of data and how they transform. To deal with this type of problem, external tools for **global state management** can be a great choice. The React ecosystem has seen a number of players enter this space giving us lots of libraries to choose from.
+React has introduced great tooling in the last few years to deal with this increase of complexity in application state. The **Context API** as well as the **useReducer Hook** have been great additions to the React developer's toolbox and allow us to work more comfortably with complex data. However, in some cases it is still very difficult to keep track of all the different pieces of data and how they transform. To deal with this type of problem, external tools for **global state management** can be a great choice. The React ecosystem has seen a number of players enter this space giving us lots of libraries to choose from.
 
 One of the more commonly known tools is **MobX** which describes itself as a _"Simple, scalable state management"_ solution. The other well-known tool in the industry is **Redux**. Redux was in part developed by Dan Abramov and Andrew Clark who are now part of the official React Core Team. It positions itself as _"A predictable state container for JavaScript apps"._ Redux is arguably the more dominating tool boasting with higher usage stats and downloads.
 
 This chapter will dive deeper into **Redux**. This is due to a number of reasons: first of all, I have experience with **Redux** myself and have used in it a number of different projects. Additionally, my experience with Redux has been very pleasant. But those are not the only reasons. Redux still has around **4 million weekly installations**. Compared to **MobX** which still has a very respectable number of **200.000 installations** per week, Redux is the dominant force in the React ecosystem though.
 
-Despite a number of voices which keep proclaiming Redux's death, the interest in **Redux** has remained steady over the years and the number of downloads is still growing. When the **Context API** was introduced with **React 16.3.0**, **Redux** was said to be obsolete. Once **React 16.8.0** introduced Hooks, more specifically the **useReducer hook**, the critics' voices were raised again. Despite all this criticism, the number of installations of Redux keeps growing.
+Despite a number of voices which keep proclaiming Redux's death, the interest in **Redux** has remained steady over the years and the number of downloads is still growing. When the **Context API** was introduced with **React 16.3.0**, **Redux** was said to be obsolete. Once **React 16.8.0** introduced Hooks, more specifically the **useReducer Hook**, the critics' voices were raised again. Despite all this criticism, the number of installations of Redux keeps growing.
 
 In fact, **Redux** makes use of **Context** and **Hooks** under the hood and uses these principles to optimize its own performance and simplify its API. Moreover, **Redux** has seen a great increase of custom add-ons and tools for their own ecosystem which is enhanced, rather than replaced, by the new functionality offered by React.
 
@@ -1138,19 +1138,19 @@ Please ensure that you have the Redux Devtools installed in your browser.
 
 With React-Redux v7.1.0, Hooks have officially landed in the official React bindings for Redux. Hooks increase the usability of Redux in React manyfold. While creating a store is much the same, the `connect()` HOC can be avoided completely. Each method of access - reading or writing by dispatching actions - can be achieved by Hooks.
 
-The most important hooks to remember are `useSelector` and `useDispatch` which can be loosely compared to `mapStateToProps` and `mapDispatchToProps`. Following this analogy, the `useSelector` hook is used to _read_ data from the store while `useDispatch` is used to _dispatch_ actions to write data to the store. React Redux offers a third hook, `useStore`, which is not really used in the wild. Its usage should be more of a last resort should you really need access to the store object.
+The most important Hooks to remember are `useSelector` and `useDispatch` which can be loosely compared to `mapStateToProps` and `mapDispatchToProps`. Following this analogy, the `useSelector` Hook is used to _read_ data from the store while `useDispatch` is used to _dispatch_ actions to write data to the store. React Redux offers a third Hook, `useStore`, which is not really used in the wild. Its usage should be more of a last resort should you really need access to the store object.
 
-These hooks can be imported as named imports from react-redux:
+These Hooks can be imported as named imports from react-redux:
 
 ```javascript
 import { useSelector, useDispatch, useStore } from 'react-redux';
 ```
 
-As is the case with other hooks, Redux Hooks can only be used in function components. If you prefer using Class components, you can keep using the `connect()` HOC.
+As is the case with other Hooks, Redux Hooks can only be used in function components. If you prefer using Class components, you can keep using the `connect()` HOC.
 
 #### useSelector\(selectorFn, equalityFn\)
 
-The `useSelector` hook enables us to read values from the store. It expects a so-called selector function as its first parameter. This function receives the complete Redux store and then returns a simple or calculated value \(or even a whole tree\) of data:
+The `useSelector` Hook enables us to read values from the store. It expects a so-called selector function as its first parameter. This function receives the complete Redux store and then returns a simple or calculated value \(or even a whole tree\) of data:
 
 ```jsx
 import React from 'react';
@@ -1207,15 +1207,15 @@ const TodoList = () => {
 
 Whenever a component is rendered, the selector function is called. It may return a temporary value if the selector function has already been called and the value has not changed since. To determine whether this is the case, Redux uses a _Strict Reference Equality Check_ \(`===`\) to check whether the current render has the same reference as the one before.
 
-If an action has been _dispatched_, `useSelector` will trigger a re-render of the component if the value is not strictly the same as before. Compared to the `connect()` HOC, we might encounter more re-renders. For example, selector functions will also be called if the component has re-rendered without actually receiving new props. If you encounter this issue while using the `useSelector` hook, you have a number of options:
+If an action has been _dispatched_, `useSelector` will trigger a re-render of the component if the value is not strictly the same as before. Compared to the `connect()` HOC, we might encounter more re-renders. For example, selector functions will also be called if the component has re-rendered without actually receiving new props. If you encounter this issue while using the `useSelector` Hook, you have a number of options:
 
 - The component can be wrapped by `React.memo`. This will avoid unnecessary re-renders of components in which the props did not change.
-- The `useSelector` hook can be configured to use a shallowEqual comparison \(`==`\) instead and avoids testing for referential equality \(`===`\). `shallowEqual` can be imported from `react-redux` and be passed to the hook as a second parameter `useSelector(selectorFn, shallowEqual)`
+- The `useSelector` Hook can be configured to use a shallowEqual comparison \(`==`\) instead and avoids testing for referential equality \(`===`\). `shallowEqual` can be imported from `react-redux` and be passed to the Hook as a second parameter `useSelector(selectorFn, shallowEqual)`
 - [Reselect](https://github.com/reduxjs/reselect) can be useful to use instead as Reselect will always return the same values for as long as nothing has changed in state.
 
 #### useDispatch\(\)
 
-The `useDispatch()` hook will return a reference to the `dispatch` function of the store. It can be used to _dispatch_ actions in a similar fashion to the `connect()` HOC using `mapDispatchToProps`:
+The `useDispatch()` Hook will return a reference to the `dispatch` function of the store. It can be used to _dispatch_ actions in a similar fashion to the `connect()` HOC using `mapDispatchToProps`:
 
 ```javascript
 import React from 'react';
