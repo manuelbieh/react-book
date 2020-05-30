@@ -1,22 +1,22 @@
 # State and Lifecycle Methods
 
-We've mentioned it in places and now we are finally going to look at it in greater detail — **state** and the so-called **lifecycle methods**.
+We have mentioned it in places and now we are finally going to look at it in greater detail — **state** and the so-called **lifecycle methods**.
 
-As mentioned in the previous chapter, components can: hold, manage, and change their own **state**. But **If the state within a component changes, it always triggers a re-render of the component**. This behavior _can_ be avoided by opting for a `PureComponent` as we've learned in the previous chapter, which might be useful in some cases. The foundational logic remains though. A state change leads to a re-render of a component and all of its children, except from those cases in which the children are actually a `PureComponent` or its call is surrounded by a `React.memo()` call.
+As mentioned in the previous chapter, components can: hold, manage, and change their own **state**. But **if the state within a component changes, it always triggers a re-render of the component**. This behavior _can_ be avoided by opting for a `PureComponent` as we have learned in the previous chapter, which might be useful in some cases. The foundational logic remains though. A state change leads to a re-render of a component and all of its children, except from those cases in which the children are actually a `PureComponent` or its call is surrounded by a `React.memo()` call.
 
 Relying on state to change our interface is extremely useful. It means that we do not need to rely on manually calling `ReactDOM.render()` to update our interface, and that components manage their own re-renders independently.
 
-State is tightly connected to the so-called **lifecycle methods.** These comprise a number of optional methods which can be called at different times and for different uses cases in **class components**. For example, there are **lifecycle methods** for when a component is first mounted, if a component receives new props or if the state within a component changes.
+State is tightly connected to the so-called **lifecycle methods.** These comprise a number of optional methods which can be called at different times and for different uses cases in **Class components**. For example, there are **lifecycle methods** for when a component is first mounted, if a component receives new props or if the state within a component changes.
 
-Since **React 16.8.0**, **function components** can also manage their own state through the use of **Hooks**. Hooks can also react to certain lifecycle events but we will not describe them in detail at this point. This chapter will focus primarily on class components and their associated lifecycle methods. Hooks on the other hand will receive their own dedicated chapter later in the book as they can still be considered a relatively new and extensive topic.
+Since **React 16.8.0**, **Function components** can also manage their own state through the use of **Hooks**. Hooks can also react to certain lifecycle events but we will not describe them in detail at this point. This chapter will focus primarily on Class components and their associated lifecycle methods. Hooks on the other hand will receive their own dedicated chapter later in the book as they can still be considered a relatively new and extensive topic.
 
 ## Our first stateful component
 
-**State** inside a class component can be accessed via the instance property `this.state`. It is encapsulated to the **component** and neither parent or child components can access it.
+**State** inside a Class component can be accessed via the instance property `this.state`. It is encapsulated to the **component** and neither parent or child components can access it.
 
 To define a component's initial state we can choose three ways. Two of these are relatively simple, the third is a little more advanced. We're going to cover the latter when we learn about the **lifecycle method** `getDerivedStateFromProps()`.
 
-**Initial state** can be defined by setting `this.state`. This can either be done via the constructor of a **class component**:
+**Initial state** can be defined by setting `this.state`. This can either be done via the constructor of a **Class component**:
 
 ```javascript
 class MyComponent extends React.Component {
@@ -44,13 +44,13 @@ class MyComponent extends React.Component {
 }
 ```
 
-**Class Property Syntax** is supported out-of-the-box by **Create React App**. As most projects today rely completely or in part on the CRA setup, this syntax is already widely used and common to see in most projects. If you encounter a project where this is not the case, I'd urge you to install and use this Babel plugin as it reduces the length of your code and is easily set up.
+**Class Property Syntax** is supported out-of-the-box by **Create React App**. As most projects today rely completely or in part on the CRA setup, this syntax is already widely used and common to see in most projects. If you encounter a project where this is not the case, I'd urge you to install it and use this Babel plugin as it reduces the length of your code and is easily set up.
 
 Once **state** is defined, we can **read** its value via `this.state`. While it is possible to mutate `this.state` directly, it is actively discouraged.
 
 ## Changing state with this.setState\(\)
 
-To change state within components, React offers a new method for use inside of **class components**:
+To change state within components, React offers a new method for use inside of **Class components**:
 
 ```javascript
 this.setState(updatedState);
@@ -149,7 +149,7 @@ this.setState(
 
 ## Lifecycle Methods
 
-React offers a number of so-called **lifecycle methods** that can be called at different times in a **component's lifecycle**. These can be implemented in React **class components**.
+React offers a number of so-called **lifecycle methods** that can be called at different times in a **component's lifecycle**. These can be implemented in React **Class components**.
 
 The lifecycle of a component starts as soon as it is **instantiated or mounted**, so when it is found in the `render()` method of a parent component being part of the returned component tree. The component's lifecycle ends if it is removed from the tree of components supposed to be rendered. Additionally, there are **lifecycle methods** that react to **updates** or **errors** as well as being "unmounted".
 
@@ -181,7 +181,7 @@ If new props are being passed to a component, or if state changes within the com
 
 **Unmount phase**
 
-This phase only has one matching method which is called as soon as the component is removed from the DOM. It can be useful to tidy up event listeners and `setTimeOut()` or `setInterval()` calls which had been added during mounting of the component**:**
+This phase only has one matching method which is called as soon as the component is removed from the DOM. It can be useful to tidy up event listeners and `setTimeOut()` or `setInterval()` calls which had been added during mounting of the component:
 
 - `componentWillUnmount()`
 
@@ -226,9 +226,9 @@ class Clock extends React.Component {
 ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
-We see that the **lifecycle methods** `componentDidMount()` and `componentWillUnmount()` are being used in the above example. **Default state** is defined with the property `date` and holds an instance of the date object. When the component **mounts** \(`componentDidMount()`\) the `setInterval()` interval is started and its id is saved within the the instance property `this.intervalId`. As the interval invokes the `setState()` method every second, the component regularly triggers a re-render meaning the `render()` method is called again and shows the current time again.
+We see that the **lifecycle methods** `componentDidMount()` and `componentWillUnmount()` are being used in the above example. **Default state** is defined with the property `date` and holds an instance of the date object. When the component **mounts** \(`componentDidMount()`\) the `setInterval()` interval is started and its id is saved within the instance property `this.intervalId`. As the interval invokes the `setState()` method every second, the component regularly triggers a re-render meaning the `render()` method is called again and shows the current time again.
 
-Generally, the interval function is independent of the React component apart from the fact that it calls the `setState()` method of the component. Depending on how deeply interlinked the function and the component are, React determines if function calls should be stopped or not once the component is no longer needed. In the case of the `setInterval()` function, React does not, and we have to take care of stopping the component ourselves. Luckily React provides a methods which enables us to do just that: `componentWillUnmount()`.
+Generally, the interval function is independent of the React component apart from the fact that it calls the `setState()` method of the component. Depending on how deeply interlinked the function and the component are, React determines if function calls should be stopped or not once the component is no longer needed. In the case of the `setInterval()` function, React does not, and we have to take care of stopping the component ourselves. Luckily React provides a method which enables us to do just that: `componentWillUnmount()`.
 
 This method is called just before React removes the component from the DOM and can be used to cancel any XMLHttpRequests that might still be running, to remove event listeners or to cancel a running interval — and that is just what we need here. Shortly before the component is removed, the `clearTimeOut()` is invoked and we pass the function the interval id which we previously saved in in the instance property.
 
@@ -284,13 +284,13 @@ class DateTime extends React.Component {
 ReactDOM.render(<DateTime />, document.getElementById('root'));
 ```
 
-Arguably this example is a little bit artificial but it illustrates the point. We can see how multiple components interact with each other. The `DateTime` component is our **logic component \(smart component\)** and takes care of "getting" the time and updating it. The **layout** component on the other hand deals with the actual display of the date \(`showDate`\) and the time \(`ShowTime`\) via the props it has been passed. The layout component is implemented as a simple **function component** as a **class component** would have been unnecessarily complex and produced too much overhead.
+Arguably this example is a little bit artificial but it illustrates the point. We can see how multiple components interact with each other. The `DateTime` component is our **logic component \(smart component\)** and takes care of "getting" the time and updating it. The **layout** component on the other hand deals with the actual display of the date \(`showDate`\) and the time \(`ShowTime`\) via the props it has been passed. The layout component is implemented as a simple **Function component** as a **Class component** would have been unnecessarily complex and produced too much overhead.
 
 ### The role of lifecycle methods in combination with components
 
-In the beginning I mentioned a few other **lifecycle methods** apart from `componentDidMount()` and `componentWillMount()`. React also recognizes these if they have been implemented within a **class component**.
+In the beginning I mentioned a few other **lifecycle methods** apart from `componentDidMount()` and `componentWillMount()`. React also recognizes these if they have been implemented within a **Class component**.
 
-In order to understand these different **lifecycle methods** better, let us create an example component in which we include the **lifecycle method** in debug messages. this will help us to see them in the browser console. To be more precise, the example actually consists of two component: one of them being a parent component, the other being a child component which receives props from its parent component \(which it simply ignores in this case\).
+In order to understand these different **lifecycle methods** better, let's create an example component in which we include the **lifecycle methods** in debug messages. This will help us to see them in the browser console. To be more precise, the example actually consists of two components: one of them being a parent component, the other being a child component which receives props from its parent component \(which it simply ignores in this case\).
 
 ```jsx
 import React from 'react';
@@ -425,11 +425,11 @@ The first method to be called is the `constructor` of the `ParentComponent` comp
 
 The constructor is passed the **props** of the component as a parameter and can transmit them to its parent component \(mostly `React.Component` or `React.PureComponent`\) via `super(props)`. If omitted, `this.props` in the constructor would be undefined leading to unexpected bugs and behavior.
 
-In most cases today, it is not necessary anymore to declare the constructor. The Babel plugin **"Class properties"** can be used instead to implement instance methods as well as state as their own class properties. If it's not, the constructor is the place to define the initial state \(for example `this.state = { }`\) and bind the instance methods to their respective class instances with `.bind()` \(for example `this.handleClick = this.handleClick.bind(this)`\). This is necessary as instance methods would otherwise lose their context within the component as their event listeners are used inside JSX and `this` would not point to the instance of the component anymore.
+In most cases today, it is not necessary anymore to declare the constructor. The Babel plugin **"Class properties"** can be used instead to implement instance methods as well as state as their own class properties. If it is not, the constructor is the place to define the initial state \(for example `this.state = { }`\) and bind the instance methods to their respective class instances with `.bind()` \(for example `this.handleClick = this.handleClick.bind(this)`\). This is necessary as instance methods would otherwise lose their context within the component as their event listeners are used inside JSX and `this` would not point to the instance of the component anymore.
 
 #### `static getDerivedStateFromProps(nextProps, prevState)`
 
-The constructor is followed by the static `getDerivedStateFromProps()` method. As can be inferred from its name, this is a **static** method and as does not have access to the component instance via `this`. Its primary goal is to calculate the **next state** of the component based on the props it has been passed and its last state and is returned as an object. If no changes need applied to the state, `null` is returned instead. The method's behavior is identical to that of `this.setState()` and only updates those parts of the state which are part of the returned object. Those properties are merged along with the **last state** into a **new state**.
+The constructor is followed by the static `getDerivedStateFromProps()` method. As can be inferred from its name, this is a **static** method and as does not have access to the component instance via `this`. Its primary goal is to calculate the **next state** of the component based on the props it has been passed and its last state. It is returned as an object. If no changes need applied to the state, `null` is returned instead. The method's behavior is identical to that of `this.setState()` and only updates those parts of the state which are part of the returned object. Those properties are merged along with the **last state** into a **new state**.
 
 The method itself has been a controversial topic, succeeding the now **deprecated lifecycle method** `componentWillReceiveProps`. Other than the previous method, it does not have access to the component instance. The React core team has explained that the former can lead to unexpected behavior in asynchronous rendering of components and has thus marked it "unsafe". The same applies to `componentWillMount()` and `componentWillUpdate()`. While the term might be associated with security breaches, it actually means something a little different. Components using this lifecycle method could lead to bugs and other side effects after React version 17.
 
@@ -447,7 +447,7 @@ The `componentDidMount()` method enters the scene once such a component is reach
 
 As opposed to the constructor, this method is called from "the inside to the outside" determining the method's way of first processing child components and then their parent components. We can see this in action in our above example. The log clearly shows that first the `componentDidMount()` of the `ChildComponent` is called and only then `ParentComponent`'s `componentDidMount()` is invoked.
 
-In the above example, we started a `setTimeOut()` within the `ParentComponent`which modifies the state of our component every 2000 milliseconds. It demonstrates which lifecycle methods are being called during the update of a component. Any other changes on the state of the mounted component are no longer part of the mounting phase but part of the update phase. This phase is entered after the the first 2000 milliseconds once the `ParentComponent` modifies its own state via `this.setState()`.
+In the above example, we started a `setTimeOut()` within the `ParentComponent` which modifies the state of our component every 2000 milliseconds. It demonstrates which lifecycle methods are being called during the update of a component. Any other changes on the state of the mounted component are no longer part of the mounting phase but part of the update phase. This phase is entered after the first 2000 milliseconds once the `ParentComponent` modifies its own state via `this.setState()`.
 
 #### `shouldComponentUpdate(nextProps, nextState)`
 
@@ -455,7 +455,7 @@ Whenever a component updates, whether that is due to state change within the com
 
 The `shouldComponentUpdate()` method enables us to inform if a costly re-render is actually necessary. The method receives the **next props** and the **next state** as a parameter and can determine, based on those, whether a re-render should take place. The method either has to return `true` to trigger the re-render or `false` which will prohibit the calls of `componentDidUpdate()`, `getSnapshotBeforeUpdate()` as well as `render()`.
 
-In many more complex applications, the update cycle is only triggered because a change has happened somewhere in the parent component which however is irrelevant for the child components. In these cases, `shouldComponentUpdate()` can be helpful as to optimize the rendering performance by preventing further re-renders.
+In many more complex applications, the update cycle is only triggered because a change has happened somewhere in the parent component but is irrelevant for the child components. In these cases, `shouldComponentUpdate()` can be helpful as to optimize the rendering performance by preventing further re-renders.
 
 If we were to return `false` from our `ParentComponent`'s `shouldComponentUpdate()` method, our logging output would be much shorter. Lines 14-18 would simply be missing. The component itself would not re-render, the `render()` method would not be called and the `ChildComponent` would also not re-render as well as update itself.
 
@@ -485,7 +485,7 @@ And with `componentDidUpdate()` the **update cycle** has also come to a finish. 
 
 #### `componentWillUnmount()`
 
-I admit that I have cheated in the logs of our example. `componentWillUnmount()` is only ever run if a component is completely removed from the DOM. This has not happened in our example. A components counts as "unmounted" after it has been explicitly removed by calling `ReactDOM.unmountComponentAtNode()` \(this is particularly important for mount nodes\) or if it is not implicitly returned from the `render()` method of its parent component anymore.
+I admit that I have cheated in the logs of our example. `componentWillUnmount()` is only ever run if a component is completely removed from the DOM. This has not happened in our example. A component counts as "unmounted" after it has been explicitly removed by calling `ReactDOM.unmountComponentAtNode()` \(this is particularly important for mount nodes\) or if it is not implicitly returned from the `render()` method of its parent component anymore.
 
 In those two cases, `componentWillUnmount()` will be called but of course only if it has been manually implemented. This is true for most **lifecycle methods** apart from `render()`. The `componentWillUnmount()` **lifecycle method** is an essential tool to "clean up" our application. It is the place where functions can and **should** be called to ensure that no traces are left behind. "Traces" can refer to timeouts we are still waiting on \(`setTimeout`\) or intervals which are still running \(`setInterval`\) but also DOM modifications which have taken place outside of our component JSX, as well as network requests which are still ongoing \(XHR/Fetch calls\) or simply event listeners which were added to the DOM via the API method `Element.addEventListener()`.
 
