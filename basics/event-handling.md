@@ -12,13 +12,13 @@ Behind the scenes, React handles a lot of the hard work and also enables to us t
 
 ### Differences between The React event handlers and the native Event API
 
-As mentioned previously, React and JSX events resemble HTML attribute definitions. But there are differences: events in React are defined with **camelCase** instead of **Lowercase** meaning `onclick` is changed to `onClick` in React, `onmouseover` is now defined by `onMouseOver` and `ontouchstart` would be written as `onTouchStart` — you get the picture.
+As mentioned previously, React and JSX events resemble HTML attribute definitions. But there are differences: events in React are defined with **camelCase** instead of **lowercase** meaning `onclick` is changed to `onClick` in React, `onmouseover` is now defined by `onMouseOver` and `ontouchstart` would be written as `onTouchStart` — you get the picture.
 
 The first parameter that is passed to the event handler is not an object of type `Event` as could be assumed. Instead, React supplies its own wrapper for the native event object, named a `SyntheticEvent`. The wrapper is part of React's event system and also works as a sort of normalizing layer to ensure cross-browser compatibility and, as opposed to some other browsers, it strictly follows the [event specifications of W3C](https://www.w3.org/TR/DOM-Level-3-Events/).
 
 In order to prevent the standard behavior of the browser during an event, we cannot simply return `false` from the event handler. React forces us to explicitly call `preventDefault()` - another fundamental difference to usage in the native Browser API.
 
-Last but not least, let us look at the event attribute or, in React's case, the event **prop**. React uses a **function reference** instead of a plain string \(which would be the standard in HTML\) which mandates the use of curly braces to inform JSX that a JavaScript expression is used.
+Last but not least, let's look at the event attribute or, in React's case, the event **prop**. React uses a **function reference** instead of a plain string \(which would be the standard in HTML\) which mandates the use of curly brackets to inform JSX that a JavaScript expression is used.
 
 This would look similar to:
 
@@ -71,7 +71,7 @@ An `onClick` event is added to increment the counter by one each time the user p
 Cannot read property 'setState' of undefined
 {% endhint %}
 
-Why's that? The answer is **scoping!** Whenever we click the button in the `increase()` event handler, we actually operate outside of the component instance. This means we cannot access `this.setState()` resulting in our above error. While it might seem annoying, it is not actually something React has thought up but it's actually standard behavior for ES2015 classes. But fear not, there are a number of techniques to combat this:
+Why is that? The answer is **scoping!** Whenever we click the button in the `increase()` event handler, we actually operate outside of the component instance. This means we cannot access `this.setState()` resulting in our above error. While it might seem annoying, it is not actually something React has thought up but it's actually standard behavior for ES2015 classes. But fear not, there are a number of techniques to combat this:
 
 #### Method binding in the render\(\) method
 
@@ -100,15 +100,15 @@ class Counter extends React.Component {
 }
 ```
 
-This way, the method is only bound to the instance **once** and possible checks to compare the method's likeness would always yield `true`. Thus, expensive `shouldComponentUpdate()` calls can easily be avoided. However, using this method of binding the method to the class instance is not without problems either: if the component in question does not yet use a constructor, it will now certainly have to. In order to to this, we need to call the `super(props)` method to pass the **props** of the component to the `React.Component` parent class. In the end, we end up writing the name of the method twice. Once on its own, and once to define and bind its `this`.
+This way, the method is only bound to the instance **once** and possible checks to compare the method's likeness would always yield `true`. Thus, expensive `shouldComponentUpdate()` calls can easily be avoided. However, using this method of binding the method to the class instance is not without problems either: if the component in question does not yet use a constructor, it will now certainly have to. In order to do this, we need to call the `super(props)` method to pass the **props** of the component to the `React.Component` parent class. In the end, we end up writing the name of the method twice. Once on its own, and once to define and bind its `this`.
 
 Using this method allows us to avoid potential performance bottlenecks, even if it is a little bit more verbose, but it could still be considered somewhat messy and cumbersome. We will now look at an even easier way to bind a method to a class instance.
 
 #### **Class properties**
 
-**Beware:** in order to use method I am about to explain, you need to have installed the babel plugin `@babel/plugin-proposal-class-properties`. But as most React setups already include this by default, I will assume that we can use **class properties** safely and without error. If this is not the case for some reason, event handler methods should always be bound in the constructor.
+**Beware:** in order to use the method I am about to explain, you need to have installed the babel plugin `@babel/plugin-proposal-class-properties`. But as most React setups already include this by default, I will assume that we can use **class properties** safely and without error. If this is not the case for some reason, event handler methods should always be bound in the constructor.
 
-But how exactly do we bind our method via a **class property**? To be entirely correct: we're cheating. Instead of defining a real class method as shown in the above example, we define a **public class property** which is passed an **arrow function**:
+But how exactly do we bind our method via a **class property**? To be entirely correct: we are cheating. Instead of defining a real class method as shown in the above example, we define a **public class property** which is passed an **arrow function**:
 
 ```
 class Counter extends React.Component {
@@ -186,7 +186,7 @@ We are running into a bit of a problem though: `this.setState()` uses an **updat
 Cannot read property 'value' of null
 {% endhint %}
 
-The easiest solution for this problem is to define and object literal instead of an updater function:
+The easiest solution for this problem is to define an object literal instead of an updater function:
 
 ```jsx
 handleChange = (e) => {
@@ -224,7 +224,7 @@ handleChange = (e) => {
 
 While it is not used much in practice, it is theoretically possible to use the `SyntheticEvent` object's `persist()` method to keep a reference to the event in question. This could possibly be useful when trying to pass a `SyntheticEvent` object to a callback function **outside** of the event handler.
 
-If you ever come across this situation though, it might be worth to considering whether that code of the callback function should actually live in the event handler itself. Our example function would look like this:
+If you ever come across this situation though, it might be worth to consider whether that code of the callback function should actually live in the event handler itself. Our example function would look like this:
 
 ```jsx
 handleChange = (e) => {
@@ -241,9 +241,9 @@ First, the `e.persist()` method is invoked. Second, the **updater function** can
 
 {% hint style="info" %}
 
-- **Always** use event props in JSX to define events:`onChange`, `onMouseOver`, `onTouchStart`, `onKeyDown`, `onAnimationStart`etc \(even if it seems a little odd at first\)
+- **Always** use event props in JSX to define events: `onChange`, `onMouseOver`, `onTouchStart`, `onKeyDown`, `onAnimationStart` etc \(even if it seems a little odd at first\).
 - Event handlers have to be explicitly bound to the class instance if other class methods like `this.setState()` are accessed. **Public Class Properties** and **Arrow Functions** are the more elegant ways to do this.
-- Avoid defining your own events with `addEventListener()`API. If at all necessary, do not forget to remove the event when unmounting your component with`removeEventListener()`
-- `SyntheticEvent`objects are „nullified“. Beware of using callback functions outside of the event handler. The event object might not exist anymore at the time of calling the callback.
+- Avoid defining your own events with `addEventListener()` API. If at all necessary, do not forget to remove the event when unmounting your component with `removeEventListener()`.
+- `SyntheticEvent` objects are „nullified“. Beware of using callback functions outside of the event handler. The event object might not exist anymore at the time of calling the callback.
 - `event.persist()` can force React to prevent resetting the event object to `null`.
   {% endhint %}
