@@ -540,7 +540,7 @@ As an aside: Similar to the `useState()` Hook, the `useReducer()` Hook will not 
 const memoizedFunction = useCallback(callbackFunction, dependencyArray);
 ```
 
-the `useCallback()` hook can be used to optimize the performance of an application. It receives a function and then creates a **unique identity** of that function, which will remain active until the **dependencies** of the hook itself change.
+The `useCallback()` Hook can be used to optimize the performance of an application. It receives a function and then creates a **unique identity** of that function, which will remain active until the **dependencies** of the Hook itself change.
 
 This is important as we need to provide the same reference to a function, when dealing with `PureComponents`, when functions implement their own `shouldComponentUpdate()` method or if they are wrapped by `React.memo()`.
 
@@ -582,11 +582,11 @@ const Form = () => {
 ReactDOM.render(<Form />, document.getElementById('root'));
 ```
 
-We've defined two components here: `FancyInput` and `Form`. The `Form` component renders a `FancyInput` component and not only passes it a `name` attribute but also a function. It will change the state of the `Form` component whenever changes are made to the input field and subsequently trigger a re-render.
+We have defined two components here: `FancyInput` and `Form`. The `Form` component renders a `FancyInput` component and not only passes it a `name` attribute but also a function. It will change the state of the `Form` component whenever changes are made to the input field and subsequently trigger a re-render.
 
-The `changeHandler` function is created in the **form component** and thus is generated fresh with every render, meaning **the reference to the function changes**. We are passing the same function but not an identical one.
+The `changeHandler` function is created in the **form component** and is thus generated fresh with every render, meaning **the reference to the function changes**. We are passing the same function but not an identical one.
 
-Thus, we can't make use of the `React.memo()` optimization mechanism in `FancyInput.` `React.memo()` checks **before** each re-render of a component if its **props** changed compared to the previous render and will trigger a re-render if this is the case. As the `changeHandler` function is generated from scratch every time the `Form` component renders, this condition will always be true and the `FancyInput` will always re-render too.
+Thus, we cannot make use of the `React.memo()` optimization mechanism in `FancyInput.` `React.memo()` checks **before** each re-render of a component if its **props** changed compared to the previous render and will trigger a re-render if this is the case. As the `changeHandler` function is generated from scratch every time the `Form` component renders, this condition will always be true and the `FancyInput` will always re-render too.
 
 We can use `useCallback()` to combat this. By wrapping our `changeHandler()` function in this hook, React can create a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
 
@@ -608,7 +608,7 @@ We can now use the the optimization techniques of `React.memo()` \(or in Class c
 If the function depends on values which can change in the lifespan of the component, we can put these in the **dependency array** \(as was the case in `useEffect()`\) as the second parameter. React will then create a new function with a new reference, if one of the dependencies changes.
 
 {% hint style="info" %}
-As was the case in`useEffect()` hook, the `exhaustive-deps` rule of the`eslint-plugin-react-hooks` can help us to configure the **Dependency Arrays**.
+As was the case in the `useEffect()` Hook, the `exhaustive-deps` rule of the`eslint-plugin-react-hooks` can help us to configure **Dependency Arrays**.
 {% endhint %}
 
 ## useMemo
@@ -617,7 +617,7 @@ As was the case in`useEffect()` hook, the `exhaustive-deps` rule of the`eslint-p
 const memoizedValue = useMemo(valueGetterFunction, dependencyArray);
 ```
 
-The other Hook that's useful for hardcore **performance optimization** is the `useMemo()` hook. It works similarly to the `useCallback()` hook, however it does not provide a unique identity for the function going in, but for the return value from the function which has been passed into the `useMemo()` hook.
+The other Hook that's useful for hardcore **performance optimization** is the `useMemo()` Hook. It works similarly to the `useCallback()` Hook, however it does not provide a unique identity for the function going in, but for the return value from the function which has been passed into the `useMemo()` Hook.
 
 So this snippet of code:
 
@@ -685,7 +685,7 @@ The `FibonacciNumber` component will then calculate the corresponding Fibonacci 
 
 Currently, the calculation will happen **each** time **even if the number is already present** in the array. If I entered 40, I would have to wait 3 seconds to get a result. If I entered 40 again, I would need to wait 3 seconds again \(on top of the previous 3 seconds\) as the value is calculated in both components again.
 
-We can `useMemo()` to deal with such situations more efficiently. By changing the following line from
+We can use `useMemo()` to deal with such situations more efficiently. By changing the following line from
 
 ```javascript
 const result = fibonacci(value);
@@ -699,9 +699,9 @@ const result = useMemo(() => fibonacci(value), [value]);
 
 ... we have created a _memoized_ value.
 
-React will calculate this value during the **first render**, **remember** the value and only re-calculates if the value of the `value` prop changes for this component. If the value or the **dependencies** do not change between the two renders, React will use the value of the previous calculation without actually performing the computation.
+React will calculate this value during the **first render**, **remember** the value and will only re-calculate if the value of the `value` prop changes for this component. If the value or the **dependencies** do not change between the two renders, React will use the value of the previous calculation without actually performing the computation.
 
-**But be careful**: This is all happening due to a **single** call of the `useMemo()` hook. If I called the same function twice in two different `useMemo()` hooks, the calculation would still be performed twice even if both functions use the same parameters. The second hook will **not** use the result of the previous calculation.
+**But be careful**: This is all happening due to a **single** call of the `useMemo()` Hook. If I called the same function twice in two different `useMemo()` Hooks, the calculation would still be performed twice even if both functions use the same parameters. The second Hook will **not** use the result of the previous calculation.
 
 ## useRef
 
@@ -709,7 +709,7 @@ React will calculate this value during the **first render**, **remember** the va
 const ref = useRef(initialValue);
 ```
 
-`useRef()` is used to create **Refs** by using a dedicated hook.
+`useRef()` is used to create **Refs** by using a dedicated Hook.
 
 ```jsx
 import React, { useEffect, useRef } from 'react';
@@ -727,17 +727,17 @@ function App() {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-But we're not doing this hook enough justice: **refs** in **function components** also serve a different purpose: they allow us to create a **mutable reference** which will persist for the entire lifespan of the component \(meaning until it unmounts\). It can be compared to performing similar tasks as instance variables in class components.
+We are not usually doing this Hook enough justice: **refs** in **function components** also serve a different purpose: they allow us to create a **mutable reference** which will persist for the entire lifespan of the component \(meaning until it unmounts\). It can be compared to performing similar tasks as instance variables in class components.
 
-`useRef()` takes in an optional initial value and returns an object with a `current` property which can then be accessed within the **function component**. This access is not limited to read access but also allows write access. If we wanted to provide data whose changes would not trigger a re-render but whose reference would stay the same between two rendering cycles, we can use the `useRef()` hook.
+`useRef()` takes in an optional initial value and returns an object with a `current` property which can then be accessed within the **function component**. This access is not limited to read access but also allows write access. If we wanted to provide data whose changes would not trigger a re-render but whose reference would stay the same between two rendering cycles, we can use the `useRef()` Hook.
 
 ## useLayoutEffect
 
-I've briefly mentioned `useLayoutEffect()` when I presented `useEffect().` It follows a similar pattern as the `useEffect()` hook but differs in the timing of its execution and its synchronous nature.
+I have briefly mentioned `useLayoutEffect()` when I presented `useEffect().` It follows a similar pattern as the `useEffect()` Hook but differs in the timing of its execution and its synchronous nature.
 
 While `useEffect()` is executed with a little bit of delay **after** the **layout and paint** phase of the browser, `useLayoutEffect()` is executed **after layout** but **before paint**. This difference in timing allows `useLayoutEffect()` to read the current layout from the DOM and change it **before** it is being displayed in the browser.
 
-This kind of behavior is similar to what was previously achieved by `componentDidMount()` or `componentDidUpdate()` in class components. Due to performance reasons however, it is advisable to use `useEffect()` in most cases and only use `useLayoutEffect()` if you know exactly what you are doing. `useLayoutEffect()` can also help if you are struggling to migrate **class components** to **function components** due to the different timings of the effects.
+This kind of behavior is similar to what was previously achieved by `componentDidMount()` or `componentDidUpdate()` in class components. Due to performance reasons however, it is advisable to use `useEffect()` in most cases and only use `useLayoutEffect()` if we know exactly what we are doing. `useLayoutEffect()` can also help if we are struggling to migrate **class components** to **function components** due to the different timings of the effects.
 
 But be careful: neither `useEffect()` nor `useLayoutEffect()` will be executed server-side. While this does not pose a problem for `useEffect()` as it is only executed after the layout and painting phase of the browser, `useLayoutEffect()` might lead to differences in the server-side rendered markup compared to the initial client-side render. React will usually inform us of these differences and create a warning in the console. In these cases, `useEffect()` should be used instead or components using `useLayoutEffect()` should be mounted after the browser's paint phase.
 
@@ -758,7 +758,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-In this example, the component using the `useLayoutEffect()` is only registered after the component is mounted. We achieve this by checking for the `mountLayoutComp` state after the first paint phase.
+In this example, the component using `useLayoutEffect()` is only registered after the component is mounted. We achieve this by checking for the `mountLayoutComp` state after the first paint phase.
 
 ## useDebugValue
 
@@ -766,7 +766,7 @@ In this example, the component using the `useLayoutEffect()` is only registered 
 useDebugValue(value);
 ```
 
-This hook \(`useDebugValue()`\) is purely for optimizing the developer's debugging experience. It does not create any real value in an application for the **end user**. `useDebugValue()` allows us to give custom hooks a label which we can then inspect in the **React Dev tools**:
+This Hook \(`useDebugValue()`\) is purely for optimizing the developer's debugging experience. It does not create any real value in an application for the **end user**. `useDebugValue()` allows us to give custom hooks a label which we can then inspect in the **React Dev tools**:
 
 ```jsx
 import React, { useDebugValue, useEffect } from 'react';
@@ -781,7 +781,7 @@ const usePageTitle = (title) => {
 export default usePageTitle;
 ```
 
-In this example, we have implemented a **hook** to change the page title in the browser. In the Dev tools, we can see the following:
+In this example, we have implemented a **Hook** to change the page title in the browser. In the Dev tools, we can see the following:
 
 ![The debugValue appearing next to the name of the hook](../.gitbook/assets/usedebugvalue.png)
 
@@ -789,13 +789,13 @@ In this example, we have implemented a **hook** to change the page title in the 
 
 If you recall, I have just mentioned that `useDebugValue()` does not have any real positive implication for the end user. However, this does not mean that it does not influence the user experience of the user interface. Slow calculations to display the value of the debug value can indeed decrease the rendering performance of an application.
 
-As this is not really desirable, it is possible to pass a second parameter to the `useDebugValue()` hook: a formatting function. The formatting of the value is only executed, once the value is actually inspected in the Dev tools. Declaring the hook would look like this:
+As this is not really desirable, it is possible to pass a second parameter to the `useDebugValue()` Hook: a formatting function. The formatting of the value is only executed, once the value is actually inspected in the Dev tools. Declaring the Hook could look like this:
 
 ```javascript
 useDebugValue(value, (value) => formattedValue);
 ```
 
-The hook is passed a **debug value** as its first argument just as we have provided before. However, as the second argument it will not receive a function that will executed the formatting of the debug value. This function will receive the **value** from the **hook** and will return the formatted value.
+The Hook is passed a **debug value** as its first argument just as we have provided before. However, as the second argument it will not receive a function that will executed the formatting of the debug value. This function will receive the **value** from the **Hook** and will return the formatted value.
 
 If you are looking for a clear if unrealistic example, I can provide another example using the Fibonacci function we have already seen in the `useMemo()` example. We are going to display the debug value once with, and once without the formatting function and inspect how the time to display the app changes:
 
@@ -822,7 +822,7 @@ function App() {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-Using `useDebugValue()` without the formatting function does significantly increase the loading time of the app which of course affects the user experience for the end user.
+Using `useDebugValue()` without the formatting function does significantly increase the loading time of the app which affects the user experience for the end user.
 
 ## useImperativeHandle
 
@@ -830,13 +830,13 @@ Using `useDebugValue()` without the formatting function does significantly incre
 useImperativeHandle(ref, createHandle, [deps]);
 ```
 
-I will be entirely honest with you all: I found it extremely difficult to construct a use case in which `useImperativeHandle()` will pose a useful solution. Frustrated, I took to Twitter and crafted a post to ask for help. I was lucky enough to get an answer by Dan Abramov, core developer in the React team at Facebook, who informed me that I must be doing something right. This hook should not be used and has a long name to dissuade people from using it. For matters of completion and for understanding why this hook exists, I want to present it to you anyway.
+I will be entirely honest with you all: I found it extremely difficult to construct a use case in which `useImperativeHandle()` will pose a useful solution to an encountered problem. Frustrated, I took to Twitter and crafted a post to ask for help. I was lucky enough to get an answer by Dan Abramov, core developer in the React team at Facebook, who informed me that I must be doing something right. This Hook should not be used and has a long name to dissuade people from using it. For matters of completion and for understanding why this Hook exists, I want to present it to you anyway.
 
 ![Dan Abramov advising me that useImperativeHandle should not really be used in the wild ](../.gitbook/assets/useimperativehandle.png)
 
-I've spent a lot of time thinking about use cases worth of using the `useImperativeHandle()`. In most cases you should indeed explore other ways to express logic without the use of this hook. The official React documentation also discourages anyone from using this hook. As the name might suggest, this hook caters to imperative code and does not work well with the mostly declarative style that React openly advocates. However, there are situations in which one might need to work with classes and objects, especially when working with external libraries.
+I have spent a lot of time thinking about use cases worth of using the `useImperativeHandle()`. In most cases you should indeed explore other ways to express logic without the use of this Hook. The official React documentation also discourages anyone from using this Hook. As the name might suggest, it caters to imperative code and does not work well with the mostly declarative style that React openly advocates. However, there are situations in which one might need to work with classes and objects, especially when working with external libraries.
 
-But be careful, examine the following example which illustrates the use of this **hook**. We have created a `FancyForm` component which displays its **children** and offers a couple of methods which, can be called in the parent component consuming them. In this example, we have implemented a method called `focusFirstInput` to be able to focus onto the first input in our `FancyForm` form. We furthermore extend the form with another method called `getFormValues` which allows us to return our data that we entered in JSON format. The form can be sent off programmatically and reset by passing the forwarded **forwardRef** the imperative methods `reset()` and `submit()` from the HTML `<form>` element.
+But be careful, examine the following example which illustrates the use of this **Hook**. We have created a `FancyForm` component which displays its **children** and offers a couple of methods which can be called in the parent component consuming them. In this example, we have implemented a method called `focusFirstInput` to be able to focus onto the first input in our `FancyForm` form. We furthermore extend the form with another method called `getFormValues` which allows us to return our data that we entered in JSON format. The form can be sent off programmatically and reset by passing the forwarded **forwardRef** the imperative methods `reset()` and `submit()` from the HTML `<form>` element.
 
 ```jsx
 import React, { useImperativeHandle, useEffect, useRef } from 'react';
