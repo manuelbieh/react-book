@@ -163,7 +163,7 @@ You can active it by setting `"exhaustive-deps": "warn"` in the`rules` block of 
 
 The **effect function** is called **asynchronously** with a little bit of delay after the **layout and paint phase** of the browser. For most side effects this should be sufficient. You might run into situations though in which it is necessary to to **synchronously** run side effects. For example, you might need to perform DOM mutations and a delay in execution would lead to an inconsistent user interface or jarring content on the screen.
 
-To deal with these problems, React introduced the `useLayoutEffect()` Hook. It works almost identical to the `useEffect()` hook: it expects an **effect function** which can also return a **cleanup function** and also contains a dependency array. This dependency array is identical to that of the regular `useEffect()` Hook. The difference in the two Hooks is that the `useLayoutEffect()` Hook is executed synchronously and run just after all DOM mutations have finished, as opposed to asynchronously as is the case in the regular `useEffect()` Hook.
+To deal with these problems, React introduced the `useLayoutEffect()` Hook. It works almost identical to the `useEffect()` Hook: it expects an **effect function** which can also return a **cleanup function** and also contains a dependency array. This dependency array is identical to that of the regular `useEffect()` Hook. The difference in the two Hooks is that the `useLayoutEffect()` Hook is executed synchronously and run just after all DOM mutations have finished, as opposed to asynchronously as is the case in the regular `useEffect()` Hook.
 
 `useLayoutEffect()` can read from the DOM and can also synchronously modify it **before** the browser will display these changes in its **paint phase**.
 
@@ -588,7 +588,7 @@ The `changeHandler` function is created in the **form component** and is thus ge
 
 Thus, we cannot make use of the `React.memo()` optimization mechanism in `FancyInput.` `React.memo()` checks **before** each re-render of a component if its **props** changed compared to the previous render and will trigger a re-render if this is the case. As the `changeHandler` function is generated from scratch every time the `Form` component renders, this condition will always be true and the `FancyInput` will always re-render too.
 
-We can use `useCallback()` to combat this. By wrapping our `changeHandler()` function in this hook, React can create a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
+We can use `useCallback()` to combat this. By wrapping our `changeHandler()` function in this Hook, React can create a **unique** and **stable** reference and can safely return it so it can be used in the `FancyInput` component without triggering unnecessary re-renders:
 
 ```jsx
 const changeHandler = useCallback((e) => {
@@ -766,7 +766,7 @@ In this example, the component using `useLayoutEffect()` is only registered afte
 useDebugValue(value);
 ```
 
-This Hook \(`useDebugValue()`\) is purely for optimizing the developer's debugging experience. It does not create any real value in an application for the **end user**. `useDebugValue()` allows us to give custom hooks a label which we can then inspect in the **React Dev tools**:
+This Hook \(`useDebugValue()`\) is purely for optimizing the developer's debugging experience. It does not create any real value in an application for the **end user**. `useDebugValue()` allows us to give custom Hooks a label which we can then inspect in the **React Dev tools**:
 
 ```jsx
 import React, { useDebugValue, useEffect } from 'react';
@@ -783,7 +783,7 @@ export default usePageTitle;
 
 In this example, we have implemented a **Hook** to change the page title in the browser. In the Dev tools, we can see the following:
 
-![The debugValue appearing next to the name of the hook](../.gitbook/assets/usedebugvalue.png)
+![The debugValue appearing next to the name of the Hook](../.gitbook/assets/usedebugvalue.png)
 
 ### Delayed formatting of the debug value
 
