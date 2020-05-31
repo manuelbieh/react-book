@@ -4,9 +4,9 @@ For a long time, the React **Context API** has been treated as somewhat of an af
 
 The Context API has been designed to distribute data from a component to so-called data _consumers_ without explicitly passing props through the whole component tree. This is immensely useful for language settings as well as a global styling schema \("Theme"\).
 
-The Context API consists of two main actors: The **Context Provider** as well as the **Context Consumer**.The **Provider** acts as a central instance for the corresponding data structure whereas the **Consumer** can _consume_ this data at any point in the app. It forms some sort of "semi-global" data instance which is only valid in certain parts of the component hierarchy.
+The Context API consists of two main actors: The **Context Provider** as well as the **Context Consumer**. The **Provider** acts as a central instance for the corresponding data structure whereas the **Consumer** can _consume_ this data at any point in the app. It forms some sort of "semi-global" data instance which is only valid in certain parts of the component hierarchy.
 
-This does not mean that the data structure cannot be complex. It is not limited to Strings or Arrays but can consist of complex data. An application can have an unlimited amount of Contexts \(for example one for the user-chosen language, one for the styling schema etc.\) and Providers can be reused with different values. But let's take it one step at a time.
+This does not mean that the data structure cannot be complex. It is not limited to strings or arrays but can consist of complex data. An application can have an unlimited amount of Contexts \(for example one for the user-chosen language, one for the styling schema etc.\) and Providers can be reused with different values. But let's take it one step at a time.
 
 ## API
 
@@ -16,7 +16,7 @@ In order to create a new **Context**, React provides the `createContext` method:
 const LanguageContext = React.createContext(defaultValue);
 ```
 
-We've just created a new **Context** using this line of code. The Context now consists of a **Provider** and a **Consumer** component: `LanguageContext.Provider` as well as `LanguageContext.Consumer`.
+We have just created a new **Context** using this line of code. The Context now consists of a **Provider** and a **Consumer** component: `LanguageContext.Provider` as well as `LanguageContext.Consumer`.
 
 The **Context** can now be used in the application by wrapping the contents of the tree within a Provider:
 
@@ -42,7 +42,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('#root'));
 ```
 
-The `SelectedLanguage`component can now be used at any point within the application, and the value made available by the **Provider**. If the value within the Provider changes, all **Consumer components** encompassed within the Provider will render again using the updated value.
+The `SelectedLanguage` component can now be used at any point within the application. If the value within the Provider changes, all **Consumer components** encompassed within the Provider will render again using the updated value.
 
 A complete if a little artificial example is this:
 
@@ -78,7 +78,7 @@ If the `value` within the Provider component changes, all Consumer components wi
 
 If we extend the example a little bit, we can easily add a little more structure to make a simple multilingual service.
 
-The following example contains an object with translations to which we pass a rather complex object with multiple data types \(consisting of an array, a string, a function to change the language as well as object with the original translations:
+The following example contains an object with translations to which we pass a rather complex object with multiple data types \(consisting of an array, a string, a function to change the language as well as object with the original translations\):
 
 ```jsx
 import React from 'react';
@@ -184,13 +184,13 @@ First of all, we define an object `defaultLanguageContextValue` which holds the 
 
 The `changeLanguage()` function can only be implemented in the component itself as React cannot control the state \(in this case languages and their translations\) anywhere else other than **inside of a component**. We could save the current language settings inside of a global variable, however React would not re-render the component if something changed in this global variable as this value would neither be state nor props.
 
-The `Localized` component serves as a wrapper component for our newly generated Context. We can save and modify the user's selected language here by changing the state accordingly. The `defaultLanguageContextValue` object is saved in the state of the component and furthermore the `changeLanguage()` method is implemented here. This function receives a language \(`de` or `en`\) and modifies the state accordingly, and then it fetches the translations for the chosen language from the `translationStore` object and writes it to the state as new `translations`. If the user changes their language setting from German \(default\) to English, the function overrides all German translations currently in state with the English translations. By calling `this.setState()` a re-render is triggered and all Context Consumers within the component tree will be rendered with the updated value \(which we pass to the Context Provider through the render\(\) method in the component\).
+The `Localized` component serves as a wrapper component for our newly generated Context. We can save and modify the user's selected language here by changing the state accordingly. The `defaultLanguageContextValue` object is saved in the state of the component and the `changeLanguage()` method is also implemented here. This function receives a language \(`de` or `en`\) and modifies the state accordingly, and then it fetches the translations for the chosen language from the `translationStore` object and writes it to the state as new `translations`. If the user changes their language setting from German \(default\) to English, the function overrides all German translations currently in state with the English translations. By calling `this.setState()` a re-render is triggered and all Context Consumers within the component tree will be rendered with the updated value \(which we pass to the Context Provider through the render\(\) method in the component\).
 
-If this all sounds a little complicated so far, don't worry, it will become more intuitive once it is used in practice. I strongly advise you to try the above example yourself and play with the code.
+If this all sounds a little complicated so far, do not worry, it will become more intuitive once it is used in practice. I strongly advise you to try the above example yourself and play with the code.
 
-However, there's a little gotcha in the above example: usually the state of a class component is defined first and only then properties and methods of this class will follow. In this example however, we didn't follow this convention and implemented the `changeLanguage()` method first. Why? By defining `changeLanguage()` first, we ensure that `this.changeLanguage` will not be `undefined`. Only then, we construct the `state` property of our class.
+However, there is a little gotcha in the above example: usually the state of a class component is defined first and only then properties and methods of this class will follow. In this example however, we did not follow this convention and implemented the `changeLanguage()` method first. Why? By defining `changeLanguage()` first, we ensure that `this.changeLanguage` will not be `undefined`. Only then, we construct the `state` property of our class.
 
-The code snippet is still relatively complex — and unnecessarily complicated — too. We built our own component for both the headline and the greeting, to provide it with access to a Context Consumer which has access to the object containing the translations. However, we can optimize the code by constructing a generic component with which we can directly access the translations in the the `translations` object. This component will be called `Translated` and receives a single prop: the property which we want to access in the `translations` object. In our example, this could either be `greeting` or `headline`.
+The code snippet is still relatively complex — and unnecessarily complicated — too. We built our own component for both the headline and the greeting, to provide it with access to a Context Consumer which has access to the object containing the translations. However, we can optimize the code by constructing a generic component with which we can directly access the translations in the `translations` object. This component will be called `Translated` and receives a single prop: the property which we want to access in the `translations` object. In our example, this could either be `greeting` or `headline`.
 
 ```jsx
 const Translated = ({ translationKey }) => (
@@ -252,11 +252,11 @@ Although it does not make sense to nest the _same_ **Context Providers** within 
 
 ## Abbreviation: contextType
 
-While using Class components, we can employ a trick which allows us to avoid building another Consumer component furthermore bloating our component tree.
+While using Class components, we can employ a trick which allows us to avoid building another Consumer component bloating our component tree further.
 
 In order to do this, we can use `contextType`: it can be assigned to a class component in the form of a static property. The Context value can then be accessed within the component via `this.context`. The value of the `contextType` property is created by `React.createContext()` which you need to call beforehand.
 
-But be careful: It is only possible to assign **a single Context type** to a class. If we want to access two or more Contexts, we have to wrap the respective JSX in a Consumer component. By using _Public Class Fields Syntax_ from ES2015+, it is sufficient to define a static class property `contextType` and assigning it a Context.
+But be careful: It is only possible to assign **a single Context type** to a class. If we want to access two or more Contexts, we have to wrap the respective JSX in a Consumer component. By using _Public Class Fields Syntax_ from ES2015+, it is sufficient to define a static class property `contextType` and to assign it a Context.
 
 If applied to our previous `Translated` component, the result would be:
 
@@ -269,7 +269,7 @@ class Translated extends React.Component {
 }
 ```
 
-The value of the current `LanguageContext` is assigned to the static `contextType` property of the component \(which is no longer a Functional component but a Class component\). Its value can be read by accessing `this.context`.
+The value of the current `LanguageContext` is assigned to the static `contextType` property of the component \(which is no longer a Function component but a Class component\). Its value can be read by accessing `this.context`.
 
 Without using Public Class Fields Syntax \(which I strongly encouraged in the previous chapters\), the above code would look like the following:
 
@@ -283,13 +283,13 @@ class Translated extends React.Component {
 Translated.contextType = LanguageContext;
 ```
 
-The `contextType` would be defined outside of the component and no longer inside of it. In the end, it all boils down to personal taste, and does not have any real implications. We're only using another form of syntax which is only allowed in later versions of ECMAScript or provided by Babel via transpiling \(by using the babel plugin `@babel/plugin-proposal-class-properties`\).
+The `contextType` would be defined outside of the component and no longer inside of it. In the end, it all boils down to personal taste, and does not have any real implications. We are only using another form of syntax which is only allowed in later versions of ECMAScript or provided by Babel via transpiling \(by using the babel plugin `@babel/plugin-proposal-class-properties`\).
 
 ## Performance Gotchas
 
 React massively optimizes **Context** under the hood in order to avoid unnecessary re-renders of components or avoid lengthy component hierarchies. Comparing the old value of the Context Provider with the new one, **Consumer components** are only re-rendered if the value in the **Context Provider** has actually changed.
 
-While this sounds easy for a change, it does create a little gotcha which we need to look out for. It concerns the Context Provider whose value is recreated on-the-fly if we use it within the `render()` method. Thus, it is recommended to create the value of the Context outside of the `render()` method and pass a **reference** to the value instead of a **newly created value**.
+While this sounds easy for a change, it does create a little gotcha which we need to look out for. It concerns the Context Provider whose value is recreated on-the-fly if we use it within the `render()` method. It is recommended to create the value of the Context outside of the `render()` method and pass a **reference** to the value instead of a **newly created value**.
 
 Here is an example which you should NOT recreate:
 
@@ -309,7 +309,7 @@ class App extends React.Component {
 }
 ```
 
-We're creating a new object `{color: this.state.color}` with each call of the `render()` method. As React only checks if the reference of the `value` in the current `render()` is the same as the reference in the previous `render()` call \(which is never the case as a new object is created on the fly each time\), all Consumer components would re-render.
+We are creating a new object `{color: this.state.color}` with each call of the `render()` method. As React only checks if the reference of the `value` in the current `render()` is the same as the reference in the previous `render()` call \(which is never the case as a new object is created on the fly each time\), all Consumer components would re-render.
 
 However, we can transform the above example to avoid this situation and make sure that React's performance algorithm can get to work:
 
