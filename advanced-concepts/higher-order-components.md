@@ -1,6 +1,6 @@
 # Higher Order Components
 
-**Higher Order Components** \(or **HOC** or **HOCs** for short\) were, and still are, a central concept in React. They allow you to implement components with reusable logic and are loosely tied to **Higher Order Functions** from functional programming. These kind of functions take a function as a parameter and return another function. In terms of React, the principle is applied to components. **Higher Order Components** derive their name from those **Higher Order Functions**.
+**Higher Order Components** \(or **HOC** or **HOCs** for short\) were, and still are, a central concept in React. They allow you to implement components with reusable logic and are loosely tied to **Higher Order Functions** from functional programming. These kind of functions take a function as a parameter and return another function. In terms of React, this principle is applied to components. **Higher Order Components** derive their name from those **Higher Order Functions**.
 
 Let us look at an example to illustrate this concept better:
 
@@ -20,7 +20,7 @@ const withFormatting = (WrappedComponent) => {
 };
 ```
 
-We've defined a function called `withFormatting` that takes in a React component. The function will return a new React component which in turn renders the component that was passed into the function and equips it with the props `bold` and `italic`. The component can now access these props:
+We have defined a function called `withFormatting` that takes in a React component. The function will return a new React component which in turn renders the component that was passed into the function and equips it with the props `bold` and `italic`. The component can now access these props:
 
 ```jsx
 const FormattedComponent = withFormatting(({ bold, italic }) => (
@@ -30,13 +30,13 @@ const FormattedComponent = withFormatting(({ bold, italic }) => (
 ));
 ```
 
-Typically, **Higher Order Components** can be used to encapsulate logic. They relate closely to the concept of **smart** and **dumb** components. Smart components \(which also encompass **Higher Order Components**\) are used to display business logic, deal with API communication or behavioral logic. _Dumb components_ in contrast mostly get passed static props and keep logic to a minimum which is only used to for display-logic. For example, it might decide whether to show a profile image or, if it is not present, show a placeholder image instead. Sometimes, we also refer to **Container Components** \(for _Smart_ components\) and **Layout Components** \(for _Dumb_ components\).
+Typically, **Higher Order Components** can be used to encapsulate logic. They relate closely to the concept of **smart** and **dumb** components. Smart components \(which also encompass **Higher Order Components**\) are used to display business logic, deal with API communication or behavioral logic. _Dumb components_ in contrast mostly get passed static props and keep logic to a minimum (which is only used to for display-logic). For example, it might decide whether to show a profile image or, if it is not present, show a placeholder image instead. Sometimes, we also refer to **Container Components** \(for _Smart_ components\) and **Layout Components** \(for _Dumb_ components\).
 
-But why do we categorize components this way? This strict divide into business logic and display logic enables component based development. It allows us to create layout components which do not know of possible API connections and only display data which is passed to them, no matter where they come from. It also enables the business logic components to only concern themselves with business logic without caring about how the data is displayed in the end.
+But why do we categorize components this way? This strict divide into business logic and display logic enables component based development. It allows us to create layout components which do not know of possible API connections and only display data which is passed to them, no matter where it comes from. It also enables the business logic components to only concern themselves with business logic without caring about how the data is displayed in the end.
 
-Assume we want to switch between a **list** and **map** view in a user interface. A **container component** will be in charge of gathering the data which is needed for the user and will pass them to the configurable **layout component**.As long as both components keep to the interface the developer has set up \(think **PropTypes**\), both components are easily interchangeable and can be tested and developed independently.
+Assume we want to switch between a **list** and **map** view in a user interface. A **container component** will be in charge of gathering the data which is needed for the user and will pass them to the configurable **layout component**. As long as both components keep to the interface the developer has set up \(think **PropTypes**\), both components are easily interchangeable and can be tested and developed independently.
 
-But enough of the theory. Let us look at an example. Let's load a list of the 10 biggest cryptocurrencies and their current price. In order to obtain the data from the Coinmarketcap API, we create a **Higher Order Component** which loads the data and passes it to the layout component:
+But enough of the theory. Let's look at an example. We are going to load a list of the 10 biggest cryptocurrencies and their current price. To obtain the data from the Coinmarketcap API, we create a **Higher Order Component** which loads the data and passes it to the layout component:
 
 ```jsx
 const withCryptoPrices = (WrappedComponent) => {
@@ -90,9 +90,9 @@ const withCryptoPrices = (WrappedComponent) => {
 };
 ```
 
-Et voila! We've written an **HOC** to obtain the data of the crypto prices from coinmarketcap.com. But the **Higher Order Component** itself is not enough to make this work: we also need to define a layout component to which we delegate the task of displaying the data.
+Et voila! We have written an **HOC** to obtain the data of the crypto prices from coinmarketcap.com. But the **Higher Order Component** itself is not enough to make this work: we also need to define a layout component to which we delegate the task of displaying the data.
 
-In order to do that, we define a generic `PriceTable` component which does not know about which data exactly it displays: it could be current yoghurt prices from the local supermarket or cryptocurrency prices from a stock market. Thus, we've given it a very generic name, `PriceTable`:
+In order to do that, we define a generic `PriceTable` component which does not know about which data exactly it displays: it could be current yoghurt prices from the local supermarket or cryptocurrency prices from a stock market. Thus, we have given it a very generic name, `PriceTable`:
 
 ```jsx
 const PriceTable = ({ isLoading, items, loadData }) => {
