@@ -22,7 +22,7 @@ Let's have a look at a very minimalist setup to get started with React:
 </html>
 ```
 
-We build up the bare bones set up for a regular HTML document and load in **React** and **ReactDOM** in their latest _stable_ version from unpkg-CDN. We can now use React and ReactDOM as a global variable in the window object as `window.React` and `window.ReactDOM`. Apart from that we only see a an empty page here with an empty `<div id="root"></div>`. This div is going to be used as our **mount node** to show our first React component. 
+We build up the bare bones set up for a regular HTML document and load in **React** and **ReactDOM** in their latest _stable_ version from unpkg-CDN. We can now use React and ReactDOM as a global variable in the window object as `window.React` and `window.ReactDOM`. Apart from that we only see an empty page here with an empty `<div id="root"></div>`. This div is going to be used as our **mount node** to show our first React component. 
 
 {% hint style="info" %}
 If we deal with a number of React components, we normally refer to this as an **app**, **web app** or **single page app**. The boundaries of when we call a component an app are fluid though. A few developers talk of an **app** if we only have a single component in our code. A clear definition of this does not exist though.
