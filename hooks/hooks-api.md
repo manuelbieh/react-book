@@ -603,7 +603,7 @@ const changeHandler = useCallback((e) => {
 }, []);
 ```
 
-We can now use the the optimization techniques of `React.memo()` \(or in Class components: `PureComponent`\) without triggering unnecessary renders.
+We can now use the optimization techniques of `React.memo()` \(or in Class components: `PureComponent`\) without triggering unnecessary renders.
 
 If the function depends on values which can change in the lifespan of the component, we can put these in the **dependency array** \(as was the case in `useEffect()`\) as the second parameter. React will then create a new function with a new reference, if one of the dependencies changes.
 
