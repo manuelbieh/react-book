@@ -30,7 +30,7 @@ When the update function is called, React ensures that the function always has t
 
 `useState()` will return an **array** to us of which the first **value** always denotes the state and the second value is always a **function** which we use to update said **value**. Due to array destructuring, we are not limited in naming this value and function. However, conventions have developed that follow the pattern of `value / setValue`. For example, `user` and `setUser`. But of course you could also go for something along the lines of this: `changeUser` and `updateUserState`.
 
-The mechanism of actually updating the state is very similar to that of `this.setState()` which we already encountered in the chapter on Class components. The function can either receive a **new value** which then replaces the current old value or we can pass an **updater function** to the the function. The updater function receives the previous value and uses the **return value** from the function as its new state.
+The mechanism of actually updating the state is very similar to that of `this.setState()` which we already encountered in the chapter on Class components. The function can either receive a **new value** which then replaces the current old value or we can pass an **updater function** to the function. The updater function receives the previous value and uses the **return value** from the function as its new state.
 
 But be careful: in contrast to `this.setState()`, objects are **not merged** with their previous state but the old state is completely **replaced** by the new state.
 
