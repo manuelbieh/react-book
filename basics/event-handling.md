@@ -81,7 +81,7 @@ Probably the most trivial solution is to _bind_ the method inside of the `render
 <button onClick={this.increase.bind(this)}>+1</button>
 ```
 
-The method is now invoked in the **scope of the component instance** and our counter starts to increment the count as intended. While you might come across this method quite a few times, it is not entirely recommended and has one obvious advantage. With every call of the function, a new function is created "on-the-fly" which is different to the one before. A simple check using `shouldComponentUpdate()` to compare `this.props.increase === prevProps.increase` would yield `false` every single time and possibly even lead to re-render of the the component. Even if the function has not changed at all. Therefore, using this method is actually considered a **performance bottleneck** and should thus be avoided.
+The method is now invoked in the **scope of the component instance** and our counter starts to increment the count as intended. While you might come across this method quite a few times, it is not entirely recommended and has one obvious advantage. With every call of the function, a new function is created "on-the-fly" which is different to the one before. A simple check using `shouldComponentUpdate()` to compare `this.props.increase === prevProps.increase` would yield `false` every single time and possibly even lead to re-render of the component. Even if the function has not changed at all. Therefore, using this method is actually considered a **performance bottleneck** and should thus be avoided.
 
 #### Method binding in the constructor
 
