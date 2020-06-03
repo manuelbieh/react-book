@@ -61,7 +61,7 @@ class EventOverview extends React.Component {
 }
 ​
 ReactDOM.render(
-  <EventOverview date={new Date()} title="Learning React" />,
+  <EventOverview date={new Date()} title="React Deep-Dive" />,
   document.getElementById('root')
 );
 ```
@@ -226,7 +226,7 @@ class EventOverview extends React.Component<PropsT> {
 }
 
 ReactDOM.render(
-  <EventOverview date={new Date()} title="Learning React" />,
+  <EventOverview date={new Date()} title="React Deep-Dive" />,
   document.getElementById('root')
 );
 ```
