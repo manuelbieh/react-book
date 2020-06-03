@@ -125,7 +125,7 @@ console.log(myArray);
 
 ```
 const myArray = [];
-myArray = Array.concat(1, 2);
+myArray = myArray.concat(1, 2);
 ```
 
 {% hint style="danger" %}

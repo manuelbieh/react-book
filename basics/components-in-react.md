@@ -525,8 +525,8 @@ Sometimes, it might still be beneficial to derive a new value from some props th
 If I only want to show the value that can be derived from the props that I have passed in as part of the component I can only change the output based on the props:
 
 ```jsx
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 function Example(props) {
   return (
@@ -557,10 +557,10 @@ But how can we actually change props outside of a component? So far, we have onl
 It is best to explain this with yet another example, even if it is a little abstract in this case:
 
 ```jsx
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var renderCounter = 0;
+let renderCounter = 0;
 setInterval(function () {
   renderCounter++;
   renderApp();

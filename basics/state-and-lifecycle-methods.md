@@ -21,6 +21,7 @@ To define a component's initial state we can choose three ways. Two of these are
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
+    super(props);
     this.state = {
       counter: props.counter,
     };
