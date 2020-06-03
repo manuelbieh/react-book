@@ -450,7 +450,7 @@ ReactDOM.render(
 
 The `useReducer()` Hook is used and passed to the `accountReducer` function. In this function, we deal with the three **actions** of **type** `REQUEST_START`, `REQUEST_SUCCESS`, and `REQUEST_ERROR`.
 
-The `initialState` consists of an object with an empty `data` property, an `isFetching` and `isError` flag and a `lastUpdated` property. The flags inform us whether the data has actually loaded or whether an error occurred whilst the `lastUpdated` property will store a timestamp of the last successful request. We can use these later to only use one request per minute or to signal to the user that they might be seeing data but that the interface has not changed for a while.
+The `initialState` consists of an object with an empty `data` property, an `isLoading` and `isError` flag and a `lastUpdated` property. The flags inform us whether the data has actually loaded or whether an error occurred whilst the `lastUpdated` property will store a timestamp of the last successful request. We can use these later to only use one request per minute or to signal to the user that they might be seeing data but that the interface has not changed for a while.
 
 In addition, we use a `useEffect()` Hook to initiate loading the data once the GitHub username in the **props** changes. Once this has happened, we dispatch the `REQUEST_START` **action**. The reducer will then create the new state:
 
