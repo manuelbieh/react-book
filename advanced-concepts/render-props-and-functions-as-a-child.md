@@ -41,7 +41,7 @@ Using this **Function as Children** component, a function in JSX is passed to th
 ```jsx
 <div>
   <p>This text does not know about the Formatter function</p>
-  <Formatter>{({ bold }) => <p>This text is {bold("bold though")}</p>}</Formatter>
+  <Formatter>{({ bold }) => <p>This text {bold("does though")}</p>}</Formatter>
 </div>
 ```
 
@@ -69,23 +69,19 @@ class CryptoPrices extends React.Component {
 
     try {
       const cryptoTicker = await fetch(
-        `https://api.coinmarketcap.com/v2/ticker/?limit=${limit || 10}&convert=EUR`
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&per_page=${limit || 10}`
       );
       const cryptoTickerResponse = await cryptoTicker.json();
 
       this.setState(() => ({
         isLoading: false,
-        items: this.convertResponseToArray(cryptoTickerResponse)
+        items: cryptoTickerResponse
       }));
     } catch (err) {
       this.setState(() => ({
         isLoading: false
       }));
     }
-  };
-
-  convertResponseToArray = (response) => {
-    return Object.entries(response.data).map(([id, item]) => item);
   };
 
   render() {
@@ -107,10 +103,10 @@ class CryptoPrices extends React.Component {
 
 At first glance, the example does not look much different to the one we have introduced in the previous chapter using Higher Order Components. But if you pay attention, you will notice some differences:
 
-- No new component is generated and we can work directly with our current component
-- The `loadData` method can access `this.props` to read the `limit` prop. This can then be used as a parameter in the API call
-- The `render()` method does not return any component that was passed in anymore and calls the `children` function instead which it receives from its own props
-- The `children` function receives the `isLoading` state and returns the items.
+* No new component is generated and we can work directly with our current component
+* The `loadData` method can access `this.props` to read the `limit` prop. This can then be used as a parameter in the API call
+* The `render()` method does not return any component that was passed in anymore and calls the `children` function instead which it receives from its own props
+* The `children` function receives the `isLoading` state and returns the items.
 
 Using this component is similar to that from our previous example, with the exception that we can also pass an optional `limit` prop in this case:
 
@@ -125,7 +121,7 @@ Using this component is similar to that from our previous example, with the exce
         <ul>
           {items.map((item) => (
             <li>
-              {item.name} ({item.symbol}): EUR {item.quotes.EUR.price}
+              {item.name} ({item.symbol}): EUR {item.current_price}
             </li>
           ))}
         </ul>
@@ -155,7 +151,7 @@ We have allowed for a great deal of flexibility in this example and do not expli
 
 But be careful: **Functions as a Child Components have limitiations that Higher Order Components do not have**. The data that is received by a **FaaC** component can also be used **within JSX**. If we wanted to include highly abstract methods in logic components higher up in the component hierarchy, it would not be possible using **FaaCs**.
 
-### Render Props
+## Render Props
 
 But wait — what are **Render Props** and how to they differ from **Function as Children** components?
 
@@ -190,7 +186,7 @@ It is personal preference to a degree. You do not need to give this prop the nam
 
 It is possible to have an arbitrary number of props in such a component. If you were to implement a component which returns a table which includes a table head and a body, both receiving data from the data component, that would be no problem at all.
 
-### Render Props and FaaCs in combination with Higher Order Components
+## Render Props and FaaCs in combination with Higher Order Components
 
 Here is a neat little trick: If you ever need a **Higher Order Component** but you only have a **FaaC** or **Render Prop** component, you can turn these into an HOC like this:
 
@@ -215,3 +211,4 @@ The **Function as a Child** pattern and the **Render-Props** pattern are both us
 
 In contrast to a HOC, they can be easily used within the `render()` method of a component and do not need "linked" with another additional component making them more flexible and readable than **Higher Order Components**.
 {% endhint %}
+

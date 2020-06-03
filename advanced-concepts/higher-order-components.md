@@ -30,13 +30,13 @@ const FormattedComponent = withFormatting(({ bold, italic }) => (
 ));
 ```
 
-Typically, **Higher Order Components** can be used to encapsulate logic. They relate closely to the concept of **smart** and **dumb** components. Smart components \(which also encompass **Higher Order Components**\) are used to display business logic, deal with API communication or behavioral logic. _Dumb components_ in contrast mostly get passed static props and keep logic to a minimum \(which is only used to for display-logic\). For example, it might decide whether to show a profile image or, if it is not present, show a placeholder image instead. Sometimes, we also refer to **Container Components** \(for _Smart_ components\) and **Layout Components** \(for _Dumb_ components\).
+Typically, **Higher Order Components** can be used to encapsulate logic. They relate closely to the concept of **smart** and **dumb** components. Smart components \(which also encompass **Higher Order Components**\) are used to display business logic, deal with API communication or behavioral logic. _Dumb components_ in contrast mostly get passed static props and keep logic to a minimum (which is only used to for display-logic). For example, it might decide whether to show a profile image or, if it is not present, show a placeholder image instead. Sometimes, we also refer to **Container Components** \(for _Smart_ components\) and **Layout Components** \(for _Dumb_ components\).
 
 But why do we categorize components this way? This strict divide into business logic and display logic enables component based development. It allows us to create layout components which do not know of possible API connections and only display data which is passed to them, no matter where it comes from. It also enables the business logic components to only concern themselves with business logic without caring about how the data is displayed in the end.
 
 Assume we want to switch between a **list** and **map** view in a user interface. A **container component** will be in charge of gathering the data which is needed for the user and will pass them to the configurable **layout component**. As long as both components keep to the interface the developer has set up \(think **PropTypes**\), both components are easily interchangeable and can be tested and developed independently.
 
-But enough of the theory. Let's look at an example. We are going to load a list of the 10 biggest cryptocurrencies and their current price. To obtain the data from the Coingecko API, we create a **Higher Order Component** which loads the data and passes it to the layout component:
+But enough of the theory. Let's look at an example. We are going to load a list of the 10 biggest cryptocurrencies and their current price. To obtain the data from the Coinmarketcap API, we create a **Higher Order Component** which loads the data and passes it to the layout component:
 
 ```jsx
 const withCryptoPrices = (WrappedComponent) => {
@@ -57,20 +57,23 @@ const withCryptoPrices = (WrappedComponent) => {
 
       try {
         const cryptoTicker = await fetch(
-          'https://api.coingecko.com' +
-          '/api/v3/coins/markets?vs_currency=eur&per_page=10'
+          'https://api.coinmarketcap.com/v2/ticker/?limit=10&convert=EUR'
         );
         const cryptoTickerResponse = await cryptoTicker.json();
 
         this.setState(() => ({
           isLoading: false,
-          items: cryptoTickerResponse,
+          items: this.convertResponseToArray(cryptoTickerResponse),
         }));
       } catch (err) {
         this.setState(() => ({
           isLoading: false,
         }));
       }
+    };
+
+    convertResponseToArray = (response) => {
+      return Object.entries(response.data).map(([id, item]) => item);
     };
 
     render() {
@@ -87,7 +90,7 @@ const withCryptoPrices = (WrappedComponent) => {
 };
 ```
 
-Et voila! We have written an **HOC** to obtain the data of the crypto prices from coingecko.com. But the **Higher Order Component** itself is not enough to make this work: we also need to define a layout component to which we delegate the task of displaying the data.
+Et voila! We have written an **HOC** to obtain the data of the crypto prices from coinmarketcap.com. But the **Higher Order Component** itself is not enough to make this work: we also need to define a layout component to which we delegate the task of displaying the data.
 
 In order to do that, we define a generic `PriceTable` component which does not know about which data exactly it displays: it could be current yoghurt prices from the local supermarket or cryptocurrency prices from a stock market. Thus, we have given it a very generic name, `PriceTable`:
 
@@ -112,7 +115,7 @@ const PriceTable = ({ isLoading, items, loadData }) => {
           <td>
             {item.name} ({item.symbol})
           </td>
-          <td>EUR {item.current_price}</td>
+          <td>EUR {item.quotes.EUR.price}</td>
         </tr>
       ))}
       <tr>
@@ -162,8 +165,8 @@ const PriceCSV = ({ isLoading, items, loadData, separator = ';' }) => {
   return (
     <pre>
       {items.map(
-        ({ name, symbol, current_price }) =>
-          `${name}${separator}${symbol}${separator}${current_price}\n`
+        ({ name, symbol, quotes }) =>
+          `${name}${separator}${symbol}${separator}${quotes.EUR.price}\n`
       )}
     </pre>
   );
@@ -172,7 +175,7 @@ const PriceCSV = ({ isLoading, items, loadData, separator = ';' }) => {
 
 And just like that we have implemented our very first own CSV layout component. We check again whether the data is being loaded, then whether `items` are present. This could also be extracted into another HOC component as HOCs can be nested as many times as you like. In the end, they are all just functions which are passed as parameters to yet another function.
 
-At last, we can render the output: we iterate through the list of `items`, pick the relevant properties `name`, `symbol` and `current_price` via **Object Destructuring** and then wrap the individual lines with a `pre` element to correctly display the end of the line.
+At last, we can render the output: we iterate through the list of `items`, pick the relevant properties `name`, `symbol` and `quotes` via **Object Destructuring** and then wrap the individual lines with a `pre` element to correctly display the end of the line.
 
 In contrast to the `PriceTable` component, we have introduced another optional prop: `separator` - to tell the render component how many separating symbols it should use to display the data. This separator prop can be passed as a simple prop \(as is common in JSX\):
 
@@ -214,4 +217,3 @@ return (
 
 **Higher Order Components** are still widely used and there's nothing controversial about their usage. However, newer concepts to achieve the same or similar objectives have been introduced, of which many increase readability. Two of these are **Functions as a Child** and the newer **Context API** — which has been introduced in React in Version 16.3.0. Both of these will be explained in the next two chapters.
 {% endhint %}
-
