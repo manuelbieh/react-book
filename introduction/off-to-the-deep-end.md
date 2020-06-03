@@ -1,6 +1,6 @@
 # Into the deep end
 
-We've just talked about the "what", "when" and "where" but we haven't yet talked about the "how". Let's write our first **React component.** In order to display our component in the browser, we need to not only install **React** but also **ReactDOM**, a package that enables us to mount our application in the browser — put simply: to use it in the browser. 
+We have just talked about the "what", "when" and "where" but we have not yet talked about the "how". Let's write our first **React component.** In order to display our component in the browser, we need to not only install **React** but also **ReactDOM**, a package that enables us to mount our application in the browser — put simply: to use it in the browser. 
 
 Let's have a look at a very minimalist setup to get started with React:
 
