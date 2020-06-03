@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Learning React](README.md)
+* [React Deep-Dive](README.md)
 * [Foreword](foreword.md)
 * [About the Author](about-the-autor.md)
 * [About the Translator](about-the-translator.md)
