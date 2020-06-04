@@ -561,7 +561,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 let renderCounter = 0;
-setInterval(function () {
+setInterval(function() {
   renderCounter++;
   renderApp();
 }, 2000);
@@ -650,7 +650,6 @@ ReactDOM.render(
 
 ### Summary
 
-{% hint style="info" %}
 Components have to act as **pure functions** and return the same result if the same props were passed.
 
 - Props inside a component should be treated as **read-only**
@@ -659,4 +658,3 @@ Components have to act as **pure functions** and return the same result if the s
 - In contrast to HTML, JSX allows for multiple forms of values. If the values are not of type string, they will be surrounded by **braces**
 - Props can take in any **JavaScript expressions** as their value
 - Once received, props can be passed down as many levels as required
-  {% endhint %}

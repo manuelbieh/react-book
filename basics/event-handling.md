@@ -239,11 +239,8 @@ First, the `e.persist()` method is invoked. Second, the **updater function** can
 
 ### Summary
 
-{% hint style="info" %}
-
 - **Always** use event props in JSX to define events: `onChange`, `onMouseOver`, `onTouchStart`, `onKeyDown`, `onAnimationStart` etc \(even if it seems a little odd at first\).
 - Event handlers have to be explicitly bound to the class instance if other class methods like `this.setState()` are accessed. **Public Class Properties** and **Arrow Functions** are the more elegant ways to do this.
 - Avoid defining your own events with `addEventListener()` API. If at all necessary, do not forget to remove the event when unmounting your component with `removeEventListener()`.
 - `SyntheticEvent` objects are „nullified“. Beware of using callback functions outside of the event handler. The event object might not exist anymore at the time of calling the callback.
 - `event.persist()` can force React to prevent resetting the event object to `null`.
-  {% endhint %}
