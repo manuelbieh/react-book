@@ -18,7 +18,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 
 **Styleguidist** is similar to Storybook. It also enables us to create a styleguide from our React components which are currently used in an application. However, **Styleguidist** is more implicit than **Storybook** and can be extended with **PropTypes** and **JSDoc** comments. Markdown files in the directory of the components can also be used to further add information on the component.
 
- **License:** MIT \(Open Source\)  
+**License:** MIT \(Open Source\)  
 **URL:** [https://react-styleguidist.js.org/](https://react-styleguidist.js.org/)  
 **GitHub:** [https://github.com/styleguidist/react-styleguidist](https://github.com/styleguidist/react-styleguidist)
 
@@ -45,7 +45,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 
 > Gatsby is a free and open source framework based on React that helps developers build blazing fast websites and apps
 
-**Gatsby** is part of the so-called static site generator category, meaning it is a generator for static websites. **Gatsby** allows us to create components using React and GraphQL and then transforms them into static HTML files. **Gatsby** also creates a JavaScript bundle which is loaded as soon as the page loads. Once the bundle has loaded, **Gatsby** makes use of client-side rendering which means that sites are rendered to the user in "blazing fast" fashion as the HTTP overhead is drastically reduced. Gatsby has been started as an Open Source project and still maintains that status today. In May 2018 it received an impressive investment of 3.8 million US dollars. 
+**Gatsby** is part of the so-called static site generator category, meaning it is a generator for static websites. **Gatsby** allows us to create components using React and GraphQL and then transforms them into static HTML files. **Gatsby** also creates a JavaScript bundle which is loaded as soon as the page loads. Once the bundle has loaded, **Gatsby** makes use of client-side rendering which means that sites are rendered to the user in "blazing fast" fashion as the HTTP overhead is drastically reduced. Gatsby has been started as an Open Source project and still maintains that status today. In May 2018 it received an impressive investment of 3.8 million US dollars.
 
 **License:** MIT \(Open Source\)  
 **URL:** [https://www.gatsbyjs.org/](https://www.gatsbyjs.org/)  
@@ -55,7 +55,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 
 > React-Static is a fast, lightweight, and powerful progressive static site generator based on React and its ecosystem.
 
-**React-Static** is an alternative to **Gatsby** and is also a **static site generator**. Gatsby might be the more well-known tool, especially since its last investment. However, **React  static** is a serious contender and also boasts with a great and active community.
+**React-Static** is an alternative to **Gatsby** and is also a **static site generator**. Gatsby might be the more well-known tool, especially since its last investment. However, **React static** is a serious contender and also boasts with a great and active community.
 
 **License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/nozzle/react-static](https://github.com/nozzle/react-static)
@@ -67,4 +67,3 @@ Next.js describes itself as "The React Framework" for a number of different use 
 **License:** MIT \(Open Source\)  
 **URL:** [https://nextjs.org/](https://nextjs.org/)  
 **GitHub:** [https://github.com/zeit/next.js](https://github.com/zeit/next.js)
-

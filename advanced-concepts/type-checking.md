@@ -216,9 +216,7 @@ class EventOverview extends React.Component<PropsT> {
       <div>
         <h1>{title}</h1>
         <h2>{date.toLocaleString()}</h2>
-        {description && (
-          <div className="description">{description}</div>
-        )}
+        {description && <div className="description">{description}</div>}
         {ticketsUrl && <a href={ticketsUrl}>Tickets!</a>}
       </div>
     );

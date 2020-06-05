@@ -47,4 +47,3 @@ For the curious among us, there's the possibility to inspect soon-to-be released
 ![An example of a deprecation warning](../.gitbook/assets/deprecation-warning.png)
 
 While this is useful for React's user base, one can assume that it is in Facebook's own interest to not cause problems by unplanned changes — given that they have a large number of React components in their own codebase. However, transparency is always a given and you can follow along on GitHub's issue tracker where all important changes are neatly summarized in so-called [Umbrella-Tickets](https://github.com/facebook/react/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20umbrella).
-

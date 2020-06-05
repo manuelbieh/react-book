@@ -12,7 +12,7 @@ A little personal anecdote: Since the introduction of **Hooks**, I have had to r
 
 **Hooks** allow us to reuse component logic in a coherent manner. Before **Hooks**, many components often used identical `componentDidMount()` or `componentDidUpdate()` methods that followed the same implementation patterns with the difference of checking whether various parameters had changed during `componentDidUpdate()`. For example, whether a user ID \(which was passed via props\) had changed, which in turn initiated another API request.
 
-**Hooks** were thus introduced with the aim to make it possible to easily share complex logic, without the need for writing a  lot of unnecessary duplicated code. But I will be honest with you, if you are comfortable with Class components and how they work, Hooks might force you to completely re-think how components can and should interact. Processes as well as the composition of the components themselves have changed. Where complex classes with class properties, inheritance and a mutual `this` context have prevailed in the past, **Hooks** replace these with relatively simple and clean functions. How this is achieved in detail, is what we are going to look at through the course of this chapter.
+**Hooks** were thus introduced with the aim to make it possible to easily share complex logic, without the need for writing a lot of unnecessary duplicated code. But I will be honest with you, if you are comfortable with Class components and how they work, Hooks might force you to completely re-think how components can and should interact. Processes as well as the composition of the components themselves have changed. Where complex classes with class properties, inheritance and a mutual `this` context have prevailed in the past, **Hooks** replace these with relatively simple and clean functions. How this is achieved in detail, is what we are going to look at through the course of this chapter.
 
 ## Are class components still worth it?
 
@@ -33,4 +33,3 @@ In order to demonstrate just how much simpler a component definition can be by u
 ![The same functionality with React Hooks](../.gitbook/assets/react-hooks.jpg)
 
 Source: [Sunil Pai on Twitter](https://twitter.com/threepointone/status/1056594421079261185)
-

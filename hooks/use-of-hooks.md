@@ -20,7 +20,9 @@ class Counter extends React.Component {
     return (
       <div>
         <p>Counter: {this.state.value}</p>
-        <button onClick={() => this.setState((state) => ({ value: state.value + 1 }))}>
+        <button
+          onClick={() => this.setState((state) => ({ value: state.value + 1 }))}
+        >
           +1
         </button>
       </div>
@@ -40,16 +42,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Counter = () => {
-  const [ value, setValue ] = React.useState(0);
+  const [value, setValue] = React.useState(0);
   return (
     <div>
       <p>Counter: {value}</p>
-      <button onClick={() => setValue(value + 1)}>
-        +1
-      </button>
+      <button onClick={() => setValue(value + 1)}>+1</button>
     </div>
   );
-}
+};
 
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
@@ -85,8 +85,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Counter = () => {
-  const [ firstValue, setFirstValue ] = React.useState(0);
-  const [ secondValue, setSecondValue ] = React.useState(0);
+  const [firstValue, setFirstValue] = React.useState(0);
+  const [secondValue, setSecondValue] = React.useState(0);
   return (
     <div>
       <p>Count 1: {firstValue}</p>
@@ -95,16 +95,16 @@ const Counter = () => {
       <button onClick={() => setSecondValue(secondValue + 1)}>+1</button>
     </div>
   );
-}
+};
 
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
 
 If, at this point, you are wondering how you would manage very complex state, I would urge you to "hold that thought" as we will learn about the `useReducer()` Hook in a later chapter. For now, we will focus on the three **basic** Hooks.
 
-### Side effects with useEffect\(\) 
+### Side effects with useEffect\(\)
 
-The name of the `useEffect()` **Hook** derives from its intended usage: for **Side Effects**. In this case, we mean loading data via an API, registering global events or manipulating DOM elements. The `useEffect()` Hook includes functionality that was previously found in the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` lifecycle methods. 
+The name of the `useEffect()` **Hook** derives from its intended usage: for **Side Effects**. In this case, we mean loading data via an API, registering global events or manipulating DOM elements. The `useEffect()` Hook includes functionality that was previously found in the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` lifecycle methods.
 
 If you are wondering whether all these lifecycle methods have now been replaced and been combined in to a single Hook, I can assure you: you have read correctly. Instead of using _three_ methods, you only need to use _a single_ **Hook** which takes effect in similar places where the class component methods were previously used. The trick is to use particular function parameters and return values which are intended for the `useEffect()` Hook.
 
@@ -129,8 +129,8 @@ import ReactDOM from 'react-dom';
 const defaultTitle = 'React with Hooks';
 
 const Counter = () => {
-  const [ value, setValue ] = useState(0);
-  
+  const [value, setValue] = useState(0);
+
   useEffect(() => {
     // `document.title` is set with each change (didMount/didUpdate).
     // Given the `value` has changed
@@ -140,21 +140,19 @@ const Counter = () => {
     // before each update
     return () => {
       document.title = defaultTitle;
-    }
-  
-  // Lastly, our dependency array. This way the Effect function is only invoked 
-  // when the `value` has actually changed.
+    };
+
+    // Lastly, our dependency array. This way the Effect function is only invoked
+    // when the `value` has actually changed.
   }, [value]);
-  
+
   return (
     <div>
       <p>Counter: {value}</p>
-      <button onClick={() => setValue(value + 1)}>
-        +1
-      </button>
+      <button onClick={() => setValue(value + 1)}>+1</button>
     </div>
   );
-}
+};
 
 ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
@@ -166,10 +164,10 @@ By using the `useEffect()` **Hook**, we can dramatically reduce the complexity o
 To compare this with class component code, I have prepared a little example which implements the same functionality as the `useEffect()` Hook:
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const defaultTitle = "React with Hooks";
+const defaultTitle = 'React with Hooks';
 
 class Counter extends React.Component {
   state = {
@@ -196,7 +194,7 @@ class Counter extends React.Component {
         <p>Counter: {this.state.value}</p>
         <button
           onClick={() => {
-            this.setState(state => ({ value: state.value + 1 }));
+            this.setState((state) => ({ value: state.value + 1 }));
           }}
         >
           +1
@@ -206,7 +204,7 @@ class Counter extends React.Component {
   }
 }
 
-ReactDOM.render(<Counter />, document.getElementById("root"));
+ReactDOM.render(<Counter />, document.getElementById('root'));
 ```
 
 Of course you can debate whether it would be useful to extract the call to change `document.title` into its own class method such as `setDocumentTitle()` however this is not really adding much to our discussion as they do not change anything about the complexity at hand.
@@ -222,8 +220,8 @@ The third and final basic Hook is `useContext()`. It allows us to consume data f
 In practice, this translates to something like the following example:
 
 ```jsx
-import React, { useContext } from "react";
-import ReactDOM from "react-dom";
+import React, { useContext } from 'react';
+import ReactDOM from 'react-dom';
 
 const AccountContext = React.createContext({});
 
@@ -239,15 +237,14 @@ const ContextExample = () => {
 };
 
 const App = () => (
-  <AccountContext.Provider value={{ name: "Manuel", role: "admin" }}>
+  <AccountContext.Provider value={{ name: 'Manuel', role: 'admin' }}>
     <ContextExample />
   </AccountContext.Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 The `ContextExample` component is receiving its data from the pseudo-account data provider: the`AccountContext` provider. This works without having to wrap an `AccountContext.Consumer` component around `ContextExample`. It does not only save us multiple lines of code in the component itself, but also leads to a much better debugging experience as the component tree is not as deeply nested as it would be otherwise.
 
 However, this simplification is entirely optional. If you prefer to keep using the well-known Consumer component to access data from a provider, that is completely fine.
-

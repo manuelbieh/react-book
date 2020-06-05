@@ -20,24 +20,24 @@ Let's assume that we want to show list of cryptocurrencies. The array containing
 
 ```jsx
 const cryptos = [
-    {
-        id: 1,
-        name: 'Bitcoin',
-        symbol: 'BTC',
-        quotes: { EUR: { price: 7179.92084586 } }
-    },
-    {
-        id: 2,
-        name: 'Ethereum',
-        symbol: 'ETH',
-        quotes: { EUR: { price: 595.218568203 } }
-    },
-    {
-        id: 3,
-        name: 'Litecoin',
-        symbol: 'LTC',
-        quotes: { EUR: { price: 117.690716234 } }
-    }
+  {
+    id: 1,
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    quotes: { EUR: { price: 7179.92084586 } },
+  },
+  {
+    id: 2,
+    name: 'Ethereum',
+    symbol: 'ETH',
+    quotes: { EUR: { price: 595.218568203 } },
+  },
+  {
+    id: 3,
+    name: 'Litecoin',
+    symbol: 'LTC',
+    quotes: { EUR: { price: 117.690716234 } },
+  },
 ];
 ```
 
@@ -48,7 +48,9 @@ const CryptoList = ({ currencies }) => (
   <ul>
     {currencies.map((currency) => (
       <li>
-        <h1>{currency.name} ({currency.symbol})</h1>
+        <h1>
+          {currency.name} ({currency.symbol})
+        </h1>
         <p>{currency.quotes.EUR.price.toFixed(2)} €</p>
       </li>
     ))}
@@ -72,14 +74,16 @@ In our example, we can take the id of each item. Amended, the example now looks 
 
 ```jsx
 const CryptoList = ({ currencies }) => (
-    <ul>
-        {currencies.map((currency) => (
-            <li key={currency.id}>
-                <h1>{currency.name} ({currency.symbol})</h1>
-                <p>{currency.quotes.EUR.price.toFixed(2)} €</p>
-            </li>
-        ))}
-    </ul>
+  <ul>
+    {currencies.map((currency) => (
+      <li key={currency.id}>
+        <h1>
+          {currency.name} ({currency.symbol})
+        </h1>
+        <p>{currency.quotes.EUR.price.toFixed(2)} €</p>
+      </li>
+    ))}
+  </ul>
 );
 ```
 
@@ -87,14 +91,16 @@ The key only has to be unique **within the iterator compared to its sibling elem
 
 If your data set does not contain an easily distinguishable id, the **index** of the array can be used as a **last resort.** This is not recommended though and can lead to unexpected behavior in the rendering of user interfaces and also impact performance.
 
-It is important that the `key` prop is always **present in the top-level component or array element within the iterator** but not in the JSX returned by the component. 
+It is important that the `key` prop is always **present in the top-level component or array element within the iterator** but not in the JSX returned by the component.
 
 To illustrate this point further, I'm going to transform the above list item into its own `CryptoListItem` component.
 
 ```jsx
 const CryptoListItem = ({ name, symbol, quotes }) => (
   <li>
-    <h1>{name} ({symbol})</h1>
+    <h1>
+      {name} ({symbol})
+    </h1>
     <p>{quotes.EUR.price.toFixed(2)} €</p>
   </li>
 );
@@ -124,7 +130,9 @@ A little bit off-topic: We could even simplify the `CryptoList` component by usi
 ```jsx
 const CryptoList = ({ currencies }) => (
   <ul>
-    {currencies.map((currency) => <CryptoListItem key={currency.id} {...currency} />)}
+    {currencies.map((currency) => (
+      <CryptoListItem key={currency.id} {...currency} />
+    ))}
   </ul>
 );
 ```
@@ -136,11 +144,7 @@ If we didn't use an iterator such as `Array.map()`, a list would need to be expl
 ```jsx
 const MyList = () => (
   <ul>
-  {[
-    <li key="1">One</li>,
-    <li key="2">Two</li>,
-    <li key="3">Three</li>
-  ]}
+    {[<li key="1">One</li>, <li key="2">Two</li>, <li key="3">Three</li>]}
   </ul>
 );
 ```
@@ -173,7 +177,7 @@ render() {
 }
 ```
 
-In this example, multiple elements are being returned in the `render()` method without a surrounding element, leading to an error. We do not always want to create new elements though, especially if the surrounding element is found in a parent component and the child element is found in its own component. 
+In this example, multiple elements are being returned in the `render()` method without a surrounding element, leading to an error. We do not always want to create new elements though, especially if the surrounding element is found in a parent component and the child element is found in its own component.
 
 On top of that, many elements \(such as `table`, `ul`, `ol`, `dl`, ...\) do not allow for `div` elements to be used as an intermediary wrapper \(ignoring the fact that we would also litter the markup by using `divs`\). As we are only permitted to ever return a single root element from a component, **Fragments** can be incredibly useful. We could transform our example from above into the following:
 
@@ -250,7 +254,7 @@ It would simply not be possible to wrap a `div` or `span` or another element aro
 </dl>
 ```
 
-... and is invalid HTML! A `dl` element only permits `dt` and `dd` as its child element. The **Fragment** helps us to alleviate these situations and creates valid JSX without creating invalid markup. It was only introduced in React 16.3 and meant that some React components were unnecessarily complex to deal with this problem to avoid violating JSX or HTML rules. 
+... and is invalid HTML! A `dl` element only permits `dt` and `dd` as its child element. The **Fragment** helps us to alleviate these situations and creates valid JSX without creating invalid markup. It was only introduced in React 16.3 and meant that some React components were unnecessarily complex to deal with this problem to avoid violating JSX or HTML rules.
 
 **Fragment** components can also be imported directly from React using a named import:
 
@@ -293,7 +297,7 @@ const NotificationList = ({ items }) => {
       </ul>
     );
   }
-  return <p>No new notifications</p>
+  return <p>No new notifications</p>;
 };
 ```
 
@@ -324,22 +328,23 @@ class EditableText extends React.Component {
     this.setState(() => ({
       value,
     }));
-  }
+  };
 
   setMode = (mode) => () => {
     this.setState(() => ({
       mode,
     }));
-  }
+  };
 
   render() {
     if (this.state.mode === 'edit') {
       return (
         <div>
-          <input 
-            type="text" 
-            value={this.state.value} 
-            onChange={this.handleChange} />
+          <input
+            type="text"
+            value={this.state.value}
+            onChange={this.handleChange}
+          />
           <br />
           <button onClick={this.setMode('view')}>Done</button>
         </div>
@@ -352,15 +357,14 @@ class EditableText extends React.Component {
         <br />
         <button onClick={this.setMode('edit')}>Edit</button>
       </div>
-    )
+    );
   }
 }
 
 render(
-  <EditableText initialValue='Example' />, 
+  <EditableText initialValue="Example" />,
   document.getElementById('root')
 );
-
 ```
 
 The relevant part can be found in the `render()` method of the component. The state is tested against its property value in `mode`. If `edit` is the current value in state, we directly return the input field with an "early return". If this is not the case, we assume that the "standard case" is taking place meaning that the current mode is `view`. The `else` part of this condition is not actually necessary here and would only add unnecessary complexity. Both times, the text is rendered with the difference that it is an editable `value` of an `input` field in one case, and a simple text node in the other. A button is included to switch between the different modes of `view` and `edit`.
@@ -415,7 +419,7 @@ render() {
 
 Users that have been deactivated are now marked with the `is-disabled` class, whereas active users are denoted with `is-active`.
 
-Even complex JSX can be displayed using the **ternary operator**. As long as you follow the rule to use parentheses if the JSX spans multiple lines: 
+Even complex JSX can be displayed using the **ternary operator**. As long as you follow the rule to use parentheses if the JSX spans multiple lines:
 
 ```jsx
 render() {
@@ -482,11 +486,11 @@ class Countdown extends React.Component {
   renderTimeLeft() {
     // […]
   }
-  
+
   renderTimePassed() {
     // […]
   }
-  
+
   render() {
     const { currentDate, eventDate } = this.props;
     if (currentDate < eventDate) {
@@ -509,7 +513,7 @@ As soon as you begin to consider moving parts of your code into custom `render()
 
 Instead of using multiple `render()` methods, we can create new **Function components**. These will receive **props** from their parent component and then take care of displaying their own data as an independent, self-governing and testable component.
 
-Careful consideration should be given as to what data actually needs passed down to the new child component\(s\), and how to pass this data, as the component\(s\) should not contain too much logic or state. 
+Careful consideration should be given as to what data actually needs passed down to the new child component\(s\), and how to pass this data, as the component\(s\) should not contain too much logic or state.
 
 Using custom components becomes useful once the `render()` method in one component has become too complex or if the same elements are used repetitively within a component.
 
@@ -546,9 +550,7 @@ First, create a `TextField` component and then cut the recurring JSX from the fo
 ```jsx
 const TextField = ({ id, label, ...HTMLInputAttributes }) => (
   <p>
-    <label for={id}>
-      {label}
-    </label>
+    <label for={id}>{label}</label>
     <br />
     <input {...HTMLInputAttributes} id={id} />
   </p>
@@ -572,4 +574,3 @@ render() {
 ```
 
 We have just transformed long and potentially hard to read markup into a clean and precise `render()` method which only consists of very few components. If we ever wanted to add a change which should affect all of our text fields \(for example adding a class\), this can be added with ease by only changing data in one place — in the new `TextField` component.
-

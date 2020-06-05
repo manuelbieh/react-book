@@ -140,15 +140,15 @@ class App extends React.Component {
   state = {
     modalIsOpen: false,
   };
-  
+
   openModal = () => {
     this.setState({ modalIsOpen: true });
   };
-  
+
   closeModal = () => {
     this.setState({ modalIsOpen: false });
   };
-  
+
   render() {
     return (
       <div>

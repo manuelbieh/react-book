@@ -13,16 +13,13 @@ As we might want to use this logic in other components and do not want to repeat
 import { useEffect } from 'react';
 
 const useBackgroundColor = (color) => {
-  useEffect(
-    () => {
-      document.body.style.backgroundColor = color;
-      return () => {
-        document.body.style.backgroundColor = '';
-      }
-    }, 
-    [color]
-  );
-}
+  useEffect(() => {
+    document.body.style.backgroundColor = color;
+    return () => {
+      document.body.style.backgroundColor = '';
+    };
+  }, [color]);
+};
 
 export default useBackgroundColor;
 ```
@@ -31,44 +28,44 @@ To use this component, we are creating a little `Tabs` component which allows us
 
 ```jsx
 // Tabs.js
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import useBackgroundColor from "./useBackgroundColor";
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import useBackgroundColor from './useBackgroundColor';
 
 const DefaultContent = () => {
   return <p>Default Content</p>;
 };
 
 const SpecialContent = () => {
-  useBackgroundColor("red");
+  useBackgroundColor('red');
   return <p>Special Content</p>;
 };
 
 const OtherSpecialContent = () => {
-  useBackgroundColor("orange");
+  useBackgroundColor('orange');
   return <p>Other Special Content</p>;
 };
 
 const Tabs = () => {
-  const [tab, setTab] = useState("home");
+  const [tab, setTab] = useState('home');
 
   return (
     <div className="tabs">
       <div className="tabBar">
-        <button onClick={() => setTab("home")}>Home</button>
-        <button onClick={() => setTab("special")}>Special</button>
-        <button onClick={() => setTab("other")}>Other Special</button>
+        <button onClick={() => setTab('home')}>Home</button>
+        <button onClick={() => setTab('special')}>Special</button>
+        <button onClick={() => setTab('other')}>Other Special</button>
       </div>
       <div className="tabContent">
-        {tab === "home" && <DefaultContent />}
-        {tab === "special" && <SpecialContent />}
-        {tab === "other" && <OtherSpecialContent />}
+        {tab === 'home' && <DefaultContent />}
+        {tab === 'special' && <SpecialContent />}
+        {tab === 'other' && <OtherSpecialContent />}
       </div>
     </div>
   );
 };
 
-ReactDOM.render(<Tabs/>, document.getElementById("root"));
+ReactDOM.render(<Tabs />, document.getElementById('root'));
 ```
 
 We've implemented three basic components in this example which help us to display our content: `DefaultContent`, `SpecialContent` and `OtherSpecialContent`. Two of these components already use our **custom Hook** `useBackgroundColor()` to change the global background color in a `useEffect()` once the component has mounted.
@@ -87,24 +84,21 @@ We pass a GitHub username to this Hook and obtain an object with all the relevan
 
 ```jsx
 // useGitHubAccountData.js
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const useGitHubAccountData = (account) => {
   const [accountData, setAccountData] = useState({});
 
-  useEffect(
-    () => {
-      if (!account) {
-        return;
-      }
+  useEffect(() => {
+    if (!account) {
+      return;
+    }
 
-      axios.get(`https://api.github.com/users/${account}`).then((response) => {
-        setAccountData(response.data);
-      });
-    },
-    [account]
-  );
+    axios.get(`https://api.github.com/users/${account}`).then((response) => {
+      setAccountData(response.data);
+    });
+  }, [account]);
 
   return accountData;
 };
@@ -118,22 +112,22 @@ We can now safely access the data from this component and use it as we see fit:
 
 ```jsx
 // RepoInfo.js
-import React from "react";
-import ReactDOM from "react-dom";
-import useGitHubAccountData from "./useGitHubAccountData";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import useGitHubAccountData from './useGitHubAccountData';
 
 const RepoInfo = () => {
-  const accountData = useGitHubAccountData("manuelbieh");
+  const accountData = useGitHubAccountData('manuelbieh');
 
   return (
     <p>
-      GitHub user {accountData.name} has {accountData.public_repos}{" "}
-      public repositories.
+      GitHub user {accountData.name} has {accountData.public_repos} public
+      repositories.
     </p>
   );
 };
 
-ReactDOM.render(<RepoInfo />, document.getElementById("root"));
+ReactDOM.render(<RepoInfo />, document.getElementById('root'));
 ```
 
 At this point, we could implement further info based on `RepoInfo`. For example, we could implement a search for a particular GitHub Account instead of setting this beforehand. To achieve this, we can use `useState()` to create a new **state** in which we write the account that the user has provided and then pass this **state** to our **Custom Hook**.
@@ -142,12 +136,12 @@ As our `useEffect()` Hook contains the account name in the dependency array, it 
 
 ```jsx
 // RepoLookup.js
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import useGitHubAccountData from "./useGitHubAccountData";
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import useGitHubAccountData from './useGitHubAccountData';
 
 const RepoLookup = () => {
-  const [account, setAccount] = useState("");
+  const [account, setAccount] = useState('');
   const accountData = useGitHubAccountData(account);
 
   return (
@@ -157,7 +151,7 @@ const RepoLookup = () => {
         <p>Please provide a GitHub username</p>
       ) : (
         <p>
-          GitHub user {accountData.name} ({accountData.login}) has{" "}
+          GitHub user {accountData.name} ({accountData.login}) has{' '}
           {accountData.public_repos} public repositories.
         </p>
       )}
@@ -165,8 +159,7 @@ const RepoLookup = () => {
   );
 };
 
-ReactDOM.render(<RepoLookup />, document.getElementById("root"));
+ReactDOM.render(<RepoLookup />, document.getElementById('root'));
 ```
 
 Side note: GitHub's public API only allows about 60 API requests per hour. If you feel that you want to access more and play around with these examples a bit more, you should create a GitHub API token and append it to the URL with `access_token=xyz`. The token can be generated here: [https://github.com/settings/tokens](https://github.com/settings/tokens).
-

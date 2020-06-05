@@ -6,13 +6,13 @@ In order to work with React comfortably and without interruptions, a few conditi
 
 ### Node.js and npm
 
-Most of you will know **Node.js** as server-side JavaScript, however this is only partly true. First of all, **Node.js** is a **JavaScript Runtime Environment** that is very well suited to write network applications, such as a server. **Node.js** also comes with a package management tool, commonly known as **npm**. It enables us to easily install new JavaScript libraries on our own machines and also lets us write and run our own command line scripts. 
+Most of you will know **Node.js** as server-side JavaScript, however this is only partly true. First of all, **Node.js** is a **JavaScript Runtime Environment** that is very well suited to write network applications, such as a server. **Node.js** also comes with a package management tool, commonly known as **npm**. It enables us to easily install new JavaScript libraries on our own machines and also lets us write and run our own command line scripts.
 
 Instead of installing **Node** directly, I suggest to use [**nvm**](https://github.com/creationix/nvm) \(_"Node Version Manager"_\) for Mac or Linux, and [**nvm-windows**](https://github.com/coreybutler/nvm-windows) for Windows. One of **nvm**'s advantages is that it does not require root privileges to install packages globally. Moreover, we can update your installed node version with a simple command line expression \(`nvm install [version]`\). If we want to see the list of all available versions, we can run `nvm ls-remote` \(Max/Linux\) or `nvm list available` \(Windows\). For the rest of this book, I would suggest you use the LTS \(Long Term Support\) version as its stable and will receive updates over a longer time frame.
 
 ### Yarn
 
-While **Node** and **npm** already offer a very solid package manager, **yarn** takes it a little bit further and offers simpler commands, and better caching — and thus better performance. Similar to React, **yarn** was created at Facebook to make working with React a little bit nicer. Everything that I am going to describe in the rest of the book will also work seamlessly with **npm** but I would still suggest installing **yarn** instead. Especially in the React ecosystem, it is gaining popularity due to its ease of use and its better performance compared to **npm**. Once **Node** and **npm** have been installed, **yarn** can be added as a global package via **npm**: 
+While **Node** and **npm** already offer a very solid package manager, **yarn** takes it a little bit further and offers simpler commands, and better caching — and thus better performance. Similar to React, **yarn** was created at Facebook to make working with React a little bit nicer. Everything that I am going to describe in the rest of the book will also work seamlessly with **npm** but I would still suggest installing **yarn** instead. Especially in the React ecosystem, it is gaining popularity due to its ease of use and its better performance compared to **npm**. Once **Node** and **npm** have been installed, **yarn** can be added as a global package via **npm**:
 
 ```bash
 npm install --global yarn
@@ -38,17 +38,17 @@ Babel consists of a core module \(`@babel/core`\) that offers a few APIs that ca
 
 The `@` sign in the name indicates that the package originates from an organization within the npm registry \(the npm package registry\) and can been understood as some sort of a namespace. In the case of Babel, you can find all of its official packages in the organization that have been published there by the Babel maintainers. Before Babel version 7 was released, this organization did not exist and the packages were simply separated by hyphens. `@babel/preset-react` was called `babel-preset-react` and `@babel/core` was named `babel-core` and so on.
 
-So do not be confused if you encounter `babel-core` instead of `@babel/core` in a project. In this case we are simply dealing with an older version of Babel \(6 or below\). However, sometimes we might come across plugins or presets that are not officially part of Babel, but the developer has still prefixed the package with `babel-`  although it works with Babel 7. In this case, we can only really check the readme of the package to understand what is going on.
+So do not be confused if you encounter `babel-core` instead of `@babel/core` in a project. In this case we are simply dealing with an older version of Babel \(6 or below\). However, sometimes we might come across plugins or presets that are not officially part of Babel, but the developer has still prefixed the package with `babel-` although it works with Babel 7. In this case, we can only really check the readme of the package to understand what is going on.
 
 The **presets** that I have used in my work with React \(and which I also suggest you should use are\):
 
-* `@babel/preset-env`
-* `@babel/preset-react`
-* `@babel/plugin-proposal-object-rest-spread`
-* `@babel/plugin-proposal-class-properties`
-* `@babel/plugin-syntax-dynamic-import`
+- `@babel/preset-env`
+- `@babel/preset-react`
+- `@babel/plugin-proposal-object-rest-spread`
+- `@babel/plugin-proposal-class-properties`
+- `@babel/plugin-syntax-dynamic-import`
 
-If you want to work with static type checking like Flow or TypeScript, you also need to install `@babel/preset-flow` or `@babel/preset-typescript` respectively. 
+If you want to work with static type checking like Flow or TypeScript, you also need to install `@babel/preset-flow` or `@babel/preset-typescript` respectively.
 
 You can install these via:
 
@@ -133,7 +133,7 @@ create-react-app projectname
 And just like that we have created a complete React setup with a few little example components in our _"projectname"_ folder. I would advise you to go ahead and execute the last few steps right now because the following code examples will all assume that you have set up **Create React App**.
 
 {% hint style="warning" %}
-The project name has to fit the[ criteria for the `name`property](https://docs.npmjs.com/files/package.json#name) for the `package.json` format of **npm**.  This means that it is **not allowed to contain capital letters**, it can have **no spaces,** and can only have **up to 214 characters max**. The other criteria can be found in the **npm** documentation.
+The project name has to fit the[ criteria for the `name`property](https://docs.npmjs.com/files/package.json#name) for the `package.json` format of **npm**. This means that it is **not allowed to contain capital letters**, it can have **no spaces,** and can only have **up to 214 characters max**. The other criteria can be found in the **npm** documentation.
 {% endhint %}
 
 This setup is quite extensive and has dealt with many aspects beforehand, so we do not need to spend as much time with the setup and can dive into the code straight away.
@@ -174,11 +174,11 @@ Happy hacking!
 
 ### yarn start
 
-This command starts the development server, which lets us see our newly created application in the browser. The dev server is also taking care of files which are changing in the different directories and "compiles" our app and its dependencies again if we have made changes. 
+This command starts the development server, which lets us see our newly created application in the browser. The dev server is also taking care of files which are changing in the different directories and "compiles" our app and its dependencies again if we have made changes.
 
 ### yarn build
 
-Creates a build folder of our app which we can then deploy to a public server. Compared to the development build \(`yarn start`\), this build is optimized for performance. Due to this, running `yarn build` takes much longer than running `yarn start`. 
+Creates a build folder of our app which we can then deploy to a public server. Compared to the development build \(`yarn start`\), this build is optimized for performance. Due to this, running `yarn build` takes much longer than running `yarn start`.
 
 ### yarn test
 
@@ -193,4 +193,3 @@ In order to understand all the code examples in the book, I strongly suggest to 
 
 If you do not want to install CRA locally or if you are in a hurry, you can try working with [CodeSandbox](https://codesandbox.io/). It allows you to create a new setup with [**Create React App**](https://codesandbox.io/s/new) in seconds and then allows you interact with it in a browser environment.
 {% endhint %}
-
