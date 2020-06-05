@@ -153,6 +153,8 @@ const ProfileImage = () => {
 
 **CSS Modules** aim to avoid conflicts in very isolated components while still allowing us to write regular CSS in CSS files without any JavaScript knowledge. They are a great solution for teams in which development is more separated into JavaScript and CSS and in which there are experts for both.
 
+<div class="force-break-before"></div>
+
 ### CSS-in-JS - Moving styles into JavaScript
 
 I've already mentioned in the introduction that **CSS-in-JS** is a bit of a hotly debated topic. Opponents say that users of **CSS-in-JS** do simply not understand the cascade to write scalable CSS. Proponents on the other hand explain that the cascade is not the main reason for choosing **CSS-in-JS** but argue that a safer way is needed to write highly isolated components. I'm a bit more diplomatic myself and think that there's room and reasons for both. **CSS-in-JS** certainly has reason to exist. But what even is **CSS-in-JS**?

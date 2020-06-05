@@ -194,6 +194,8 @@ Another method to deal with errors has been added to React with React 16. This m
 
 Components which implement `componentDidCatch()` are commonly called **error boundaries** and help to visualize an alternative to the erroneous tree of components. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erroneous action attached to the button.
 
+<div class="force-break-before"></div>
+
 ### Lifecycle methods in practice
 
 Let's have a look at how **lifecycle methods** behave in a simple component. The code implements a component which updates its own state every second and displays the current time. As soon as the component **mounts** an interval is started which updates the state of our component in the `componentDidMount()` method. A re-render is triggered and the current time is shown again.

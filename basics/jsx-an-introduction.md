@@ -32,7 +32,7 @@ The first argument for the `createElement()` call denotes the tag name of the DO
 
 The second argument of the `createElement()` call are the **props** of an element. Props are comparable to HTML attributes but are much more flexible than regular HTML attributes. They are not limited to strings but can also include arrays, objects or even other React components as their value.
 
-All other arguments are the so-called _"children"_ of the element. In our example above, the `div` contains two children: two paragraphs \(`<p>`\) . These in turn do not have any other props though \(`null`\)  and only contain a text string \(`A paragraph in JSX`  and `Another paragraph`\) as their children.
+All other arguments are the so-called _"children"_ of the element. In our example above, the `div` contains two children: two paragraphs \(`<p>`\) . These in turn do not have any other props though \(`null`\) and only contain a text string \(`A paragraph in JSX` and `Another paragraph`\) as their children.
 
 If anyone is a little confused at this point or finds JSX a little intimidating, I can assure you that writing JSX will become second nature to you in no time. It will feel like writing HTML markup. I still deem it very important to understand how JSX works under the hood, especially to grasp slightly more complex examples in the future.
 
@@ -52,7 +52,7 @@ A JavaScript expression is not much more than a piece of code that will generate
 'Hel' + 'lo';
 ```
 
-... is another expression that **concatenates** the two strings `Hel` and `lo`  into a single value `Hello`.
+... is another expression that **concatenates** the two strings `Hel` and `lo` into a single value `Hello`.
 
 Instead, we could use any of the following as all **JavaScript data types** can be used as an expression:
 
@@ -167,7 +167,7 @@ Similarly, array literals also need to be included within a set of braces. The o
 
 Some of you may have noticed that the prop `className` was used in the example. The DOM Element API of the browser lets us access the `class` attribute of an element by using `Element.className`. React does just the same and borrows from the properties of the DOM `Element` class.
 
-Some attribute names deviate from the regular JavaScript equivalents in JSX as they use reserved words. In the example, `class` is a reserved word which is why we use `className` instead. Same applies to `for`. The `for` is usually the JavaScript keyword for starting a loop but can also be used to inform a `<label>` which input field it belongs to. Instead of using `for`, JSX code can employ the  [HTMLLabelElement Interface](https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor) `htmlFor`.
+Some attribute names deviate from the regular JavaScript equivalents in JSX as they use reserved words. In the example, `class` is a reserved word which is why we use `className` instead. Same applies to `for`. The `for` is usually the JavaScript keyword for starting a loop but can also be used to inform a `<label>` which input field it belongs to. Instead of using `for`, JSX code can employ the [HTMLLabelElement Interface](https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor) `htmlFor`.
 
 ```jsx
 <fieldset>
@@ -178,7 +178,7 @@ Some attribute names deviate from the regular JavaScript equivalents in JSX as t
 
 This pattern applies to all major HTML attributes. All HTML attributes that should be set need to adhere to the following rules `tabindex` is `tabIndex`, `readonly` to `readOnly`, `maxlength` becomes `maxLength`.
 
-The development mode of the browser usually reminds everyone that the regular HTML attributes should be renamed though and thus makes it easy to avoid these mistakes before they happen. 
+The development mode of the browser usually reminds everyone that the regular HTML attributes should be renamed though and thus makes it easy to avoid these mistakes before they happen.
 
 {% hint style="danger" %}
 Warning: Invalid DOM property `class`. Did you mean `className`?
@@ -188,7 +188,7 @@ For those of you who want to really understand which HTML attributes are support
 
 > `accept acceptCharset accessKey action allowFullScreen alt async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked cite classID className colSpan cols content contentEditable contextMenu controls controlsList coords crossOrigin data dateTime default defer dir disabled download draggable encType form formAction formEncType formMethod formNoValidate formTarget frameBorder headers height hidden high href hrefLang htmlFor httpEquiv icon id inputMode integrity is keyParams keyType kind label lang list loop low manifest marginHeight marginWidth max maxLength media mediaGroup method min minLength multiple muted name noValidate nonce open optimum pattern placeholder poster preload profile radioGroup readOnly rel required reversed role rowSpan rows sandbox scope scoped scrolling seamless selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step style summary tabIndex target title type useMap value width wmode wrap`
 
-The same applies to SVG elements. You can also use these in JSX as SVGs are valid XML. The documentation for SVG attributes and which of these are supported is easily at least three times as long than the one for plain HTML modules. Take a look if you want to know more:  [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
+The same applies to SVG elements. You can also use these in JSX as SVGs are valid XML. The documentation for SVG attributes and which of these are supported is easily at least three times as long than the one for plain HTML modules. Take a look if you want to know more: [https://reactjs.org/docs/dom-elements.html\#all-supported-html-attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes)
 
 ## Inline styles
 
@@ -224,17 +224,14 @@ Instead the comments are contained within braces and will be opened in the form 
 }
 ```
 
-Comments can easily span multiple lines of course. In contrast, the usual one-liner JavaScript comments introduced with the double slash \(`//`\) cannot be used in JSX meaning even short one-line comments need to be written with the above \(`/* */`\). 
+Comments can easily span multiple lines of course. In contrast, the usual one-liner JavaScript comments introduced with the double slash \(`//`\) cannot be used in JSX meaning even short one-line comments need to be written with the above \(`/* */`\).
 
 And this is it! All these examples and explanations should have laid the groundwork for understanding and working with JSX, enabling you to follow along in the upcoming chapters.
 
 ## Summary
 
-{% hint style="info" %}
-* Multi-line JSX has to be surrounded by parentheses
-* JSX includes JavaScript expressions. These have to be contained in braces and can then be used in props
-* To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
-* CSS inline styles have to be written as a JavaScript object
-* Comments are put within braces and use multi-line comment Syntax: `{/* */}`
-{% endhint %}
-
+- Multi-line JSX has to be surrounded by parentheses
+- JSX includes JavaScript expressions. These have to be contained in braces and can then be used in props
+- To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
+- CSS inline styles have to be written as a JavaScript object
+- Comments are put within braces and use multi-line comment Syntax: `{/* */}`

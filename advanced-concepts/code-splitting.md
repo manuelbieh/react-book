@@ -1,7 +1,5 @@
 # Code Splitting
 
-
-
 When developing projects with React, most people tend to also use a **bundler** such as **Webpack**, **Browserify** or **Rollup**. These tools ensure that all files and all imports are later bundled into a single big file which can be deployed in a relatively simple fashion without having to worry about relative links between files. This process is referred to as **bundling**. A **bundle** can easily grow and reach a size of a megabyte or more especially if many third party libraries are used. Large bundles are a big performance problem as bigger bundles take longer to be processed and downloaded by the browser as well as executing.
 
 To combat large bundles, a technique called **Code Splitting** is used to counteract it. **Code Splitting** defines the process in which we separate our application into many smaller bundles which are all able to run on their own and load further bundles if necessary. A common separation is either splitting by dependencies \(React, ReactDOM, ...\) or having a bundle per route.
@@ -54,10 +52,12 @@ const App = () => (
   </Suspense>
 );
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-This method allows us to easily optimize for the size of our JavaScript bundle and only load certain files from the server when they are actually requested by the user. During the time it takes loading and receiving the data from the server to being executed, we will see information informing us that `<div>Application is loading</div>`. This is only possible because we are using a feature which has also been added to React in version **16.6**: `React.Suspense.` 
+This method allows us to easily optimize for the size of our JavaScript bundle and only load certain files from the server when they are actually requested by the user. During the time it takes loading and receiving the data from the server to being executed, we will see information informing us that `<div>Application is loading</div>`. This is only possible because we are using a feature which has also been added to React in version **16.6**: `React.Suspense.`
+
+<div class="force-break-before"></div>
 
 ### Display fallbacks with React.Suspense
 
@@ -70,16 +70,16 @@ Nesting components is also possible and can be a great idea in certain scenarios
 A possible scenario to use `Suspense` in practice is image editing. In these type of cases, it can be useful to display the image to edit to the user already to give visual clues. The rest of the user interface containing the actual editing functionality will be loaded in a further step if loading the actual component is taking longer.
 
 ```jsx
-import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
+import React, { Suspense } from 'react';
+import ReactDOM from 'react-dom';
 
-const ImageCanvas = React.lazy(() => import("./ImageCanvas"));
-const ImageToolbar = React.lazy(() => import("./ImageToobar"));
+const ImageCanvas = React.lazy(() => import('./ImageCanvas'));
+const ImageToolbar = React.lazy(() => import('./ImageToobar'));
 
 function App() {
   return (
     <Suspense fallback={<div>Application loading</div>}>
-      <ImageCanvas url="https://via.placeholder.com/350x240"/>
+      <ImageCanvas url="https://via.placeholder.com/350x240" />
       <Suspense fallback={<div>Image editing tools are being loaded</div>}>
         <ImageToolbar />
       </Suspense>
@@ -87,20 +87,20 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 In this example we have defined two main components: `ImageCanvas` which displays an image and `ImageToolbar` which contains the editing tools for the images. Both of these elements are embraced by a Suspense element. The fallback `<div>Application loading</div>` will be shown until the `ImageCanvas` component has been loaded by the server.
 
-If this happens **before** the `ImageToolbar` has loaded, the second inner `Suspense` element will take effect and show a message that _"Image editing tools are being loaded."_  until it has been fully loaded.
+If this happens **before** the `ImageToolbar` has loaded, the second inner `Suspense` element will take effect and show a message that _"Image editing tools are being loaded."_ until it has been fully loaded.
 
 If, however, the `ImageCanvas` component is only loaded **after** the `ImageToolbar` has completed loading, the outer `Suspense` will prevent the `ImageToolbar` from being displayed until the `ImageCanvas` has also loaded. It will display the outer fallback message and render the components to the screen as soon as the `ImageCanvas` has completed loading.
 
 Thus, our user interface can take three different forms:
 
-* `ImageCanvas` and `ImageToolbar` have loaded successfully and are both displayed
-* `ImageCanvas` has not finished loading and the message "Application is loading" message is displayed \(independent of the status of the `ImageToolbar`\)
-* `ImageCanvas` has loaded but `ImageToolbar` has not. In this case, `ImageCanvas` will be displayed but instead of the `ImageToolbar`, a message saying _"Image editing tools are being loaded."_  will be shown.
+- `ImageCanvas` and `ImageToolbar` have loaded successfully and are both displayed
+- `ImageCanvas` has not finished loading and the message "Application is loading" message is displayed \(independent of the status of the `ImageToolbar`\)
+- `ImageCanvas` has loaded but `ImageToolbar` has not. In this case, `ImageCanvas` will be displayed but instead of the `ImageToolbar`, a message saying _"Image editing tools are being loaded."_ will be shown.
 
 This way we explicitly prevent the image editing tools from being displayed to the user without having a fully loaded image to display alongside it. Nesting `Suspense` fallbacks allow for a greater degree of flexibility and granular decision making of which components should be shown at any time.
 
@@ -109,4 +109,3 @@ This way we explicitly prevent the image editing tools from being displayed to t
 {% hint style="warning" %}
 **Be careful:** **Lazy** and **Suspense** are only supported in **client-side** applications for now. Currently, there is no support for this feature for **server-side** rendering but it is in active development.
 {% endhint %}
-

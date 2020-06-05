@@ -10,6 +10,8 @@ Furthermore, this book is intended as an **introduction to React**. It is not an
 
 **But do not worry**: it all sounds more complicated than it actually is. Every reader that has worked with something like jQuery in the past, should not have any problems working through the examples in this book and understanding the explanations.
 
+<div class="force-break-before"></div>
+
 ## A few words on this book
 
 I self-published this book to retain full control on all channels of distribution, the pricing model and all rights and freedom. I am not "in it for the money" or to get rich, but I primarily want to have as many of you benefit from the book as possible. This is why you can still find a free German version of this book online at the following URL: [https://lernen.react-js.dev](https://lernen.react-js.dev).
@@ -21,4 +23,3 @@ The book has been written entirely in Markdown format. I have used [Gitbook.com]
 If you loved the book or if you simply have a question, you can reach out to me via Twitter. I always like to receive feedback. It does not matter if it is words of encouragement or constructive criticism.
 
 And now, I hope you enjoy the book!
-

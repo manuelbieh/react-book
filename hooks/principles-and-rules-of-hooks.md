@@ -36,6 +36,8 @@ I've got good news for those of you who are using **Create React App**: you do n
 
 We talked about the formalities and how to check that we are not violating these pre-defined Hooks rules. But what are those rules exactly?
 
+<div class="force-break-before"></div>
+
 #### Hooks can only be used in React function components
 
 **Hooks** can only be called in React function components, not in **class components** or anywhere else. This means that a function that uses Hooks always has to be a React component, meaning it always has a return value (either JSX, Arrays, Strings or _null_).
@@ -47,10 +49,8 @@ We talked about the formalities and how to check that we are not violating these
 ```jsx
 class MyComponent extends React.Component {
   render() {
-    const [value, setValue ] = useState();
-    return (
-      <input type="text" onChange={(e) => setValue(e.target.value)} />
-    );
+    const [value, setValue] = useState();
+    return <input type="text" onChange={(e) => setValue(e.target.value)} />;
   }
 }
 ```
@@ -63,11 +63,9 @@ However:
 
 ```jsx
 const MyComponent = () => {
-  const [value, setValue ] = useState();
-  return (
-    <input type="text" onChange={(e) => setValue(e.target.value)} />
-  );
-}
+  const [value, setValue] = useState();
+  return <input type="text" onChange={(e) => setValue(e.target.value)} />;
+};
 ```
 
 #### Hooks are only allowed to be used on the highest layer inside of the function component
@@ -82,7 +80,7 @@ It is **not possible** to use **Hooks** inside of **loops, conditions or nested 
 if (title) {
   useEffect(() => {
     document.title = title;
-  }, [title])
+  }, [title]);
 }
 ```
 
@@ -95,8 +93,7 @@ useEffect(() => {
   if (title) {
     document.title = title;
   }
-}, [title])
+}, [title]);
 ```
 
 If you installed the ESLint plugin as outlined above and configured the `.eslintrc` to use the rules as described, you don't have to fear accidentally run into any of those errors. ESLint will prompt you with a warning as to how you violated one of the rules.
-

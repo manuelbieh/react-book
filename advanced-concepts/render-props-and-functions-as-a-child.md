@@ -25,8 +25,8 @@ const italic = (string) => {
 };
 
 const Formatter = (props) => {
-  if (typeof props.children !== "function") {
-    console.warn("children prop must be a function!");
+  if (typeof props.children !== 'function') {
+    console.warn('children prop must be a function!');
     return null;
   }
 
@@ -41,7 +41,7 @@ Using this **Function as Children** component, a function in JSX is passed to th
 ```jsx
 <div>
   <p>This text does not know about the Formatter function</p>
-  <Formatter>{({ bold }) => <p>This text {bold("does though")}</p>}</Formatter>
+  <Formatter>{({ bold }) => <p>This text {bold('does though')}</p>}</Formatter>
 </div>
 ```
 
@@ -53,7 +53,7 @@ Let's look at our second example again which we talked about in the chapter on H
 class CryptoPrices extends React.Component {
   state = {
     isLoading: true,
-    items: []
+    items: [],
   };
 
   componentDidMount() {
@@ -62,24 +62,25 @@ class CryptoPrices extends React.Component {
 
   loadData = async () => {
     this.setState(() => ({
-      isLoading: true
+      isLoading: true,
     }));
 
     const { limit } = this.props;
 
     try {
       const cryptoTicker = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&per_page=${limit || 10}`
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&per_page=${limit ||
+          10}`
       );
       const cryptoTickerResponse = await cryptoTicker.json();
 
       this.setState(() => ({
         isLoading: false,
-        items: cryptoTickerResponse
+        items: cryptoTickerResponse,
       }));
     } catch (err) {
       this.setState(() => ({
-        isLoading: false
+        isLoading: false,
       }));
     }
   };
@@ -88,14 +89,14 @@ class CryptoPrices extends React.Component {
     const { isLoading, items } = this.state;
     const { children } = this.props;
 
-    if (typeof children !== "function") {
+    if (typeof children !== 'function') {
       return null;
     }
 
     return children({
       isLoading,
       items,
-      loadData: this.loadData
+      loadData: this.loadData,
     });
   }
 }
@@ -103,10 +104,10 @@ class CryptoPrices extends React.Component {
 
 At first glance, the example does not look much different to the one we have introduced in the previous chapter using Higher Order Components. But if you pay attention, you will notice some differences:
 
-* No new component is generated and we can work directly with our current component
-* The `loadData` method can access `this.props` to read the `limit` prop. This can then be used as a parameter in the API call
-* The `render()` method does not return any component that was passed in anymore and calls the `children` function instead which it receives from its own props
-* The `children` function receives the `isLoading` state and returns the items.
+- No new component is generated and we can work directly with our current component
+- The `loadData` method can access `this.props` to read the `limit` prop. This can then be used as a parameter in the API call
+- The `render()` method does not return any component that was passed in anymore and calls the `children` function instead which it receives from its own props
+- The `children` function receives the `isLoading` state and returns the items.
 
 Using this component is similar to that from our previous example, with the exception that we can also pass an optional `limit` prop in this case:
 
@@ -186,6 +187,8 @@ It is personal preference to a degree. You do not need to give this prop the nam
 
 It is possible to have an arbitrary number of props in such a component. If you were to implement a component which returns a table which includes a table head and a body, both receiving data from the data component, that would be no problem at all.
 
+<div class="force-break-before"></div>
+
 ## Render Props and FaaCs in combination with Higher Order Components
 
 Here is a neat little trick: If you ever need a **Higher Order Component** but you only have a **FaaC** or **Render Prop** component, you can turn these into an HOC like this:
@@ -196,7 +199,9 @@ function withCryptoPrices(WrappedComponent) {
     render() {
       return (
         <CryptoPrices>
-          {(cryptoPriceProps) => <WrappedComponent {...this.props} {...cryptoPriceProps} />}
+          {(cryptoPriceProps) => (
+            <WrappedComponent {...this.props} {...cryptoPriceProps} />
+          )}
         </CryptoPrices>
       );
     }
@@ -211,4 +216,3 @@ The **Function as a Child** pattern and the **Render-Props** pattern are both us
 
 In contrast to a HOC, they can be easily used within the `render()` method of a component and do not need "linked" with another additional component making them more flexible and readable than **Higher Order Components**.
 {% endhint %}
-

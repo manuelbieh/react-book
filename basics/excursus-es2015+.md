@@ -892,6 +892,8 @@ const { name, class: ticketClass } = passenger;
 
 The value of the `class` property is written into the new variable `ticketClass` which, as opposed to `class`, is a valid name for a variable. The name of the passenger can easily be destructured into a variable with the name `name`.
 
+<div class="force-break-before"></div>
+
 **Defaults in destructuring assignments**
 
 It is also possible to use defaults with **destructuring**. If you are trying to destructure a property of an object in which it does not exist, you can define a default to use instead. Instead of using a colon as we did for reserved names, we use the equals sign followed by the default value we want to pass:
@@ -1192,7 +1194,9 @@ It is relatively simple to refactor code based on callbacks into one that is usi
 navigator.geolocation.getCurrentPosition(
   (position) => {
     console.log(
-      `User position is at ${position.coords.latitude}, ${position.coords.longitude}`
+      `User position is at ${position.coords.latitude}, ${
+        position.coords.longitude
+      }`
     );
   },
   () => {
@@ -1217,7 +1221,9 @@ Yep, that's it! Now we can access the user's location like the following instead
 getCurrentPositionPromise()
   .then((position) => {
     console.log(
-      `User position is at ${position.coords.latitude}, ${position.coords.longitude}`
+      `User position is at ${position.coords.latitude}, ${
+        position.coords.longitude
+      }`
     );
   })
   .catch(() => {
@@ -1264,6 +1270,8 @@ Babel was first to implement a solution that was based on the previous standard 
 After **10** years, we have finally reached consensus for the specification and JavaScript engines are busy implementing it. This sounds rather complicated. It surely has been in the past. However, nowadays most agree and developers finally found clarity. But there are a few gotchas still which is why we should still rely on Webpack, Babel or TypeScript to work with modules. But more on that later.
 
 We have talked a lot about the history of modules now. But how do imports work and what even are modules?
+
+<div class="force-break-before"></div>
 
 ### Modules in JavaScript
 

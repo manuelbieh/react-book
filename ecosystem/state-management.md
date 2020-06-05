@@ -12,6 +12,8 @@ Despite a number of voices which keep proclaiming Redux's death, the interest in
 
 In fact, **Redux** makes use of **Context** and **Hooks** under the hood and uses these principles to optimize its own performance and simplify its API. Moreover, **Redux** has seen a great increase of custom add-ons and tools for their own ecosystem which is enhanced, rather than replaced, by the new functionality offered by React.
 
+<div class="force-break-before"></div>
+
 ### Introduction to Redux
 
 As mentioned earlier, **Redux** is a predictable state container. But what exactly does this mean? I want to add some back story here to answer this question properly. It's important to really understand the principles of Redux to avoid common errors and set yourself up for success.
@@ -654,6 +656,8 @@ In most previous examples, only the `<App />` component was passed to `ReactDOM.
 
 In theory, `Provider` components can be nested inside each other. Components connected to a store, will always the **store** of the next `Provider` component up. However, this is not common practice and leads to more confusion than necessary. When two stores exist in parallel, reducers of both stores should be combined via `combineReducer()` into one big store. This will allow the `Provider` to wrap around the rest of the elements using only a single store.
 
+<div class="force-break-before"></div>
+
 #### Connecting components to a store using the connect function
 
 Now onto the harder part of React with Redux: **connecting** a React component to a **Redux store** using a `connect()` function. This function can take up to 4 parameters of which the first 3 are functions which can also take 3 parameters. That sounds like a lot. But be rest assured: in most cases, we only really need 2 out of these 4 parameters and the functions will only take a single argument. But let's go through everything step by step increasing the complexity with each step.
@@ -661,7 +665,12 @@ Now onto the harder part of React with Redux: **connecting** a React component t
 The function takes the following form:
 
 ```javascript
-connect(mapStateToProps, mapDispatchToProps, mergeProps, options);
+connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps,
+  options
+);
 ```
 
 Calling the `connect()` function will create a **Higher Order Component**. It can be used to transfer parts of the state of the store to this component. In order to decide which parts of the state should be passed as props, we use the first parameter: `mapStateToProps`.
@@ -792,7 +801,10 @@ We want to add the possibility of adding new todos to our `TodoList`, mark them 
 
 ```javascript
 // Helper function to create a (hopefully ;)) unique ID
-const getPseudoRandomId = () => Math.random().toString(36).slice(-6);
+const getPseudoRandomId = () =>
+  Math.random()
+    .toString(36)
+    .slice(-6);
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -892,7 +904,10 @@ All the properties returned by `mapStateToProps` as well as `mapDispatchToProps`
 If we wanted to only pass `mapDispatchToProps()` to the `connect()` call to be able to dispatch **actions** from a component, we can pass `null` as a first parameter. This means that we do not have read access to the component.
 
 ```javascript
-const ConnectedTodoList = connect(null, mapDispatchToProps)(TodoList);
+const ConnectedTodoList = connect(
+  null,
+  mapDispatchToProps
+)(TodoList);
 ```
 
 #### Merging StateProps and DispatchProps using MergeProps
@@ -963,7 +978,10 @@ export default (state = initialState, action) => {
 
 ```javascript
 // store/todos/actions.js
-const getPseudoRandomId = () => Math.random().toString(36).slice(-6);
+const getPseudoRandomId = () =>
+  Math.random()
+    .toString(36)
+    .slice(-6);
 
 export const addTodo = (text) => ({
   type: 'ADD_TODO',
@@ -1051,7 +1069,10 @@ const mapDispatchToProps = {
   changeStatus,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList);
 ```
 
 ```jsx
@@ -1101,7 +1122,10 @@ React Redux will automatically wrap these with a `dispatch` call.
 in `mapStateToProps`, we define that the want to pass the `todos` branch of our store to our components. Then, `mapStateToProps` as well as `mapDispatchToProps` will be passed to the `connect()` function:
 
 ```javascript
-connect(mapStateToProps, mapDispatchToProps);
+connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
 ```
 
 But that's not at all: `connect()` creates a new **HOC** which we pass to our `TodoList` component.

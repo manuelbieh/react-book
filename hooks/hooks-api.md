@@ -98,6 +98,8 @@ The `useEffect()` **Hook** combats this problem and allows for a _safe_ mechanis
 
 The **Hook** expects a **function** as its first parameter and a **dependency array** as its second. The function is called **after** the component has rendered. If we have passed an **optional dependency array** to this Hook, the function we pass will only be executed if at least one of the values in the **dependency array** has changed. If an **empty dependency array** is passed, the function will only be run on the **first render** of the component - similar to the `componentDidMount()` lifecycle method which we learned about with Class components.
 
+<div class="force-break-before"></div>
+
 ### Cleaning up side effects
 
 Sometimes side effects leave "traces" that have to be cleaned up once a component is no longer in use. If for example you had intervals which you had started with `setInterval()`, these should be stopped with `clearTimeOut()` once the component has been removed. If left untreated, these side effects can lead to actual problems or even memory leaks.

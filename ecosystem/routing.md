@@ -274,9 +274,9 @@ If the URL `/old` is hit \(first example\) or `/users/123` \(second example\), t
 
 Each component that was rendered by React Router and has been added as a `component` prop to a `Route` component, automatically receives three other props:
 
-* `match`
-* `location`
-* `history`
+- `match`
+- `location`
+- `history`
 
 Each of these props can be accessed just like any other props. **Class components** can access these via `this.props` whereas **function components** can access these with `props`:
 
@@ -352,6 +352,8 @@ To facilitate said behavior, **React Router** supports a `Link` component. It ca
 Apart from the `to` prop, `Links` can also be equipped with an `innerRef`. These will be filled by `createRef()` or `useRef()` which both create a ref that can be used by the component. Moreover, `Link` also supports a `replace` prop which allows us to replace the current URL in the browser history instead of creating a new history entry. Be careful though, you cannot access the previous route when pressing the back button in the browser anymore if you chose to make use of the `replace`prop.
 
 Any other props that are passed to the `<Link />` element, will be passed down to the generated anchor element. `<Link to="/" title="Homepage">Home</Link>` would generate the following markup: `<a href="/" title="Homepage">Home</a>`.
+
+<div class="force-break-before"></div>
 
 ## Special case: NavLink
 
@@ -474,7 +476,7 @@ const NavigateHomeButton = () => {
   };
 
   return <button onClick={goHome}>Take me home</button>;
-}
+};
 ```
 
 This example demonstrates how we can implement a button which will direct us to the home page once it's clicked using the `useHistory()` Hook.
@@ -535,4 +537,3 @@ useRouteMatch('/orders/:orderid');
 ```
 
 Calling this function with `/users/:userid` will return a value of `null`.
-

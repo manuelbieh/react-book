@@ -648,6 +648,8 @@ ReactDOM.render(
 );
 ```
 
+<div class="force-break-before"></div>
+
 ### Summary
 
 Components have to act as **pure functions** and return the same result if the same props were passed.

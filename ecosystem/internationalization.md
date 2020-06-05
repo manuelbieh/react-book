@@ -216,6 +216,8 @@ const { t } = useTranslation(['namespace1', 'namespace2']);
 
 If no namespace has been provided, the default settings will be used.
 
+<div class="force-break-before"></div>
+
 #### Complex translations using the Trans component
 
 In a few select cases, it might be necessary to use a React component in the translations. For example, one might want to use the `Link` component from **React Router** to link to a different URL within a translation. The `t()` function does not support this out of the box. The solution to this problem comes in the form of the `Trans` component from `react-18next`. It is not always easy to understand how it should be used but it can be powerful tool.
