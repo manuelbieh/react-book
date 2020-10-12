@@ -6,7 +6,7 @@ To combat large bundles, a technique called **Code Splitting** is used to counte
 
 One of the simplest ways to make use of code splitting is to use **Dynamic Import Syntax**. It's currently in discussion at **TC39** and thus in the process of being standardized. But **Babel** and **Webpack** enable us to make use of Code Splitting today. It is necessary to install the babel plugin `@babel/plugin-syntax-dynamic-import` to make use of code splitting. **Create React App** as well as **next.js** and **Gatsby** support **Code Splitting** out of the box and do not need to be configured to allow it.
 
-### Using dynamic imports
+## Using dynamic imports
 
 We have briefly touched on import syntax in the chapter on ES2015+. Dynamic Import Syntax is an extension of this syntax and allows us to dynamically lazy load them. Dynamic imports are similar to a promise:
 
@@ -24,7 +24,7 @@ import('./greeter').then((greeter) => {
 
 When Webpack finds a dynamic import, it will automatically perform code splitting and put this file into its own so-called _Chunk_. These Chunks are loaded independently once they are needed within the application - thus the naming of **Lazy Loading.**
 
-### Lazy Loading of components with React.lazy\(\)
+## Lazy Loading of components with React.lazy\(\)
 
 Let's talk about **lazy loading in React**. To make the experience of performing **lazy loading** more enjoyable, React offers its own method from version **16.6** onward to dynamically lazy load components. It is combined with **Dynamic Import Syntax** and allows the developer to easily load certain components only when the application has started running thus further reducing the size of the bundle.
 
@@ -57,9 +57,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 This method allows us to easily optimize for the size of our JavaScript bundle and only load certain files from the server when they are actually requested by the user. During the time it takes loading and receiving the data from the server to being executed, we will see information informing us that `<div>Application is loading</div>`. This is only possible because we are using a feature which has also been added to React in version **16.6**: `React.Suspense.`
 
-<div class="force-break-before"></div>
-
-### Display fallbacks with React.Suspense
+## Display fallbacks with React.Suspense
 
 Back in the day, the Suspense component on the React object was named **Placeholder**. This is a very accurate description of the task it fulfills: acting as a placeholder for components which have not yet been rendered and displaying alternative content in the meantime. These fallbacks can take many forms: they can be a message that parts of the application are still being loaded or take the form of a loading animation. The placeholder to display is passed to **Suspense** in the `fallback` prop and _has_ to be defined. Any valid React Element can be used and passed as a prop. Strings such as `<Suspense fallback="Loading ...">[…]</Suspense>` are also a valid.
 
@@ -98,9 +96,9 @@ If, however, the `ImageCanvas` component is only loaded **after** the `ImageTool
 
 Thus, our user interface can take three different forms:
 
-- `ImageCanvas` and `ImageToolbar` have loaded successfully and are both displayed
-- `ImageCanvas` has not finished loading and the message "Application is loading" message is displayed \(independent of the status of the `ImageToolbar`\)
-- `ImageCanvas` has loaded but `ImageToolbar` has not. In this case, `ImageCanvas` will be displayed but instead of the `ImageToolbar`, a message saying _"Image editing tools are being loaded."_ will be shown.
+* `ImageCanvas` and `ImageToolbar` have loaded successfully and are both displayed
+* `ImageCanvas` has not finished loading and the message "Application is loading" message is displayed \(independent of the status of the `ImageToolbar`\)
+* `ImageCanvas` has loaded but `ImageToolbar` has not. In this case, `ImageCanvas` will be displayed but instead of the `ImageToolbar`, a message saying _"Image editing tools are being loaded."_ will be shown.
 
 This way we explicitly prevent the image editing tools from being displayed to the user without having a fully loaded image to display alongside it. Nesting `Suspense` fallbacks allow for a greater degree of flexibility and granular decision making of which components should be shown at any time.
 
@@ -109,3 +107,4 @@ This way we explicitly prevent the image editing tools from being displayed to t
 {% hint style="warning" %}
 **Be careful:** **Lazy** and **Suspense** are only supported in **client-side** applications for now. Currently, there is no support for this feature for **server-side** rendering but it is in active development.
 {% endhint %}
+

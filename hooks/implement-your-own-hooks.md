@@ -2,7 +2,7 @@
 
 Apart from the **internal Hooks** such as `useState` or `useEffect`, it is also possible to create our own **custom Hooks**. These in turn can use **internal Hooks** or other **custom Hooks**, and encapsulate logic in a reusable form. Creating **custom Hooks** can be really useful if you want to use the same logic in multiple components. Even if the complexity of the component's logic grows, it can be useful to **divide** it and break it up into **custom Hooks** with meaningful names in order to keep the current **Function component** more manageable and readable.
 
-### Your first custom Hook
+## Your first custom Hook
 
 Let's start with a relatively simple example and assume that we want to create a **custom Hook** with which we can invoke Side Effects and change the background-color of a component whenever it is mounted. A typical name for such a **custom Hook** would be `useBackgroundColor()` — remember that Hooks always need to start with `use`. This Hook expects a valid CSS color and then applies the color as the current background color. It is applied as soon as a component using it is mounted or passes a new value to the **custom Hook**.
 
@@ -74,7 +74,7 @@ Alternatively, we could have implemented the `useEffect()` Hook manually in each
 
 While JSX allows us to create reusable components for the user interface, Hooks offer us the opportunity to reuse logic across components without having to make any compromises.
 
-### Working with data in Hooks
+## Working with data in Hooks
 
 Passing data via **Custom Hooks** is no one-way street. In our first custom Hook example we've seen that we can pass data into a **custom Hook** as a function parameter. The Hook can also _return_ data that can then be used in the component. The form in which this data is returned from the **Hook** is entirely at the discretion of the developer. You can easily return strings, tuples but also entire React components or elements or even a combination of all of them. You're free to choose so to say.
 
@@ -163,3 +163,4 @@ ReactDOM.render(<RepoLookup />, document.getElementById('root'));
 ```
 
 Side note: GitHub's public API only allows about 60 API requests per hour. If you feel that you want to access more and play around with these examples a bit more, you should create a GitHub API token and append it to the URL with `access_token=xyz`. The token can be generated here: [https://github.com/settings/tokens](https://github.com/settings/tokens).
+

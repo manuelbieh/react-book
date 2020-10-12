@@ -4,7 +4,7 @@ React currently offers **10** Hooks for us to use. Of these 10, **3** of these a
 
 The remaining **additional Hooks** will help us to cover edge cases or to deal with certain optimizations at a later date. In this chapter however, we will focus on "simple" Hooks and how we can now implement functionality in **Function components** that was previously reserved for **Class components.**
 
-### **State with useState\(\)**
+## **State with useState\(\)**
 
 Let us have a look at how we previously accessed and modified state:
 
@@ -102,7 +102,7 @@ ReactDOM.render(<Counter />, document.getElementById('root'));
 
 If, at this point, you are wondering how you would manage very complex state, I would urge you to "hold that thought" as we will learn about the `useReducer()` Hook in a later chapter. For now, we will focus on the three **basic** Hooks.
 
-### Side effects with useEffect\(\)
+## Side effects with useEffect\(\)
 
 The name of the `useEffect()` **Hook** derives from its intended usage: for **Side Effects**. In this case, we mean loading data via an API, registering global events or manipulating DOM elements. The `useEffect()` Hook includes functionality that was previously found in the `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` lifecycle methods.
 
@@ -211,7 +211,7 @@ Of course you can debate whether it would be useful to extract the call to chang
 
 Even then, we would still need to call the same \(and now abstracted\) function in two places: `componentDidMount()` and `componentDidUpdate()`. Additionally, we would have to add another class method which further bloats our class component and only reduces duplication by adding more abstraction layers.
 
-### Accessing Context with useContext\(\)
+## Accessing Context with useContext\(\)
 
 The third and final basic Hook is `useContext()`. It allows us to consume data from a Context Provider without having to define a Provider component with a function as a child.
 
@@ -248,3 +248,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 The `ContextExample` component is receiving its data from the pseudo-account data provider: the`AccountContext` provider. This works without having to wrap an `AccountContext.Consumer` component around `ContextExample`. It does not only save us multiple lines of code in the component itself, but also leads to a much better debugging experience as the component tree is not as deeply nested as it would be otherwise.
 
 However, this simplification is entirely optional. If you prefer to keep using the well-known Consumer component to access data from a provider, that is completely fine.
+

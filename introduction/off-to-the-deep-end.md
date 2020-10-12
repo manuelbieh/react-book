@@ -1,4 +1,4 @@
-# Into the deep end
+# Into to the deep end
 
 We have just talked about the "what", "when" and "where" but we have not yet talked about the "how". Let's write our first **React component.** In order to display our component in the browser, we need to not only install **React** but also **ReactDOM**, a package that enables us to mount our application in the browser — put simply: to use it in the browser.
 
@@ -73,9 +73,9 @@ In terms of an array, the array can include strings, numbers, React elements or 
 
 Even if it is entirely up to us how to structure our JavaScript classes, a common pattern has evolved to put our `render()` method at the end of all our methods. This is not mandatory of course but it aids readability. Many renowned engineers in the React scene advocate for this guideline too. The code guidelines by AirBnB also include this rule. Speaking from my own experience here, I can say that it does help to follow this guideline to make your day-to-day React work easier.
 
-![Error message for missing render() method](../.gitbook/assets/react-no-render-error.png)
+![Error message for missing render\(\) method](../.gitbook/assets/react-no-render-error.png)
 
-![Error message for missing render() method](../.gitbook/assets/invalid-react-element.png)
+![Error message for missing render\(\) method](../.gitbook/assets/invalid-react-element.png)
 
 ```jsx
 React.createElement();
@@ -128,3 +128,4 @@ While this is good to know in theory, we normally do not call `ReactDOM.render()
 {% endhint %}
 
 And just like that, we have discussed the basics of how React works under the hood, implemented our first component and finally displayed it in the browser. Congrats!
+

@@ -144,7 +144,6 @@ Or with yarn:
 ```bash
 yarn add --dev babel-plugin-transform-react-remove-prop-types
 ```
-
 {% endhint %}
 
 ## Flow
@@ -329,3 +328,4 @@ This allows us to also import React's **type definitions** which is necessary if
 **TypeScript** files are easy to spot as they usually have the file ending of `.ts` or, if **TypeScript** is used in a React project, `.tsx`.
 
 With the release of **Babel 7**, the integration of **TypeScript** in projects has become much easier as one does not have to install the **TypeScript** compiler \(`tsc`\) anymore but can simply use a Babel plugin. This plugin is installed once you install the Babel Preset `@babel/preset-typescript`. If you are looking for more information on how to use **TypeScript** in your React projects, the official **TypeScript** documentation is a great place to start: [https://www.typescriptlang.org/docs](https://www.typescriptlang.org/docs).
+

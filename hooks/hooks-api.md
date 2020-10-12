@@ -4,19 +4,19 @@ In this chapter I want to summarize all the Hooks which are available to us inte
 
 The three **basic Hooks** which I mentioned briefly beforehand are:
 
-- `useState`
-- `useEffect`
-- `useContext`
+* `useState`
+* `useEffect`
+* `useContext`
 
 The **seven additional Hooks** are:
 
-- `useReducer`
-- `useCallback`
-- `useMemo`
-- `useRef`
-- `useImperativeHandle`
-- `useLayoutEffect`
-- `useDebugValue`
+* `useReducer`
+* `useCallback`
+* `useMemo`
+* `useRef`
+* `useImperativeHandle`
+* `useLayoutEffect`
+* `useDebugValue`
 
 ## useState
 
@@ -97,8 +97,6 @@ This **Hook** is intended for **imperative side effects** such as API requests, 
 The `useEffect()` **Hook** combats this problem and allows for a _safe_ mechanism to use side effects within **Function components**.
 
 The **Hook** expects a **function** as its first parameter and a **dependency array** as its second. The function is called **after** the component has rendered. If we have passed an **optional dependency array** to this Hook, the function we pass will only be executed if at least one of the values in the **dependency array** has changed. If an **empty dependency array** is passed, the function will only be run on the **first render** of the component - similar to the `componentDidMount()` lifecycle method which we learned about with Class components.
-
-<div class="force-break-before"></div>
 
 ### Cleaning up side effects
 
@@ -352,9 +350,9 @@ The guiding principle of **reducers** should be known to those in the React comm
 
 A common use case for reducers forms the management of API requests. Common conventions dictate that three actions for each API request should be defined:
 
-- an action which informs the application that the data is loading when the request has started
-- an action which resets the loading state and \(if the request has failed\) can inform the state of an error
-- an action which writes the data received by the API request into state if it was successful
+* an action which informs the application that the data is loading when the request has started
+* an action which resets the loading state and \(if the request has failed\) can inform the state of an error
+* an action which writes the data received by the API request into state if it was successful
 
 Let's have a look at an example using our previous account data example using the GitHub API:
 
@@ -898,3 +896,4 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
+

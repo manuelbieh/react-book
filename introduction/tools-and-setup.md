@@ -42,11 +42,11 @@ So do not be confused if you encounter `babel-core` instead of `@babel/core` in 
 
 The **presets** that I have used in my work with React \(and which I also suggest you should use are\):
 
-- `@babel/preset-env`
-- `@babel/preset-react`
-- `@babel/plugin-proposal-object-rest-spread`
-- `@babel/plugin-proposal-class-properties`
-- `@babel/plugin-syntax-dynamic-import`
+* `@babel/preset-env`
+* `@babel/preset-react`
+* `@babel/plugin-proposal-object-rest-spread`
+* `@babel/plugin-proposal-class-properties`
+* `@babel/plugin-syntax-dynamic-import`
 
 If you want to work with static type checking like Flow or TypeScript, you also need to install `@babel/preset-flow` or `@babel/preset-typescript` respectively.
 
@@ -193,3 +193,4 @@ In order to understand all the code examples in the book, I strongly suggest to 
 
 If you do not want to install CRA locally or if you are in a hurry, you can try working with [CodeSandbox](https://codesandbox.io/). It allows you to create a new setup with [**Create React App**](https://codesandbox.io/s/new) in seconds and then allows you interact with it in a browser environment.
 {% endhint %}
+

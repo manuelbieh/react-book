@@ -230,8 +230,9 @@ And this is it! All these examples and explanations should have laid the groundw
 
 ## Summary
 
-- Multi-line JSX has to be surrounded by parentheses
-- JSX includes JavaScript expressions. These have to be contained in braces and can then be used in props
-- To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
-- CSS inline styles have to be written as a JavaScript object
-- Comments are put within braces and use multi-line comment Syntax: `{/* */}`
+* Multi-line JSX has to be surrounded by parentheses
+* JSX includes JavaScript expressions. These have to be contained in braces and can then be used in props
+* To use HTML elements, the DOM Element Interface writing standard has to be used \(`htmlFor` instead of `for`, `className` instead of `class`\)
+* CSS inline styles have to be written as a JavaScript object
+* Comments are put within braces and use multi-line comment Syntax: `{/* */}`
+

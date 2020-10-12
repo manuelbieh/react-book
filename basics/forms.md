@@ -107,7 +107,7 @@ At first glance the `Controlled` component does not look very different from the
 
 There are a few other things to consider. The `value` attribute is only ever allowed to be a **string** but never `undefined` or `null`.
 
-![Warning for a controlled input field with the value "null"](../.gitbook/assets/react-uncontrolled-null.png)
+![Warning for a controlled input field with the value &quot;null&quot;](../.gitbook/assets/react-uncontrolled-null.png)
 
 The `select` elements that have the `multiple` attribute are an exception to the rule. The `value` attribute in this case needs to be an **array** \(rather than a string\).
 
@@ -234,8 +234,6 @@ If a value is modified, as is the case with text inputs and radio buttons, the c
 
 This is **business as usual** for the user and they will not notice that the form works differently behind the scenes and does not reflect usual browser behavior. React fully takes care of the logic in the background and painted a new "frame" in the user interface.
 
-<div class="force-break-before"></div>
-
 ### Changing state in checkboxes and radio buttons
 
 Checkboxes \(`<input type="checkbox" />`\) work in a similar fashion but their value will remain the same. Checkboxes change their state rather than their value by providing the boolean `true` or `false` in its `checked` property. If the `checked` property is controlled by React, the form field is said to be controlled. One can check whether the checkbox is activated \(`true`\) or not \(`false`\) by inspecting `e.target.checked` in the event handler which passes this information to React state. React then takes care of the re-render and showing the status of the checkbox to the user.
@@ -271,3 +269,4 @@ Forms in React can take a controlled or uncontrolled form.
 
 In contrast to regular HTML forms, React expects the value of textareas, selects and inputs to be in a `value` attribute.
 {% endhint %}
+

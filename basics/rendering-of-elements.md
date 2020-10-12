@@ -82,3 +82,4 @@ In practice, `ReactDOM.render()` is only called once. Mostly when opening a page
 
 **Components** \(instead of elements\) trigger a re-render if their state changes or if they have been passed new props, but let's look at components in the next chapter!
 {% endhint %}
+

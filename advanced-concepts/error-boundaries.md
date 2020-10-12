@@ -6,9 +6,9 @@ An **Error Boundary** describes a component which can catch certain errors **in 
 
 They can deal with mistakes that result from the handling of the following situations:
 
-- Errors in **lifecycle methods**
-- Errors in the `render()` method anywhere **inside** the Error Boundary
-- Errors in the `constructor()` of a component
+* Errors in **lifecycle methods**
+* Errors in the `render()` method anywhere **inside** the Error Boundary
+* Errors in the `constructor()` of a component
 
 If React encounters an error in a lifecycle method, the `render()` method or in the constructor of a component, the Error Boundary can safely prevent it. It can display a fallback that can prompt the user to restart their application or inform them that something has gone wrong. Similar to Context components, Error Boundaries can be nested inside each other. If an error occurs, the implementation of the higher Error Boundary component takes precedence.
 
@@ -18,14 +18,14 @@ If React encounters an error in a lifecycle method, the `render()` method or in 
 
 There are certain situations in which Error Boundaries do not work:
 
-- in event handlers
-- in asynchronous code \(like `setTimeOut()` or `requestAnimationFrame()`\)
-- in server-side rendered components \(SSR\)
-- in errors which occur in the **Error Boundary** itself
+* in event handlers
+* in asynchronous code \(like `setTimeOut()` or `requestAnimationFrame()`\)
+* in server-side rendered components \(SSR\)
+* in errors which occur in the **Error Boundary** itself
 
 **Error Boundaries** will not work in these situations as it is either not necessary or not possible for them to deal with the problem at hand. If an event-handler throws an error, this might not necessarily impact its render and React can continue to show a working interface to the user. The only repercussion would be the missing interaction based on said event.
 
-### Implementing an Error Boundary
+## Implementing an Error Boundary
 
 There are two simple rules when it comes to implementing an **Error Boundary**:
 
@@ -81,7 +81,7 @@ As `componentDidCatch()` is not a static method, it would be entirely possible t
 
 Finally, we react to possible errors in the `render()` method. If the `hasError` property in state is set to `true`, we know that an error has occurred and can thus display a warning such as `<h1>An error occured.</h1>`. If on the other hand everything works as expected, we simply return `this.props.children`. How exactly the errors encountered are dealt with is up to the developer. For example, it might be sufficient to inform the user that certain information cannot be displayed at the moment if the error is only small. If however serious errors have been encountered, we should prompt the user to reload the application.
 
-### Error Boundaries in practice
+## Error Boundaries in practice
 
 We now know how to implement an **Error Boundary**: by adding either `static getDerivedStateFromError()` or `componentDidCatch()` to your components. **Error Boundaries** should not implement their own logic, should not be too tightly coupled to other components and be as independent as possible. It is at the developer's discretion to decide how granular the **Error Boundary** should be according to the specific use case.
 
@@ -116,3 +116,4 @@ Since React version 16, components will be "unmounted" and removed from the tree
 
 In order to deal with these errors and risks properly, **Error Boundaries** were introduced. They allow developers to inform users that the application is currently in an erroneous state. As errors and mistakes can never be fully avoided in an application, using **Error Boundaries** is highly recommended.
 {% endhint %}
+

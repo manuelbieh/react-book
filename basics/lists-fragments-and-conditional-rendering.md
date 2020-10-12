@@ -574,3 +574,4 @@ render() {
 ```
 
 We have just transformed long and potentially hard to read markup into a clean and precise `render()` method which only consists of very few components. If we ever wanted to add a change which should affect all of our text fields \(for example adding a class\), this can be added with ease by only changing data in one place — in the new `TextField` component.
+

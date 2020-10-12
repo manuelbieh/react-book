@@ -32,15 +32,13 @@ In addition, you need to amend the `.eslintrc` as shown:
 
 I've got good news for those of you who are using **Create React App**: you do not need to do any of these previous steps as those two specific rules ship with **Create React App** out of the box!
 
-### The rules of Hooks
+## The rules of Hooks
 
 We talked about the formalities and how to check that we are not violating these pre-defined Hooks rules. But what are those rules exactly?
 
-<div class="force-break-before"></div>
+### Hooks can only be used in React function components
 
-#### Hooks can only be used in React function components
-
-**Hooks** can only be called in React function components, not in **class components** or anywhere else. This means that a function that uses Hooks always has to be a React component, meaning it always has a return value (either JSX, Arrays, Strings or _null_).
+**Hooks** can only be called in React function components, not in **class components** or anywhere else. This means that a function that uses Hooks always has to be a React component, meaning it always has a return value \(either JSX, Arrays, Strings or _null_\).
 
 {% hint style="danger" %}
 **This is now allowed as it uses a Class component:**
@@ -68,7 +66,7 @@ const MyComponent = () => {
 };
 ```
 
-#### Hooks are only allowed to be used on the highest layer inside of the function component
+### Hooks are only allowed to be used on the highest layer inside of the function component
 
 It is **not possible** to use **Hooks** inside of **loops, conditions or nested functions**. Why you might wonder? This is due to how React treats **Hooks** internally. The order in which **Hooks** are executed has to be identical for each re-render of the component and explains why it is not possible to call a **Hook** conditionally. If we did in fact executed a **Hook** based on a condition, we would change the order in which the **Hooks** are being executed. We can use conditions _inside_ of **Hooks** though!
 
@@ -97,3 +95,4 @@ useEffect(() => {
 ```
 
 If you installed the ESLint plugin as outlined above and configured the `.eslintrc` to use the rules as described, you don't have to fear accidentally run into any of those errors. ESLint will prompt you with a warning as to how you violated one of the rules.
+

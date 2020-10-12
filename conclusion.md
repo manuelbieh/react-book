@@ -12,6 +12,7 @@ React allowed me to work on a number of very interesting projects over the last 
 
 If you want to support my work, you can order a copy of this book on the regular channels or buy the e-book in Kindle, Apple Books or Google Play book format and read it on your favourite device. I also love hearing about new great projects with React in Berlin, so please get in touch if you have a project that might be of interest.
 
-If you are curious, you can learn more about me and my work on [https://www.manuelbieh.de](https://www.manuelbieh.de). By the way, this website has also been built using Gatsby (a tool I told you about in one of the chapters).
+If you are curious, you can learn more about me and my work on [https://www.manuelbieh.de](https://www.manuelbieh.de). By the way, this website has also been built using Gatsby \(a tool I told you about in one of the chapters\).
 
 I look forward to hearing your feedback — be it positive or negative! You can reach me at [@manuelbieh](https://twitter.com/ManuelBieh) on Twitter.
+

@@ -177,10 +177,10 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 First of all, we define an object `defaultLanguageContextValue` which holds the default value of the newly generated Context object. This consists of:
 
-- an object called `translationStore` which contains all available translations
-- a standard language — German in this case \(`de`\) which is saved to a property called `language`
-- an array named `availableLanguages` that lists all available languages of the `translationStore` object which we dynamically generate with `Object.keys()` — in our case: `["de", "en"]`
-- a placeholder function \(`changeLanguage()`\) which is later replaced with an actual implementation in the `Localized` component. This helps us to avoid the case of incorrectly calling a function which is not yet implemented. Otherwise the warning: _"Function changeLanguage\(\) is not implemented"_.
+* an object called `translationStore` which contains all available translations
+* a standard language — German in this case \(`de`\) which is saved to a property called `language`
+* an array named `availableLanguages` that lists all available languages of the `translationStore` object which we dynamically generate with `Object.keys()` — in our case: `["de", "en"]`
+* a placeholder function \(`changeLanguage()`\) which is later replaced with an actual implementation in the `Localized` component. This helps us to avoid the case of incorrectly calling a function which is not yet implemented. Otherwise the warning: _"Function changeLanguage\(\) is not implemented"_.
 
 The `changeLanguage()` function can only be implemented in the component itself as React cannot control the state \(in this case languages and their translations\) anywhere else other than **inside of a component**. We could save the current language settings inside of a global variable, however React would not re-render the component if something changed in this global variable as this value would neither be state nor props.
 
@@ -330,3 +330,4 @@ class App extends React.Component {
 ```
 
 In this example, we are merely passing a _reference_ to the `state` object of the component. As this remains intact during the re-renders of the component, it does not trigger a re-render if the content of the state did not change.
+

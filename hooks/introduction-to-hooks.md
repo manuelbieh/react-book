@@ -33,3 +33,4 @@ In order to demonstrate just how much simpler a component definition can be by u
 ![The same functionality with React Hooks](../.gitbook/assets/react-hooks.jpg)
 
 Source: [Sunil Pai on Twitter](https://twitter.com/threepointone/status/1056594421079261185)
+

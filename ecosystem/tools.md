@@ -1,8 +1,8 @@
 # Tools and Frameworks
 
-As React has been around for a while, an ecosystem has grown around it that boasts an abundance of tools. Ranging from static site generators (in order to realize simple to medium-sized and complex static website on the basis of React) to prototyping tools to tools which allow us to display our components in some sort of styleguide, the React ecosystem has much to offer. In this small sub-chapter I want to provide a _short_ overview of the most commonly used tools and frameworks.
+As React has been around for a while, an ecosystem has grown around it that boasts an abundance of tools. Ranging from static site generators \(in order to realize simple to medium-sized and complex static website on the basis of React\) to prototyping tools to tools which allow us to display our components in some sort of styleguide, the React ecosystem has much to offer. In this small sub-chapter I want to provide a _short_ overview of the most commonly used tools and frameworks.
 
-### Storybook
+## Storybook
 
 > Storybook is a development environment for UI components. It allows us to browse through a component library, view the different states of each component, and interactively develop and test components.
 
@@ -12,7 +12,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 **URL:** [https://storybook.js.org/](https://storybook.js.org/)  
 **GitHub:** [https://github.com/storybooks/storybook](https://github.com/storybooks/storybook)
 
-### React Styleguidist
+## React Styleguidist
 
 > React Styleguidist is a component development environment with a hot reloaded dev server and a living style guide that can shared with your team.
 
@@ -22,7 +22,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 **URL:** [https://react-styleguidist.js.org/](https://react-styleguidist.js.org/)  
 **GitHub:** [https://github.com/styleguidist/react-styleguidist](https://github.com/styleguidist/react-styleguidist)
 
-### Docz
+## Docz
 
 > It has never been so easy to document your things!
 
@@ -32,7 +32,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 **URL:** [https://docz.site/](https://docz.site/)  
 **GitHub:** [https://github.com/pedronauck/docz](https://github.com/pedronauck/docz)
 
-### React Cosmos
+## React Cosmos
 
 > Dev tool for creating reusable React components
 
@@ -41,7 +41,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 **License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/react-cosmos/react-cosmos](https://github.com/react-cosmos/react-cosmos)
 
-### Gatsby
+## Gatsby
 
 > Gatsby is a free and open source framework based on React that helps developers build blazing fast websites and apps
 
@@ -51,7 +51,7 @@ As React has been around for a while, an ecosystem has grown around it that boas
 **URL:** [https://www.gatsbyjs.org/](https://www.gatsbyjs.org/)  
 **GitHub:** [https://github.com/gatsbyjs/gatsby](https://github.com/gatsbyjs/gatsby)
 
-### React Static
+## React Static
 
 > React-Static is a fast, lightweight, and powerful progressive static site generator based on React and its ecosystem.
 
@@ -60,10 +60,11 @@ As React has been around for a while, an ecosystem has grown around it that boas
 **License:** MIT \(Open Source\)  
 **GitHub:** [https://github.com/nozzle/react-static](https://github.com/nozzle/react-static)
 
-### Next.js
+## Next.js
 
 Next.js describes itself as "The React Framework" for a number of different use cases, ranging from static to dynamic websites, small to large companies, and mobile to classic websites. Next.js lives up to its claim, as 36,000 stars on GitHub indicate; it is extremely popular within the community. For many, Next.js is a serious alternative to Create React App. As opposed to CRA, Next.js supports server-side rendering out of the box, which is especially important for developers optimizing for SEO.
 
 **License:** MIT \(Open Source\)  
 **URL:** [https://nextjs.org/](https://nextjs.org/)  
 **GitHub:** [https://github.com/zeit/next.js](https://github.com/zeit/next.js)
+

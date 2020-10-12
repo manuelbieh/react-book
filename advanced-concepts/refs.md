@@ -8,11 +8,11 @@ But a word of warning before we proceed. Even though **Refs** exist, they should
 
 However, there are a few cases in which using Refs is acceptable or even necessary. These are:
 
-- Setting focus on an input element \(`input.focus()`\) or calling methods such as `.play()` or `.pause()` on `video` or `audio` elements
-- Invoking imperative animations
-- Reading properties of elements currently in the DOM \(e.g. `.getBoundingClientRect()`\)
+* Setting focus on an input element \(`input.focus()`\) or calling methods such as `.play()` or `.pause()` on `video` or `audio` elements
+* Invoking imperative animations
+* Reading properties of elements currently in the DOM \(e.g. `.getBoundingClientRect()`\)
 
-### String Refs
+## String Refs
 
 The simplest and oldest form of refs are **string refs**. Nowadays, it is not recommended to use them anymore as they can impact performance and might be deprecated in the future. I wanted to mention them for the sake of completeness though as they are currently still part of the official API and as you might come across them during your work with React \(especially if you are working with legacy code\).
 
@@ -37,7 +37,7 @@ ReactDOM.render(<ComponentWithStringRef />, document.getElementById('app'));
 
 We can use `this.refs.username` to gain access to the input field, and then focus it by calling `this.refs.username.focus()`.
 
-### Callback Refs
+## Callback Refs
 
 A more flexible alternative to **string refs** are the so-called **callback refs**. While being more flexible, their handling is slightly more cumbersome and needs to be managed explicitly. Using **callback refs**, it is possible to pass refs to a component's **child components** and access their corresponding DOM elements.
 
@@ -110,7 +110,7 @@ If you were to name the prop `ref`, leaving us with `<UsernameInput ref={this.se
 
 However, if forwarding refs to child components is something you are trying to achieve, you are better off using the `forwardRef()` method. I will explain it at the end of this chapter.
 
-### Refs via createRef\(\)
+## Refs via createRef\(\)
 
 With React 16.3, we have seen the introduction of the top-level API method `React.createRef()`. It resembles the usage of **callback refs** but differs in a few cases. As was the case with **callback refs**, you also need to take care of ref handling yourself and it is still common practice to assign the **ref** to an **instance property**.
 
@@ -171,7 +171,7 @@ class MyComponent extends React.Component {
 
 We are accessing the element via `this.usernameEl.current`.
 
-### Ref forwarding
+## Ref forwarding
 
 **Ref forwarding** \(references to a component or a DOM element\) enables passing a reference through a component to a child component. In most cases, this will not be necessary but it can become of interest if you are creating reusable component libraries.
 
@@ -224,7 +224,7 @@ We have thus informed React that it should forward the `ref` prop on the `Userna
 
 If the **ref** is passed to a component lower in the component tree, the same restrictions apply: The relevant component either has to be a class component \(then the reference would point to the instance of the class\) or the component needs to conduct ref forwarding via `forwardRef()`.
 
-#### Be careful with Higher Order Components!
+### Be careful with Higher Order Components!
 
 Careful consideration and care needs to be taken with **refs** while implementing **Higher Order Components**. If there is doubt whether these HOC should be able to access forwarded Refs, they also need to be wrapped by a `forwardRef()` call.
 
@@ -287,3 +287,4 @@ class App extends React.Component {
   }
 }
 ```
+

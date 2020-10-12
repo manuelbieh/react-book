@@ -214,3 +214,4 @@ return (
 
 **Higher Order Components** are still widely used and there's nothing controversial about their usage. However, newer concepts to achieve the same or similar objectives have been introduced, of which many increase readability. These are **Functions as a Child**; the newer **Context API** which has been introduced in React in Version 16.3.0; and **Hooks** – which can be used inside of Function Components since 16.8.0. All of these will be explained in detail later.
 {% endhint %}
+

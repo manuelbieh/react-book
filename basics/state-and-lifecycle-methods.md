@@ -162,39 +162,37 @@ The following shall be a comprehensive overview of the **lifecycle methods** tha
 
 These methods are only called **once** when the component is first rendered \(or put simply: added to the DOM\).
 
-- `constructor(props)`
-- `static getDerivedStateFromProps(nextProps, prevState)`
-- `componentWillMount(nextProps, nextState)` \(deprecated in React 17\)
-- `render()`
-- `componentDidMount()`
+* `constructor(props)`
+* `static getDerivedStateFromProps(nextProps, prevState)`
+* `componentWillMount(nextProps, nextState)` \(deprecated in React 17\)
+* `render()`
+* `componentDidMount()`
 
 **Update phase**
 
 If new props are being passed to a component, or if state changes within the component, these update methods will be called. Alternatively, an explicit `forceUpdate()` method could be invoked.
 
-- `componentWillReceiveProps(nextProps)` \(deprecated in React 17\)
-- `static getDerivedStateFromProps(nextProps, prevState)`
-- `shouldComponentUpdate(nextProps, nextState)`
-- `componentWillUpdate(nextProps, nextState)` \(deprecated in React 17\)
-- `render()`
-- `getSnapshotBeforeUpdate(prevProps, prevState)`
-- `componentDidUpdate(prevProps, prevState, snapshot)`
+* `componentWillReceiveProps(nextProps)` \(deprecated in React 17\)
+* `static getDerivedStateFromProps(nextProps, prevState)`
+* `shouldComponentUpdate(nextProps, nextState)`
+* `componentWillUpdate(nextProps, nextState)` \(deprecated in React 17\)
+* `render()`
+* `getSnapshotBeforeUpdate(prevProps, prevState)`
+* `componentDidUpdate(prevProps, prevState, snapshot)`
 
 **Unmount phase**
 
 This phase only has one matching method which is called as soon as the component is removed from the DOM. It can be useful to tidy up event listeners and `setTimeOut()` or `setInterval()` calls which had been added during mounting of the component:
 
-- `componentWillUnmount()`
+* `componentWillUnmount()`
 
 **Error handling**
 
 Another method to deal with errors has been added to React with React 16. This method can be called to catch errors that occur during the rendering process in a lifecycle method or in the constructor of a **child component**.
 
-- `componentDidCatch()`
+* `componentDidCatch()`
 
 Components which implement `componentDidCatch()` are commonly called **error boundaries** and help to visualize an alternative to the erroneous tree of components. It could be a high-level component \(with regard to its position in the component hierarchy\) that displays an error page and asks the user to reload. But equally, it could also be a low level component which only renders a little error message next to a button, triggered by an erroneous action attached to the button.
-
-<div class="force-break-before"></div>
 
 ### Lifecycle methods in practice
 
@@ -239,7 +237,7 @@ If we ever forget this during development mode, React will remind us if we try t
 
 {% hint style="danger" %}
 **Warning:** Can't call setState \(or forceUpdate\) on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.  
- in Clock
+in Clock
 {% endhint %}
 
 As opposed to previous examples, we only call `ReactDOM.render()` once. The component takes care of the rest and initiates the render process once its **state** has updated. This is the normal procedure when developing applications with React. A single `ReactDOM.render()` call is enough for the app to manage itself, allow interaction with the user and react to state changes and re-render the interface.
@@ -496,4 +494,5 @@ Event listeners are a good topic to end this chapter on. As opposed to working w
 
 ### Diagram of lifecycle methods
 
-![Diagram depicting the different lifecycle methods and the phases in which they are run (CC0 Dan Abramov)](../.gitbook/assets/lifecycle-methods-2.jpg)
+![Diagram depicting the different lifecycle methods and the phases in which they are run \(CC0 Dan Abramov\)](../.gitbook/assets/lifecycle-methods-2.jpg)
+

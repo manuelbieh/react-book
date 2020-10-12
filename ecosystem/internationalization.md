@@ -12,7 +12,7 @@ You might wonder why we are focusing on `i18next`; I have worked with both `reac
 
 **i18next** was also one of the first packages to implement support and even implement optimizations for React Hooks, without comprising backwards compatibility. The API has remained simple and easy to use in that process and still offers the greatest amount of flexibility. The package is complete and caters to most use cases a developer could possibly imagine making it a very solid choice for us.
 
-### Setup of i18next
+## Setup of i18next
 
 In order to install this package, we enter the following lines into the terminal window:
 
@@ -114,11 +114,11 @@ Or for short:
 
 It is entirely up to you which form you like best.
 
-### Using translations in React components
+## Using translations in React components
 
 Once **i18next** is set up correctly and the translations have been set up as well, we can start to translate our components. **i18next** offers full flexibility: we can work with a `withTranslation` HOC in **class components** or a `useTranslation` Hook in **function components**. In the rare case of having to use components inside of translations, `react-i18next` boasts with a so-called `Trans` component.
 
-#### Using the withTranslation\(\) HOC in class components
+### Using the withTranslation\(\) HOC in class components
 
 The `withTranslation()` function will create a **HOC** which we can pass to the component that is supposed to be translated. The `t` and `i18n` props will be passed to this component. To do this, we import the function as a named export from the `react-i18next` package:
 
@@ -179,12 +179,12 @@ If plurals or placeholders are used in the translations, they can be defined in 
 
 The `i18n` prop contains the initialized **i18next** instance. It offers a number of properties and methods that can be relevant for our translations. The most notable are:
 
-- `i18n.language` to read the currently selected language
-- `i18n.changeLanguage()` to switch the currently selected language
+* `i18n.language` to read the currently selected language
+* `i18n.changeLanguage()` to switch the currently selected language
 
 In order to switch the language from `en` to `de`, we can call `i18n.changeLanguage('de')`.
 
-#### Using the useTranslation\(\) Hook in function components
+### Using the useTranslation\(\) Hook in function components
 
 The use of the `withTranslation()` HOC is not constrained to **class components** but can also be used in **function components**. However, the use of the `useTranslation()` Hook often simplifies the component and makes it much more readable. The Hook can be imported similarly to the HOC:
 
@@ -216,9 +216,7 @@ const { t } = useTranslation(['namespace1', 'namespace2']);
 
 If no namespace has been provided, the default settings will be used.
 
-<div class="force-break-before"></div>
-
-#### Complex translations using the Trans component
+### Complex translations using the Trans component
 
 In a few select cases, it might be necessary to use a React component in the translations. For example, one might want to use the `Link` component from **React Router** to link to a different URL within a translation. The `t()` function does not support this out of the box. The solution to this problem comes in the form of the `Trans` component from `react-18next`. It is not always easy to understand how it should be used but it can be powerful tool.
 
@@ -323,8 +321,9 @@ By the way: You can still use the `t()` function as you are used to if you find 
 </Trans>
 ```
 
-### Summary
+## Summary
 
 Using the examples provided in this chapter, it is relatively simple to provide internationalization in our applications. For my personal and professional use, i18next has proven to be a universal and complete tool to build international applications. Integrating with different libraries and frameworks has been a breeze. It offers all sorts of functionality that should be supported by a i18n framework and is easy to understand and learn with only a small set of functions: `i18n.changeLanguage()`, `t()`, `<Trans>`.
 
 Once set up correctly \(I would advise you to check out the [complete options of i18next](https://www.i18next.com/overview/configuration-options)\), internationalization in React applications is easy to achieve without having to deal with a great deal of effort. One could even integrate with online services such as [Locize.com](https://locize.com/) or [Lokalise.co](https://www.lokalise.co) \(to name a few\) which help to create and manage translations or even outsource them automatically.
+

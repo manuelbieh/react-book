@@ -192,13 +192,13 @@ ReactDOM.render(<MyApp />, document.getElementById('app'));
 
 Important: A component can only ever return _one_ **root element**. This can either be:
 
-- a single React element:
+* a single React element:
 
 ```jsx
 <Hello name="Manuel />
 ```
 
-- in nested form - as long as only a single element is on the outer layer:
+* in nested form - as long as only a single element is on the outer layer:
 
 ```jsx
 <Parent>
@@ -206,19 +206,19 @@ Important: A component can only ever return _one_ **root element**. This can eit
 </Parent>
 ```
 
-- a DOM element - which in turn can also be nested and include other elements:
+* a DOM element - which in turn can also be nested and include other elements:
 
 ```jsx
 <div>…</div>
 ```
 
-- ... or it can be self--closing:
+* ... or it can be self--closing:
 
 ```jsx
 <img src="logo.jpg" alt="Bild: Logo" />
 ```
 
-- or simply:
+* or simply:
 
 ```javascript
 null;
@@ -228,19 +228,19 @@ null;
 
 Since **React 16.0.0** we are also allowed to return:
 
-- an array which contains valid return values:
+* an array which contains valid return values:
 
 ```jsx
 [<div key="1">Hello</div>, <Hello key="2" name="Manuel" />];
 ```
 
-- a simple string
+* a simple string
 
 ```javascript
 'Hello World';
 ```
 
-- or a so-called "Fragment" - a special "component" which does not appear in the rendered output and can act as a container if we otherwise violated the rule of only ever returning one root element:
+* or a so-called "Fragment" - a special "component" which does not appear in the rendered output and can act as a container if we otherwise violated the rule of only ever returning one root element:
 
 ```jsx
 <React.Fragment>
@@ -648,15 +648,14 @@ ReactDOM.render(
 );
 ```
 
-<div class="force-break-before"></div>
-
 ### Summary
 
 Components have to act as **pure functions** and return the same result if the same props were passed.
 
-- Props inside a component should be treated as **read-only**
-- Components can receive an **arbitrary number of props**
-- In JSX, props are passed similarly to how data is passed in HTML attributes
-- In contrast to HTML, JSX allows for multiple forms of values. If the values are not of type string, they will be surrounded by **braces**
-- Props can take in any **JavaScript expressions** as their value
-- Once received, props can be passed down as many levels as required
+* Props inside a component should be treated as **read-only**
+* Components can receive an **arbitrary number of props**
+* In JSX, props are passed similarly to how data is passed in HTML attributes
+* In contrast to HTML, JSX allows for multiple forms of values. If the values are not of type string, they will be surrounded by **braces**
+* Props can take in any **JavaScript expressions** as their value
+* Once received, props can be passed down as many levels as required
+

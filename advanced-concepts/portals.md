@@ -4,7 +4,7 @@
 
 The portal remains in the context of the component that has created it and thus has access to all data that is also available to the parent component such as its props and state. However, they are placed in entirely different locations in the rendered HTML compared to the rest of the application. Being able to access props and state is crucial for **Portals**, as they allow us to access common context such as translations.
 
-### Creating portals
+## Creating portals
 
 Creating a portal is relatively simple compared to other concepts we have learned about so far. The component intended to use the portal has to call the `createPortal()` method from ReactDOM and pass in a valid component as the _first_ and an existing destination node as the _second_ parameter.
 
@@ -102,7 +102,7 @@ The resulting `<body>` in the HTML document will look like this:
 
 The Portal is rendered into the `#portal` node instead of the `#root` node where all other content including the component itself is placed. A Portal is rendered once the component mounts and is removed from the DOM if the component containing the portal is removed from the component tree.
 
-### Portals and their relationship to their parent component
+## Portals and their relationship to their parent component
 
 In order to further our understanding of portals, we are going to build — surprise surprise — a modal portal. The basis is formed by the same HTML which we have used in the introduction of portals before. There are two divs in the example: one in which our application is rendered and another in which we render the portal.
 
@@ -170,3 +170,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 We need to pay special attention to the `this.closeModal()` method. Even though this method is defined in the `App` component, it is called within the `ModalPortal` component in the context of the `App` component once a user has clicked on the button "Close Modal".
 
 This method can also alter the state of component via `modalIsOpen` even though the component is not placed within `<div id="root">` as the rest of the components. Portals allow us to do this as the content is placed within the same component tree **within React**. The **resulting HTML** however, is different and the code is placed in a different `<div>` to the rest of the application.
+

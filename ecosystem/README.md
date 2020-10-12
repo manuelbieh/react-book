@@ -9,3 +9,4 @@ As already mentioned at the beginning of this book, React is just a **library fo
 But there is a very valuable and active ecosystem that has evolved around React, with tools that integrate well with a React setup and give developers the choice of choosing from multiple tools to find the one that best suits their personal needs. If none fits at all, this is usually not a problem. React offers a variety of functions and APIs that allow for the possibility to develop a robust, own solution.
 
 With such a great and vast ecoystem around a single library, you might lose track as to which additional tools are actually useful. I want to dedicate some time and effort in this chapter to outline the most common tools and libraries which have proven to be effective in the daily work with React. Most of these have thousands of starts on GitHub and are installed ten thousand times or more via `npm`.
+
