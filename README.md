@@ -1,4 +1,4 @@
-# React Deep-Dive
+# React Deep Dive
 
 This book is also available as ePub, PDF, and Mobi:
 
